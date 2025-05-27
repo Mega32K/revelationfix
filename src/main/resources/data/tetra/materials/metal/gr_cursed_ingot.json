@@ -1,0 +1,33 @@
+{
+    "key": "gr_cursed_ingot",
+    "category": "metal",
+    "primary": 5.5,
+    "secondary": 3.5,
+    "tertiary": 3,
+    "durability": 400,
+    "integrityCost": 2,
+    "integrityGain": 5,
+    "magicCapacity": 130,
+    "toolLevel": "minecraft:iron",
+    "toolEfficiency": 6,
+    "effects": {
+        "goety_revelation.soul_repair": 1
+    },
+    "attributes": {
+        "goety_revelation:none_power": 0.3
+    },
+    "tints": {
+        "glyph": "426982",
+        "texture": "2e4d62"
+    },
+    "textures": [
+        "metal",
+        "default"
+    ],
+    "material": {
+        "items": [ "goety:cursed_ingot" ]
+    },
+    "requiredTools": {
+        "hammer_dig": "minecraft:gold"
+    }
+}

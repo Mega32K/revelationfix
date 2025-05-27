@@ -1,0 +1,37 @@
+{
+  "key": "gr_soul_emerald",
+  "category": "gem",
+  "primary": 6.5,
+  "secondary": 2.5,
+  "tertiary": 0,
+  "durability": 850,
+  "integrityCost": 1,
+  "integrityGain": 2,
+  "magicCapacity": 216,
+  "toolLevel": "minecraft:iron",
+  "toolEfficiency": 7,
+  "tints": {
+    "glyph": "emerald_glyph",
+    "texture": "emerald"
+  },
+  "effects": {
+    "goety_revelation.soul_repair": 2,
+    "goety_revelation.mysterious_blade" : 5
+  },
+  "attributes": {
+    "goety_revelation:none_power": 1.2
+  },
+  "textures": [
+    "shiny",
+    "crude"
+  ],
+  "material": {
+    "items": [ "goety:soul_emerald" ]
+  },
+  "improvements": {
+    "arrested": 0
+  },
+  "requiredTools": {
+    "hammer_dig": "minecraft:stone"
+  }
+}

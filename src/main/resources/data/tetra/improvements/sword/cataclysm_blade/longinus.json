@@ -1,0 +1,22 @@
+[
+  {
+    "key": "blade/longinus",
+    "level": 0,
+    "integrity": -1,
+    "attributes": {
+      "**generic.attack_damage": 0.1
+    },
+    "effects": {
+      "armorPenetration": 100,
+      "goety_revelation.deicide" : 40,
+      "sweeping" : [-15, 0]
+    },
+    "prefixPriority" : "HIGH",
+    "models": [
+      {
+        "location": "tetra:item/module/sword/blade/longinus",
+        "tint" : "ffffff"
+      }
+    ]
+  }
+]

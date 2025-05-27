@@ -1,0 +1,23 @@
+{
+  "replace": true,
+  "slots": [ "sword/fuller" ],
+  "materialSlotCount": 1,
+  "materialRevealSlot": 0,
+  "rarity": "temporary",
+  "displayType": "minor",
+  "glyph": {
+    "tint": "000000",
+    "textureX": 72,
+    "textureY": 16
+  },
+  "outcomes": [
+    {
+      "materials": [ "tetra:misc/gr_shadow_essence" ],
+      "requiredTools": {
+        "hammer_dig": "minecraft:iron"
+      },
+      "moduleKey": "sword/shadow_essence_fuller",
+      "moduleVariant": "fuller/shadow_essence_fuller"
+    }
+  ]
+}

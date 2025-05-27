@@ -1,0 +1,40 @@
+{
+  "key": "socket_goety_revelation_doom_medal",
+  "hidden": true,
+  "category": "socket",
+  "primary": 0,
+  "secondary": 0,
+  "tertiary": 0,
+  "durability": 666.0,
+  "integrityCost": 1,
+  "integrityGain": 0,
+  "magicCapacity": 0,
+  "toolLevel": 0,
+  "toolEfficiency": 7.0,
+  "effects": {
+    "goety_revelation.doom": 35,
+    "sweeping":0.4
+  },
+  "attributes": {
+    "**generic.attack_damage": 0.066
+  },
+  "tints": {
+    "glyph": "88001b",
+    "texture": "88001b"
+  },
+  "textures": [
+    "default"
+  ],
+  "experienceCost": 50,
+  "material": {
+    "items": [
+      "goety_revelation:doom_medal"
+    ]
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "goety_revelation"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "replace": true,
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "goety_revelation"
+    }
+  ],
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type": "tetra:and",
+        "requirements": [
+          {
+            "type": "tetra:craft_type",
+            "craft": "module"
+          },
+          {
+            "type": "tetra:material",
+            "material": {
+              "items": [ "goety_revelation:apocalyptium_ingot" ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "tetra:or",
+        "requirements": [
+          {
+            "type": "tetra:module",
+            "module": "sword/basic_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/heavy_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/short_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/machete"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/katana_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/saber_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/crucible_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/executioner_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/flamberge_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/rapier_blade"
+          }
+        ]
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "type": "tetra:apply_enchantments",
+      "enchantments": {
+        "minecraft:smite": 10
+      }
+    },
+    {
+      "type": "tetra:apply_improvements",
+      "improvements": {
+        "blade/apocalyptium_blade": 0
+      }
+    }
+  ]
+}

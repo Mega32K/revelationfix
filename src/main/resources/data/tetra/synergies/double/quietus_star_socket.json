@@ -1,0 +1,74 @@
+[
+  {
+    "modules": [
+      "double/basic_axe"
+    ],
+    "moduleVariants": [
+      "double_socket/socket_quietus_star"
+    ],
+    "visibilityKey": "double_socket/socket_quietus_star",
+    "tools": {
+      "axe_dig": 2
+    }
+  },
+  {
+    "modules": [
+      "double/adze"
+    ],
+    "moduleVariants": [
+      "double_socket/socket_quietus_star"
+    ],
+    "visibilityKey": "double_socket/socket_quietus_star",
+    "tools": {
+      "shovel_dig": 2
+    }
+  },
+  {
+    "modules": [
+      "double/basic_pickaxe"
+    ],
+    "moduleVariants": [
+      "double_socket/socket_quietus_star"
+    ],
+    "visibilityKey": "double_socket/socket_quietus_star",
+    "tools": {
+      "pickaxe_dig": 2
+    }
+  },
+  {
+    "modules": [
+      "double/basic_hammer"
+    ],
+    "moduleVariants": [
+      "double_socket/socket_quietus_star"
+    ],
+    "visibilityKey": "double_socket/socket_quietus_star",
+    "tools": {
+      "hammer_dig": 2
+    }
+  },
+  {
+    "modules": [
+      "double/claw"
+    ],
+    "moduleVariants": [
+      "double_socket/socket_quietus_star"
+    ],
+    "visibilityKey": "double_socket/socket_quietus_star",
+    "tools": {
+      "pry": 2
+    }
+  },
+  {
+    "modules": [
+      "double/hoe"
+    ],
+    "moduleVariants": [
+      "double_socket/socket_quietus_star"
+    ],
+    "visibilityKey": "double_socket/socket_quietus_star",
+    "tools": {
+      "hoe_dig": 2
+    }
+  }
+]

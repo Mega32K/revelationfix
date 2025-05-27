@@ -1,0 +1,29 @@
+{
+  "key": "gr_sky_wood_planks",
+  "category": "wood",
+  "primary": 4,
+  "secondary": 1.7,
+  "tertiary": 5.5,
+  "durability": 512,
+  "integrityCost": 1,
+  "integrityGain": 6,
+  "magicCapacity": 322,
+  "toolLevel": "minecraft:stone",
+  "toolEfficiency": 6,
+  "tints": {
+    "glyph": "83a7a5",
+    "texture": "83a7a5"
+  },
+  "textures": [
+    "crude",
+    "wooden"
+  ],
+  "material": {
+    "items": [
+      "goety:sky_wood_planks"
+    ]
+  },
+  "requiredTools": {
+    "axe_dig": "minecraft:gold"
+  }
+}

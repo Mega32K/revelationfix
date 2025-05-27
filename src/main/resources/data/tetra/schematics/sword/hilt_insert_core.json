@@ -1,0 +1,37 @@
+{
+  "replace": true,
+  "slots": [ "sword/hilt" ],
+  "materialSlotCount": 1,
+  "materialRevealSlot": 0,
+  "rarity": "temporary",
+  "displayType": "improvement",
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type": "tetra:improvement",
+        "improvement": "hilt/gr_empty_focus"
+      },
+      {
+        "type":"tetra:not",
+        "requirement":{
+          "type":"tetra:improvement",
+          "improvement":"hilt/core/"
+        }
+      }
+    ]
+  },
+  "glyph": {
+    "tint": "758487",
+    "textureX": 72,
+    "textureY": 16
+  },
+  "outcomes": [
+    {
+      "materials": [ "tetra:core/" ],
+      "improvements": {
+        "hilt/core/": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "key": "gr_gale_fabric",
+  "hidden": false,
+  "hiddenOutcomes": false,
+  "category": "fabric",
+  "primary": 3,
+  "secondary": 2,
+  "tertiary": 5,
+  "durability": 200,
+  "integrityCost": 1,
+  "integrityGain": 5,
+  "magicCapacity": 160,
+  "toolLevel": 0,
+  "toolEfficiency": 0,
+  "attributes": {
+    "goety_revelation:wind_power": 1
+  },
+  "tints": {
+    "glyph": "36654a",
+    "texture": "305d44"
+  },
+  "textures": [
+    "crude",
+    "default"
+  ],
+  "material": {
+    "items": [ "goety:gale_fabric" ]
+  },
+  "requiredTools": {
+    "cut": "minecraft:wood"
+  }
+}

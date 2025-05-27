@@ -1,0 +1,32 @@
+{
+  "key": "gr_windswept_planks",
+  "category": "wood",
+  "primary": 4,
+  "secondary": 1.2,
+  "tertiary": 8.45,
+  "durability": 512,
+  "integrityCost": 1,
+  "integrityGain": 6,
+  "magicCapacity": 142,
+  "toolLevel": "minecraft:stone",
+  "toolEfficiency": 6,
+  "effects": {
+    "unstable": 15
+  },
+  "tints": {
+    "glyph": "c79665",
+    "texture": "c79665"
+  },
+  "textures": [
+    "crude",
+    "wooden"
+  ],
+  "material": {
+    "items": [
+      "goety:windswept_planks"
+    ]
+  },
+  "requiredTools": {
+    "axe_dig": "minecraft:gold"
+  }
+}

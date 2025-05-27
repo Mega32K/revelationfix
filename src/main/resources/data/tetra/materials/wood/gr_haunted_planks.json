@@ -1,0 +1,32 @@
+{
+  "key": "gr_haunted_planks",
+  "category": "wood",
+  "primary": 4,
+  "secondary": 1.7,
+  "tertiary": 5.5,
+  "durability": 512,
+  "integrityCost": 1,
+  "integrityGain": 6,
+  "magicCapacity": 102,
+  "toolLevel": "minecraft:stone",
+  "toolEfficiency": 6,
+  "effects": {
+    "goety_revelation.soul_repair": 1
+  },
+  "tints": {
+    "glyph": "222222",
+    "texture": "222222"
+  },
+  "textures": [
+    "crude",
+    "wooden"
+  ],
+  "material": {
+    "items": [
+      "goety:haunted_planks"
+    ]
+  },
+  "requiredTools": {
+    "axe_dig": "minecraft:gold"
+  }
+}

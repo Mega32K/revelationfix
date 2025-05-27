@@ -1,0 +1,37 @@
+{
+  "key": "gr_ice_cube",
+  "category": "gem",
+  "primary": 3,
+  "secondary": 0,
+  "tertiary": 0,
+  "durability": 72,
+  "integrityCost": 1,
+  "integrityGain": 2,
+  "magicCapacity": 180,
+  "toolLevel": "minecraft:wood",
+  "toolEfficiency": 6,
+  "attributes": {
+    "goety_revelation:frost_power": 0.5
+  },
+  "effects": {
+    "stabilizing": -10,
+    "goety_revelation.ice_blade" : [60, 3.5]
+  },
+  "tints": {
+    "glyph": "deeafc",
+    "texture": "a0c2fc"
+  },
+  "textures": [
+    "shiny",
+    "crude"
+  ],
+  "material": {
+    "items": [ "goety:ice_cube" ]
+  },
+  "improvements": {
+    "arrested": 0
+  },
+  "requiredTools": {
+    "hammer_dig": "minecraft:wood"
+  }
+}

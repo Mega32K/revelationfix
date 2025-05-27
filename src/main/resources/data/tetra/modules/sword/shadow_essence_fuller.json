@@ -1,0 +1,34 @@
+{
+  "replace": true,
+  "slots": [ "sword/fuller" ],
+  "type": "tetra:basic_major_module",
+  "variants": [
+    {
+      "key": "fuller/shadow_essence_fuller",
+      "attributes": {
+        "**generic.attack_speed": 0.05
+      },
+      "effects": {
+        "truesweep": 1,
+        "goety_revelation.shadow_walk" : [30, 4]
+      },
+      "durability": 25,
+      "integrity": 3,
+      "magicCapacity": 100,
+      "glyph": {
+        "tint": "ffffff",
+        "textureX": 72,
+        "textureY": 16
+      },
+      "models": [
+        {
+          "location": "tetra:item/module/sword/fuller/shadow_essence/shadow_essence"
+        },
+        {
+          "location": "tetra:item/module/sword/fuller/shadow_essence/shadow_essence",
+          "emission": 8
+        }
+      ]
+    }
+  ]
+}

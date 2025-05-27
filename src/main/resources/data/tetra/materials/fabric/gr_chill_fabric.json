@@ -1,0 +1,32 @@
+{
+  "key": "gr_chill_fabric",
+  "hidden": false,
+  "hiddenOutcomes": false,
+  "category": "fabric",
+  "primary": 3,
+  "secondary": 2,
+  "tertiary": 5,
+  "durability": 200,
+  "integrityCost": 1,
+  "integrityGain": 5,
+  "magicCapacity": 160,
+  "toolLevel": 0,
+  "toolEfficiency": 0,
+  "attributes": {
+    "goety_revelation:frost_power": 1
+  },
+  "tints": {
+    "glyph": "233471",
+    "texture": "1d2e6c"
+  },
+  "textures": [
+    "crude",
+    "default"
+  ],
+  "material": {
+    "items": [ "goety:chill_fabric" ]
+  },
+  "requiredTools": {
+    "cut": "minecraft:wood"
+  }
+}

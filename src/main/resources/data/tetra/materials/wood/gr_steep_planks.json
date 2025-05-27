@@ -1,0 +1,29 @@
+{
+  "key": "gr_steep_planks",
+  "category": "wood",
+  "primary": 4,
+  "secondary": 1.7,
+  "tertiary": 5.5,
+  "durability": 512,
+  "integrityCost": 1,
+  "integrityGain": 6,
+  "magicCapacity": 102,
+  "toolLevel": "minecraft:stone",
+  "toolEfficiency": 6,
+  "tints": {
+    "glyph": "9e5f55",
+    "texture": "9e5f55"
+  },
+  "textures": [
+    "crude",
+    "wooden"
+  ],
+  "material": {
+    "items": [
+      "goety:steep_planks"
+    ]
+  },
+  "requiredTools": {
+    "axe_dig": "minecraft:gold"
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "materials": [ "tetra:core/" ],
+    "key": "hilt/core/",
+    "level": 0,
+    "durability": 3,
+    "integrity": -1,
+    "effects": {
+      "goety_revelation.soul_repair": 1
+    },
+    "attributes": {
+      "generic.attack_speed": 0.05
+    },
+    "extract": {
+      "glyph": {
+        "textureX": 16
+      },
+      "availableTextures": [ "default" ],
+      "models": [
+        {
+          "location": "tetra:item/module/sword/hilt/basic/core/"
+        }
+      ]
+    }
+  }
+]

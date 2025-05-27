@@ -1,0 +1,39 @@
+{
+  "key": "socket_gr_heart_of_the_night",
+  "hidden": false,
+  "category": "socket",
+  "primary": 0,
+  "secondary": 0,
+  "tertiary": 0,
+  "durability": 166.0,
+  "integrityCost": 1,
+  "integrityGain": 0,
+  "magicCapacity": 0,
+  "toolLevel": 0,
+  "toolEfficiency": 7.0,
+  "effects": {
+    "goety_revelation.ruler_of_nocturnal" : 1
+  },
+  "attributes": {
+    "**generic.attack_damage": 0.066
+  },
+  "tints": {
+    "glyph": "d5fc6c",
+    "texture": "54ce00"
+  },
+  "textures": [
+    "perk_glow_0"
+  ],
+  "experienceCost": 10,
+  "material": {
+    "items": [
+      "goety:heart_of_the_night"
+    ]
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "goety_revelation"
+    }
+  ]
+}

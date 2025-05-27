@@ -1,0 +1,35 @@
+{
+  "type": "farmersdelight:cooking",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "cookingtime": 600,
+  "experience": 512,
+  "ingredients": [
+    {
+      "item": "minecraft:honey_bottle"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "goety:ectoplasm"
+    },
+    {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    {
+      "item": "goety:unholy_blood"
+    },
+    {
+      "item": "goety_revelation:broken_halo"
+    }
+  ],
+  "recipe_book_tab": "meals",
+  "result": {
+    "item": "goety_revelation:ascension_hard_candy"
+  }
+}

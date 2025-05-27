@@ -1,0 +1,35 @@
+{
+  "key": "gr_venomous_fang",
+  "category": "bone",
+  "primary": 5,
+  "secondary": 2,
+  "tertiary": 4.5,
+  "durability": 180,
+  "integrityCost": 1,
+  "integrityGain": 5,
+  "magicCapacity": 130,
+  "toolLevel": "minecraft:stone",
+  "toolEfficiency": 4.5,
+  "attributes": {
+    "forge:reach_distance": 0.3,
+    "forge:attack_range": 0.3,
+    "goety_revelation:wild_power": 0.3
+  },
+  "effects": {
+    "goety_revelation.position_blade" : [30, 1]
+  },
+  "tints": {
+    "glyph": "bone_glyph",
+    "texture": "bone"
+  },
+  "textures": [
+    "bone",
+    "crude"
+  ],
+  "material": {
+    "items": [ "goety:venomous_fang" ]
+  },
+  "requiredTools": {
+    "hammer_dig": "minecraft:wood"
+  }
+}

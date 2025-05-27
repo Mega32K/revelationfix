@@ -1,0 +1,37 @@
+{
+  "key": "gr_unholy_fabric",
+  "hidden": false,
+  "hiddenOutcomes": false,
+  "category": "fabric",
+  "primary": 4,
+  "secondary": 2,
+  "tertiary": 5,
+  "durability": 400,
+  "integrityCost": 1,
+  "integrityGain": 7,
+  "magicCapacity": 160,
+  "toolLevel": 1,
+  "toolEfficiency": 1,
+  "attributes": {
+    "goety_revelation:nether_power": 2,
+    "**generic.attack_damage": 0.25
+  },
+  "effects" : {
+    "art_of_forging:hubris": 30,
+    "quickStrike": 2
+  },
+  "tints": {
+    "glyph": "360404",
+    "texture": "270000"
+  },
+  "textures": [
+    "crude",
+    "default"
+  ],
+  "material": {
+    "items": [ "goety:unholy_fabric" ]
+  },
+  "requiredTools": {
+    "cut": "minecraft:iron"
+  }
+}

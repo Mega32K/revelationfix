@@ -1,0 +1,38 @@
+{
+  "replace": true,
+  "slots": [ "sword/hilt" ],
+  "materialSlotCount": 1,
+  "materialRevealSlot": 0,
+  "rarity": "temporary",
+  "displayType": "minor",
+  "glyph": {
+    "tint": "034150",
+    "textureX": 72,
+    "textureY": 16
+  },
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type":"tetra:not",
+        "requirement":{
+          "type":"tetra:improvement",
+          "improvement":"hilt/gr_empty_focus"
+        }
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "material": {
+        "items": [ "goety:empty_focus" ]
+      },
+      "requiredTools": {
+        "hammer_dig": "minecraft:stone"
+      },
+      "improvements": {
+        "hilt/gr_empty_focus": 0
+      }
+    }
+  ]
+}

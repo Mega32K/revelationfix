@@ -1,0 +1,53 @@
+{
+  "replace": true,
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "goety_revelation"
+    }
+  ],
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type": "tetra:and",
+        "requirements": [
+          {
+            "type": "tetra:craft_type",
+            "craft": "module"
+          },
+          {
+            "type": "tetra:material",
+            "material": {
+              "items": [ "goety_revelation:apocalyptium_ingot" ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "tetra:or",
+        "requirements": [
+          {
+            "type": "tetra:module",
+            "module": "sword/basic_hilt"
+          }
+        ]
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "type": "tetra:apply_enchantments",
+      "force" : true,
+      "enchantments": {
+        "goety_revelation:reality_piercer": 10
+      }
+    },
+    {
+      "type": "tetra:apply_improvements",
+      "improvements": {
+        "blade/apocalyptium_hilt": 0
+      }
+    }
+  ]
+}

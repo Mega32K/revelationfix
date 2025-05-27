@@ -1,0 +1,35 @@
+{
+    "key": "gr_dark_ingot",
+    "category": "metal",
+    "primary": 6,
+    "secondary": 3.8,
+    "tertiary": 3,
+    "durability": 166,
+    "integrityCost": 2,
+    "integrityGain": 6,
+    "magicCapacity": 130,
+    "toolLevel": "minecraft:iron",
+    "toolEfficiency": 6,
+    "effects": {
+        "stabilizing": 15,
+        "goety_revelation.soul_repair": 1,
+        "goety_revelation.cursed_blade": [13.0, 1.3]
+    },
+    "attributes": {
+        "goety_revelation:none_power": 0.3
+    },
+    "tints": {
+        "glyph": "3c4447",
+        "texture": "252e32"
+    },
+    "textures": [
+        "metal",
+        "default"
+    ],
+    "material": {
+        "items": [ "goety:dark_ingot" ]
+    },
+    "requiredTools": {
+        "hammer_dig": "minecraft:gold"
+    }
+}

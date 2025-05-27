@@ -1,0 +1,30 @@
+{
+  "replace": true,
+  "slots": [ "sword/fuller" ],
+  "type": "tetra:basic_major_module",
+  "variants": [
+    {
+      "key": "goety/unholy_blood",
+      "attributes": {
+        "generic.attack_speed": -0.1,
+        "**generic.attack_damage":0.10
+      },
+      "effects": {
+        "criticalStrike":[18,1.2],
+        "backstab": 2,
+        "sweeping": 0.4,
+        "armorPenetration" : 40,
+        "reaching" : [7, 0.45]
+      },
+      "durability": 679,
+      "integrity": 11,
+      "magicCapacity": 300,
+      "glyph": {"textureX":72,"textureY":112},
+      "models": [
+        {
+          "location": "tetra:item/module/sword/fuller/reinforced_fuller/default"
+        }
+      ]
+    }
+  ]
+}

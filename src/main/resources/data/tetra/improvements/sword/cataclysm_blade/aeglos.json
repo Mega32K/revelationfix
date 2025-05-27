@@ -1,0 +1,24 @@
+[
+  {
+    "key": "blade/aeglos",
+    "level": 0,
+    "integrity": 0,
+    "attributes": {
+      "**generic.attack_damage": 0.05,
+      "**generic.attack_speed": 0.33
+    },
+    "effects": {
+      "armorPenetration": 100,
+      "goety_revelation.fading" : 9,
+      "goety_revelation.deicide" : 80,
+      "sweeping" : [-15, -0]
+    },
+    "prefixPriority" : "HIGH",
+    "models": [
+      {
+        "location": "tetra:item/module/sword/blade/aeglos",
+        "tint" : "ffffff"
+      }
+    ]
+  }
+]

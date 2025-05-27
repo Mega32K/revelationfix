@@ -1,0 +1,35 @@
+{
+  "key": "gr_occult_fabric",
+  "hidden": false,
+  "hiddenOutcomes": false,
+  "category": "fabric",
+  "primary": 3,
+  "secondary": 2,
+  "tertiary": 5,
+  "durability": 200,
+  "integrityCost": 1,
+  "integrityGain": 5,
+  "magicCapacity": 160,
+  "toolLevel": 0,
+  "toolEfficiency": 0,
+  "attributes": {
+    "goety_revelation:ill_power": 1
+  },
+  "effects" : {
+    "goety_revelation.cursed_blade": [30.0, 3.0]
+  },
+  "tints": {
+    "glyph": "55355f",
+    "texture": "4f3058"
+  },
+  "textures": [
+    "crude",
+    "default"
+  ],
+  "material": {
+    "items": [ "goety:occult_fabric" ]
+  },
+  "requiredTools": {
+    "cut": "minecraft:wood"
+  }
+}

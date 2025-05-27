@@ -1,0 +1,15 @@
+[
+  {
+    "key": "blade/apocalyptium_hilt",
+    "level": 0,
+    "integrity": -1,
+    "attributes": {
+      "generic.attack_speed": 0.12,
+      "**generic.attack_damage": 0.4
+    },
+    "effects": {
+      "quickStrike": 3,
+      "reaching": 5
+    }
+  }
+]

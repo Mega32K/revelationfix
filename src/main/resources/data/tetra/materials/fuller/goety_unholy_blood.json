@@ -1,0 +1,34 @@
+{
+    "key": "goety/goety_unholy_blood",
+    "category": "misc",
+    "primary": 0,
+    "secondary": 0,
+    "tertiary": 0,
+    "durability": 679,
+    "integrityCost": 0,
+    "integrityGain": 0,
+    "magicCapacity": 0,
+    "toolLevel": "tetra:maxed_forge_hammer",
+    "toolEfficiency": 10,
+    "tints": {
+        "glyph": "8b0000",
+        "texture": "8b0000"
+    },
+    "textures": [
+        "default"
+    ],
+    "material": {
+        "items": [
+            "goety:unholy_blood"
+        ]
+    },
+    "requiredTools": {
+        "hammer_dig": 8
+    },
+    "conditions": [
+        {
+            "type": "forge:mod_loaded",
+            "modid": "goety"
+        }
+    ]
+}

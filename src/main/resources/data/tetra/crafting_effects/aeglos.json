@@ -1,0 +1,43 @@
+{
+  "replace": true,
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "goety_revelation"
+    }
+  ],
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type": "tetra:craft_type",
+        "craft": "improvement"
+      },
+      {
+        "type": "tetra:improvement",
+        "improvement": "blade/aeglos"
+      },
+      {
+        "type": "tetra:or",
+        "requirements": [
+          {
+            "type": "tetra:module",
+            "module": "sword/basic_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/cataclysm_blade"
+          }
+        ]
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "type": "tetra:remove_improvements",
+      "improvements": [
+        "blade/longinus"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+[
+  {
+    "moduleVariants": ["short_blade/gr_ice_cube"],
+    "improvements": [ "hilt/wrap/gr_chill_fabric" ],
+    "name": "sword/gr_ice_cube",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2
+    },
+    "effects": {
+      "goety_revelation.ice_blade" : [40, 2]
+    }
+  },
+
+  {
+    "moduleVariants": ["short_blade/gr_cursed_ingot"],
+    "improvements": [ "hilt/wrap/gr_magic_fabric" ],
+    "name": "sword/gr_cursed_ingot",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2
+    },
+    "effects": {
+      "goety_revelation.soul_repair": 1
+    }
+  },
+  {
+    "moduleVariants": ["short_blade/gr_dark_ingot"],
+    "improvements": [ "hilt/wrap/gr_magic_fabric" ],
+    "name": "sword/gr_dark_ingot",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2
+    },
+    "effects": {
+      "goety_revelation.soul_repair": 1
+    }
+  },
+  {
+    "moduleVariants": ["short_blade/gr_magic_emerald"],
+    "improvements": [ "hilt/wrap/gr_magic_fabric" ],
+    "name": "sword/gr_magic_emerald",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2
+    },
+    "effects": {
+      "goety_revelation.mysterious_blade" : 3
+    }
+  },
+  {
+    "moduleVariants": ["short_blade/gr_soul_emerald"],
+    "improvements": [ "hilt/wrap/gr_magic_fabric" ],
+    "name": "sword/gr_soul_emerald",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2
+    },
+    "effects": {
+      "goety_revelation.mysterious_blade" : 8
+    }
+  },
+
+  {
+    "moduleVariants": ["sword_socket/socket_gr_ominous_orb"],
+    "improvements": [ "hilt/core/gr_mystic_core", "hilt/wrap/gr_occult_fabric" ],
+    "name": "sword_socket/socket_gr_ominous_orb",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.15,
+      "goety_revelation:spell_power_multiplier": 0.2,
+      "**generic.attack_damage": 0.1
+    },
+    "effects": {
+      "goety_revelation.cursed_blade": [8.0, 1.0],
+      "goety_revelation.mysterious_blade" : 4
+    }
+  },
+  {
+    "moduleVariants": ["sword_socket/socket_gr_soul_ruby"],
+    "improvements": [ "hilt/wrap/gr_occult_fabric" ],
+    "name": "sword_socket/socket_gr_soul_ruby",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.15,
+      "goety_revelation:spell_power_multiplier": 0.1
+    },
+    "effects": {
+      "goety_revelation.mysterious_blade" : 8
+    }
+  },
+  {
+    "moduleVariants": ["short_blade/gr_savage_tooth"],
+    "improvements": [ "hilt/wrap/gr_occult_fabric" ],
+    "name": "short_blade/gr_savage_tooth",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2,
+      "forge:reach_distance": 0.15,
+      "forge:attack_range": 0.15
+    }
+  },
+
+  {
+    "moduleVariants": ["short_blade/gr_jade"],
+    "improvements": [ "hilt/core/gr_wind_core", "hilt/wrap/gr_gale_fabric" ],
+    "name": "sword/gr_wind_core",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2,
+      "minecraft:generic.attack_speed": 1.5
+    },
+    "effects": {
+      "sweeping" : [4, 2]
+    }
+  },
+  {
+    "moduleVariants": ["short_blade/gr_jade"],
+    "improvements": [ "hilt/wrap/gr_gale_fabric" ],
+    "name": "short_blade/gr_jade",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2,
+      "minecraft:generic.movement_speed": 0.1
+    }
+  },
+
+  {
+    "moduleVariants": ["short_blade/gr_venomous_fang"],
+    "improvements": [ "hilt/wrap/gr_dark_fabric" ],
+    "name": "short_blade/gr_venomous_fang",
+    "attributes": {
+      "goety_revelation:spell_cooldown": 0.25,
+      "goety_revelation:spell_power_multiplier": 0.2
+    },
+    "effects": {
+      "goety_revelation.position_blade" : [10, 2]
+    }
+  }
+]

@@ -1,0 +1,46 @@
+{
+    "replace": true,
+    "localizationKey": "goety_revelation/aeglos",
+    "slots": [ "sword/blade" ],
+    "materialSlotCount": 1,
+    "rarity": "temporary",
+    "displayType": "improvement",
+    "glyph": {
+        "textureLocation": "tetra:textures/gui/gr_glyph.png",
+        "textureX": 16,
+        "tint": "ffffff"
+    },
+    "requirement": {
+        "type": "tetra:and",
+        "requirements": [
+            {
+                "type": "tetra:locked",
+                "key": "tetra:sword/aeglos"
+            },
+            {
+                "type": "tetra:improvement",
+                "improvement": "blade/longinus"
+            },
+            {
+                "type":"tetra:not",
+                "requirement":{
+                    "type":"tetra:improvement",
+                    "improvement":"blade/aeglos"
+                }
+            }
+        ]
+    },
+    "outcomes": [
+        {
+            "material": {
+                "items": [ "goety_revelation:the_tip_of_the_aeglos" ]
+            },
+            "requiredTools": {
+                "hammer_dig": "tetra:maxed_forge_hammer"
+            },
+            "improvements": {
+                "blade/aeglos": 0
+            }
+        }
+    ]
+}

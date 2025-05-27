@@ -1,0 +1,64 @@
+{
+  "replace": true,
+  "localizationKey": "goety_revelation/longinus",
+  "slots": [
+    "sword/blade"
+  ],
+  "materialSlotCount": 1,
+  "rarity": "temporary",
+  "displayType": "improvement",
+  "glyph": {
+    "textureLocation": "tetra:textures/gui/gr_glyph.png",
+    "textureX": 0,
+    "tint": "ffffff"
+  },
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type": "tetra:locked",
+        "key": "tetra:sword/longinus"
+      },
+      {
+        "type": "tetra:or",
+        "requirements": [
+          {
+            "type": "tetra:module",
+            "module": "sword/basic_blade"
+          },
+          {
+            "type": "tetra:module",
+            "module": "sword/cataclysm_blade"
+          }
+        ]
+      },
+      {
+        "type":"tetra:not",
+        "requirement":{
+          "type":"tetra:improvement",
+          "improvement":"blade/longinus"
+        }
+      },
+      {
+        "type":"tetra:not",
+        "requirement":{
+          "type":"tetra:improvement",
+          "improvement":"blade/aeglos"
+        }
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "material": {
+        "items": [ "goety_revelation:the_needle" ]
+      },
+      "requiredTools": {
+        "hammer_dig": "tetra:maxed_forge_hammer"
+      },
+      "improvements": {
+        "blade/longinus": 0
+      }
+    }
+  ]
+}

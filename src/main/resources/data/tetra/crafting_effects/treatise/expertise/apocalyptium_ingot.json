@@ -1,0 +1,32 @@
+{
+  "replace": true,
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type": "tetra:locked",
+        "key": "tetra:apocalyptium_ingot_expertise"
+      },
+      {
+        "type": "tetra:craft_type",
+        "craft": "module"
+      },
+      {
+        "type": "tetra:material",
+        "material": {
+          "items": [
+            "goety_revelation:apocalyptium_ingot"
+          ]
+        }
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "type": "tetra:apply_improvements",
+      "improvements": {
+        "quality": 2
+      }
+    }
+  ]
+}

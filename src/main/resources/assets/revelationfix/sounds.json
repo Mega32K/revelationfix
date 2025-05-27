@@ -1,0 +1,33 @@
+{
+  "apollyon_new_nether_theme": {
+    "sounds": [
+      {
+        "name": "revelationfix:apollyon_new_nether_theme",
+        "stream": true
+      }
+    ]
+  },
+  "quietus_beam": {
+    "sounds": [
+      {
+        "name": "revelationfix:quietus_beam",
+        "stream": true
+      }
+    ]
+  },
+  "star_arrow_explode": {
+    "sounds": [
+      "revelationfix:star_arrow_explode"
+    ]
+  },
+  "star_arrow_cast": {
+    "sounds": [
+      "revelationfix:star_arrow_cast"
+    ]
+  },
+  "time_stop": {
+    "sounds" : [
+      "revelationfix:stop"
+    ]
+  }
+}

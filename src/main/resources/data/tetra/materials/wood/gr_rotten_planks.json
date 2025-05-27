@@ -1,0 +1,29 @@
+{
+  "key": "gr_rotten_planks",
+  "category": "wood",
+  "primary": 3,
+  "secondary": 1.9,
+  "tertiary": 5.5,
+  "durability": 128,
+  "integrityCost": 1,
+  "integrityGain": 6,
+  "magicCapacity": 102,
+  "toolLevel": "minecraft:stone",
+  "toolEfficiency": 6,
+  "tints": {
+    "glyph": "36301c",
+    "texture": "36301c"
+  },
+  "textures": [
+    "crude",
+    "wooden"
+  ],
+  "material": {
+    "items": [
+      "goety:rotten_planks"
+    ]
+  },
+  "requiredTools": {
+    "axe_dig": "minecraft:gold"
+  }
+}

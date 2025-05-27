@@ -1,0 +1,28 @@
+{
+  "key": "gr_animation_core",
+  "hidden": true,
+  "category": "core",
+  "primary": 0,
+  "secondary": 0,
+  "tertiary": 0,
+  "durability": 48,
+  "integrityCost": 1,
+  "integrityGain": 0,
+  "magicCapacity": 0,
+  "toolLevel": 0,
+  "toolEfficiency": 0,
+  "attributes": {
+    "goety_revelation:none_power": 1.2,
+    "generic.attack_speed": 0.35
+  },
+  "tints": {
+    "glyph": "bfbfbf",
+    "texture": "bfbfbf"
+  },
+  "textures": [
+    "default"
+  ],
+  "material": {
+    "items": [ "goety:animation_core" ]
+  }
+}

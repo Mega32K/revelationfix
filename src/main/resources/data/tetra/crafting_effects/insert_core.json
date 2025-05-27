@@ -1,0 +1,34 @@
+{
+  "replace": true,
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "goety_revelation"
+    }
+  ],
+  "requirement": {
+    "type": "tetra:and",
+    "requirements": [
+      {
+        "type": "tetra:craft_type",
+        "craft": "improvement"
+      },
+      {
+        "type": "tetra:improvement",
+        "improvement": "hilt/gr_empty_focus"
+      },
+      {
+        "type": "tetra:module",
+        "module": "sword/basic_hilt"
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "type": "tetra:remove_improvements",
+      "improvements": [
+        "hilt/gr_empty_focus"
+      ]
+    }
+  ]
+}

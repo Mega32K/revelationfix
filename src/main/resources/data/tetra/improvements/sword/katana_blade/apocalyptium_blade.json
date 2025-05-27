@@ -1,0 +1,12 @@
+[
+  {
+    "key": "blade/apocalyptium_blade",
+    "level": 0,
+    "integrity": -1,
+    "effects": {
+      "armorPenetration": 20,
+      "crushing": 5,
+      "truesweep" : 1
+    }
+  }
+]
