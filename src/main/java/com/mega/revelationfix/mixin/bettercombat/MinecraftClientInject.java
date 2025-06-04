@@ -1,8 +1,8 @@
 package com.mega.revelationfix.mixin.bettercombat;
 
 
-import com.mega.revelationfix.safe.BetterCombatTicker;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.bettercombat.BetterCombatTicker;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.bettercombat.BetterCombat;

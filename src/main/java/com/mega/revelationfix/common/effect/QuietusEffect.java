@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.effect;
 
+import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.ally.undead.skeleton.WitherSkeletonServant;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
@@ -8,12 +9,12 @@ import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.init.ModEffects;
-import com.mega.revelationfix.safe.AttributeInstanceInterface;
+import com.mega.revelationfix.safe.entity.AttributeInstanceInterface;
 import com.mega.revelationfix.safe.DamageSourceInterface;
-import com.mega.revelationfix.safe.EntityExpandedContext;
-import com.mega.revelationfix.safe.MobEffectInstanceEC;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import com.mega.revelationfix.util.ATAHelper2;
-import com.mega.revelationfix.util.EntityActuallyHurt;
+import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.particles.ParticleTypes;
@@ -73,10 +74,10 @@ public class QuietusEffect extends MobEffect {
             LivingEntity living = event.getEntity();
             if (!living.level.isClientSide) {
                 EntityExpandedContext expandedContext = ((LivingEntityEC) living).revelationfix$livingECData();
-                if (expandedContext.getQuietusCaster() != null) {
+                if (!(expandedContext.getQuietusCaster() instanceof Player)) {
                     Level level = living.level;
                     WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), level);
-                    servant.setTrueOwner(expandedContext.getQuietusCaster());
+                    servant.setTrueOwner(expandedContext.getQuietusCaster() instanceof IOwned owned ? owned.getTrueOwner() : expandedContext.getQuietusCaster());
                     servant.setLimitedLife(5 * 60 * 20);
                     servant.finalizeSpawn((ServerLevel) level, level.getCurrentDifficultyAt(living.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                     SummonCircle summonCircle = new SummonCircle(level, living.blockPosition(), servant, false, true, expandedContext.getQuietusCaster());

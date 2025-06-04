@@ -17,7 +17,9 @@ import se.mickelus.tetra.items.modular.impl.holo.gui.craft.HoloStatsGui;
 public class MiscSpellAttributeEffect {
     public static void init() {
         createPercentAttributeBar(ModAttributes.SPELL_COOLDOWN.get(), "spell_cooldown");
-        createPercentAttributeBar(ModAttributes.SPELL_POWER.get(), "spell_power_multiplier");
+        createPercentAttributeBar(ModAttributes.SPELL_POWER_MULTIPLIER.get(), "spell_power_multiplier");
+        createPercentAttributeBar(ModAttributes.SPELL_POWER.get(), "spell_power");
+        createPercentAttributeBar(ModAttributes.CAST_DURATION.get(), "cast_duration");
     }
     @OnlyIn(Dist.CLIENT)
     private static void createPercentAttributeBar(Attribute attribute, String languageKey) {

@@ -4,7 +4,7 @@ import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
-import com.mega.revelationfix.safe.PlayerInterface;
+import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.ATAHelper2;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageTypes;

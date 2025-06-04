@@ -1,7 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.common.client.enums.ModUseAnim;
-import com.mega.revelationfix.util.EventUtil;
+import com.mega.revelationfix.client.enums.ModUseAnim;
 import net.minecraft.world.item.UseAnim;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

@@ -2,7 +2,7 @@ package com.mega.revelationfix.common.apollyon.common;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
-import com.mega.revelationfix.safe.Apollyon2Interface;
+import com.mega.revelationfix.safe.entity.Apollyon2Interface;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;

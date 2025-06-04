@@ -4,7 +4,7 @@ import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.config.ClientConfig;
-import com.mega.revelationfix.safe.Apollyon2Interface;
+import com.mega.revelationfix.safe.entity.Apollyon2Interface;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;

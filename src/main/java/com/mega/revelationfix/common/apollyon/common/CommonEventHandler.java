@@ -9,12 +9,12 @@ import com.Polarice3.Goety.utils.WandUtil;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.compat.FeModSafe;
 import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.common.compat.Wrapped2;
+import com.mega.revelationfix.common.compat.iaf.IAFWrapped;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.common.spell.nether.RevelationSpell;
-import com.mega.revelationfix.safe.DeathArrowEC;
-import com.mega.revelationfix.safe.EntityExpandedContext;
+import com.mega.revelationfix.safe.entity.DeathArrowEC;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.util.ATAHelper2;
 import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.tags.DamageTypeTags;
@@ -54,6 +54,9 @@ public class CommonEventHandler {
         EntityExpandedContext livingEC = ((LivingEntityEC) living).revelationfix$livingECData();
         if (livingEC.banHealingTime > 0) {
             livingEC.banHealingTime--;
+        }
+        if (livingEC.banAnySpelling > 0) {
+            livingEC.banAnySpelling--;
         }
     }
 
@@ -126,7 +129,7 @@ public class CommonEventHandler {
         if (event.getTarget() instanceof Apostle apostle) {
             if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon()) {
                 if (SafeClass.isIAFLoaded()) {
-                    Wrapped2.e1(event, player);
+                    IAFWrapped.e1(event, player);
                 }
             }
         }
@@ -136,7 +139,7 @@ public class CommonEventHandler {
     public static void apollyonChaiBanning2(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
         if (SafeClass.isIAFLoaded()) {
-            Wrapped2.e2(event, player);
+            IAFWrapped.e2(event, player);
         }
     }
 }

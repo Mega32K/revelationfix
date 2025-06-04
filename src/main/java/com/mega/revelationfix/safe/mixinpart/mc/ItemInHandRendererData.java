@@ -1,6 +1,6 @@
 package com.mega.revelationfix.safe.mixinpart.mc;
 
-import com.mega.revelationfix.common.client.enums.ModUseAnim;
+import com.mega.revelationfix.client.enums.ModUseAnim;
 import com.mega.revelationfix.common.item.combat.GungnirItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

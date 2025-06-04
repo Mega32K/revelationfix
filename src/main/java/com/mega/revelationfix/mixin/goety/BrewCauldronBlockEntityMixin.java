@@ -4,20 +4,30 @@ import com.Polarice3.Goety.common.blocks.entities.BrewCauldronBlockEntity;
 import com.Polarice3.Goety.common.crafting.BrewingRecipe;
 import com.Polarice3.Goety.common.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.common.effects.brew.BrewEffect;
+import com.Polarice3.Goety.common.effects.brew.BrewEffectInstance;
 import com.Polarice3.Goety.common.effects.brew.BrewEffects;
+import com.Polarice3.Goety.common.effects.brew.PotionBrewEffect;
 import com.Polarice3.Goety.common.effects.brew.modifiers.BrewModifier;
 import com.Polarice3.Goety.common.effects.brew.modifiers.CapacityModifier;
+import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.utils.BrewUtils;
+import com.mega.revelationfix.api.event.register.CustomBrewRegisterEvent;
+import com.mega.revelationfix.common.config.BrewConfig;
+import com.mega.revelationfix.common.data.brew.BrewData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -25,6 +35,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(BrewCauldronBlockEntity.class)
 public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
@@ -77,9 +89,6 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
     public abstract void setColor(int color);
 
     @Shadow(remap = false)
-    public abstract ItemStack getBrew();
-
-    @Shadow(remap = false)
     public abstract int getDuration();
 
     @Shadow(remap = false)
@@ -112,6 +121,10 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
     @Shadow(remap = false)
     public abstract BrewCauldronBlockEntity.Mode fail();
 
+    @Shadow public abstract @NotNull ItemStack getItem(int pIndex);
+
+    @Shadow(remap = false) public abstract EntityType<?> getSacrificed(int pIndex);
+
     @Unique
     private void fuckingClearContent() {
         try {
@@ -137,7 +150,11 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
     public BrewCauldronBlockEntity.Mode insertItem(ItemStack itemStack) {
         if (this.level != null && !this.level.isClientSide) {
             Item ingredient = itemStack.getItem();
-            BrewModifier brewModifier = (new BrewEffects()).getModifier(ingredient);
+            if (BrewEffects.INSTANCE == null) {
+                BrewEffects.INSTANCE = new BrewEffects();
+                BrewData.reRegister();
+            }
+            BrewModifier brewModifier = BrewEffects.INSTANCE.getModifier(ingredient);
             int modLevel = brewModifier != null ? brewModifier.getLevel() : -1;
             boolean activate = brewModifier instanceof CapacityModifier && brewModifier.getLevel() == 0;
             int firstEmpty = this.getFirstEmptySlot();
@@ -173,7 +190,7 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
 
                 if (this.mode == BrewCauldronBlockEntity.Mode.BREWING) {
                     BrewingRecipe brewingRecipe = this.level.getRecipeManager().getAllRecipesFor(ModRecipeSerializer.BREWING_TYPE.get()).stream().filter(recipe -> recipe.input.test(itemStack)).findFirst().orElse(null);
-                    BrewEffect brewEffect = (new BrewEffects()).getEffectFromCatalyst(ingredient);
+                    BrewEffect brewEffect = BrewEffects.INSTANCE.getEffectFromCatalyst(ingredient);
                     if (this.hasNoAugmentation() && (brewingRecipe != null || brewEffect != null)) {
                         if (brewingRecipe != null && brewingRecipe.getCapacityExtra() + this.getCapacityUsed() <= this.getCapacity()) {
                             this.capacityUsed += brewingRecipe.getCapacityExtra();
@@ -223,6 +240,11 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                                     this.multiplyCost(2.0F);
                                     return BrewCauldronBlockEntity.Mode.BREWING;
                                 }
+                                if (this.getDuration() == 4 && modLevel == 4) {
+                                    ++this.duration;
+                                    this.multiplyCost(2.0F);
+                                    return BrewCauldronBlockEntity.Mode.BREWING;
+                                }
                             }
 
                             if (brewModifier.getId().equals(BrewModifier.AMPLIFIER)) {
@@ -245,7 +267,12 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                                 }
                                 if (this.getAmplifier() == 3 && modLevel == 3) {
                                     ++this.amplifier;
-                                    this.multiplyCost(3.5F);
+                                    this.multiplyCost(3.0F);
+                                    return BrewCauldronBlockEntity.Mode.BREWING;
+                                }
+                                if (this.getAmplifier() == 4 && modLevel == 4) {
+                                    ++this.amplifier;
+                                    this.multiplyCost(3.0F);
                                     return BrewCauldronBlockEntity.Mode.BREWING;
                                 }
                             }
@@ -269,6 +296,11 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                                     return BrewCauldronBlockEntity.Mode.BREWING;
                                 }
                                 if (this.getAoE() == 3 && modLevel == 3) {
+                                    ++this.aoe;
+                                    this.multiplyCost(2.0F);
+                                    return BrewCauldronBlockEntity.Mode.BREWING;
+                                }
+                                if (this.getAoE() == 4 && modLevel == 4) {
                                     ++this.aoe;
                                     this.multiplyCost(2.0F);
                                     return BrewCauldronBlockEntity.Mode.BREWING;
@@ -299,6 +331,12 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                                     this.multiplyCost(1.25F);
                                     return BrewCauldronBlockEntity.Mode.BREWING;
                                 }
+
+                                if (this.getLingering() == 4.0F && modLevel == 4) {
+                                    ++this.lingering;
+                                    this.multiplyCost(1.25F);
+                                    return BrewCauldronBlockEntity.Mode.BREWING;
+                                }
                             }
 
                             if (brewModifier.getId().equals(BrewModifier.QUAFF)) {
@@ -324,6 +362,11 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                                     this.multiplyCost(1.25F);
                                     return BrewCauldronBlockEntity.Mode.BREWING;
                                 }
+                                if (this.getQuaff() == 32 && modLevel == 4) {
+                                    this.quaff += 8;
+                                    this.multiplyCost(1.25F);
+                                    return BrewCauldronBlockEntity.Mode.BREWING;
+                                }
                             }
 
                             if (brewModifier.getId().equals(BrewModifier.VELOCITY)) {
@@ -345,6 +388,11 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                                     return BrewCauldronBlockEntity.Mode.BREWING;
                                 }
                                 if (this.getVelocity() == 0.5F && modLevel == 3) {
+                                    this.velocity += 0.2F;
+                                    this.multiplyCost(1.25F);
+                                    return BrewCauldronBlockEntity.Mode.BREWING;
+                                }
+                                if (this.getVelocity() == 0.7F && modLevel == 4) {
                                     this.velocity += 0.2F;
                                     this.multiplyCost(1.25F);
                                     return BrewCauldronBlockEntity.Mode.BREWING;
@@ -429,4 +477,104 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
 
         return this.fail();
     }
+    /**
+     * @author Mega
+     * @reason reason in text versions
+     */
+    @Overwrite(remap = false)
+    public ItemStack getBrew() {
+        if (BrewEffects.INSTANCE == null) {
+            BrewEffects.INSTANCE = new BrewEffects();
+            BrewData.reRegister();
+
+        }
+        ItemStack brew = new ItemStack(ModItems.BREW.get());
+        if (this.level != null && !this.level.isClientSide) {
+            List<MobEffectInstance> effects = new ArrayList<>();
+            List<BrewEffectInstance> blockEffects = new ArrayList<>();
+            int hidden = 0;
+            for (int i = 0; i < this.getCapacity(); i++) {
+                ItemStack itemStack = this.getItem(i);
+                Item item = itemStack.getItem();
+                BrewModifier brewModifier = BrewEffects.INSTANCE.getModifier(item);
+                BrewEffect brewEffect = BrewEffects.INSTANCE.getEffectFromCatalyst(item);
+                BrewingRecipe brewingRecipe = this.level.getRecipeManager().getAllRecipesFor(ModRecipeSerializer.BREWING_TYPE.get()).stream().filter(recipe -> recipe.input.test(itemStack)).findFirst().orElse(null);
+                EntityType<?> entityType = this.getSacrificed(i);
+                if (entityType != null){
+                    brewingRecipe = this.level.getRecipeManager().getAllRecipesFor(ModRecipeSerializer.BREWING_TYPE.get()).stream()
+                            .filter(recipe -> {
+                                if (recipe.getEntityTypeTag() != null){
+                                    return entityType.is(recipe.getEntityTypeTag());
+                                } else if (recipe.getEntityType() != null) {
+                                    return entityType == recipe.getEntityType();
+                                }
+                                return false;
+                            }).findFirst().orElse(null);
+                    brewEffect = BrewEffects.INSTANCE.getEffectFromSacrifice(entityType);
+                }
+                BrewingRecipe finalBrewingRecipe = brewingRecipe;
+                if (brewingRecipe != null && effects.stream().noneMatch(effect -> effect.getEffect() == finalBrewingRecipe.output)) {
+                    effects.add(new MobEffectInstance(brewingRecipe.output, brewingRecipe.duration));
+                } else if (brewEffect != null){
+                    if (brewEffect instanceof PotionBrewEffect potionBrewEffect){
+                        effects.add(new MobEffectInstance(potionBrewEffect.mobEffect, potionBrewEffect.duration));
+                    } else {
+                        blockEffects.add(new BrewEffectInstance(brewEffect, brewEffect.duration));
+                    }
+                } else if (brewModifier != null) {
+                    if (brewModifier.getId().equals(BrewModifier.HIDDEN)) {
+                        hidden++;
+                    } else if (brewModifier.getId().equals(BrewModifier.SPLASH) && brew.is(ModItems.BREW.get())) {
+                        brew = new ItemStack(ModItems.SPLASH_BREW.get());
+                    } else if (brewModifier.getId().equals(BrewModifier.LINGERING) && brew.is(ModItems.SPLASH_BREW.get())) {
+                        brew = new ItemStack(ModItems.LINGERING_BREW.get());
+                    } else if (brewModifier.getId().equals(BrewModifier.GAS) && brew.is(ModItems.LINGERING_BREW.get())) {
+                        brew = new ItemStack(ModItems.GAS_BREW.get());
+                    }
+                }
+            }
+            for (int i = 0; i < effects.size(); i++) {
+                for (int j = 0; j < this.getDuration(); j++) {
+                    MobEffect type = effects.get(i).getEffect();
+                    int duration = effects.get(i).getDuration();
+                    effects.set(i, new MobEffectInstance(type, type.isInstantenous() ? duration : duration * 2));
+                }
+                for (int j = 0; j < this.getAmplifier(); j++) {
+                    MobEffect type = effects.get(i).getEffect();
+                    int duration = effects.get(i).getDuration();
+                    effects.set(i, new MobEffectInstance(type, type.isInstantenous() ? duration : duration / 2, Math.min(effects.get(i).getAmplifier() + 1, BrewConfig.maxAmplier(type))));
+                }
+                for (int j = 0; j < hidden; j++) {
+                    MobEffect type = effects.get(i).getEffect();
+                    int duration = effects.get(i).getDuration();
+                    int amplifier = effects.get(i).getAmplifier();
+                    effects.set(i, new MobEffectInstance(type, duration, amplifier, false, false, false));
+                }
+            }
+            for (int i = 0; i < blockEffects.size(); i++) {
+                for (int j = 0; j < this.getDuration(); j++) {
+                    BrewEffect type = blockEffects.get(i).getEffect();
+                    int duration = blockEffects.get(i).getDuration();
+                    blockEffects.set(i, new BrewEffectInstance(type, type.isInstantenous() ? duration : duration * 2));
+                }
+                for (int j = 0; j < this.getAmplifier(); j++) {
+                    BrewEffect type = blockEffects.get(i).getEffect();
+                    int duration = blockEffects.get(i).getDuration();
+                    blockEffects.set(i, new BrewEffectInstance(type, duration, blockEffects.get(i).getAmplifier() + 1));
+                }
+            }
+            BrewUtils.setCustomEffects(brew, effects, blockEffects);
+            BrewUtils.setAreaOfEffect(brew, this.getAoE());
+            BrewUtils.setLingering(brew, this.getLingering());
+            BrewUtils.setQuaff(brew, this.getQuaff());
+            BrewUtils.setVelocity(brew, this.getVelocity());
+            BrewUtils.setAquatic(brew, this.isAquatic());
+            BrewUtils.setFireProof(brew, this.isFireProof());
+            brew.getOrCreateTag().putInt("CustomPotionColor", BrewUtils.getColor(effects, blockEffects));
+            brew.getOrCreateTag().putBoolean("CustomBrew", true);
+            this.markUpdated();
+        }
+        return brew;
+    }
+
 }

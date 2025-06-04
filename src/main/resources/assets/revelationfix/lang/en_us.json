@@ -9,6 +9,10 @@
   "tooltip.revelationfix.holdAltEffect": "§5Hold §6Alt§5 to see effects details.",
   "tooltip.revelationfix.remaing": "§5Remaining quantity of items §6%s.",
   "tooltip.revelationfix.owner": "§5Owner: %s",
+  "tooltip.goety_revelation.jade.core": "§7Current core: %s",
+  "tooltip.goety_revelation.jade.available": "§7(Available)",
+  "tooltip.goety_revelation.jade.not_available": "§7(Not Available)",
+  "tooltip.goety_revelation.jade.rune_reactor_structure": "§7Structure integrity: %d / %d",
 
   "itemGroup.goety_revelation": "Goety · Revelation",
 
@@ -16,7 +20,7 @@
   "entity.revelationfix.maverick_servant": "Maverick Servant",
   "entity.revelationfix.quietus_virtual_entity": "Quietus Beam",
   "entity.revelationfix.apostle_servant": "Apostle Servant",
-  "entity.revelationfix.the_end_ritual_block": "The-End Ritual Block",
+  "entity.revelationfix.block_shaking_entity": "Rendering Block",
   "entity.revelationfix.the_end_hellfire":"The-End Fire",
   "entity.revelationfix.star_arrow":"Star Arrow",
 
@@ -26,10 +30,11 @@
 
   "info.goety.ritual.apollyonWarn": "§4You are about to summon the most dreaded god in this world. Are you ready？§4",
   "info.goety.ritual.apollyonDisable": "§qYou haven't summoned Apollyon in the Overworld yet!§q",
-  "info.goety.apollyon.summon": "§cThe Lord is watching you....",
+  "info.goety.apollyon.summon": "§cThe World is watching you....",
   "info.goety_revelation.puzzle.title": "Chaos Extracted Material",
   "info.goety_revelation.puzzle.desc": "§7The-End Puzzle: %s",
   "info.revelationfix.ritual.structure.fail" : "Inefficient Block Requirements! The structural integrity:%s / %s",
+  "info.goety_revelation.no_spells" : "Your magic has malfunctioned under the influence of the current domain!",
 
   "item.goety_revelation.halo_of_the_end" : "Halo of The-End",
   "item.goety_revelation.halo_of_the_end.default_1" : "If this is indeed the end of everything———",
@@ -392,6 +397,8 @@
   "goety_revelation.effect.spell_cooldown.tooltip" : "Reduce the cooldown of focus by §e%s§r.",
   "goety_revelation.effect.spell_power_multiplier.name" : "Spell Power Multiplier",
   "goety_revelation.effect.spell_power_multiplier.tooltip" : "Increases total goety spell level by §e%s§r.",
+  "goety_revelation.effect.spell_power.name" : "Spell Power",
+  "goety_revelation.effect.spell_power.tooltip" : "Increases goety spell power by §e%s§r.",
   "goety_revelation.effect.mysterious_blade.name" : "Mysterious Blade",
   "goety_revelation.effect.mysterious_blade.tooltip" : "Convert §e%s §rof damage into magical damage, with a §e%s §rchance of healing surrounding servants",
   "goety_revelation.effect.ruler_of_nocturnal.name" : "Ruler of Nocturnal",
@@ -413,5 +420,9 @@
   "item.tetra.scroll.sword/aeglos.prefix" : "███Documentation",
   "item.tetra.scroll.sword/aeglos.name" : "Schematic: §7The Spear of Aeglos",
   "item.tetra.scroll.sword/aeglos.description" : "§7The Final Arbiter of Existential Threats.",
-  "item.tetra.scroll.sword/aeglos.details" : "§7The Final Arbiter of Existential Threats."
+  "item.tetra.scroll.sword/aeglos.details" : "§7The Final Arbiter of Existential Threats.",
+
+  "config.jade.plugin_goety_revelation.runestone_id" : "Runestone Engraved Table",
+  "config.jade.plugin_goety_revelation.rune_reactor_id" : "Rune Reactor"
+
 }

@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.network.s2c;
 
-import com.mega.revelationfix.common.network.LifeStealPacketHandler;
+import com.mega.revelationfix.common.network.PacketClientProxy;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -37,6 +37,6 @@ public class LifeStealParticlesS2CPacket {
     }
 
     static void handle0(LifeStealParticlesS2CPacket packet, Supplier<NetworkEvent.Context> context) {
-        LifeStealPacketHandler.doLifestealParticles(packet.xPos, packet.yPos, packet.zPos);
+        PacketClientProxy.doLifestealParticles(packet.xPos, packet.yPos, packet.zPos);
     }
 }

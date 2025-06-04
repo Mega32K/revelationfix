@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time.time.millis;
 
-import com.mega.revelationfix.safe.NoModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
 import com.mega.revelationfix.util.time.TimeContext;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;

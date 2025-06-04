@@ -1,8 +1,10 @@
 package com.mega.revelationfix.mixin.gr;
 
-import com.mega.revelationfix.common.client.enums.ModChatFormatting;
+import com.mega.revelationfix.client.enums.ModChatFormatting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -34,9 +36,12 @@ public class ChatFormattingMixin {
     )
     private static void addFormatting(CallbackInfo ci) {
         int ordinal = $VALUES.length;
-        $VALUES = Arrays.copyOf($VALUES, ordinal + 1);
+
+        $VALUES = Arrays.copyOf($VALUES, ordinal + 2);
         ModChatFormatting.APOLLYON = (ChatFormatting) (Object) (new ChatFormattingMixin("APOLLYON", ordinal, "APOLLYON", 'q', 0, 0));
         $VALUES[ordinal] = ModChatFormatting.APOLLYON;
+        ModChatFormatting.FROST = (ChatFormatting) (Object) (new ChatFormattingMixin("GR_FROST", ordinal+1, "GR_FROST", 'w', 16, 0x8ec5fc));
+        $VALUES[ordinal+1] = ModChatFormatting.FROST;
     }
 }
 

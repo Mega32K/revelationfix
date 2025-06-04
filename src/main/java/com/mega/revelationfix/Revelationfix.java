@@ -5,12 +5,8 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.Maverick;
 import com.google.common.collect.ImmutableList;
 import com.mega.revelationfix.common.advancement.ModCriteriaTriggers;
 import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.common.config.ClientConfig;
-import com.mega.revelationfix.common.config.CommonConfig;
-import com.mega.revelationfix.common.config.ItemConfig;
-import com.mega.revelationfix.common.config.ModpackCommonConfig;
-import com.mega.revelationfix.common.data.ModDataGeneratorHandler;
-import com.mega.revelationfix.common.data.ModWorldGen;
+import com.mega.revelationfix.common.config.*;
+import com.mega.revelationfix.common.entity.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.init.*;
 import com.mega.revelationfix.common.network.PacketHandler;
@@ -27,9 +23,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -61,6 +54,8 @@ public class Revelationfix {
 
     public Revelationfix() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ModBlocks.BLOCKS.register(modBus);
+        ModBlocks.BLOCK_ENTITIES.register(modBus);
         ModAttributes.ATTRIBUTES.register(modBus);
         ModSounds.SOUNDS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
@@ -69,6 +64,7 @@ public class Revelationfix {
         ModStructurePlacementTypes.STRUCTURE_PLACEMENT_TYPES.register(modBus);
         ModStructureTypes.STRUCTURE_TYPES.register(modBus);
         ModStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(modBus);
+        ModParticleTypes.PARTICLE_TYPES.register(modBus);
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::enqueueIMC);
         modBus.addListener(this::setupEntityAttributeCreation);
@@ -89,9 +85,11 @@ public class Revelationfix {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, MODID + "/" + MODID + "-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ItemConfig.SPEC, MODID + "/" + MODID + "-item.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, MODID + "/" + MODID + "-client.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
+
         if (!SafeClass.isFantasyEndingLoaded()) {
             DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-                Timer timer = new Timer();
+                Timer timer = new Timer(true);
                 TimerTask task = new TimerTask() {
                     public void run() {
                         if (!TimeStopUtils.isTimeStop) {
@@ -130,6 +128,7 @@ public class Revelationfix {
         event.put(ModEntities.HERETIC_SERVANT.get(), Heretic.setCustomAttributes().build());
         event.put(ModEntities.MAVERICK_SERVANT.get(), Maverick.setCustomAttributes().build());
         event.put(ModEntities.APOSTLE_SERVANT.get(), ApostleServant.setCustomAttributes().build());
+        event.put(ModEntities.FAKE_SPELLER.get(), FakeSpellerEntity.createAttributes().build());
     }
 
     private void enqueueIMC(InterModEnqueueEvent event) {

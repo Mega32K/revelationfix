@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.common.effect.QuietusEffect;
-import com.mega.revelationfix.safe.NoModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;

@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.network.s2c.timestop;
 
-import com.mega.revelationfix.safe.ClientLevelExpandedContext;
-import com.mega.revelationfix.safe.LevelEC;
+import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
+import com.mega.revelationfix.safe.level.LevelEC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;

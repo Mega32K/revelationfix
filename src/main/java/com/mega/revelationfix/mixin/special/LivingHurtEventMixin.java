@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.special;
 
-import com.mega.revelationfix.safe.LivingEventEC;
+import com.mega.revelationfix.safe.entity.LivingEventEC;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

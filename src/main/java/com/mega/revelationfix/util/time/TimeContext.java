@@ -1,6 +1,6 @@
 package com.mega.revelationfix.util.time;
 
-import com.mega.revelationfix.common.client.RendererUtils;
+import com.mega.revelationfix.client.RendererUtils;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Timer;

@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.gr;
 
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,10 +1,7 @@
 package com.mega.revelationfix.common.init;
 
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.common.entity.FakeItemEntity;
-import com.mega.revelationfix.common.entity.RevelationCageEntity;
-import com.mega.revelationfix.common.entity.TheEndHellfire;
-import com.mega.revelationfix.common.entity.TheEndRitualBlockEntity;
+import com.mega.revelationfix.common.entity.*;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.cultists.HereticServant;
 import com.mega.revelationfix.common.entity.cultists.MaverickServant;
@@ -49,8 +46,8 @@ public class ModEntities {
             .sized(0.1F, 0.1F)
             .clientTrackingRange(40)
     );
-    public static final RegistryObject<EntityType<TheEndRitualBlockEntity>> THE_END_RITUAL_BLOCK = register("the_end_ritual_block", EntityType.Builder.
-                    <TheEndRitualBlockEntity>of(TheEndRitualBlockEntity::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<BlockShakingEntity>> BLOCK_SHAKING_ENTITY = register("block_shaking_entity", EntityType.Builder.
+                    <BlockShakingEntity>of(BlockShakingEntity::new, MobCategory.MISC)
             .fireImmune()
             .setShouldReceiveVelocityUpdates(false)
             .sized(.001F, .001F)
@@ -75,6 +72,12 @@ public class ModEntities {
             EntityType.Builder.<GungnirSpearEntity>of(GungnirSpearEntity::new, MobCategory.MISC)
                     .fireImmune()
                     .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20));
+    public static final RegistryObject<EntityType<FakeSpellerEntity>> FAKE_SPELLER = register("fake_speller",
+            EntityType.Builder.<FakeSpellerEntity>of(FakeSpellerEntity::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0F, 0F)
                     .clientTrackingRange(4)
                     .updateInterval(20));
 

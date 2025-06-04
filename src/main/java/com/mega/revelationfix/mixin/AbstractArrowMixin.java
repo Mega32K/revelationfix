@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin;
 
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
-import com.mega.revelationfix.safe.DeathArrowEC;
+import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

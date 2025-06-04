@@ -41,7 +41,7 @@ public class RulerOfNocturnalEffect {
                 if (level <= 0) return;
                 if (attacker.level.getSkyDarken() > 0) {
                     event.setAmount(event.getAmount() * 1.6666F);
-                } else event.setAmount(event.getAmount() * (1F - .6666F));
+                } else event.setAmount(event.getAmount() * (1F - .3333F));
             }
         }
     }

@@ -208,9 +208,15 @@ dependencies {
     implementation fg.deobf("curse.maven:Tetra-289712:6418957")
     implementation fg.deobf("curse.maven:Caelus-308989:4581481")
     implementation fg.deobf("curse.maven:EnigmaticLegacy-336184:5600004")
+    implementation fg.deobf("curse.maven:EnigmaticAddons-1030121:6563671")
     implementation fg.deobf("curse.maven:ArtofForging-596955:6510711")
     implementation fg.deobf("curse.maven:SoulFire-662413:6248077")
     implementation fg.deobf("curse.maven:Cobweb-968456:6089406")
+    /*
+    implementation fg.deobf("curse.maven:KubeJS-238086:5853326")
+    implementation fg.deobf("curse.maven:Rhino-416294:6186971")
+
+     */ 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("maven.modrinth:tetraclip:1.0.5")
 }

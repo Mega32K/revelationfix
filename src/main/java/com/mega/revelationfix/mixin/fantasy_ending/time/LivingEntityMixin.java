@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time;
 
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.safe.NoModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
 import com.mega.revelationfix.util.time.TimeStopEntityData;
 import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.nbt.CompoundTag;

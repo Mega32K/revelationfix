@@ -10,12 +10,14 @@ import com.Polarice3.Goety.common.magic.Spell;
 import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.mega.revelationfix.common.config.GRSpellConfig;
+import com.mega.revelationfix.common.entity.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.misc.QuietusVirtualEntity;
 import com.mega.revelationfix.common.init.ModEffects;
 import com.mega.revelationfix.common.init.ModSounds;
-import com.mega.revelationfix.safe.EntityExpandedContext;
-import com.mega.revelationfix.safe.MobEffectInstanceEC;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import com.mega.revelationfix.util.LivingEntityEC;
+import com.mega.revelationfix.util.entity.EntityFinder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,7 +25,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
@@ -66,7 +70,7 @@ public class WitherQuietusSpell extends Spell {
             range += WandUtil.getLevels(ModEnchantments.RANGE.get(), caster) * 4;
         }
         LivingEntity target = this.getTarget(caster, range);
-        return target != null && target.isAlive() && (!(target instanceof IOwned owned) || !owned.getTrueOwner().getUUID().equals(caster.getUUID()));
+        return target != null && target.isAlive() && (!(target instanceof IOwned owned) || owned.getTrueOwner() != caster);
     }
 
     public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
@@ -75,7 +79,7 @@ public class WitherQuietusSpell extends Spell {
             range += WandUtil.getLevels(ModEnchantments.RANGE.get(), caster) * 4;
         }
         LivingEntity target = this.getTarget(caster, range);
-        if (target != null && target.isAlive() && (!(target instanceof IOwned owned) || !owned.getTrueOwner().getUUID().equals(caster.getUUID()))) {
+        if (target != null && target.isAlive() && EntityFinder.STRICT_NOT_ALLIED.test(caster, target)) {
             this.playSound(worldIn, caster, this.CastingSound(), 1.0F, 1.0F);
             QuietusVirtualEntity quietusVirtual = new QuietusVirtualEntity(caster.level, new Vec3(caster.getX(), caster.getY(0.5F), caster.getZ()), new Vec3(target.getX(), target.getY(0.5D), target.getZ()), caster);
             caster.level.addFreshEntity(quietusVirtual);
@@ -84,7 +88,7 @@ public class WitherQuietusSpell extends Spell {
             target.hurt(caster.damageSources().source(DamageTypes.WITHER, caster), 12.0F);
             target.invulnerableTime = 0;
             target.hurt(caster.damageSources().source(DamageTypes.MAGIC, caster), 8.0F);
-            if (!target.level.isClientSide && target.isDeadOrDying()) {
+            if (!target.level.isClientSide && target.isDeadOrDying() && caster instanceof Player) {
                 Level level = target.level;
                 WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), level);
                 servant.setTrueOwner(caster);

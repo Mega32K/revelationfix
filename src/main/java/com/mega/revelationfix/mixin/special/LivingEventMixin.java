@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.special;
 
-import com.mega.revelationfix.safe.LivingEventEC;
+import com.mega.revelationfix.safe.entity.LivingEventEC;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;

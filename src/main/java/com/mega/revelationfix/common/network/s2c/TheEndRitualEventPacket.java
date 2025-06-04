@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.network.s2c;
 
-import com.mega.revelationfix.safe.ClientLevelExpandedContext;
-import com.mega.revelationfix.safe.ClientLevelInterface;
+import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
+import com.mega.revelationfix.safe.level.ClientLevelInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public class TheEndRitualEventPacket {
     private final BlockPos darkAltarPos;
     private final boolean isStart;
+
 
     public TheEndRitualEventPacket(BlockPos blockPos, boolean isStart) {
         this.darkAltarPos = blockPos;

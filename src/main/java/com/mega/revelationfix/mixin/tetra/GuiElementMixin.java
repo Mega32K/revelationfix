@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.tetra;
 
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import com.mega.revelationfix.safe.mixinpart.tetra.GuiElementEC;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

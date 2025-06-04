@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.l2hostility;
 
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import dev.xkmc.l2hostility.content.item.traits.SealedItem;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;

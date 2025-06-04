@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.safe.Apollyon2Interface;
+import com.mega.revelationfix.safe.entity.Apollyon2Interface;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;

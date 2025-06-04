@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.data;
 
-import com.mega.revelationfix.safe.PlayerInterface;
+import com.mega.revelationfix.safe.entity.PlayerInterface;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

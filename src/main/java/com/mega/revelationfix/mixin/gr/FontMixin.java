@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.gr;
 
-import com.mega.revelationfix.common.client.font.MinecraftFont;
+import com.mega.revelationfix.client.font.MinecraftFont;
 import com.mega.revelationfix.common.compat.SafeClass;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.FontSet;

@@ -2,10 +2,11 @@ package com.mega.revelationfix.common.event.handler;
 
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.revelationfix.Revelationfix;
+import com.mega.revelationfix.client.spell.SpellClientContext;
 import com.mega.revelationfix.common.apollyon.client.render.VFRBuilders;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
-import com.mega.revelationfix.common.client.RendererUtils;
-import com.mega.revelationfix.common.client.font.OdamaneFont;
+import com.mega.revelationfix.client.RendererUtils;
+import com.mega.revelationfix.client.font.OdamaneFont;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.config.CommonConfig;
@@ -14,7 +15,7 @@ import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.item.ICenterDescItem;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
-import com.mega.revelationfix.safe.ClientLevelExpandedContext;
+import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import com.mega.revelationfix.util.ATAHelper2;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
@@ -51,6 +52,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
@@ -72,7 +74,7 @@ public class ClientEventHandler {
     public static final ResourceLocation RAIN_LOCATION = new ResourceLocation(Revelationfix.MODID, "textures/environment/rain.png");
     private static final RandomSource rand = RandomSource.create();
     public static VFRBuilders.WorldVFRTrailBuilder normalStarTrailsBuilder;
-    public static short tickCount;
+    public static int tickCount;
     public static Item randomDisplayItem = Items.END_CRYSTAL;
     public static Item randomPuzzleDisplayItem = Items.END_CRYSTAL;
 
@@ -166,7 +168,9 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getInstance().level != null) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level != null && event.phase == TickEvent.Phase.START) {
+            mc.getProfiler().push("gr_clientTickEvent");
             tickCount++;
             if (tickCount >= 255)
                 tickCount = 0;
@@ -191,6 +195,9 @@ public class ClientEventHandler {
                     randomPuzzleDisplayItem = item;
                 }
             }
+            if (SpellClientContext.circle != null && !mc.isPaused())
+                SpellClientContext.circle.tick();
+            mc.getProfiler().pop();
         }
     }
 
@@ -379,6 +386,14 @@ public class ClientEventHandler {
         if (TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension && (mc.player != null && (!TimeStopUtils.canMove(mc.player)))) {
             if (!(mc.screen instanceof DeathScreen))
                 event.setCanceled(true);
+        }
+    }
+    @SubscribeEvent
+    public static void renderSpellCircle(RenderPlayerEvent event) {
+        if (SafeClass.isYSMLoaded()) return;
+        Minecraft mc = Minecraft.getInstance();
+        if (SpellClientContext.circle != null) {
+            SpellClientContext.circle.render(event.getPartialTick(), event.getPoseStack());
         }
     }
 }

@@ -13,6 +13,9 @@ public class GRSpellConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> WitherQuietusCost;
     public static ForgeConfigSpec.ConfigValue<Integer> WitherQuietusDuration;
     public static ForgeConfigSpec.ConfigValue<Integer> WitherQuietusCoolDown;
+    public static ForgeConfigSpec.ConfigValue<Integer> IceCost;
+    public static ForgeConfigSpec.ConfigValue<Integer> IceChargeUp;
+    public static ForgeConfigSpec.ConfigValue<Integer> IceCoolDown;
 
     public static void init(ForgeConfigSpec.Builder BUILDER) {
         BUILDER.push("Revelation Spell");
@@ -30,6 +33,11 @@ public class GRSpellConfig {
         WitherQuietusCost = BUILDER.comment("Wither Quietus Spell Cost, Default: 2500").defineInRange("quietusCost", 2500, 0, Integer.MAX_VALUE);
         WitherQuietusDuration = BUILDER.comment("Time to cast Wither Quietus Spell, Default: 0").defineInRange("quietusTime", 0, 0, 72000);
         WitherQuietusCoolDown = BUILDER.comment("Wither Quietus Spell Cooldown, Default: 140").defineInRange("quietusCoolDown", 140, 0, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("Ice Spell");
+        IceCost = BUILDER.comment("Ice Spell Cost, Default: 8").defineInRange("iceCost", 100, 0, Integer.MAX_VALUE);
+        IceChargeUp = BUILDER.comment("How many ticks the Ice Spell much charge before casting, Default: 20").defineInRange("iceChargeUp", 0, 0, Integer.MAX_VALUE);
+        IceCoolDown = BUILDER.comment("Ice Spell Cooldown, Default: 400").defineInRange("iceCoolDown", 200, 0, 72000);
         BUILDER.pop();
     }
 }

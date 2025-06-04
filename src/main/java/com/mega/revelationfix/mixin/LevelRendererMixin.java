@@ -1,18 +1,22 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.common.client.citadel.PostEffectRegistry;
+import com.mega.revelationfix.client.citadel.PostEffectRegistry;
+import com.mega.revelationfix.common.levelevent.LevelEventManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
@@ -59,5 +63,8 @@ public class LevelRendererMixin {
     private void ac_renderLevel_end(PoseStack poseStack, float f, long l, boolean b, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo ci) {
         PostEffectRegistry.blitEffects();
     }
-
+    @Inject(method = "levelEvent", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void customLevelEvent(int p_234305_, BlockPos p_234306_, int p_234307_, CallbackInfo ci, RandomSource randomsource) {
+        LevelEventManager.onReceive(p_234305_, randomsource, p_234306_, p_234307_);
+    }
 }

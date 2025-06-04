@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.tetra;
 
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import org.spongepowered.asm.mixin.Mixin;

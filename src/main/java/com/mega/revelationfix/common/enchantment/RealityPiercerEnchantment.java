@@ -6,7 +6,7 @@ import com.eeeab.eeeabsmobs.sever.entity.immortal.EntityImmortal;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.mixin.eeeabsmobs.EntityImmortalAccessor;
 import com.mega.revelationfix.mixin.eeeabsmobs.EntityNamelessGuardianAccessor;
-import com.mega.revelationfix.safe.Apollyon2Interface;
+import com.mega.revelationfix.safe.entity.Apollyon2Interface;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,17 +36,29 @@ public class RealityPiercerEnchantment extends Enchantment {
         if (beHurt instanceof Apostle apostle && apostle instanceof ApollyonAbilityHelper helper && apostle instanceof Apollyon2Interface apollyon2Interface) {
             if (helper.allTitlesApostle_1_20_1$isApollyon()) {
 
-                helper.allTitlesApostle_1_20_1$setHitCooldown(helper.allTitlesApostle_1_20_1$getHitCooldown() - maxTicks);
-                if (helper.allTitlesApostle_1_20_1$getHitCooldown() < 0)
-                    helper.allTitlesApostle_1_20_1$setHitCooldown(0);
+                {
+                    if (helper.allTitlesApostle_1_20_1$getHitCooldown() >= 1) {
+                        helper.allTitlesApostle_1_20_1$setHitCooldown(helper.allTitlesApostle_1_20_1$getHitCooldown() - maxTicks);
+                        if (helper.allTitlesApostle_1_20_1$getHitCooldown() <= 0)
+                            helper.allTitlesApostle_1_20_1$setHitCooldown(1);
+                    }
+                }
 
-                helper.setApollyonTime(helper.getApollyonTime() - maxTicks);
-                if (helper.getApollyonTime() < 0)
-                    helper.setApollyonTime(0);
+                {
+                    if (helper.getApollyonTime() >= 1) {
+                        helper.setApollyonTime(helper.getApollyonTime() - maxTicks);
+                        if (helper.getApollyonTime() <= 0)
+                            helper.setApollyonTime(1);
+                    }
+                }
 
-                apollyon2Interface.revelaionfix$setHitCooldown(apollyon2Interface.revelaionfix$getHitCooldown() - maxTicks);
-                if (apollyon2Interface.revelaionfix$getHitCooldown() < 0)
-                    apollyon2Interface.revelaionfix$setHitCooldown(0);
+                {
+                    if (apollyon2Interface.revelaionfix$getHitCooldown() >= 1) {
+                        apollyon2Interface.revelaionfix$setHitCooldown(apollyon2Interface.revelaionfix$getHitCooldown() - maxTicks);
+                        if (apollyon2Interface.revelaionfix$getHitCooldown() <= 0)
+                            apollyon2Interface.revelaionfix$setHitCooldown(1);
+                    }
+                }
 
             }
         } else if (SafeClass.isEEEABLoaded()) {

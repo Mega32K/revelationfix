@@ -6,7 +6,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import z1gned.goetyrevelation.ModMain;
 
-@Mod.EventBusSubscriber(modid = ModMain.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ReloadListenerEvents {
     @SubscribeEvent
     public static void dataListener(AddReloadListenerEvent event){

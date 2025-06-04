@@ -4,12 +4,12 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.mega.revelationfix.common.client.enums.ModUseAnim;
+import com.mega.revelationfix.client.enums.ModUseAnim;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
 import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.common.item.IInvulnerableItem;
 import com.mega.revelationfix.safe.DamageSourceInterface;
-import com.mega.revelationfix.safe.LivingEventEC;
+import com.mega.revelationfix.safe.entity.LivingEventEC;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +31,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -80,7 +79,10 @@ public class GungnirItem extends Item implements Vanishable, IInvulnerableItem, 
     public int getUseDuration(@NotNull ItemStack itemStack) {
         return 72000;
     }
-
+    @Override
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+        return super.onEntitySwing(stack, entity);
+    }
     public void releaseUsing(@NotNull ItemStack itemStack, @NotNull Level level, @NotNull LivingEntity livingEntity, int timeLeft) {
         if (livingEntity instanceof Player player) {
             int i = this.getUseDuration(itemStack) - timeLeft;
@@ -135,7 +137,7 @@ public class GungnirItem extends Item implements Vanishable, IInvulnerableItem, 
     }
 
     @Override
-    public void inventoryTick(ItemStack p_41404_, Level p_41405_, Entity p_41406_, int p_41407_, boolean p_41408_) {
+    public void inventoryTick(@NotNull ItemStack p_41404_, @NotNull Level p_41405_, @NotNull Entity p_41406_, int p_41407_, boolean p_41408_) {
         if (p_41408_ && p_41406_ instanceof Player player) {
             GungnirClient.handTick(player, p_41404_);
             Entity target = GungnirClient.selectEntity;

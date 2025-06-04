@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.compat.tetra.client;
 
-import com.mega.revelationfix.common.client.PreciseGuiGraphics;
+import com.mega.revelationfix.client.PreciseGuiGraphics;
 import net.minecraft.client.gui.GuiGraphics;
 import se.mickelus.mutil.gui.GuiElement;
 

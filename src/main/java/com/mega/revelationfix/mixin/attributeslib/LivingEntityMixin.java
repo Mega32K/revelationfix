@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.attributeslib;
 
 import com.mega.revelationfix.common.effect.QuietusEffect;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import dev.shadowsoffire.attributeslib.api.ALCombatRules;
 import dev.shadowsoffire.attributeslib.api.ALObjects;
 import dev.shadowsoffire.attributeslib.util.IAttributeManager;

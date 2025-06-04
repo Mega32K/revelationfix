@@ -9,6 +9,10 @@
   "tooltip.revelationfix.holdAltEffect": "§5按住 §6Alt§5 查看效果。",
   "tooltip.revelationfix.remaing": "§5剩余物品数量 §6%s",
   "tooltip.revelationfix.owner": "§5所有者: %s",
+  "tooltip.goety_revelation.jade.core": "§7当前核心: %s",
+  "tooltip.goety_revelation.jade.available": "§7(可用)",
+  "tooltip.goety_revelation.jade.not_available": "§7(不可用)",
+  "tooltip.goety_revelation.jade.rune_reactor_structure": "§7结构完整度: %d / %d",
 
   "itemGroup.goety_revelation": "诡厄巫法·启示录",
 
@@ -16,7 +20,7 @@
   "entity.revelationfix.maverick_servant": "独行者",
   "entity.revelationfix.quietus_virtual_entity": "凋灵寂灭射线",
   "entity.revelationfix.apostle_servant": "使徒-仆从",
-  "entity.revelationfix.the_end_ritual_block": "终末仪式技术方块",
+  "entity.revelationfix.block_shaking_entity": "技术渲染方块",
   "entity.revelationfix.the_end_hellfire":"终末之焰",
   "entity.revelationfix.star_arrow":"星辰之矢",
 
@@ -26,10 +30,11 @@
 
   "info.goety.ritual.apollyonWarn": "§4你即将召唤此界最为畏怖之神，你做好准备了么?§4",
   "info.goety.ritual.apollyonDisable": "§q你还没有在主世界召唤过祂!§q",
-  "info.goety.apollyon.summon": "§c神明注视着你....",
+  "info.goety.apollyon.summon": "§c世界凝视着你....",
   "info.goety_revelation.puzzle.title": "混沌提取之物",
   "info.goety_revelation.puzzle.desc": "§7终末之谜: %s",
   "info.revelationfix.ritual.structure.fail" : "无效的仪式!仪式完整度:%s / %s",
+  "info.goety_revelation.no_spells" : "你的魔法在当前领域的影响下失灵了!",
 
   "item.goety_revelation.halo_of_the_end" : "终末之环",
   "item.goety_revelation.halo_of_the_end.default_1" : "如果这就是一切的尽头，那么——",
@@ -391,7 +396,9 @@
   "goety_revelation.effect.spell_cooldown.name" : "聚晶冷却缩减",
   "goety_revelation.effect.spell_cooldown.tooltip" : "使用魔法聚晶后，减少 §e%s§r 的聚晶冷却时间",
   "goety_revelation.effect.spell_power_multiplier.name" : "巫法强度乘数",
-  "goety_revelation.effect.spell_power_multiplier.tooltip" : "增加 §e%s§r 任意巫法的强效等级",
+  "goety_revelation.effect.spell_power_multiplier.tooltip" : "增幅 §e%s§r 任意巫法的额外强效等级",
+  "goety_revelation.effect.spell_power.name" : "巫法强度",
+  "goety_revelation.effect.spell_power.tooltip" : "增加 §e%s§r 任意巫法的强效等级",
   "goety_revelation.effect.mysterious_blade.name" : "玄妙之刃",
   "goety_revelation.effect.mysterious_blade.tooltip" : "将 §e%s §r的伤害转化为有源魔法伤害，同时 §e%s §r的几率治愈周围的仆从",
   "goety_revelation.effect.ruler_of_nocturnal.name" : "暗夜主宰",
@@ -413,5 +420,8 @@
   "item.tetra.scroll.sword/aeglos.name" : "§7艾格洛斯之枪",
   "item.tetra.scroll.sword/aeglos.prefix" : "███项目文档",
   "item.tetra.scroll.sword/aeglos.description" : "§7对抗一切实体的终极武器",
-  "item.tetra.scroll.sword/aeglos.details" : "§7对抗一切实体的终极武器"
+  "item.tetra.scroll.sword/aeglos.details" : "§7对抗一切实体的终极武器",
+
+  "config.jade.plugin_goety_revelation.runestone_id" : "符文镶嵌台",
+  "config.jade.plugin_goety_revelation.rune_reactor_id" : "符文反应台"
 }

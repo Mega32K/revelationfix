@@ -38,6 +38,8 @@ public class PacketHandler {
         INSTANCE.registerMessage(id(), PlayApollyonPostThemePacket.class, PlayApollyonPostThemePacket::encode, PlayApollyonPostThemePacket::decode, PlayApollyonPostThemePacket::handle);
         INSTANCE.registerMessage(id(), TheEndDeathPacket.class, TheEndDeathPacket::encode, TheEndDeathPacket::decode, TheEndDeathPacket::handle);
         INSTANCE.registerMessage(id(), LifeStealParticlesS2CPacket.class, LifeStealParticlesS2CPacket::encode, LifeStealParticlesS2CPacket::decode, LifeStealParticlesS2CPacket::handle);
+        INSTANCE.registerMessage(id(), SpellCircleStatePacket.class, SpellCircleStatePacket::encode, SpellCircleStatePacket::decode, SpellCircleStatePacket::handle);
+        INSTANCE.registerMessage(id(), IceSpellParticlePacket.class, IceSpellParticlePacket::encode, IceSpellParticlePacket::decode, IceSpellParticlePacket::handle);
     }
 
     public static int id() {

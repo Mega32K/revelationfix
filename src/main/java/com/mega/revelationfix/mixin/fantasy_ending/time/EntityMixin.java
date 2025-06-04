@@ -1,8 +1,8 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time;
 
-import com.mega.revelationfix.safe.LevelEC;
-import com.mega.revelationfix.safe.LevelExpandedContext;
-import com.mega.revelationfix.safe.NoModDependsMixin;
+import com.mega.revelationfix.safe.level.LevelEC;
+import com.mega.revelationfix.safe.level.LevelExpandedContext;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
 import com.mega.revelationfix.util.time.TimeStopEntityData;
 import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.server.level.ServerLevel;

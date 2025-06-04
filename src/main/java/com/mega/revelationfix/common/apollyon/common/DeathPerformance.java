@@ -8,12 +8,12 @@ import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.PlayApollyonPostThemePacket;
-import com.mega.revelationfix.safe.Apollyon2Interface;
-import com.mega.revelationfix.safe.ApollyonExpandedContext;
+import com.mega.revelationfix.safe.entity.Apollyon2Interface;
+import com.mega.revelationfix.safe.entity.ApollyonExpandedContext;
 import com.mega.revelationfix.safe.DamageSourceInterface;
-import com.mega.revelationfix.safe.EntityExpandedContext;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.util.ATAHelper2;
-import com.mega.revelationfix.util.EntityActuallyHurt;
+import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -300,39 +301,39 @@ public class DeathPerformance {
     public static DamageSource[] damageSourcesFromForge(LivingEntity source) {
         return new DamageSource[]{
                 (source.damageSources().anvil(source)),
-                (source.damageSources().cactus()),
-                (source.damageSources().cramming()),
-                (source.damageSources().dragonBreath()),
-                (source.damageSources().drown()),
-                (source.damageSources().dryOut()),
+                (source.damageSources().source(DamageTypes.CACTUS, source)),
+                (source.damageSources().source(DamageTypes.CRAMMING, source)),
+                (source.damageSources().source(DamageTypes.DRAGON_BREATH, source)),
+                (source.damageSources().source(DamageTypes.DROWN, source)),
+                (source.damageSources().source(DamageTypes.DRY_OUT, source)),
                 (source.damageSources().explosion(source, source)),
-                (source.damageSources().freeze()),
-                (source.damageSources().fall()),
+                (source.damageSources().source(DamageTypes.FREEZE, source)),
+                (source.damageSources().source(DamageTypes.FALL, source)),
                 (source.damageSources().fallingStalactite(source)),
-                (source.damageSources().fellOutOfWorld()),
-                (source.damageSources().flyIntoWall()),
-                (source.damageSources().generic()),
-                (source.damageSources().genericKill()),
-                (source.damageSources().hotFloor()),
-                (source.damageSources().inFire()),
-                (source.damageSources().inWall()),
+                (source.damageSources().source(DamageTypes.FELL_OUT_OF_WORLD, source)),
+                (source.damageSources().source(DamageTypes.FLY_INTO_WALL, source)),
+                (source.damageSources().source(DamageTypes.GENERIC, source)),
+                (source.damageSources().source(DamageTypes.GENERIC_KILL, source)),
+                (source.damageSources().source(DamageTypes.HOT_FLOOR, source)),
+                (source.damageSources().source(DamageTypes.IN_FIRE, source)),
+                (source.damageSources().source(DamageTypes.IN_WALL, source)),
                 (source.damageSources().indirectMagic(source, source)),
-                (source.damageSources().lava()),
-                (source.damageSources().lightningBolt()),
+                (source.damageSources().source(DamageTypes.LAVA, source)),
+                (source.damageSources().source(DamageTypes.LIGHTNING_BOLT, source)),
                 (source.damageSources().mobProjectile(source, source)),
-                (source.damageSources().magic()),
+                (source.damageSources().source(DamageTypes.MAGIC, source)),
                 (source.damageSources().mobAttack(source)),
                 (source.damageSources().noAggroMobAttack(source)),
-                (source.damageSources().onFire()),
-                (source.damageSources().outOfBorder()),
-                (source.damageSources().stalagmite()),
-                (source.damageSources().starve()),
+                (source.damageSources().source(DamageTypes.ON_FIRE, source)),
+                (source.damageSources().source(DamageTypes.OUTSIDE_BORDER, source)),
+                (source.damageSources().source(DamageTypes.STALAGMITE, source)),
+                (source.damageSources().source(DamageTypes.STARVE, source)),
                 (source.damageSources().sonicBoom(source)),
                 (source.damageSources().sting(source)),
-                (source.damageSources().sweetBerryBush()),
+                (source.damageSources().source(DamageTypes.SWEET_BERRY_BUSH, source)),
                 (source.damageSources().thorns(source)),
                 (source.damageSources().trident(source, source)),
-                (source.damageSources().wither())
+                (source.damageSources().source(DamageTypes.WITHER, source))
         };
     }
 }

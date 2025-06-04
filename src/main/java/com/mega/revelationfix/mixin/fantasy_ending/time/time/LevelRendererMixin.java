@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time.time;
 
-import com.mega.revelationfix.common.client.RendererUtils;
-import com.mega.revelationfix.safe.NoModDependsMixin;
+import com.mega.revelationfix.client.RendererUtils;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
 import com.mega.revelationfix.util.time.TimeContext;
 import com.mega.revelationfix.util.time.TimeStopUtils;
 import com.mojang.blaze3d.vertex.PoseStack;

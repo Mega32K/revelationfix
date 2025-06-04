@@ -11,7 +11,7 @@ import com.Polarice3.Goety.utils.ParticleUtil;
 import com.mega.revelationfix.common.apollyon.common.DeathPerformance;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.util.ATAHelper2;
-import com.mega.revelationfix.util.EntityActuallyHurt;
+import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

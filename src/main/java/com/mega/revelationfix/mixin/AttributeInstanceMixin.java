@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.safe.AttributeInstanceInterface;
+import com.mega.revelationfix.safe.entity.AttributeInstanceInterface;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;

@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.audio.PostBossMusic;
 import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.client.events.ClientEvents;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.github.alexthe666.citadel.repack.jcodec.codecs.mpeg4.es.SL;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.util.ATAHelper2;
@@ -13,6 +14,7 @@ import com.mega.uom.util.time.TimeStopUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +31,6 @@ import java.util.function.Predicate;
 
 public class Wrapped {
     static Minecraft minecraft = Minecraft.getInstance();
-
     @OnlyIn(Dist.CLIENT)
     public static boolean isNetherApollyonLoaded(Predicate<Apostle> predicate) {
         return BossBarEvent.BOSS_BARS.values().stream().anyMatch(mob ->
@@ -91,7 +92,9 @@ public class Wrapped {
     public static boolean isFieldTimeStop() {
         return TimeStopUtils.isTimeStop;
     }
-
+    public static boolean isTimeStop(ServerLevel serverLevel) {
+        return TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(serverLevel);
+    }
     public static void play(Apostle apostle) {
         ClientEvents.BOSS_MUSIC = null;
         SoundManager soundHandler = Minecraft.getInstance().getSoundManager();

@@ -3,7 +3,7 @@ package com.mega.revelationfix.mixin.gr;
 import com.Polarice3.Goety.compat.patchouli.PatchouliIntegration;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.safe.Self;
+import com.mega.revelationfix.util.java.Self;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +23,6 @@ import z1gned.goetyrevelation.item.ModItems;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.function.Supplier;
 
 @Mixin(ModMain.class)
 public class ModMainMixin {
@@ -58,8 +57,8 @@ public class ModMainMixin {
                                 e.printStackTrace();
                             }
                             if (GRItems.insertAfterTabMap.containsKey(index)) {
-                                for (Supplier<ItemStack> itemStackSupplier : GRItems.insertAfterTabMap.get(index))
-                                    output.accept(itemStackSupplier.get());
+                                for (ItemStack stack : GRItems.insertAfterTabMap.get(index).get())
+                                    output.accept(stack);
                             }
                             index++;
                         }

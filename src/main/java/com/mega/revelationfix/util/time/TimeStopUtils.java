@@ -1,13 +1,14 @@
 package com.mega.revelationfix.util.time;
 
+import com.mega.revelationfix.client.RendererUtils;
 import com.mega.revelationfix.common.data.TimeStopSavedData;
 import com.mega.revelationfix.common.init.ModSounds;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.timestop.TSDimensionSynchedPacket;
 import com.mega.revelationfix.common.network.s2c.timestop.TimeStopSkillPacket;
-import com.mega.revelationfix.safe.ClientLevelExpandedContext;
-import com.mega.revelationfix.safe.LevelEC;
-import com.mega.revelationfix.safe.ServerEC;
+import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
+import com.mega.revelationfix.safe.level.LevelEC;
+import com.mega.revelationfix.safe.level.ServerEC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 /**
- * 节省性能，在客户端判断{@link TimeStopUtils#andSameDimension(Level)}请直接调用预备好的boolean字段{@link com.mega.revelationfix.common.client.RendererUtils#isTimeStop_andSameDimension}
+ * 节省性能，在客户端判断{@link TimeStopUtils#andSameDimension(Level)}请直接调用预备好的boolean字段{@link RendererUtils#isTimeStop_andSameDimension}
  */
 public class TimeStopUtils {
     public static volatile boolean isTimeStop;
@@ -76,10 +77,12 @@ public class TimeStopUtils {
 
             if (!z) {
                 for (LivingEntity living : source.level.getEntitiesOfClass(LivingEntity.class, new AABB(new BlockPos(0, 0, 0)).inflate(30000000))) {
-                    if (TimeStopEntityData.getTimeStopCount(living) > 0 && living.isAlive()) {
-                        if (force)
-                            TimeStopEntityData.setTimeStopCount(source, 0);
-                        return;
+                    if (living != source) {
+                        if (TimeStopEntityData.getTimeStopCount(living) > 0 && living.isAlive()) {
+                            if (force)
+                                TimeStopEntityData.setTimeStopCount(source, 0);
+                            return;
+                        }
                     }
                 }
             }

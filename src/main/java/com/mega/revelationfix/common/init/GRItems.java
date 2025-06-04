@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.init;
 
+import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
@@ -20,18 +21,17 @@ import com.mega.revelationfix.common.item.disc.DecisiveMomentDisc;
 import com.mega.revelationfix.common.item.food.AscensionHardCandy;
 import com.mega.revelationfix.common.item.other.*;
 import com.mega.revelationfix.common.item.template.ApocalyptiumTemplateItem;
+import com.mega.revelationfix.common.item.wand.FrostbloomStaff;
 import com.mega.revelationfix.common.spell.EmptySpell;
+import com.mega.revelationfix.common.spell.frost.IceSpell;
 import com.mega.revelationfix.common.spell.nether.HereticSpell;
 import com.mega.revelationfix.common.spell.nether.RevelationSpell;
 import com.mega.revelationfix.common.spell.nether.WitherQuietusSpell;
-import com.mega.revelationfix.safe.Self;
+import com.mega.revelationfix.util.java.Self;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryObject;
@@ -76,6 +76,8 @@ public class GRItems {
     public static final TagKey<Item> VANISHING_CB = ItemTags.create(new ResourceLocation(Revelationfix.MODID, "vanishing_enchantment_book"));
     //不偷的饰品标签
     public static final TagKey<Item> NO_STEALING = ItemTags.create(new ResourceLocation(Revelationfix.MODID, "no_stealing"));
+    //图腾物品标签
+    public static final TagKey<Item> TOTEMS = ItemTags.create(new ResourceLocation(Goety.MOD_ID, "totems"));
     //2.1
     @ObjectHolder(value = "goety_revelation:apocalyptium_helmet", registryName = "item")
     public static final Item A_HELMET = null;
@@ -89,7 +91,7 @@ public class GRItems {
     public static final Item APOCALYPTIUM_INGOT_ITEM = null;
     @ObjectHolder(value = "goety_revelation:the_tip_of_the_longinus", registryName = "item")
     public static final Item TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM = null;
-    public static Map<Integer, List<Supplier<ItemStack>>> insertAfterTabMap = new HashMap<>();
+    public static Map<Integer, Supplier<List<ItemStack>>> insertAfterTabMap = new HashMap<>();
     public static RegistryObject<Item> ASCENSION_HARD_CANDY;
     public static RegistryObject<Item> VALETTEIN;
     public static RegistryObject<Item> GUNGNIR;
@@ -126,6 +128,7 @@ public class GRItems {
     public static RegistryObject<Item> ICE_FOCUS;
     public static RegistryObject<Item> SHADOW_CLONE_FOCUS;
     public static RegistryObject<Item> NETHER_METEOR_FOCUS;
+    public static RegistryObject<Item> STAFF_FROSTBLOOM;
     @Self
     public static RegistryObject<Item> RANDOM_DISPLAY;
     @Self
@@ -140,6 +143,8 @@ public class GRItems {
     public static RegistryObject<Item> DISC_2;
     @Self
     public static RegistryObject<Item> DISC_3;
+    public static RegistryObject<BlockItem> BI_RUNE_REACTOR;
+    public static RegistryObject<BlockItem> BI_RUNESTONE_ENGRAVED_TABLE;
 
     public static void init(DeferredRegister<Item> ITEMS) {
         ODAMANE_HALO = ITEMS.register("halo_of_the_end", OdamaneHalo::new);
@@ -150,7 +155,7 @@ public class GRItems {
         DEMENTOR_FOCUS = ITEMS.register("dementor_focus", () -> new MagicFocus(new EmptySpell()));
         DRAGON_NIRVANA_FOCUS = ITEMS.register("dragon_nirvana_focus", () -> new MagicFocus(new EmptySpell()));
         DRAGON_SKYROCKET_FOCUS = ITEMS.register("dragon_skyrocket_focus", () -> new MagicFocus(new EmptySpell()));
-        ICE_FOCUS = ITEMS.register("ice_focus", () -> new MagicFocus(new EmptySpell()));
+        ICE_FOCUS = ITEMS.register("ice_focus", () -> new MagicFocus(new IceSpell()));
         SHADOW_CLONE_FOCUS = ITEMS.register("shadow_clone_focus", () -> new MagicFocus(new EmptySpell()));
         NETHER_METEOR_FOCUS = ITEMS.register("nether_meteor_focus", () -> new MagicFocus(new EmptySpell()));
         RANDOM_DISPLAY = ITEMS.register("random_display", () -> new RandomDisplayItem(new Item.Properties().stacksTo(1).fireResistant()));
@@ -180,18 +185,38 @@ public class GRItems {
         DISC_1 = ITEMS.register("disc_arch_illager", ArchIllagerDisc::new);
         DISC_2 = ITEMS.register("disc_arch_illager_remix", ArchIllagerRemixDisc::new);
         DISC_3 = ITEMS.register("disc_decisive_moment_disc", DecisiveMomentDisc::new);
+        STAFF_FROSTBLOOM = ITEMS.register("frostbloom_staff", FrostbloomStaff::new);
+        BI_RUNE_REACTOR = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNE_REACTOR);
+        BI_RUNESTONE_ENGRAVED_TABLE = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNESTONE_ENGRAVED_TABLE);
         if (SafeClass.isEnigmaticLegacyLoaded())
             EnigmaticLegacyItemInit.init();
-        GRItems.insertAfterTabMap.put(0, List.of(() -> DISC_1.get().getDefaultInstance(), () -> DISC_2.get().getDefaultInstance(), () -> DISC_3.get().getDefaultInstance()));
-        GRItems.insertAfterTabMap.put(3, List.of(() -> {
+        GRItems.insertAfterTabMap.put(0, () ->List.of(DISC_1.get().getDefaultInstance(), DISC_2.get().getDefaultInstance(), DISC_3.get().getDefaultInstance()));
+        GRItems.insertAfterTabMap.put(3, () -> {
             ItemStack stack = GRItems.THE_NEEDLE.get().getDefaultInstance();
             stack.getOrCreateTag().putBoolean(TheNeedleItem.IS_REAL_NBT, true);
-            return stack;
-        }));
+            return List.of(stack);
+        });
         if (SafeClass.isTetraLoaded())
-            GRItems.insertAfterTabMap.put(12, List.of(() -> new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM), () -> new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_AEGLOS.get())));
-        //GRItems.insertAfterTabMap.put(11, List.of(() -> createFragment(0), () -> createFragment(1), () -> createFragment(2), () -> createFragment(3)));
-        GRItems.insertAfterTabMap.put(16, List.of(() -> new ItemStack(ModItems.DOOM_MEDAL.get()), () -> new ItemStack(GRItems.QUIETUS_STAR.get()), () -> new ItemStack(ModItems.WITHER_QUIETUS.get())));
+            GRItems.insertAfterTabMap.put(12, () ->List.of(new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM), new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_AEGLOS.get())));
+        //GRItems.insertAfterTabMap.put(11, List.of(createFragment(0), createFragment(1), createFragment(2), createFragment(3)));
+        GRItems.insertAfterTabMap.put(16, () ->
+                List.of(new ItemStack(ModItems.DOOM_MEDAL.get()),
+                        new ItemStack(GRItems.QUIETUS_STAR.get()),
+                        new ItemStack(ModItems.WITHER_QUIETUS.get())
+                ));
+        GRItems.insertAfterTabMap.put(25, () ->
+                List.of(new ItemStack(com.Polarice3.Goety.common.items.ModItems.DARK_WAND.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.OMINOUS_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.NECRO_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.WIND_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.STORM_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.FROST_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.WILD_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.ABYSS_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.NETHER_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.NAMELESS_STAFF.get())
+                ));
+
     }
 
     public static ItemStack createFragment(int index) {

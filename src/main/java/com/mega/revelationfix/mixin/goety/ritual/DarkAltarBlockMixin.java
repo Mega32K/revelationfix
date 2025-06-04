@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
 import com.Polarice3.Goety.common.blocks.entities.PedestalBlockEntity;
 import com.Polarice3.Goety.common.crafting.RitualRecipe;
 import com.Polarice3.Goety.common.ritual.Ritual;
-import com.mega.revelationfix.common.entity.TheEndRitualBlockEntity;
+import com.mega.revelationfix.common.entity.BlockShakingEntity;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.TheEndRitualEventPacket;
 import com.mega.revelationfix.common.ritual.ModRitualTypes;
@@ -40,11 +40,11 @@ public abstract class DarkAltarBlockMixin extends PedestalBlockEntity {
         if (this.level != null && !this.level.isClientSide) {
             if (ritualRecipe.getCraftType().equals(ModRitualTypes.THE_END) && ritualRecipe.getRitualType().equals(Goety.location("craft"))) {
                 for (PedestalBlockEntity pbe : ritualRecipe.getRitual().getPedestals(player.level, this.getBlockPos())) {
-                    TheEndRitualBlockEntity theEndRitualBlockEntity = new TheEndRitualBlockEntity(player.level, pbe.getBlockPos().getX(), pbe.getBlockPos().getY() + 2, pbe.getBlockPos().getZ(), pbe.getBlockState(), 100 * 20);
-                    player.level.addFreshEntity(theEndRitualBlockEntity);
+                    BlockShakingEntity blockShakingEntity = new BlockShakingEntity(player.level, pbe.getBlockPos().getX(), pbe.getBlockPos().getY() + 2, pbe.getBlockPos().getZ(), pbe.getBlockState(), 100 * 20);
+                    player.level.addFreshEntity(blockShakingEntity);
                 }
-                TheEndRitualBlockEntity theEndRitualBlockEntity = new TheEndRitualBlockEntity(player.level, this.getBlockPos().getX(), this.getBlockPos().getY() + 2, this.getBlockPos().getZ(), this.getBlockState(), 100 * 20);
-                player.level.addFreshEntity(theEndRitualBlockEntity);
+                BlockShakingEntity blockShakingEntity = new BlockShakingEntity(player.level, this.getBlockPos().getX(), this.getBlockPos().getY() + 2, this.getBlockPos().getZ(), this.getBlockState(), 100 * 20);
+                player.level.addFreshEntity(blockShakingEntity);
                 player.addTag("odamaneFinalDeath");
                 if (player instanceof ServerPlayer sp)
                     sp.setRespawnPosition(sp.level.dimension(), this.getBlockPos().above(1), 0F, true, false);
@@ -57,7 +57,7 @@ public abstract class DarkAltarBlockMixin extends PedestalBlockEntity {
     @Inject(remap = false, method = "stopRitual", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;markNetworkDirty()V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
     private void stopRitual(boolean finished, CallbackInfo ci) {
         if (this.level != null && !this.level.isClientSide) {
-            for (TheEndRitualBlockEntity ter : this.level.getEntitiesOfClass(TheEndRitualBlockEntity.class, new AABB(this.getBlockPos()).inflate(Ritual.RANGE + 1))) {
+            for (BlockShakingEntity ter : this.level.getEntitiesOfClass(BlockShakingEntity.class, new AABB(this.getBlockPos()).inflate(Ritual.RANGE + 1))) {
                 ter.setDuration(30);
                 PacketHandler.sendToAll(new TheEndRitualEventPacket(this.getBlockPos(), false));
             }
@@ -68,7 +68,7 @@ public abstract class DarkAltarBlockMixin extends PedestalBlockEntity {
     @Inject(remap = false, method = "removeItem", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;markNetworkDirty()V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
     private void removeItem(CallbackInfo ci, IItemHandler handler, ItemStack itemStack) {
         if (this.level != null && !this.level.isClientSide) {
-            for (TheEndRitualBlockEntity ter : this.level.getEntitiesOfClass(TheEndRitualBlockEntity.class, new AABB(this.getBlockPos()).inflate(Ritual.RANGE + 1))) {
+            for (BlockShakingEntity ter : this.level.getEntitiesOfClass(BlockShakingEntity.class, new AABB(this.getBlockPos()).inflate(Ritual.RANGE + 1))) {
                 ter.setDuration(30);
                 PacketHandler.sendToAll(new TheEndRitualEventPacket(this.getBlockPos(), false));
             }

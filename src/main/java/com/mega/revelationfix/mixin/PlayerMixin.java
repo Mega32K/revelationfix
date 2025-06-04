@@ -3,17 +3,15 @@ package com.mega.revelationfix.mixin;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.utils.NoKnockBackDamageSource;
 import com.Polarice3.Goety.utils.OwnedDamageSource;
-import com.mega.revelationfix.common.apollyon.client.effect.LoreHelper;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
-import com.mega.revelationfix.common.client.enums.ModChatFormatting;
+import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
-import com.mega.revelationfix.safe.PlayerInterface;
-import com.mega.revelationfix.util.EntityActuallyHurt;
-import net.minecraft.ChatFormatting;
+import com.mega.revelationfix.safe.entity.PlayerInterface;
+import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -84,7 +82,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerInterfac
         if (ArmorEvents.findChestplate(player, GRItems.A_CHESTPLATE) && cir.getReturnValue() instanceof MutableComponent component)
             cir.setReturnValue(component.append(ArmorEvents.getTitle(ArmorEvents.getApocalyptiumTitleId(player))));
         if (revelationfix$odamaneHaloExpandedContext().isBlasphemous() && cir.getReturnValue() instanceof MutableComponent component)
-            cir.setReturnValue(component.append(Component.literal(LoreHelper.codeMode(ModChatFormatting.APOLLYON)).append(Component.translatable("message.goety_revelation.blasphemous_priest_fix")).append(Component.literal(LoreHelper.codeMode(ChatFormatting.WHITE)))));
+            cir.setReturnValue(component.append(Component.translatable("message.goety_revelation.blasphemous_priest_fix").withStyle(ModChatFormatting.APOLLYON)));
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

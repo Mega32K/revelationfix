@@ -47,16 +47,15 @@ public class TryTimeStopSkill {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (!ATAHelper2.hasOdamane(serverPlayer) && !ATAHelper2.hasEternalWatch(serverPlayer))
                     return;
-                if (SafeClass.isClientTimeStop()) {
+                if (SafeClass.isTimeStop(serverLevel)) {
                     SafeClass.enableTimeStop(serverPlayer, false);
                     CooldownsManager.setItemCooldowns(serverPlayer, GRItems.HALO_OF_THE_END, 1400);
                     CooldownsManager.setItemCooldowns(serverPlayer, GRItems.ETERNAL_WATCH.get(), ItemConfig.ewCooldown * 20);
                 } else {
-
                     if (serverPlayer.isCreative()) {
-                        SafeClass.enableTimeStop(serverPlayer, true, 30000);
+                        SafeClass.enableTimeStop(serverPlayer, true, 300);
                     } else if (ATAHelper2.hasOdamane(serverPlayer) && !serverPlayer.getCooldowns().isOnCooldown(GRItems.HALO_OF_THE_END)) {
-                        SafeClass.enableTimeStop(serverPlayer, true, 30000);
+                        SafeClass.enableTimeStop(serverPlayer, true, 300);
                         CooldownsManager.setItemCooldowns(serverPlayer, GRItems.HALO_OF_THE_END, 1400);
                     } else if (ATAHelper2.hasEternalWatch(serverPlayer) && !serverPlayer.getCooldowns().isOnCooldown(GRItems.ETERNAL_WATCH.get())) {
                         SafeClass.enableTimeStop(serverPlayer, true, ItemConfig.ewFreezingTime * 20);

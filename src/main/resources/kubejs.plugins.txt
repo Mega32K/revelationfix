@@ -1,0 +1,1 @@
+com.mega.revelationfix.common.compat.kjs.KubeJSPlugin

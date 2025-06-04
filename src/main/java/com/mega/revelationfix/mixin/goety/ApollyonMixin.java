@@ -4,7 +4,6 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.cultists.SpellCastingCultist;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.Polarice3.Goety.common.entities.projectiles.FireTornado;
-import com.Polarice3.Goety.common.entities.projectiles.NetherMeteor;
 import com.Polarice3.Goety.common.entities.projectiles.SpellEntity;
 import com.Polarice3.Goety.common.entities.util.AbstractTrap;
 import com.Polarice3.Goety.config.AttributesConfig;
@@ -20,6 +19,7 @@ import com.mega.revelationfix.common.item.combat.BowOfRevelationItem;
 import com.mega.revelationfix.common.item.curios.TheNeedleItem;
 import com.mega.revelationfix.mixin.MobAccessor;
 import com.mega.revelationfix.safe.*;
+import com.mega.revelationfix.safe.entity.*;
 import com.mega.revelationfix.util.ATAHelper2;
 import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -153,22 +153,6 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
 
     @Shadow
     public abstract void tick();
-
-    @Shadow(remap = false)
-    protected abstract void barrier(Entity p_213688_1_, LivingEntity livingEntity);
-
-    @Shadow(remap = false)
-    @NotNull
-    protected abstract NetherMeteor getNetherMeteor();
-
-    @Shadow(remap = false)
-    protected abstract void launch(Entity p_213688_1_, LivingEntity livingEntity);
-
-    @Shadow(remap = false)
-    protected abstract void serverRoarParticles();
-
-    @Shadow(remap = false)
-    protected abstract void teleportTowards(Entity entity);
 
     @Shadow
     protected abstract boolean shouldDespawnInPeaceful();
@@ -959,30 +943,5 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     @Unique
     public void setDeathTime(int time) {
         this.entityData.set(DEATH_TIME, time);
-    }
-
-    @Override
-    public void revelationfix$barrier(Entity p_213688_1_, LivingEntity livingEntity) {
-        this.barrier(p_213688_1_, livingEntity);
-    }
-
-    @Override
-    public NetherMeteor revelationfix$getNetherMeteor() {
-        return this.getNetherMeteor();
-    }
-
-    @Override
-    public void revelationfix$launch(Entity p_213688_1_, LivingEntity livingEntity) {
-        this.launch(p_213688_1_, livingEntity);
-    }
-
-    @Override
-    public void revelationfix$serverRoarParticles() {
-        this.serverRoarParticles();
-    }
-
-    @Override
-    public void revelationfix$teleportTowards(Entity entity) {
-        this.teleportTowards(entity);
     }
 }

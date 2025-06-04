@@ -3,25 +3,27 @@ package com.mega.revelationfix.util;
 import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.magic.SpellStat;
+import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.config.CommonConfig;
+import com.mega.revelationfix.common.entity.FakeSpellerEntity;
 import com.mega.revelationfix.common.init.ModAttributes;
-import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import se.mickelus.tetra.module.data.SynergyData;
 import z1gned.goetyrevelation.util.ATAHelper;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
-import java.util.Arrays;
-
 public class EventUtil {
-    public static Object2BooleanOpenHashMap<Class<?>> canUseAttributesSpells = new Object2BooleanOpenHashMap<>();
 
     public static void tryCaughtThrowable(Throwable throwable) {
         System.exit(-1);
@@ -31,11 +33,14 @@ public class EventUtil {
 
     //终末之后会将法术吟唱速度*8
     public static int castDuration(int duration, ISpell spell, LivingEntity caster) {
+        if (caster instanceof FakeSpellerEntity spellerEntity && spellerEntity.getOwner() != null)
+            caster = spellerEntity.getOwner();
         if (caster instanceof Player player) {
             if (ATAHelper2.hasOdamane(player))
                 duration = (int) (duration / Math.max(8.0F, CommonConfig.haloSpellCastingSpeed * 2.0F));
             else if (ATAHelper.hasHalo(player))
                 duration = (int) (duration / CommonConfig.haloSpellCastingSpeed);
+            duration *= (2F - player.getAttributeValue(ModAttributes.CAST_DURATION.get()));
         }
         return duration;
     }
@@ -52,40 +57,53 @@ public class EventUtil {
         }
         return duration;
     }
-
-    public static void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, ISpell spell) {
-        Class<?> spellClass = spell.getClass();
-        if (!canUseAttributesSpells.containsKey(spellClass)) {
-            boolean shouldUseAttribtues = true;
-            try {
-                spell.getClass().getDeclaredMethod("SpellResult", ServerLevel.class, LivingEntity.class, ItemStack.class, SpellStat.class);
-            } catch (NoSuchMethodException error) {
-                shouldUseAttribtues = false;
+    public static void redirectSpellResult(ISpell iSpell, ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
+        EntityExpandedContext expandedContext = ((LivingEntityEC) caster).revelationfix$livingECData();
+        if (expandedContext.banAnySpelling > 0) {
+            if (caster instanceof ServerPlayer player) {
+                player.displayClientMessage(Component.translatable("info.goety_revelation.no_spells").withStyle(ChatFormatting.RED), true);
             }
-            canUseAttributesSpells.put(spellClass, shouldUseAttribtues);
+            return;
         }
-        boolean shouldUseAttribtues = canUseAttributesSpells.getBoolean(spellClass);
-        if (shouldUseAttribtues) {
-            SpellStat src = spell.defaultStats();
-            SpellStat spellStat = new SpellStat(src.potency, src.duration, src.range, src.radius, src.burning, src.velocity);
-            if (caster instanceof Player player) {
+        spellStat = modifySpellStats(iSpell, worldIn, caster, staff, spellStat);
+        iSpell.SpellResult(worldIn, caster, staff, spellStat);
+    }
+    public static SpellStat modifySpellStats(ISpell spell, ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat src) {
+        Player player = null;
+        boolean useSpeller = false;
+        if (caster instanceof Player)
+            player = (Player) caster;
+        else if (caster instanceof FakeSpellerEntity spellerEntity && spellerEntity.getOwner() instanceof Player) {
+            player = (Player) spellerEntity.getOwner();
+            useSpeller = true;
+        }
+            if (player != null) {
                 try {
                     {
                         double attributeValue = player.getAttributeValue(ModAttributes.spellAttribute(spell.getSpellType()));
                         if (attributeValue > 0.0001D) {
-                            spellStat.setPotency((int) (spellStat.getPotency() + Math.round(attributeValue)));
+                            src.setPotency((int) (src.getPotency() + Math.round(attributeValue)));
                         }
                     }
                     {
-                        double attributeValue = player.getAttributeValue(ModAttributes.SPELL_POWER.get()) + 1;
-                        spellStat.setPotency(Math.round(spellStat.getPotency() * (float)attributeValue));
+                        double attributeValue = player.getAttributeValue(ModAttributes.SPELL_POWER.get());
+                        src.setPotency((int) (src.getPotency() + Math.round(attributeValue)));
+                    }
+                    {
+                        double attributeValue = player.getAttributeValue(ModAttributes.SPELL_POWER_MULTIPLIER.get());
+                        src.setPotency(Math.round(src.getPotency() * (float)attributeValue));
                     }
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
             }
-            spell.SpellResult(worldIn, caster, staff, spellStat);
-        } else spell.SpellResult(worldIn, caster, staff);
+            if (useSpeller) {
+                FakeSpellerEntity spellerEntity = (FakeSpellerEntity) caster;
+                if (worldIn.getBlockEntity(spellerEntity.getReactorPos()) instanceof RuneReactorBlockEntity blockEntity) {
+                    src = blockEntity.modifySpellStats(src);
+                }
+            }
+            return src;
     }
 
     public static float damageIncrease(LivingEntity living, DamageSource source, float amount) {

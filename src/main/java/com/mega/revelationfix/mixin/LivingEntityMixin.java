@@ -6,8 +6,8 @@ import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.ItemHelper;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
-import com.mega.revelationfix.safe.EntityExpandedContext;
-import com.mega.revelationfix.safe.MobEffectInstanceEC;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import com.mega.revelationfix.util.ATAHelper2;
 import com.mega.revelationfix.util.EventUtil;
 import com.mega.revelationfix.util.LivingEntityEC;
@@ -113,8 +113,12 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEC
     )
     public void canAttack(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         //(this.getMobType() == MobType.UNDEAD || this.getType().is(ModTags.EntityTypes.LICH_NEUTRAL))
-        if (this.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) && target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG)) {
-            if (this.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) && target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG)) {
+        if ((this.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) && target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG))) {
+            if (this.tags.contains(EntityExpandedContext.GR_FT_CHURCH) && target.tags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
+                cir.setReturnValue(false);
+            }
+        } else if (EntityExpandedContext.isOwnerFriendlyTag(this) && EntityExpandedContext.isOwnerFriendlyTag(target)) {
+            if (EntityExpandedContext.isOwnerFriendlyTag_Church(this) && EntityExpandedContext.isOwnerFriendlyTag_Church(target)) {
                 cir.setReturnValue(false);
             }
         }

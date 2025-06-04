@@ -1,5 +1,7 @@
 package com.mega.revelationfix.util;
 
+import com.Polarice3.Goety.api.magic.ISpell;
+import com.Polarice3.Goety.common.magic.Spell;
 import cpw.mods.modlauncher.LaunchPluginHandler;
 import cpw.mods.modlauncher.Launcher;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.service.MixinService;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
     public static final Set<String> toRemovedMixins = Collections.synchronizedSet(new HashSet<>());
@@ -26,8 +29,12 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
     private static final String ABSTRACT_SPELL_MIXIN = "com.mega.revelationfix.mixin.fantasy_ending.time.ironspellbook.AbstractSpellMixin";
     private static final String EVENT_BUS_MIXIN = "net/minecraftforge/eventbus/EventBus";
     private static final String IMODULAR_ITEM_CLASS = "se.mickelus.tetra.items.modular.IModularItem".replace('.', '/');
+    private static final String EVENT_UTIL_CLASS = "com/mega/revelationfix/util/EventUtil";
     public static boolean USE_FIX_MIXIN = true;
     public static Logger LOGGER = LogManager.getLogger("RevelationFix");
+    public static boolean isUnsupportModifyingClass(String name) {
+        return name.replace('/', '.').startsWith("com.mega.revelationfix.util.EventUtil");
+    }
 
     static {
         handCheckMixins.add(ABSTRACT_SPELL_MIXIN);
@@ -81,6 +88,25 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                     public boolean processClass(Phase phase, ClassNode classNode, Type classType) {
                         String name = classNode.name;
                         if (phase == Phase.BEFORE) {
+                            {
+                                AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+                                classNode.methods.forEach(methodNode -> {
+                                    methodNode.instructions.forEach(abstractInsnNode -> {
+                                        if (abstractInsnNode instanceof MethodInsnNode mNode) {
+                                            if (mNode.owner.equals(ISPELL_CLASS)) {
+                                                if (mNode.name.equals("SpellResult") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
+                                                    if (!isUnsupportModifyingClass(name)) {
+                                                        atomicBoolean.set(true);
+                                                        methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "redirectSpellResult", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                });
+                                if (atomicBoolean.get())
+                                    return true;
+                            }
                                 if (name.equals(ISPELL_CLASS)) {
                                     classNode.methods.forEach(methodNode -> {
                                         if (methodNode.name.equals("castDuration")) {
@@ -92,7 +118,7 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                                                     InsnList insnList = new InsnList();
                                                     insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                                                     insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                                                    insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/mega/revelationfix/util/EventUtil", "castDuration", "(ILcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/world/entity/LivingEntity;)I", false));
+                                                    insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "castDuration", "(ILcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/world/entity/LivingEntity;)I", false));
                                                     methodNode.instructions.insertBefore(insnNode, insnList);
                                                 }
                                             });
@@ -105,7 +131,7 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                                                 if (opcode == Opcodes.IRETURN) {
                                                     InsnList insnList = new InsnList();
                                                     insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                                                    insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/mega/revelationfix/util/EventUtil", "spellCooldown", "(ILcom/Polarice3/Goety/api/magic/ISpell;)I", false));
+                                                    insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "spellCooldown", "(ILcom/Polarice3/Goety/api/magic/ISpell;)I", false));
                                                     methodNode.instructions.insertBefore(insnNode, insnList);
                                                 }
                                             });
@@ -187,15 +213,16 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
         }
         List<AnnotationNode> annotationNodes = new ArrayList<>(node.invisibleAnnotations);
         for (AnnotationNode annotationNode : annotationNodes) {
-            if (annotationNode.desc.equals("Lcom/mega/uom/util/DeprecatedMixin;"))
+
+            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/NonDevEnvMixin;") && MCMapping.isWorkingspaceMode())
                 return false;
-            if (annotationNode.desc.equals("Lcom/mega/uom/util/NonDevEnvMixin;") && MCMapping.isWorkingspaceMode())
+            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/DevEnvMixin;") && !MCMapping.isWorkingspaceMode())
                 return false;
-            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/ModDependsMixin;")) {
+            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/ModDependsMixin;")) {
                 //0-> value 1-> modid
                 return EarlyConfig.modIds.contains((String) annotationNode.values.get(1));
             }
-            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/NoModDependsMixin;")) {
+            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/NoModDependsMixin;")) {
                 //0-> value 1-> modid
                 return !EarlyConfig.modIds.contains((String) annotationNode.values.get(1));
             }

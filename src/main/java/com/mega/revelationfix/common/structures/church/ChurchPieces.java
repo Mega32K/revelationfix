@@ -71,8 +71,8 @@ public class ChurchPieces {
             STRUCTURE_LOCATION_CHURCH_4, new BlockPos(0, 0, 48),
             STRUCTURE_LOCATION_CHURCH_5, new BlockPos(-48, 48-1, 0),
             STRUCTURE_LOCATION_CHURCH_6, new BlockPos(-48, 48-1, 48),
-            STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48-1, 0),
-            STRUCTURE_LOCATION_CHURCH_8, new BlockPos(0, 48-1, 48)
+            STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48-2, 0),
+            STRUCTURE_LOCATION_CHURCH_8, new BlockPos(-1, 48-2, 48)
     );
     public static void addPieces(StructureTemplateManager pStructureTemplateManager, BlockPos pStartPos, Rotation pRotation, StructurePieceAccessor pPieces, RandomSource pRandom) {
         int x = pStartPos.getX();
@@ -176,7 +176,7 @@ public class ChurchPieces {
             super.postProcess(pLevel, p_226900_, p_226901_, pRandom, boundingBox, p_226904_, pPos);
             try {
                 for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.BARREL)) {
-                    if (pLevel.getBlockEntity(structuretemplate$structureblockinfo.pos()) instanceof BarrelBlockEntity barrelBlockEntity ) {
+                    if (pLevel.getBlockEntity(structuretemplate$structureblockinfo.pos()) instanceof BarrelBlockEntity barrelBlockEntity && barrelBlockEntity.isEmpty()) {
                         if (rl.equals(ChurchPieces.STRUCTURE_LOCATION_CHURCH_1)) {
                             barrelBlockEntity.setLootTable(ModLootTables.CHURCH_FOOD, pRandom.nextLong());
                         } else {
@@ -193,7 +193,7 @@ public class ChurchPieces {
                 }
                 for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.CHEST)) {
                     BlockPos pos = structuretemplate$structureblockinfo.pos();
-                    if(pLevel.getBlockEntity(pos) instanceof ChestBlockEntity chestBlockEntity ){
+                    if(pLevel.getBlockEntity(pos) instanceof ChestBlockEntity chestBlockEntity && chestBlockEntity.isEmpty()){
                         if (pos.getY() < 128) {
                             if (pRandom.nextBoolean()) {
                                 chestBlockEntity.setLootTable(BuiltInLootTables.BASTION_TREASURE, pRandom.nextLong());
@@ -207,7 +207,7 @@ public class ChurchPieces {
                 }
                 for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, ModBlocks.LOFTY_CHEST.get())) {
                     BlockPos pos = structuretemplate$structureblockinfo.pos();
-                    if(pLevel.getBlockEntity(pos) instanceof LoftyChestBlockEntity chestBlockEntity ){
+                    if(pLevel.getBlockEntity(pos) instanceof LoftyChestBlockEntity chestBlockEntity && chestBlockEntity.isEmpty() ){
                         if (pos.getY() > 128) {
                             if (pRandom.nextBoolean()) {
                                 chestBlockEntity.setLootTable(BuiltInLootTables.BASTION_TREASURE, pRandom.nextLong());

@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time.time;
 
-import com.mega.revelationfix.safe.NoModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.DeathScreen;
 import org.spongepowered.asm.mixin.Final;

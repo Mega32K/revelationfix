@@ -7,7 +7,7 @@ import com.mega.revelationfix.common.apollyon.client.render.trail.TrailPoint;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.common.init.ModSounds;
 import com.mega.revelationfix.common.odamane.common.FeDamage;
-import com.mega.revelationfix.util.EntityActuallyHurt;
+import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

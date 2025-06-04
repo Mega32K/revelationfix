@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.safe.ClientLevelExpandedContext;
-import com.mega.revelationfix.safe.ClientLevelInterface;
+import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
+import com.mega.revelationfix.safe.level.ClientLevelInterface;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.LevelRenderer;

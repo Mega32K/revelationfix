@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.apollyon.client.render;
 
-import com.mega.revelationfix.common.client.citadel.GRShaders;
+import com.mega.revelationfix.client.citadel.GRShaders;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;

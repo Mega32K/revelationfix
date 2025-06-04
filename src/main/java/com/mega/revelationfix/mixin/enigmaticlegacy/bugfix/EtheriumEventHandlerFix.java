@@ -4,7 +4,7 @@ import com.aizistral.enigmaticlegacy.objects.Vector3;
 import com.aizistral.etherium.core.EtheriumEventHandler;
 import com.aizistral.etherium.core.IEtheriumConfig;
 import com.aizistral.etherium.items.EtheriumArmor;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

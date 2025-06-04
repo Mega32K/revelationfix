@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time.ironspellbook;
 
-import com.mega.revelationfix.safe.LevelEC;
-import com.mega.revelationfix.safe.LevelExpandedContext;
+import com.mega.revelationfix.safe.level.LevelEC;
+import com.mega.revelationfix.safe.level.LevelExpandedContext;
 import com.mega.revelationfix.util.time.TimeStopUtils;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;

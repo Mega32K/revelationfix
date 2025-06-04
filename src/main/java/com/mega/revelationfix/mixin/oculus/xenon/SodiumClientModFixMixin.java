@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin.oculus.xenon;
 
+import com.mega.revelationfix.safe.mixinpart.DevEnvMixin;
 import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SodiumClientMod.class)
+@DevEnvMixin
 public abstract class SodiumClientModFixMixin {
     @Shadow(remap = false)
     private static void updateFingerprint() {

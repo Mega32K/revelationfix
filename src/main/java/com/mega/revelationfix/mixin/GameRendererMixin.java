@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.common.client.screen.post.PostProcessingShaders;
+import com.mega.revelationfix.client.screen.post.PostProcessingShaders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;

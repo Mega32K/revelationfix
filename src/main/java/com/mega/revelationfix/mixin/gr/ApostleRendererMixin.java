@@ -7,7 +7,7 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
-import com.mega.revelationfix.safe.Apollyon2Interface;
+import com.mega.revelationfix.safe.entity.Apollyon2Interface;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

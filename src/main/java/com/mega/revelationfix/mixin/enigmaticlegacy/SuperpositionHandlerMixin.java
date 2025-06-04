@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.enigmaticlegacy;
 
 import com.aizistral.enigmaticlegacy.handlers.SuperpositionHandler;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import com.mega.revelationfix.util.ATAHelper2;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;

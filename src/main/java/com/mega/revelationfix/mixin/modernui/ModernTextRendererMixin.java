@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.modernui;
 
-import com.mega.revelationfix.common.client.font.FontTextBuilder;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.client.font.FontTextBuilder;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import com.mega.revelationfix.safe.ModernTextRendererCall;
 import icyllis.modernui.mc.text.ModernTextRenderer;
 import icyllis.modernui.mc.text.TextLayoutEngine;

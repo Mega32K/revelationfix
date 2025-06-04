@@ -65,7 +65,7 @@ side = "BOTH"# Here's another dependency
     modId="goety_revelation"
     mandatory=true
     versionRange="[0.0,)"
-    ordering="NONE"
+    ordering="BEFORE"
     side="BOTH"
 [[dependencies."${mod_id}"]]
     modId="tetra"

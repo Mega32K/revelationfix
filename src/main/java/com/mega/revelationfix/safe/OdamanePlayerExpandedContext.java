@@ -10,6 +10,7 @@ import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
 import com.mega.revelationfix.mixin.gr.PlayerMixin;
+import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.ATAHelper2;
 import com.mega.revelationfix.util.java.SynchedFixedLengthList;
 import net.minecraft.core.registries.BuiltInRegistries;

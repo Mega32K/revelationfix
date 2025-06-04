@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.safe.MobEffectInstanceEC;
+import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;

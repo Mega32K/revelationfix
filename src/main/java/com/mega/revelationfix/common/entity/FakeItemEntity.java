@@ -36,7 +36,7 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
     public final float bobOffs;
     public WrappedTrailUpdate wrappedTrailUpdate = new WrappedTrailUpdate(this);
     /**
-     * The maximum age of this EntityItem.  The item is expired once this is reached.
+     * The maximum maxLife of this EntityItem.  The item is expired once this is reached.
      */
     public int lifespan = FakeItemEntity.LIFETIME;
     private UUID apollyon;

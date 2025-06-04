@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time.time;
 
-import com.mega.revelationfix.safe.NoModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
 import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.MusicManager;

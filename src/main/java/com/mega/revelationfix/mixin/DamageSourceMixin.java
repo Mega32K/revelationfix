@@ -1,12 +1,14 @@
 package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
+import com.mega.revelationfix.common.entity.FakeSpellerEntity;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -95,5 +97,13 @@ public class DamageSourceMixin implements DamageSourceInterface {
     private void is(ResourceKey<DamageType> p_276108_, CallbackInfoReturnable<Boolean> cir) {
         if (p_276108_ == ExtraDamageTypes.FE_POWER)
             if (this.revelationfix$fePower()) cir.setReturnValue(true);
+    }
+    @Inject(method = "getEntity", at = @At("RETURN"), cancellable = true)
+    private void modifyToTrueOwner(CallbackInfoReturnable<Entity> cir) {
+        if (cir.getReturnValue() instanceof FakeSpellerEntity fakeSpellerEntity) {
+            Entity entity = fakeSpellerEntity.getOwner();
+            if (entity != null)
+                cir.setReturnValue(entity);
+        }
     }
 }

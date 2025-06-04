@@ -2,6 +2,7 @@ package com.mega.revelationfix.common.spell.nether;
 
 import com.Polarice3.Goety.api.magic.SpellType;
 import com.Polarice3.Goety.common.magic.EverChargeSpell;
+import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.init.ModSounds;
 import com.mega.revelationfix.common.config.GRSpellConfig;
 import com.mega.revelationfix.common.entity.RevelationCageEntity;
@@ -37,7 +38,7 @@ public class RevelationSpell extends EverChargeSpell {
         playSound(worldIn, caster, SoundEvents.BEACON_DEACTIVATE);
     }
 
-    public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff) {
+    public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
         List<RevelationCageEntity> entities = worldIn.getEntitiesOfClass(RevelationCageEntity.class, caster.getBoundingBox().inflate(2.0), (cageEntity) -> cageEntity.getOwner() == caster);
 
         if (entities.isEmpty()) {

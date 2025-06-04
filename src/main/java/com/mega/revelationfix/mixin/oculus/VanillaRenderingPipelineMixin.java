@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.oculus;
 
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import net.irisshaders.iris.pipeline.VanillaRenderingPipeline;
 import org.spongepowered.asm.mixin.Mixin;
 

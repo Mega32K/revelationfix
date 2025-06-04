@@ -1,8 +1,8 @@
 package com.mega.revelationfix.mixin.fantasy_ending.time.time;
 
-import com.mega.revelationfix.safe.NoModDependsMixin;
-import com.mega.revelationfix.safe.ServerEC;
-import com.mega.revelationfix.safe.ServerExpandedContext;
+import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
+import com.mega.revelationfix.safe.level.ServerEC;
+import com.mega.revelationfix.safe.level.ServerExpandedContext;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.Services;

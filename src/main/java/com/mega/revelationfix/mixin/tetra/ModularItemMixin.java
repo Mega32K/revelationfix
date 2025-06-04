@@ -4,7 +4,7 @@ import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.config.ItemConfig;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.mega.revelationfix.common.compat.tetra.effect.SoulRepairEffect;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

@@ -17,13 +17,15 @@ import com.mega.revelationfix.common.network.s2c.TheEndPuzzleUpdatePacket;
 import com.mega.revelationfix.common.network.s2c.timestop.TimeStopSkillPacket;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
 import com.mega.revelationfix.safe.*;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import com.mega.revelationfix.safe.entity.LivingEventEC;
+import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.ATAHelper2;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import com.mega.revelationfix.util.time.TimeStopEntityData;
 import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -43,8 +45,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -88,11 +88,12 @@ public class CommonEventHandler {
     public static void onMobChangeTarget(LivingChangeTargetEvent event) {
         LivingEntity target = event.getNewTarget();
         LivingEntity entity = event.getEntity();
-        if (target != null && target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG)) {
-            if (entity.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG)) {
-                if (entity.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) && target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG)) {
+        if (target != null && (target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(target))) {
+            if (entity.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(entity)) {
+                if (entity.tags.contains(EntityExpandedContext.GR_FT_CHURCH) && target.tags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
                     event.setCanceled(true);
-                }
+                } else if (EntityExpandedContext.isOwnerFriendlyTag_Church(entity) && EntityExpandedContext.isOwnerFriendlyTag_Church(target))
+                    event.setCanceled(true);
             }
         }
     }
@@ -405,12 +406,6 @@ public class CommonEventHandler {
 
     @Mod.EventBusSubscriber
     public static class NeedleAttributeHandler {
-        @SubscribeEvent
-        public static void onServerChat(ServerChatEvent event) {
-            if (TimeStopSavedData.isPlayerBlasphemous(event.getPlayer())) {
-                event.setMessage(Component.literal("\uD870").append(event.getMessage()));
-            }
-        }
 
         @SubscribeEvent
         public static void onPlayerClone(PlayerEvent.Clone event) {

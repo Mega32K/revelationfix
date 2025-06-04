@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.network.co;
 
-import com.mega.revelationfix.common.client.screen.TheEndDeathScreen;
+import com.mega.revelationfix.client.screen.TheEndDeathScreen;
 import com.mega.revelationfix.common.network.c2s.TheEndDeathPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;

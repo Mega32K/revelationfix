@@ -7,7 +7,7 @@ import com.mega.revelationfix.common.apollyon.client.render.trail.TrailPoint;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.safe.DamageSourceInterface;
-import com.mega.revelationfix.safe.MobEffectInstanceEC;
+import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -143,7 +143,8 @@ public class GungnirSpearEntity extends AbstractArrow {
                 }
 
                 double d0 = 0.05D * (double) i;
-                this.setDeltaMovement(this.getDeltaMovement().scale(0.95D).add(vec3.normalize().scale(d0)));
+
+                this.setDeltaMovement(this.getDeltaMovement().scale(isNoGravity() ? 1F : 0.95D).add(vec3.normalize().scale(d0)));
                 if (this.clientSideReturnTridentTickCount == 0) {
                     this.playSound(SoundEvents.TRIDENT_RETURN, 10.0F, 1.0F);
                 }
@@ -408,7 +409,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     }
 
     public boolean tryPickup(Player p_150196_) {
-        return super.tryPickup(p_150196_) || this.isNoPhysics() && this.ownedBy(p_150196_);
+        return super.tryPickup(p_150196_) || (this.isNoPhysics() && this.ownedBy(p_150196_));
     }
 
     public SoundEvent getDefaultHitGroundSoundEvent() {

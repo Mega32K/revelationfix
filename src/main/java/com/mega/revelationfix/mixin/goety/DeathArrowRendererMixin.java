@@ -9,7 +9,7 @@ import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.entity.renderer.DeathArrowTrailTask;
 import com.mega.revelationfix.common.event.handler.ClientEventHandler;
-import com.mega.revelationfix.safe.DeathArrowEC;
+import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

@@ -4,7 +4,7 @@ import com.Polarice3.Goety.client.render.HellfireRenderer;
 import com.Polarice3.Goety.client.render.ModModelLayer;
 import com.Polarice3.Goety.client.render.model.IceBouquetModel;
 import com.Polarice3.Goety.common.entities.projectiles.Hellfire;
-import com.mega.revelationfix.common.client.citadel.GRRenderTypes;
+import com.mega.revelationfix.client.citadel.GRRenderTypes;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

@@ -1,0 +1,119 @@
+{
+  "plugin": "Goety Revelation",
+  "languageKey" : "ritual.goety_revelation.dimensional",
+  "iconItem" : "goety_revelation:dimensional_will",
+  "maxRange" : [8, 8],
+  "requirements" : {
+    "blocks" : [
+      {
+        "block" : "minecraft:end_bricks",
+        "count" : 8
+      },
+      {
+        "block" : "minecraft:crying_obsidian",
+        "count" : 8
+      },
+      {
+        "tag" : "#forge:storage_blocks",
+        "count" : 4
+      },
+      {
+        "block" : "goety_revelation:runestone_engraved_table",
+        "count" : 1,
+        "state" : [
+          {
+            "name" : "core",
+            "type" : "int",
+            "value" : 0
+          }
+        ]
+      },
+      {
+        "block" : "goety_revelation:runestone_engraved_table",
+        "count" : 1,
+        "state" : [
+          {
+            "name" : "core",
+            "type" : "int",
+            "value" : 1
+          }
+        ]
+      },
+      {
+        "block" : "goety_revelation:runestone_engraved_table",
+        "count" : 1,
+        "state" : [
+          {
+            "name" : "core",
+            "type" : "int",
+            "value" : 2
+          }
+        ]
+      },
+      {
+        "block" : "goety_revelation:runestone_engraved_table",
+        "count" : 1,
+        "state" : [
+          {
+            "name" : "core",
+            "type" : "int",
+            "value" : 3
+          }
+        ]
+      },
+      {
+        "type" : "goety_revelation:check_chest",
+        "container" : [
+          {
+            "item" : "goety:heart_of_the_night",
+            "minCount" : 3
+          },
+          {
+            "item" : "minecraft:nether_star",
+            "minCount" : 3
+          },
+          {
+            "item" : "minecraft:dragon_breath",
+            "minCount" : 3
+          }
+        ]
+      }
+    ],
+    "entities" : [
+      {
+        "entity" : "minecraft:player"
+      },
+      {
+        "type" : "goety_revelation:item_frame",
+        "item" : "#revelationfix:mystery_0"
+      },
+      {
+        "type" : "goety_revelation:item_frame",
+        "item" : "#revelationfix:mystery_1"
+      },
+      {
+        "type" : "goety_revelation:item_frame",
+        "item" : "#revelationfix:mystery_2"
+      },
+      {
+        "type" : "goety_revelation:item_frame",
+        "item" : "#revelationfix:mystery_3"
+      }
+    ],
+    "dimension_type" : "minecraft:overworld",
+    "position" : {
+      "posX" : {
+        "min" : 3999,
+        "max" : 3999
+      },
+      "posZ" : {
+        "min" : 3999,
+        "max" : 3999
+      }
+    },
+    "time" : {
+      "min" : 3999,
+      "max" : 4936
+    }
+  }
+}

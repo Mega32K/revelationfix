@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.apollyon.common;
 
-import com.mega.revelationfix.common.client.enums.ModChatFormatting;
+import com.mega.revelationfix.client.enums.ModChatFormatting;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.item.Rarity;
 

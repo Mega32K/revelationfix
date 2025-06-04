@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.eeeabsmobs;
 
 import com.eeeab.eeeabsmobs.sever.entity.immortal.EntityImmortal;
-import com.mega.revelationfix.safe.ModDependsMixin;
+import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
