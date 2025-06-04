@@ -85,7 +85,7 @@ public class Revelationfix {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, MODID + "/" + MODID + "-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ItemConfig.SPEC, MODID + "/" + MODID + "-item.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, MODID + "/" + MODID + "-client.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
 
         if (!SafeClass.isFantasyEndingLoaded()) {
             DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
