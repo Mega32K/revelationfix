@@ -53,7 +53,6 @@ public class RevelationCageEntity extends AbstractBeam {
                 if (this.owner instanceof Player) {
                     ModNetwork.INSTANCE.sendToServer(new CBeamPacket(this));
                 }
-
                 this.updatePositionAndRotation();
             }
             {

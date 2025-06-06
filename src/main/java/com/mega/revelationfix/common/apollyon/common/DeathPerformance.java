@@ -6,6 +6,7 @@ import com.Polarice3.Goety.utils.ParticleUtil;
 import com.mega.revelationfix.common.apollyon.client.SafePlayPostMusic;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
+import com.mega.revelationfix.common.entity.FakeSpellerEntity;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.PlayApollyonPostThemePacket;
 import com.mega.revelationfix.safe.entity.Apollyon2Interface;
@@ -184,7 +185,7 @@ public class DeathPerformance {
                 }
 
                 for (Entity entity : apostle.level().getEntities(apostle, new AABB(apostle.blockPosition()).inflate(17.0D), EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
-                    if (entity instanceof LivingEntity living) {
+                    if (entity instanceof LivingEntity living && !(living instanceof FakeSpellerEntity)) {
                         double fireScale = living.getBoundingBox().getYsize() / 2D;
                         float percentAmount = living.getMaxHealth() / 17F / 20 / 20 + 0.01F;
                         AttributeInstance knockback = living.getAttribute(Attributes.KNOCKBACK_RESISTANCE);

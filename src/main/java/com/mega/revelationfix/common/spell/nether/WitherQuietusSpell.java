@@ -88,7 +88,7 @@ public class WitherQuietusSpell extends Spell {
             target.hurt(caster.damageSources().source(DamageTypes.WITHER, caster), 12.0F);
             target.invulnerableTime = 0;
             target.hurt(caster.damageSources().source(DamageTypes.MAGIC, caster), 8.0F);
-            if (!target.level.isClientSide && target.isDeadOrDying() && caster instanceof Player) {
+            if (!target.level.isClientSide && target.isDeadOrDying() ) {
                 Level level = target.level;
                 WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), level);
                 servant.setTrueOwner(caster);

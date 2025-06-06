@@ -6,7 +6,9 @@ import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.client.particles.CircleExplodeParticleOption;
 import com.Polarice3.Goety.common.blocks.entities.CursedCageBlockEntity;
 import com.Polarice3.Goety.common.items.ModItems;
+import com.Polarice3.Goety.common.magic.spells.FireBreathSpell;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
+import com.mega.revelationfix.common.config.BlockConfig;
 import com.mega.revelationfix.common.entity.BlockShakingEntity;
 import com.mega.revelationfix.common.entity.FakeSpellerEntity;
 import com.mega.revelationfix.common.init.ModBlocks;
@@ -109,7 +111,7 @@ public class RuneReactorBlock extends BaseEntityBlock {
                                 blockEntity.setOwner(player);
                                 {
                                     if (!findFocus(handItem).isEmpty()) {
-                                        FakeSpellerEntity spellerEntity = new FakeSpellerEntity(level, handItem, blockPos.above(1));
+                                        FakeSpellerEntity spellerEntity = new FakeSpellerEntity(level, handItem, blockPos);
                                         spellerEntity.setWand(handItem.copy());
                                         spellerEntity.setTrueOwner(player);
                                         level.addFreshEntity(spellerEntity);
@@ -244,9 +246,11 @@ public class RuneReactorBlock extends BaseEntityBlock {
     public static int structuralIntegrity(Level level, BlockPos pos, BlockState state) {
         int integrity = 0;
         if (canUseStructure(level, pos, state)) {
+
             RuneReactorBlockEntity blockEntity = (RuneReactorBlockEntity) level.getBlockEntity(pos);
             assert blockEntity != null;
             for (BlockPos pos1 : blockEntity.getRunestonePoses()) {
+
                 BlockState tempState = level.getBlockState(pos1);
                 if (tempState.getBlock() instanceof RunestoneEngravedTableBlock engravedTableBlock) {
                     if (tempState.getValue(RunestoneEngravedTableBlock.CORE) > 0)
@@ -271,7 +275,7 @@ public class RuneReactorBlock extends BaseEntityBlock {
     public static boolean isKindOfCore(ItemStack stack) {
         checkCores();
         ISpell spell;
-        return isRitualStructureCore(stack) || ((spell = getSpell(stack)) != null);
+        return isRitualStructureCore(stack) || ((spell = getSpell(stack)) != null && !BlockConfig.blacklistSpellNames.contains(spell.getClass().getName()));
     }
     public static void checkCores() {
     }

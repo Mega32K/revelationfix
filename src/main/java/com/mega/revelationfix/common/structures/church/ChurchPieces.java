@@ -64,17 +64,27 @@ public class ChurchPieces {
             STRUCTURE_LOCATION_CHURCH_7, BlockPos.ZERO,
             STRUCTURE_LOCATION_CHURCH_8, BlockPos.ZERO
     );
-    public static final Map<ResourceLocation, BlockPos> OFFSETS = ImmutableMap.of(
+    public static Map<ResourceLocation, BlockPos> OFFSETS = ImmutableMap.of(
             STRUCTURE_LOCATION_CHURCH_1, new BlockPos(-48, 0, 0),
             STRUCTURE_LOCATION_CHURCH_2, new BlockPos(-48, 0, 48),
             STRUCTURE_LOCATION_CHURCH_3, BlockPos.ZERO,
             STRUCTURE_LOCATION_CHURCH_4, new BlockPos(0, 0, 48),
             STRUCTURE_LOCATION_CHURCH_5, new BlockPos(-48, 48-1, 0),
             STRUCTURE_LOCATION_CHURCH_6, new BlockPos(-48, 48-1, 48),
-            STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48-2, 0),
-            STRUCTURE_LOCATION_CHURCH_8, new BlockPos(-1, 48-2, 48)
+            STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48-1, 0),
+            STRUCTURE_LOCATION_CHURCH_8, new BlockPos(1, 48-1, 48)
     );
     public static void addPieces(StructureTemplateManager pStructureTemplateManager, BlockPos pStartPos, Rotation pRotation, StructurePieceAccessor pPieces, RandomSource pRandom) {
+        OFFSETS = ImmutableMap.of(
+                STRUCTURE_LOCATION_CHURCH_1, new BlockPos(-48, 0, 0),
+                STRUCTURE_LOCATION_CHURCH_2, new BlockPos(-48, 0, 48),
+                STRUCTURE_LOCATION_CHURCH_3, BlockPos.ZERO,
+                STRUCTURE_LOCATION_CHURCH_4, new BlockPos(0, 0, 48),
+                STRUCTURE_LOCATION_CHURCH_5, new BlockPos(-48, 48-1, 0),
+                STRUCTURE_LOCATION_CHURCH_6, new BlockPos(-48, 48-1, 48),
+                STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48-1, 0),
+                STRUCTURE_LOCATION_CHURCH_8, new BlockPos(1, 48-1, 48)
+        );
         int x = pStartPos.getX();
         int z = pStartPos.getZ();
         BlockPos rotationOffSet;

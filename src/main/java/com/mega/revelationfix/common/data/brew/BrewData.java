@@ -6,16 +6,11 @@ import com.Polarice3.Goety.common.effects.brew.PotionBrewEffect;
 import com.Polarice3.Goety.common.effects.brew.modifiers.BrewModifier;
 import com.Polarice3.Goety.common.effects.brew.modifiers.CapacityModifier;
 import com.google.gson.JsonObject;
-import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.api.event.register.CustomBrewRegisterEvent;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.kjs.KjsSafeClass;
-import com.mega.revelationfix.common.compat.kjs.events.KjsEvents;
-import com.mega.revelationfix.common.compat.kjs.events.WitchBrewRegisterKjsEvent;
-import com.mega.revelationfix.mixin.goety.BrewCauldronBlockEntityMixin;
 import com.mega.revelationfix.safe.mixinpart.goety.BrewEffectsInvoker;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
-import com.mojang.datafixers.types.Func;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.effect.MobEffect;
@@ -30,16 +25,16 @@ import java.util.*;
 import java.util.function.Function;
 
 public class BrewData {
-    private static final Map<String, BrewData> registered = new HashMap<>();
+    private static final Map<String, BrewData> REGISTRIES = new HashMap<>();
     public String pluginName = "";
     public List<Capacity> capacities = new ArrayList<>();
     public List<Catalysts<?>> catalysts = new ArrayList<>();
     public List<Augmentation> augmentations = new ArrayList<>();
     public static void clearData() {
-        registered.clear();
+        REGISTRIES.clear();
     }
     public static void reRegister() {
-        for (var entry : registered.entrySet())
+        for (var entry : REGISTRIES.entrySet())
             register(entry.getKey(), entry.getValue());
         MinecraftForge.EVENT_BUS.post(new CustomBrewRegisterEvent(CustomBrewRegisterEvent.Phase.CHECK));
         if (SafeClass.isKJSLoaded()) {
@@ -47,7 +42,7 @@ public class BrewData {
         }
     }
     public static void register(String id, BrewData data) {
-        registered.put(id, data);
+        REGISTRIES.put(id, data);
         {
             Logger logger = RevelationFixMixinPlugin.LOGGER;
             BrewEffectsInvoker invoker = (BrewEffectsInvoker) BrewEffects.INSTANCE;
@@ -76,10 +71,10 @@ public class BrewData {
         }
     }
     public static BrewData getValue(String id) {
-        return registered.get(id);
+        return REGISTRIES.get(id);
     }
     public static Collection<BrewData> allData() {
-        return registered.values();
+        return REGISTRIES.values();
     }
     public static class Capacity {
         private Item item;

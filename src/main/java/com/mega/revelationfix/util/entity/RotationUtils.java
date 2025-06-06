@@ -12,7 +12,11 @@ public class RotationUtils {
     }
     public static void rotationAtoB(Entity a, Vec3 targetPos) {
         a.setYRot(getYRotD(a, targetPos.x, targetPos.z));
+        a.setYHeadRot(getYRotD(a, targetPos.x, targetPos.z));
         a.setXRot(getXRotD(a, targetPos.x, targetPos.y, targetPos.z));
+        a.xRotO = a.getXRot();
+        a.yRotO = a.getYRot();
+
     }
     public static float getXRotD(Entity e, double wantedX, double wantedY, double wantedZ) {
         double d0 = wantedX - e.getX();

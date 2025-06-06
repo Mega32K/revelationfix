@@ -74,17 +74,15 @@ public class QuietusEffect extends MobEffect {
             LivingEntity living = event.getEntity();
             if (!living.level.isClientSide) {
                 EntityExpandedContext expandedContext = ((LivingEntityEC) living).revelationfix$livingECData();
-                if (!(expandedContext.getQuietusCaster() instanceof Player)) {
-                    Level level = living.level;
-                    WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), level);
-                    servant.setTrueOwner(expandedContext.getQuietusCaster() instanceof IOwned owned ? owned.getTrueOwner() : expandedContext.getQuietusCaster());
-                    servant.setLimitedLife(5 * 60 * 20);
-                    servant.finalizeSpawn((ServerLevel) level, level.getCurrentDifficultyAt(living.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
-                    SummonCircle summonCircle = new SummonCircle(level, living.blockPosition(), servant, false, true, expandedContext.getQuietusCaster());
-                    level.addFreshEntity(summonCircle);
-                    DamageSource source = living.lastDamageSource == null ? expandedContext.getQuietusCaster().damageSources().wither() : living.lastDamageSource;
+                Level level = living.level;
+                WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), level);
+                servant.setTrueOwner(expandedContext.getQuietusCaster() instanceof IOwned owned ? owned.getTrueOwner() : expandedContext.getQuietusCaster());
+                servant.setLimitedLife(5 * 60 * 20);
+                servant.finalizeSpawn((ServerLevel) level, level.getCurrentDifficultyAt(living.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                SummonCircle summonCircle = new SummonCircle(level, living.blockPosition(), servant, false, true, expandedContext.getQuietusCaster());
+                level.addFreshEntity(summonCircle);
+                DamageSource source = living.lastDamageSource == null ? expandedContext.getQuietusCaster().damageSources().wither() : living.lastDamageSource;
 
-                }
             }
         }
     }

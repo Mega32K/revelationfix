@@ -77,7 +77,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<FakeSpellerEntity>> FAKE_SPELLER = register("fake_speller",
             EntityType.Builder.<FakeSpellerEntity>of(FakeSpellerEntity::new, MobCategory.MISC)
                     .fireImmune()
-                    .sized(0F, 0F)
+                    .sized(0.2F, 0.2F)
                     .clientTrackingRange(4)
                     .updateInterval(20));
 

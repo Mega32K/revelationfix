@@ -1,22 +1,15 @@
-package com.mega.revelationfix.common.levelevent;
+package com.mega.revelationfix.client.levelevent;
 
 import com.Polarice3.Goety.client.particles.CircleExplodeParticleOption;
-import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.mega.revelationfix.common.block.RuneReactorBlock;
-import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.network.PacketClientProxy;
-import com.mega.revelationfix.common.network.s2c.IceSpellParticlePacket;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import mezz.jei.common.network.packets.IServerPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BeaconBlock;
-import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 
 public class LevelEventManager {
     public static Int2ObjectOpenHashMap<ILevelEvent> registries = new Int2ObjectOpenHashMap<>();

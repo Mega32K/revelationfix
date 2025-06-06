@@ -51,7 +51,11 @@ public class DarkWandMixin implements ILevelWand {
         tooltip.add(Component.translatable("tooltip.goety_revelation.wand_type").append(spellType.getName()));
         tooltip.add(Component.translatable("tooltip.goety_revelation.wand_level").append(LoreHelper.getStaffLevelDesc(this, stack)));
     }
-
+    @Inject(method = "onUseTick", at = @At("HEAD"), cancellable = true)
+    private void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count, CallbackInfo ci) {
+        if (livingEntityIn instanceof FakeSpellerEntity)
+            ci.cancel();
+    }
     @Override
     public boolean expandedRightStaffLogic(Spell spell, ItemStack stack) {
         return spell.getSpellType() == this.spellType;

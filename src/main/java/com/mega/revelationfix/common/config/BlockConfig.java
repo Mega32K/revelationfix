@@ -1,26 +1,35 @@
 package com.mega.revelationfix.common.config;
 
+import com.Polarice3.Goety.common.items.magic.MagicFocus;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BlockConfig {
     public static final ForgeConfigSpec SPEC;
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorRootCoreDelay;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorSoulCoreDelay;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorTransferCoreDelay;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorAnimationCoreCost;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorHungerCoreCost;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorMysticCoreCost;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorWindCoreCost;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorAnimationCoreCost_Focus;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorHungerCoreCost_Focus;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorMysticCoreCost_Focus;
-    private static final ForgeConfigSpec.ConfigValue<Integer> RuneReactorWindCoreCost_Focus;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_ROOT_CORE_DELAY;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_SOUL_CORE_DELAY;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_TRANSFER_CORE_DELAY;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_ANIMATION_CORE_COST;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_HUNGER_CORE_COST;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_MYSTIC_CORE_COST;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_WIND_CORE_COST;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_ANIMATION_CORE_COST_FOCUS;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_HUNGER_CORE_COST_FOCUS;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_MYSTIC_CORE_COST_FOCUS;
+    private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_WIND_CORE_COST_FOCUS;
     private static final ForgeConfigSpec.ConfigValue<Double> SpellingCostMultiplier;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> RUNE_REACTOR_BLACK_LIST_FOCUS;
     public static int runeReactor_rootCoreDelay;
     public static int runeReactor_soulCoreDelay;
     public static int runeReactor_transferCoreDelay;
@@ -33,62 +42,69 @@ public class BlockConfig {
     public static int runeReactor_MysticCoreCost_Focus;
     public static int runeReactor_WindCoreCost_Focus;
     public static double runeReactor_spellingCostMultiplier = 1D;
+    public static Set<String> blacklistSpellNames = new HashSet<>();
     static {
         BUILDER.push("Rune Reactor");
-        RuneReactorRootCoreDelay = BUILDER.worldRestart()
+        RUNE_REACTOR_ROOT_CORE_DELAY = BUILDER.worldRestart()
                 .comment("The delay from the Totem of Roots for the server-side tick effect of Rune Reactor, Default: 4")
                 .defineInRange("rootCoreDelay", 4, 1, 32767);
-        RuneReactorSoulCoreDelay = BUILDER.worldRestart()
+        RUNE_REACTOR_SOUL_CORE_DELAY = BUILDER.worldRestart()
                 .comment("The delay from the Totem of Souls for the server-side tick effect of Rune Reactor, Default: 4")
                 .defineInRange("soulCoreDelay", 2, 1, 32767);
-        RuneReactorTransferCoreDelay = BUILDER.worldRestart()
+        RUNE_REACTOR_TRANSFER_CORE_DELAY = BUILDER.worldRestart()
                 .comment("The delay from the Transfer Gem for the server-side tick effect of Rune Reactor, Default: 4")
                 .defineInRange("transferCoreDelay", 1, 1, 32767);
-        RuneReactorAnimationCoreCost = BUILDER.worldRestart()
+        RUNE_REACTOR_ANIMATION_CORE_COST = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(normal structure), Default: 2")
                 .defineInRange("normalStructure_AnimationCoreCost", 2, 0, 128);
-        RuneReactorHungerCoreCost = BUILDER.worldRestart()
+        RUNE_REACTOR_HUNGER_CORE_COST = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(normal structure), Default: 2")
                 .defineInRange("normalStructure_HungerCoreCost", 4, 0, 128);
-        RuneReactorMysticCoreCost = BUILDER.worldRestart()
+        RUNE_REACTOR_MYSTIC_CORE_COST = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(normal structure), Default: 2")
                 .defineInRange("normalStructure_MysticCoreCost", 2, 0, 128);
-        RuneReactorWindCoreCost = BUILDER.worldRestart()
+        RUNE_REACTOR_WIND_CORE_COST = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(normal structure), Default: 2")
                 .defineInRange("normalStructure_WindCoreCost", 1, 0, 128);
-        RuneReactorAnimationCoreCost_Focus = BUILDER.worldRestart()
+        RUNE_REACTOR_ANIMATION_CORE_COST_FOCUS = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(auto-spelling structure), Default: 2")
                 .defineInRange("normalStructure_AnimationCoreCost", 2, 0, 128);
-        RuneReactorHungerCoreCost_Focus = BUILDER.worldRestart()
+        RUNE_REACTOR_HUNGER_CORE_COST_FOCUS = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(auto-spelling structure), Default: 2")
                 .defineInRange("normalStructure_HungerCoreCost", 2, 0, 128);
-        RuneReactorMysticCoreCost_Focus = BUILDER.worldRestart()
+        RUNE_REACTOR_MYSTIC_CORE_COST_FOCUS = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(auto-spelling structure), Default: 2")
                 .defineInRange("normalStructure_MysticCoreCost", 2, 0, 128);
-        RuneReactorWindCoreCost_Focus = BUILDER.worldRestart()
+        RUNE_REACTOR_WIND_CORE_COST_FOCUS = BUILDER.worldRestart()
                 .comment("The core's soul cost per second(auto-spelling structure), Default: 2")
                 .defineInRange("normalStructure_WindCoreCost", 2, 0, 128);
         SpellingCostMultiplier = BUILDER.worldRestart()
                 .comment("The total soul cost of auto-spelling structure, Default: 2")
                 .defineInRange("runeReactor_spellingCostMultiplier", 1D, 0D, 128D );
+        RUNE_REACTOR_BLACK_LIST_FOCUS = BUILDER.worldRestart().comment("A list of focus items will be banned when Rune Reactor auto-spelling.")
+                .defineListAllowEmpty("blacklistSpellNames", List.of(), BlockConfig::validateFocusName);
         BUILDER.pop();
         SPEC = BUILDER.build();
+    }
+    public static boolean validateFocusName(final Object obj) {
+        return obj instanceof final String itemName && ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)) instanceof MagicFocus;
     }
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         if (SPEC.isLoaded()) {
-            runeReactor_rootCoreDelay = RuneReactorRootCoreDelay.get();
-            runeReactor_soulCoreDelay = RuneReactorSoulCoreDelay.get();
-            runeReactor_transferCoreDelay = RuneReactorTransferCoreDelay.get();
-            runeReactor_AnimationCoreCost = RuneReactorAnimationCoreCost.get();
-            runeReactor_HungerCoreCost = RuneReactorHungerCoreCost.get();
-            runeReactor_MysticCoreCost = RuneReactorMysticCoreCost.get();
-            runeReactor_WindCoreCost = RuneReactorWindCoreCost.get();
-            runeReactor_AnimationCoreCost_Focus = RuneReactorAnimationCoreCost_Focus.get();
-            runeReactor_HungerCoreCost_Focus = RuneReactorHungerCoreCost_Focus.get();
-            runeReactor_MysticCoreCost_Focus = RuneReactorMysticCoreCost_Focus.get();
-            runeReactor_WindCoreCost_Focus = RuneReactorWindCoreCost_Focus.get();
+            runeReactor_rootCoreDelay = RUNE_REACTOR_ROOT_CORE_DELAY.get();
+            runeReactor_soulCoreDelay = RUNE_REACTOR_SOUL_CORE_DELAY.get();
+            runeReactor_transferCoreDelay = RUNE_REACTOR_TRANSFER_CORE_DELAY.get();
+            runeReactor_AnimationCoreCost = RUNE_REACTOR_ANIMATION_CORE_COST.get();
+            runeReactor_HungerCoreCost = RUNE_REACTOR_HUNGER_CORE_COST.get();
+            runeReactor_MysticCoreCost = RUNE_REACTOR_MYSTIC_CORE_COST.get();
+            runeReactor_WindCoreCost = RUNE_REACTOR_WIND_CORE_COST.get();
+            runeReactor_AnimationCoreCost_Focus = RUNE_REACTOR_ANIMATION_CORE_COST_FOCUS.get();
+            runeReactor_HungerCoreCost_Focus = RUNE_REACTOR_HUNGER_CORE_COST_FOCUS.get();
+            runeReactor_MysticCoreCost_Focus = RUNE_REACTOR_MYSTIC_CORE_COST_FOCUS.get();
+            runeReactor_WindCoreCost_Focus = RUNE_REACTOR_WIND_CORE_COST_FOCUS.get();
             runeReactor_spellingCostMultiplier = SpellingCostMultiplier.get();
+            blacklistSpellNames = RUNE_REACTOR_BLACK_LIST_FOCUS.get().stream().map(itemName -> ((MagicFocus)ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName))).getSpell().getClass().getName()).collect(Collectors.toSet());
         }
     }
 }

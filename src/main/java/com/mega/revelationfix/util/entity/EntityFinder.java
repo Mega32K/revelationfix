@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -50,30 +51,29 @@ public class EntityFinder {
         return t;
     }
     public static boolean isAlliedNotEquals(LivingEntity caster, Entity entity) {
-        return caster != entity && isAlliedTo(caster, entity);
+        return caster != entity && entity.isAlive() && isAlliedTo(caster, entity);
     }
     public static boolean isNotAlliedNotEquals(LivingEntity caster, Entity entity) {
-        return caster != entity && !isAlliedTo(caster, entity);
+        return caster != entity && entity.isAlive() && !isAlliedTo(caster, entity);
     }
     public static boolean isAlliedTo(LivingEntity caster, Entity entityIn) {
-        boolean var10000 = true;
+        boolean flag = false;
         if (caster instanceof IOwned owned)
             caster = owned.getTrueOwner();
-        if (!caster.isAlliedTo(entityIn) && !entityIn.isAlliedTo(caster) && entityIn != caster) {
-            var10000 = false;
+         if (!caster.isAlliedTo(entityIn) && !entityIn.isAlliedTo(caster) && entityIn != caster) {
             label55:
             {
                 if (entityIn instanceof IOwned owned) {
-                    if (owned.getTrueOwner() == caster) {
-                        var10000 = true;
 
+                    if (owned.getTrueOwner() == caster || owned.getMasterOwner() == caster) {
+                        flag = true;
                         break label55;
                     }
                 }
 
                 if (entityIn instanceof OwnableEntity ownable) {
                     if (ownable.getOwner() == caster) {
-                        var10000 = true;
+                        flag = true;
                         break label55;
                     }
                 }
@@ -81,7 +81,7 @@ public class EntityFinder {
                 if (caster instanceof Player player) {
                     if (entityIn instanceof LivingEntity livingEntity) {
                         if (SEHelper.getAllyEntities(player).contains(livingEntity) || SEHelper.getAllyEntityTypes(player).contains(livingEntity.getType())) {
-                            var10000 = true;
+                            flag = true;
                         }
                     }
 
@@ -89,8 +89,8 @@ public class EntityFinder {
             }
 
 
-        }
+        } else flag = true;
 
-        return var10000;
+        return flag;
     }
 }

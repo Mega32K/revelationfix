@@ -72,9 +72,9 @@ public class ValetteinItem extends SwordItem implements IInvulnerableItem, ICust
         if (entity instanceof ObsidianMonolith monolith) {
             if (monolith.getTrueOwner() instanceof Player ownerPlayer) {
                 if (ownerPlayer != player || !player.isAlliedTo(ownerPlayer)) {
-                    monolith.silentDie(player.damageSources().playerAttack(player));
+                    monolith.die(player.damageSources().playerAttack(player));
                 }
-            } else monolith.silentDie(player.damageSources().playerAttack(player));
+            } else monolith.die(player.damageSources().playerAttack(player));
         }
         if (SafeClass.isYoukaiLoaded()) {
             YoukaiKiller.killYoukai(entity);

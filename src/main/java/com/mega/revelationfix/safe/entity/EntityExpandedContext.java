@@ -20,7 +20,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public class EntityExpandedContext {
-    public static final Predicate<Entity> NO_GODS = (e) -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(e) || ATAHelper2.hasOdamane(e);
+    public static final Predicate<Entity> NO_GODS = (e) -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(e) && !ATAHelper2.hasOdamane(e);
     public static final String GR_MAY_FRIENDLY_TAG = "grFriendlyToTeam";
     public static final String GR_FT_CHURCH = "grFT_church";
     public final LivingEntity entity;

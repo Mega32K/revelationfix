@@ -1,12 +1,15 @@
 package com.mega.revelationfix.util;
 
+import io.netty.util.internal.shaded.org.jctools.util.UnsafeAccess;
 import sun.misc.Unsafe;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.invoke.VarHandle;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +18,6 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class ClassHandler {
-
     public static Class<?> MEMEBER_NAME;
     public static MethodHandle MEMBER_NAME_COS;
     public static Map<Class<?>, List<Class<?>>> parentsMapping = new HashMap<>();
@@ -34,7 +36,15 @@ public class ClassHandler {
         }
 
     }
-
+    public static <T> T newInstance(Class<T> clazz) {
+        try {
+            Constructor<T> method = clazz.getConstructor();
+            method.setAccessible(true);
+            return  method.newInstance();
+        } catch (Throwable throwable) {
+            return null;
+        }
+    }
     public static MethodHandles.Lookup IMPL_LOOKUP() throws NoSuchFieldException, IllegalAccessException {
         //return (MethodHandles.Lookup) getDsDamage(MethodHandles.Lookup.class, "IMPL_LOOKUP", MethodHandles.Lookup.class);
         Field f = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");

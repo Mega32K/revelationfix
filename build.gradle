@@ -191,7 +191,7 @@ dependencies {
     implementation fg.deobf("curse.maven:IMBlocker-483760:4656554")
     implementation fg.deobf("curse.maven:Oculus-581495:5299671")
     implementation fg.deobf("curse.maven:Xenon-564239:5752040")
-    implementation fg.deobf("curse.maven:goety-586095:6518333")
+    implementation fg.deobf("curse.maven:goety-586095:6620277")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
     implementation fg.deobf("curse.maven:MobBattle-268746:5300817")
     implementation fg.deobf("curse.maven:IBE-256822:4994072")

@@ -1,4 +1,4 @@
-package com.mega.revelationfix.common.particle;
+package com.mega.revelationfix.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;

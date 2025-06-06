@@ -2,6 +2,8 @@ package com.mega.revelationfix.mixin.goety.ritual;
 
 import com.Polarice3.Goety.common.blocks.entities.RitualBlockEntity;
 import com.Polarice3.Goety.common.ritual.RitualRequirements;
+import com.mega.revelationfix.common.data.ritual.RitualData;
+import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.ritual.ModRitualTypes;
 import net.minecraft.core.BlockPos;
@@ -31,7 +33,9 @@ public class RitualRequirementsMixin {
 
     @Inject(method = "getProperStructure", at = @At("HEAD"), cancellable = true)
     private static void getProperStructure(String craftType, RitualBlockEntity pTileEntity, BlockPos pPos, Level pLevel, CallbackInfoReturnable<Boolean> cir) {
-        if (craftType.equals(ModRitualTypes.THE_END)) {
+        if (RitualDataManager.isCustomRitual(craftType)) {
+            cir.setReturnValue(RitualDataManager.getProperStructure(craftType, pTileEntity, pPos, pLevel));
+        } else if (craftType.equals(ModRitualTypes.THE_END)) {
             cir.setReturnValue(pPos.getY() <= 10 && revelationfix$getStructuresTheEnd(craftType, pPos, pLevel) && pLevel.dimension() == Level.END);
         } else if (craftType.equals(ModRitualTypes.THE_END_MAGIC)) {
             cir.setReturnValue(revelationfix$getStructuresTheEnd(craftType, pPos, pLevel));

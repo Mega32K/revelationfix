@@ -12,6 +12,7 @@ import com.mega.uom.render.RendererUtils;
 import com.mega.uom.util.time.TimeStopEntityData;
 import com.mega.uom.util.time.TimeStopUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +28,7 @@ import z1gned.goetyrevelation.ModMain;
 import z1gned.goetyrevelation.util.ATAHelper;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class Wrapped {
@@ -99,5 +101,10 @@ public class Wrapped {
         ClientEvents.BOSS_MUSIC = null;
         SoundManager soundHandler = Minecraft.getInstance().getSoundManager();
         soundHandler.queueTickingSound(new PostBossMusic(ModMain.APOLLYON_THEME_POST.get(), apostle));
+    }
+    public static Entity getEntityByUUID(UUID uuid) {
+        if (uuid == null)
+            return null;
+        return ((ClientLevel) clientLevel()).getEntities().get(uuid);
     }
 }

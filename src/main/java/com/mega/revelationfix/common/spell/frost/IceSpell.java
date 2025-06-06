@@ -8,6 +8,7 @@ import com.Polarice3.Goety.common.entities.projectiles.IceSpear;
 import com.Polarice3.Goety.common.entities.projectiles.IceSpike;
 import com.Polarice3.Goety.common.magic.EverChargeSpell;
 import com.Polarice3.Goety.common.magic.SpellStat;
+import com.Polarice3.Goety.common.magic.spells.FeastSpell;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ColorUtil;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -126,6 +127,7 @@ public class IceSpell extends EverChargeSpell {
             DamageSource source = caster.damageSources().source(DamageTypes.FREEZE, caster);
             PacketHandler.sendToAll(new IceSpellParticlePacket(caster.uuid, frostAreaRadius, IceSpellParticlePacket.TARGETS_PARTICLES));
             for (Entity entity : worldIn.getEntities(caster, new AABB(caster.blockPosition).inflate(frostAreaRadius * (Math.sqrt(2) / 2) + 4), (entity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && !EntityFinder.isAlliedTo(caster, entity)))) {
+
 
                 if (entity instanceof LivingEntity living) {
                     living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2), caster);

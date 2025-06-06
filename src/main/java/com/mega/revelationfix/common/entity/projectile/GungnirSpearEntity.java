@@ -124,7 +124,6 @@ public class GungnirSpearEntity extends AbstractArrow {
         if (this.inGroundTime > 4) {
             this.dealtDamage = true;
         }
-
         Entity entity = this.getOwner();
         int i = this.entityData.get(ID_LOYALTY);
         if (i > 0 && (this.dealtDamage || this.isNoPhysics()) && entity != null) {
@@ -153,44 +152,55 @@ public class GungnirSpearEntity extends AbstractArrow {
             }
         }
         super.tick();
-        if (this.isSeek() && !dealtDamage) {
-            if (!isThisArrowFlying())
-                return;
-            if (!this.level().isClientSide()) {
-                this.updateTarget(seekDistance, seekAngle * 2.0F);
-            }
-            Entity target = checkSaveTarget();
-            if (target != null) {
-
-                Vec3 targetVec = getVectorToTarget(target).scale(seekFactor);
-                Vec3 courseVec = getMotionVec();
-
-                // vector lengths
-                double courseLen = courseVec.length();
-                double targetLen = targetVec.length();
-                double totalLen = Math.sqrt(courseLen * courseLen + targetLen * targetLen);
-
-                double dotProduct = courseVec.dot(targetVec) / (courseLen * targetLen); // cosine similarity
-
-                if (dotProduct > seekThreshold) {
-
-                    // add vector to target, scale to match current velocity
-                    Vec3 newMotion = courseVec.scale(courseLen / totalLen).add(targetVec.scale(courseLen / totalLen));
-
-                    this.setDeltaMovement(newMotion.add(0, 0.045F, 0));
-
-                } else if (!this.level().isClientSide()) {
-                    // too inaccurate for our intended target, give up on it
-                    this.setTarget(null);
+        label:{
+            if (this.isSeek() && !dealtDamage) {
+                if (!isThisArrowFlying())
+                    break label;
+                if (!this.level().isClientSide()) {
+                    this.updateTarget(seekDistance, seekAngle * 2.0F);
                 }
-            }
+                Entity target = checkSaveTarget();
+                if (target != null) {
 
+                    Vec3 targetVec = getVectorToTarget(target).scale(seekFactor);
+                    Vec3 courseVec = getMotionVec();
+
+                    // vector lengths
+                    double courseLen = courseVec.length();
+                    double targetLen = targetVec.length();
+                    double totalLen = Math.sqrt(courseLen * courseLen + targetLen * targetLen);
+
+                    double dotProduct = courseVec.dot(targetVec) / (courseLen * targetLen); // cosine similarity
+
+                    if (dotProduct > seekThreshold) {
+
+                        // add vector to target, scale to match current velocity
+                        Vec3 newMotion = courseVec.scale(courseLen / totalLen).add(targetVec.scale(courseLen / totalLen));
+
+                        this.setDeltaMovement(newMotion.add(0, 0.045F, 0));
+
+                    } else if (!this.level().isClientSide()) {
+                        // too inaccurate for our intended target, give up on it
+                        this.setTarget(null);
+                    }
+                }
+
+            }
         }
-        if (tickCount > 400 || this.getY() < this.level.getMinBuildHeight() && !dealtDamage) {
+
+        if ((tickCount > 400 || this.getY() < this.level.getMinBuildHeight())) {
             this.dealtDamage = true;
+            setNoPhysics(true);
             if (!this.level.isClientSide) {
-                if (this.getOwner() != null)
+                if (this.getOwner() != null && isAcceptibleReturnOwner()) {
                     this.setPos(this.getOwner().position.add(new Vec3(0, 1F, 0F)));
+                } else if (isNoPhysics()) {
+                    if (!this.level().isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
+                        this.spawnAtLocation(this.getPickupItem(), 0.1F);
+                    }
+                } else if (isNoGravity()) {
+                    this.discard();
+                }
             }
         }
 

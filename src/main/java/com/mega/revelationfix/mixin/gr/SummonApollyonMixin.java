@@ -20,7 +20,6 @@ public class SummonApollyonMixin extends SummonApostle {
     public SummonApollyonMixin(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
-
     @Override
     public void tick() {
         super.tick();

@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.compat.tetra.effect;
 
 import com.Polarice3.Goety.common.entities.ModEntityType;
-import com.Polarice3.Goety.common.entities.ally.AllyVex;
+import com.Polarice3.Goety.common.entities.ally.illager.AllyVex;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.mega.revelationfix.common.compat.tetra.TetraVersionCompat;
 import com.mega.revelationfix.safe.DamageSourceInterface;
