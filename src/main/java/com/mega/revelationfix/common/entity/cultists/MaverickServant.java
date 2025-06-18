@@ -176,7 +176,7 @@ public class MaverickServant extends Maverick implements IServant {
     public void setTarget(@javax.annotation.Nullable LivingEntity p_21544_) {
         if (this.isPatrolling()) {
             if (p_21544_ != null) {
-                if (p_21544_.distanceToSqr(this.vec3BoundPos()) <= (double) Mth.square(PATROL_RANGE)) {
+                if (p_21544_.distanceToSqr(this.vec3BoundPos()) <= (double) Mth.square(GUARDING_RANGE)) {
                     this.normalSetTarget(p_21544_);
                 }
             } else {

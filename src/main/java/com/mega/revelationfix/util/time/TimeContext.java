@@ -13,6 +13,8 @@ import org.joml.Vector4f;
 
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TimeContext {
 
@@ -22,6 +24,7 @@ public class TimeContext {
 
     @OnlyIn(Dist.CLIENT)
     public static class Client {
+        public static final Lock lock = new ReentrantLock();
         private static final AtomicLong SEED_UNIQUIFIER = new AtomicLong(8682522807148012L);
         public static Timer timer = new Timer(20.0F, 0L);
         /**
@@ -43,9 +46,7 @@ public class TimeContext {
         }
 
         public static long generateUniqueSeed() {
-            return (TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension) ? (SEED_UNIQUIFIER.get() * 1181783497276652981L) ^ (Both.timeStopModifyMillis * 1000000L) : SEED_UNIQUIFIER.updateAndGet((p_224601_) -> {
-                return p_224601_ * 1181783497276652981L;
-            }) ^ (Both.timeStopModifyMillis * 1000000L);
+            return (TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension) ? (SEED_UNIQUIFIER.get() * 1181783497276652981L) ^ (Both.timeStopModifyMillis * 1000000L) : SEED_UNIQUIFIER.updateAndGet((p_224601_) -> p_224601_ * 1181783497276652981L) ^ (Both.timeStopModifyMillis * 1000000L);
         }
 
         public static float alwaysPartial() {
@@ -67,19 +68,7 @@ public class TimeContext {
 
         public static Color rainbow(float f0, float saturation, float lgiht) {
             float colorr = (float) milliTime() / f0 % 1.0F;
-            Color color = Color.getHSBColor(colorr, saturation, lgiht);
-            return color;
-        }
-
-        public static Vector4f rainbowV4(float f0, float saturation, float lgiht) {
-            float colorr = (float) milliTime() / f0 % 1.0F;
-            Color color = Color.getHSBColor(colorr, saturation, lgiht);
-            return new Vector4f(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-        }
-
-        public static int argbRainbow(float f0, float saturation, float lgiht) {
-            Color color = rainbow(f0, saturation, lgiht);
-            return FastColor.ARGB32.color(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
+            return Color.getHSBColor(colorr, saturation, lgiht);
         }
 
         public static long getNanos() {

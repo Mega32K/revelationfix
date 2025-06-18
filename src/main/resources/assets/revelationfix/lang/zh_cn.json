@@ -25,6 +25,7 @@
   "entity.revelationfix.star_arrow":"星辰之矢",
 
   "effect.revelationfix.quietus" : "寂灭",
+  "effect.revelationfix.counterspell" : "法术反制",
 
   "message.apollyon.ban_chain" : "锁链/粘性锁链已被禁用",
 
@@ -137,9 +138,18 @@
   "item.goety_revelation.puzzle.58" : "漂亮国海底旅游工具操控器（Alex的洞穴）",
   "item.goety_revelation.puzzle.59" : "凡人的创世权柄（机械动力）",
 
+  "item.minecraft.potion.effect.counterspell" : "法术反制药水",
+  "item.minecraft.splash_potion.effect.counterspell" : "喷溅型法术反制药水",
+  "item.minecraft.lingering_potion.effect.counterspell" : "滞留型法术反制药水",
+  "item.minecraft.potion.effect.long_counterspell" : "长效法术反制药水",
+  "item.minecraft.splash_potion.effect.long_counterspell" : "长效喷溅型法术反制药水",
+  "item.minecraft.lingering_potion.effect.long_counterspell" : "长效滞留型法术反制药水",
+  "item.minecraft.potion.effect.strong_counterspell" : "强化法术反制药水",
+  "item.minecraft.splash_potion.effect.strong_counterspell" : "强化喷溅型法术反制药水",
+  "item.minecraft.lingering_potion.effect.strong_counterspell" : "强化滞留型法术反制药水",
+
   "jei.goety.craftType.the_end": "终末",
   "jei.goety.craftType.te_magic": "魔法",
-  "jei.goety.craftType.world": "世界",
   "jei.goety_revelation.dark_ingot_hammer.title": "黑暗金属锻锤",
 
   "curios.goety_revelation.modifiers.slots" : "栏位",

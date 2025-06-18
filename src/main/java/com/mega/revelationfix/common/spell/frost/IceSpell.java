@@ -76,7 +76,7 @@ public class IceSpell extends EverChargeSpell {
     }
 
     @Override
-    public void startSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff) {
+    public void startSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
         if (caster instanceof ServerPlayer player) {
             int range = defaultStats().getRange();
             if (WandUtil.enchantedFocus(caster)) {
@@ -87,7 +87,7 @@ public class IceSpell extends EverChargeSpell {
                 frostAreaRadius += 12.0F;
             PacketHandler.sendToPlayer(player, new SpellCircleStatePacket(this.getSpellType(), SpellCircleStatePacket.STATE_START_SPELL_CIRCLE, player.getMainHandItem().equals(staff), frostAreaRadius));
         }
-        super.startSpell(worldIn, caster, staff);
+        super.startSpell(worldIn, caster, staff, spellStat);
     }
 
     @Override
@@ -97,6 +97,7 @@ public class IceSpell extends EverChargeSpell {
         }
         super.stopSpell(worldIn, caster, staff, useTimeRemaining);
     }
+
     public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
 
         //IceSpear

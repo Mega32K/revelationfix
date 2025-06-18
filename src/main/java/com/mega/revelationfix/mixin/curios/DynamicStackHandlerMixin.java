@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.curios;
 
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.ItemStackHandler;
 import org.spongepowered.asm.mixin.Mixin;

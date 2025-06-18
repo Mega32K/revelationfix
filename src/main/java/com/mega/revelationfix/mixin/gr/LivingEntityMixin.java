@@ -5,7 +5,8 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.entities.util.SummonCircle;
 import com.Polarice3.Goety.init.ModSounds;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.common.config.CommonConfig;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -67,13 +68,15 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(at = @At("RETURN"), method = "tick")
     private void getTarget(CallbackInfo ci) {
-        if ((LivingEntity) (Object) this instanceof Mob mob) {
-            LivingEntity target = mob.getTarget();
-            if (target != null && mob.isAlive()) {
-                if (target instanceof Player player) {
-                    Owned owned = mob.level().getNearestEntity(Owned.class, TargetingConditions.DEFAULT, mob, 0.0D, 0.0D, 0.0D, new AABB(mob.blockPosition()).inflate(mob.getAttributeValue(Attributes.FOLLOW_RANGE)));
-                    if (owned != null && owned.getTrueOwner() == player && !owned.isDeadOrDying()) {
-                        mob.setTarget(owned);
+        if (CommonConfig.redirectTargetToServantOption) {
+            if ((LivingEntity) (Object) this instanceof Mob mob) {
+                LivingEntity target = mob.getTarget();
+                if (target != null && mob.isAlive()) {
+                    if (target instanceof Player player) {
+                        Owned owned = mob.level().getNearestEntity(Owned.class, TargetingConditions.DEFAULT, mob, 0.0D, 0.0D, 0.0D, new AABB(mob.blockPosition()).inflate(mob.getAttributeValue(Attributes.FOLLOW_RANGE)));
+                        if (owned != null && owned.getTrueOwner() == player && !owned.isDeadOrDying()) {
+                            mob.setTarget(owned);
+                        }
                     }
                 }
             }

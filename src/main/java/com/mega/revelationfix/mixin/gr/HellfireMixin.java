@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin.gr;
 
 import com.Polarice3.Goety.common.entities.projectiles.GroundProjectile;
 import com.Polarice3.Goety.common.entities.projectiles.Hellfire;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

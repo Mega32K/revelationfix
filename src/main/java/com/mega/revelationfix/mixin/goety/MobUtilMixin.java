@@ -1,9 +1,7 @@
 package com.mega.revelationfix.mixin.goety;
 
-import com.Polarice3.Goety.common.magic.spells.WeakeningSpell;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.mega.revelationfix.common.entity.FakeSpellerEntity;
-import com.mega.revelationfix.util.entity.EntityFinder;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

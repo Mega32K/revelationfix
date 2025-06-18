@@ -6,25 +6,22 @@ import com.mega.revelationfix.client.PlayerRendererContext;
 import com.mega.revelationfix.client.citadel.GRShaders;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
 import com.mega.revelationfix.client.key.CuriosSkillKeyMapping;
+import com.mega.revelationfix.client.model.entity.SpiderDarkmageArmorModel;
 import com.mega.revelationfix.client.particle.FrostFlowerParticle;
-import com.mega.revelationfix.client.screen.post.PostEffectHandler;
+import com.mega.revelationfix.client.renderer.entity.*;
 import com.mega.revelationfix.client.screen.post.PostProcessingShaders;
-import com.mega.revelationfix.client.screen.post.custom.AberrationDistortionPostEffect;
-import com.mega.revelationfix.client.screen.post.custom.PuzzleEffect;
-import com.mega.revelationfix.client.screen.post.custom.TimeStoppingGrayPostEffect;
 import com.mega.revelationfix.common.block.blockentity.renderer.RuneReactorBERenderer;
 import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.common.entity.renderer.*;
-import com.mega.revelationfix.common.entity.renderer.mob.HereticServantRenderer;
-import com.mega.revelationfix.common.entity.renderer.mob.MaverickServantRenderer;
+import com.mega.revelationfix.client.model.entity.TeleportEntityModel;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModBlocks;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.common.init.ModParticleTypes;
-import com.mega.revelationfix.common.item.combat.BowOfRevelationItem;
+import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
 import com.mega.revelationfix.common.item.other.MysteryFragment;
 import com.mega.revelationfix.common.odamane.client.OdamaneHaloLayer;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.common.odamane.client.OdamaneHaloModel;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import com.mega.revelationfix.util.time.TimeContext;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -46,7 +43,10 @@ import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 import z1gned.goetyrevelation.util.ATAHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -65,12 +65,10 @@ public class ClientProxy implements ModProxy {
             modBus.addListener(this::clientSetup);
             modBus.addListener(this::registerKeys);
             modBus.addListener(this::onAddLayers);
+            modBus.addListener(this::onRegisterLayers);
             modBus.addListener(this::onParticleFactoryRegistration);
             ReloadableResourceManager manager = (ReloadableResourceManager) Minecraft.getInstance().getResourceManager();
             manager.registerReloadListener(PostProcessingShaders.INSTANCE);
-            PostEffectHandler.registerEffect(new PuzzleEffect());
-            PostEffectHandler.registerEffect(new AberrationDistortionPostEffect());
-            PostEffectHandler.registerEffect(new TimeStoppingGrayPostEffect());
             //PostEffectHandler.registerEffect(new TheEndEffect());
             INSTANCE = this;
         } catch (Throwable throwable) {
@@ -102,6 +100,13 @@ public class ClientProxy implements ModProxy {
         playerRendererContext.init(event.getContext());
     }
 
+    public void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(QuietusVirtualRenderer.MODEL_LAYER_LOCATION, QuietusVirtualRenderer::createBodyLayer);
+        event.registerLayerDefinition(OdamaneHaloModel.LAYER_LOCATION, OdamaneHaloModel::createBodyLayer);
+        event.registerLayerDefinition(TeleportEntityModel.LAYER_LOCATION, TeleportEntityModel::createBodyLayer);
+        event.registerLayerDefinition(SpiderDarkmageArmorModel.OUTER, SpiderDarkmageArmorModel::creteOuter);
+    }
+
     public void clientSetup(final FMLClientSetupEvent event) {
         if (SafeClass.isTetraLoaded())
             SafeClass.registerTetraItemEffects();
@@ -118,7 +123,9 @@ public class ClientProxy implements ModProxy {
             EntityRenderers.register(ModEntities.STAR_ENTITY.get(), StarArrowRenderer::new);
             EntityRenderers.register(ModEntities.GUNGNIR.get(), GungnirSpearRenderer::new);
             EntityRenderers.register(ModEntities.FAKE_SPELLER.get(), FakeSpellerRenderer::new);
-            CuriosRendererRegistry.register(GRItems.HALO_OF_THE_END, OdamaneHaloLayer::new);
+            EntityRenderers.register(ModEntities.TELEPORT_ENTITY.get(), TeleportEntityRenderer::new);
+            if (!SafeClass.isYSMLoaded())
+                CuriosRendererRegistry.register(GRItems.HALO_OF_THE_END, OdamaneHaloLayer::new);
             BlockEntityRenderers.register(ModBlocks.RUNE_REACTOR_ENTITY.get(), RuneReactorBERenderer::new);
             BowOfRevelationItem bow = (BowOfRevelationItem) GRItems.BOW_OF_REVELATION.get();
             ItemProperties.register(bow, new ResourceLocation("pulling"), (itemStack, clientWorld, livingEntity, i)
@@ -136,6 +143,7 @@ public class ClientProxy implements ModProxy {
             MysteryFragment mysteryFragment = (MysteryFragment) GRItems.MYSTERY_FRAGMENT.get();
             ItemProperties.register(mysteryFragment, new ResourceLocation("fragment"), (itemStack, clientWorld, livingEntity, i)
                     -> livingEntity != null ? itemStack.getOrCreateTag().getInt("fragment") : 0);
+            copyOldArtIfMissing();
         });
         if (!SafeClass.isFantasyEndingLoaded())
             event.enqueueWork(() -> {
@@ -146,9 +154,10 @@ public class ClientProxy implements ModProxy {
 
                     if (!SafeClass.isClientTimeStop()) {
                         ++TimeContext.Both.timeStopModifyMillis;
+
                         if (!mc.isPaused()) TimeContext.Client.timeStopGLFW++;
                     }
-                    TimeContext.Client.count++;
+                    TimeContext.Client.count = 0;
                 }, 0L, 1L, TimeUnit.MILLISECONDS);
             });
     }
@@ -157,5 +166,29 @@ public class ClientProxy implements ModProxy {
     }
     public void onParticleFactoryRegistration(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticleTypes.FROST_FLOWER.get(), FrostFlowerParticle.Provider::new);
+    }
+    private static void copyOldArtIfMissing() {
+        File dir = new File(".", "resourcepacks");
+        File target = new File(dir, "GR Old Textures.zip");
+        if (!target.exists()) {
+            try {
+                dir.mkdirs();
+                InputStream in = Revelationfix.class.getResourceAsStream("/assets/revelationfix/gr_old_textures.zip");
+                FileOutputStream out = new FileOutputStream(target);
+                byte[] buf = new byte[16384];
+                if (in != null) {
+                    int len;
+                    while((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+
+                    in.close();
+                }
+
+                out.close();
+            } catch (IOException var6) {
+            }
+        }
+
     }
 }

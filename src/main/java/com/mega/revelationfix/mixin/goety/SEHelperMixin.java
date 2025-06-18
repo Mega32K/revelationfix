@@ -19,9 +19,6 @@ public class SEHelperMixin {
         if (living instanceof Player player) {
             if (ATAHelper.hasHalo(player))
                 cir.setReturnValue(cir.getReturnValue() / (float) CommonConfig.haloSoulReduction);
-            int i = ArmorEvents.armorSetCount(player, ModArmorMaterials.APOCALYPTIUM);
-            if (i > 0)
-                cir.setReturnValue(cir.getReturnValue() * (1F - i * 0.165F));
         }
     }
 }

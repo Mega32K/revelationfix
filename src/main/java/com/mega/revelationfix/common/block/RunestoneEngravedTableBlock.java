@@ -122,7 +122,6 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
         }
         return super.use(blockState, level, blockPos, player, hand, blockHitResult);
     }
-
     @Override
     public @NotNull List<ItemStack> getDrops(@NotNull BlockState blockState, LootParams.@NotNull Builder builder) {
         List<ItemStack> stacks = super.getDrops(blockState, builder);
@@ -132,7 +131,6 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
         }
         return stacks;
     }
-
     public int getCore(Item item) {
         checkMap();
         return coreMap0.getOrDefault(item, -1);

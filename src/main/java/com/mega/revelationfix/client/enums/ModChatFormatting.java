@@ -5,4 +5,5 @@ import net.minecraft.ChatFormatting;
 public class ModChatFormatting {
     public static ChatFormatting APOLLYON;
     public static ChatFormatting FROST;
+    public static ChatFormatting SPIDER;
 }

@@ -1,6 +1,7 @@
 package com.mega.revelationfix.common.config;
 
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -42,15 +43,15 @@ public class BlockConfig {
     public static int runeReactor_MysticCoreCost_Focus;
     public static int runeReactor_WindCoreCost_Focus;
     public static double runeReactor_spellingCostMultiplier = 1D;
-    public static Set<String> blacklistSpellNames = new HashSet<>();
+    public static Set<String> blacklistSpellNames = new ReferenceOpenHashSet<>();
     static {
         BUILDER.push("Rune Reactor");
         RUNE_REACTOR_ROOT_CORE_DELAY = BUILDER.worldRestart()
                 .comment("The delay from the Totem of Roots for the server-side tick effect of Rune Reactor, Default: 4")
-                .defineInRange("rootCoreDelay", 4, 1, 32767);
+                .defineInRange("rootTotemDelay", 4, 1, 32767);
         RUNE_REACTOR_SOUL_CORE_DELAY = BUILDER.worldRestart()
                 .comment("The delay from the Totem of Souls for the server-side tick effect of Rune Reactor, Default: 4")
-                .defineInRange("soulCoreDelay", 2, 1, 32767);
+                .defineInRange("soulTotemDelay", 1, 1, 32767);
         RUNE_REACTOR_TRANSFER_CORE_DELAY = BUILDER.worldRestart()
                 .comment("The delay from the Transfer Gem for the server-side tick effect of Rune Reactor, Default: 4")
                 .defineInRange("transferCoreDelay", 1, 1, 32767);

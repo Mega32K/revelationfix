@@ -8,7 +8,7 @@ import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.common.magic.spells.geomancy.BarricadeSpell;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;

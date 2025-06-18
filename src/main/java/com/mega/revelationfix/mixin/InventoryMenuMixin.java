@@ -1,8 +1,7 @@
 package com.mega.revelationfix.mixin;
 
-import com.Polarice3.Goety.common.crafting.RitualRecipe;
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;

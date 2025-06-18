@@ -1,15 +1,16 @@
 package com.mega.revelationfix.common.init;
 
-import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.item.AllRightsServantEgg;
-import com.mega.revelationfix.common.item.armor.ApocalyptiumArmor;
-import com.mega.revelationfix.common.item.combat.BowOfRevelationItem;
-import com.mega.revelationfix.common.item.combat.GungnirItem;
-import com.mega.revelationfix.common.item.combat.ValetteinItem;
+import com.mega.revelationfix.common.item.armor.*;
+import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
+import com.mega.revelationfix.common.item.tool.combat.trident.GungnirItem;
+import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
+import com.mega.revelationfix.common.item.tool.combat.whip.SpectreWhipItem;
+import com.mega.revelationfix.common.item.tool.combat.whip.VenomousSpiderWhipItem;
 import com.mega.revelationfix.common.item.curios.DimensionalWillItem;
 import com.mega.revelationfix.common.item.curios.EternalWatchItem;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
@@ -21,7 +22,7 @@ import com.mega.revelationfix.common.item.disc.DecisiveMomentDisc;
 import com.mega.revelationfix.common.item.food.AscensionHardCandy;
 import com.mega.revelationfix.common.item.other.*;
 import com.mega.revelationfix.common.item.template.ApocalyptiumTemplateItem;
-import com.mega.revelationfix.common.item.wand.FrostbloomStaff;
+import com.mega.revelationfix.common.item.tool.wand.FrostbloomStaff;
 import com.mega.revelationfix.common.spell.EmptySpell;
 import com.mega.revelationfix.common.spell.frost.IceSpell;
 import com.mega.revelationfix.common.spell.nether.HereticSpell;
@@ -31,10 +32,12 @@ import com.mega.revelationfix.util.java.Self;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryObject;
+import z1gned.goetyrevelation.ModMain;
 import z1gned.goetyrevelation.item.ModItems;
 
 import java.util.HashMap;
@@ -76,8 +79,10 @@ public class GRItems {
     public static final TagKey<Item> VANISHING_CB = ItemTags.create(new ResourceLocation(Revelationfix.MODID, "vanishing_enchantment_book"));
     //不偷的饰品标签
     public static final TagKey<Item> NO_STEALING = ItemTags.create(new ResourceLocation(Revelationfix.MODID, "no_stealing"));
-    //图腾物品标签
-    public static final TagKey<Item> TOTEMS = ItemTags.create(new ResourceLocation(Goety.MOD_ID, "totems"));
+    //鞭子标签
+    public static final TagKey<Item> WHIPS = ItemTags.create(new ResourceLocation("forge:tools/whips"));
+    //蜘蛛类稀有物品标签
+    public static final TagKey<Item> SPIDERS = ItemTags.create(new ResourceLocation(ModMain.MODID, "spiders"));
     //2.1
     @ObjectHolder(value = "goety_revelation:apocalyptium_helmet", registryName = "item")
     public static final Item A_HELMET = null;
@@ -91,7 +96,7 @@ public class GRItems {
     public static final Item APOCALYPTIUM_INGOT_ITEM = null;
     @ObjectHolder(value = "goety_revelation:the_tip_of_the_longinus", registryName = "item")
     public static final Item TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM = null;
-    public static Map<Integer, Supplier<List<ItemStack>>> insertAfterTabMap = new HashMap<>();
+    public static Map<RegistryObject<Item>, Supplier<List<ItemStack>>> insertAfterTabMap = new HashMap<>();
     public static RegistryObject<Item> ASCENSION_HARD_CANDY;
     public static RegistryObject<Item> VALETTEIN;
     public static RegistryObject<Item> GUNGNIR;
@@ -119,6 +124,35 @@ public class GRItems {
     public static RegistryObject<Item> HERETIC_SERVANT_SPAWN_EGG;
     @Self
     public static RegistryObject<Item> MAVERICK_SERVANT_SPAWN_EGG;
+    public static RegistryObject<Item> SPIDER_FANG;
+    public static RegistryObject<Item> HAUNTED_WHIP_HILT;
+    public static RegistryObject<Item> VENOMOUS_SPIDER_WHIP;
+    public static RegistryObject<Item> SPIDER_HELMET;
+    public static RegistryObject<Item> SPIDER_CHESTPLATE;
+    public static RegistryObject<Item> SPIDER_LEGGINGS;
+    public static RegistryObject<Item> SPIDER_BOOTS;
+    public static RegistryObject<Item> SPECTRE_WHIP;
+    public static RegistryObject<Item> SPECTRE_HELMET;
+    public static RegistryObject<Item> SPECTRE_CHESTPLATE;
+    public static RegistryObject<Item> SPECTRE_LEGGINGS;
+    public static RegistryObject<Item> SPECTRE_BOOTS;
+    @Self
+    public static RegistryObject<Item> SPIDER_DARKMAGE_HELMET;
+    @Self
+    public static RegistryObject<Item> SPIDER_DARKMAGE_CHESTPLATE;
+    @Self
+    public static RegistryObject<Item> SPIDER_DARKMAGE_LEGGINGS;
+    @Self
+    public static RegistryObject<Item> SPIDER_DARKMAGE_BOOTS;
+    @Self
+    public static RegistryObject<Item> SPECTRE_DARKMAGE_HELMET;
+    @Self
+    public static RegistryObject<Item> SPECTRE_DARKMAGE_CHESTPLATE;
+    @Self
+    public static RegistryObject<Item> SPECTRE_DARKMAGE_LEGGINGS;
+    @Self
+    public static RegistryObject<Item> SPECTRE_DARKMAGE_BOOTS;
+    @Self
     public static RegistryObject<Item> REVELATION_FOCUS;
     public static RegistryObject<Item> WITHER_QUIETUS_FOCUS;
     public static RegistryObject<Item> HERETIC_FOCUS;
@@ -188,23 +222,47 @@ public class GRItems {
         STAFF_FROSTBLOOM = ITEMS.register("frostbloom_staff", FrostbloomStaff::new);
         BI_RUNE_REACTOR = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNE_REACTOR);
         BI_RUNESTONE_ENGRAVED_TABLE = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNESTONE_ENGRAVED_TABLE);
+        SPIDER_FANG = ITEMS.register("spider_fang", ()-> new Item(new Item.Properties().stacksTo(64).food(new FoodProperties.Builder().fast().nutrition(3).saturationMod(0.6F).build())));
+        VENOMOUS_SPIDER_WHIP = ITEMS.register("venomous_spider_whip", ()-> new VenomousSpiderWhipItem(1F, -2.2F));
+        SPECTRE_WHIP = ITEMS.register("spectre_whip", ()-> new SpectreWhipItem(1F, -2.2F));
+        HAUNTED_WHIP_HILT = ITEMS.register("haunted_whip_hilt", ()-> new Item(new Item.Properties().stacksTo(1)));
+        SPIDER_HELMET = ITEMS.register("spider_helmet", ()-> new SpiderArmor(ArmorItem.Type.HELMET));
+        SPIDER_CHESTPLATE = ITEMS.register("spider_chestplate", ()-> new SpiderArmor(ArmorItem.Type.CHESTPLATE));
+        SPIDER_LEGGINGS = ITEMS.register("spider_leggings", ()-> new SpiderArmor(ArmorItem.Type.LEGGINGS));
+        SPIDER_BOOTS = ITEMS.register("spider_boots", ()-> new SpiderArmor(ArmorItem.Type.BOOTS));
+        SPECTRE_HELMET = ITEMS.register("spectre_helmet", ()-> new SpectreArmor(ArmorItem.Type.HELMET));
+        SPECTRE_CHESTPLATE = ITEMS.register("spectre_chestplate", ()-> new SpectreArmor(ArmorItem.Type.CHESTPLATE));
+        SPECTRE_LEGGINGS = ITEMS.register("spectre_leggings", ()-> new SpectreArmor(ArmorItem.Type.LEGGINGS));
+        SPECTRE_BOOTS = ITEMS.register("spectre_boots", ()-> new SpectreArmor(ArmorItem.Type.BOOTS));
+        SPIDER_DARKMAGE_HELMET = ITEMS.register("spider_darkmage_helmet", ()-> new SpiderDarkmageArmor(ArmorItem.Type.HELMET));
+        SPIDER_DARKMAGE_CHESTPLATE = ITEMS.register("spider_darkmage_chestplate", ()-> new SpiderDarkmageArmor(ArmorItem.Type.CHESTPLATE));
+        SPIDER_DARKMAGE_LEGGINGS = ITEMS.register("spider_darkmage_leggings", ()-> new SpiderDarkmageArmor(ArmorItem.Type.LEGGINGS));
+        SPIDER_DARKMAGE_BOOTS = ITEMS.register("spider_darkmage_boots", ()-> new SpiderDarkmageArmor(ArmorItem.Type.BOOTS));
+        SPECTRE_DARKMAGE_HELMET = ITEMS.register("spectre_darkmage_helmet", ()-> new SpectreDarkmageArmor(ArmorItem.Type.HELMET));
+        SPECTRE_DARKMAGE_CHESTPLATE = ITEMS.register("spectre_darkmage_chestplate", ()-> new SpectreDarkmageArmor(ArmorItem.Type.CHESTPLATE));
+        SPECTRE_DARKMAGE_LEGGINGS = ITEMS.register("spectre_darkmage_leggings", ()-> new SpectreDarkmageArmor(ArmorItem.Type.LEGGINGS));
+        SPECTRE_DARKMAGE_BOOTS = ITEMS.register("spectre_darkmage_boots", ()-> new SpectreDarkmageArmor(ArmorItem.Type.BOOTS));
         if (SafeClass.isEnigmaticLegacyLoaded())
             EnigmaticLegacyItemInit.init();
-        GRItems.insertAfterTabMap.put(0, () ->List.of(DISC_1.get().getDefaultInstance(), DISC_2.get().getDefaultInstance(), DISC_3.get().getDefaultInstance()));
-        GRItems.insertAfterTabMap.put(3, () -> {
+
+        GRItems.insertAfterTabMap.put(ASCENSION_HARD_CANDY, () ->List.of(DISC_1.get().getDefaultInstance(), DISC_2.get().getDefaultInstance(), DISC_3.get().getDefaultInstance()));
+
+        GRItems.insertAfterTabMap.put(BOW_OF_REVELATION, () -> {
             ItemStack stack = GRItems.THE_NEEDLE.get().getDefaultInstance();
             stack.getOrCreateTag().putBoolean(TheNeedleItem.IS_REAL_NBT, true);
             return List.of(stack);
         });
+
         if (SafeClass.isTetraLoaded())
-            GRItems.insertAfterTabMap.put(12, () ->List.of(new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM), new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_AEGLOS.get())));
+            GRItems.insertAfterTabMap.put(APOCALYPTIUM_BOOTS, () ->List.of(new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM), new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_AEGLOS.get())));
         //GRItems.insertAfterTabMap.put(11, List.of(createFragment(0), createFragment(1), createFragment(2), createFragment(3)));
-        GRItems.insertAfterTabMap.put(16, () ->
+
+        GRItems.insertAfterTabMap.put(QUIETUS_STAR, () ->
                 List.of(new ItemStack(ModItems.DOOM_MEDAL.get()),
-                        new ItemStack(GRItems.QUIETUS_STAR.get()),
                         new ItemStack(ModItems.WITHER_QUIETUS.get())
                 ));
-        GRItems.insertAfterTabMap.put(25, () ->
+
+        GRItems.insertAfterTabMap.put(NETHER_METEOR_FOCUS, () ->
                 List.of(new ItemStack(com.Polarice3.Goety.common.items.ModItems.DARK_WAND.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.OMINOUS_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.NECRO_STAFF.get()),
@@ -216,7 +274,18 @@ public class GRItems {
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.NETHER_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.NAMELESS_STAFF.get())
                 ));
-
+        GRItems.insertAfterTabMap.put(SPIDER_BOOTS, () ->
+                List.of(new ItemStack(SPIDER_DARKMAGE_HELMET.get()),
+                        new ItemStack(SPIDER_DARKMAGE_CHESTPLATE.get()),
+                        new ItemStack(SPIDER_DARKMAGE_LEGGINGS.get()),
+                        new ItemStack(SPIDER_DARKMAGE_BOOTS.get())
+                ));
+        GRItems.insertAfterTabMap.put(SPECTRE_BOOTS, () ->
+                List.of(new ItemStack(SPECTRE_DARKMAGE_HELMET.get()),
+                        new ItemStack(SPECTRE_DARKMAGE_CHESTPLATE.get()),
+                        new ItemStack(SPECTRE_DARKMAGE_LEGGINGS.get()),
+                        new ItemStack(SPECTRE_DARKMAGE_BOOTS.get())
+                ));
     }
 
     public static ItemStack createFragment(int index) {

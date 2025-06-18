@@ -1,6 +1,9 @@
 package com.mega.revelationfix.util;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public enum MCMapping {
     WITHER_BOSS$FIELD$bossEvent("bossEvent", "f_31430_", ""),
@@ -61,14 +64,16 @@ public enum MCMapping {
 
     public static boolean isWorkingspaceMode() {
         if (isWorkingspace == 0) {
-            File file = new File("fe_agent.jar");
-            if (file.exists()) {
+            if (isDevelopmentEnvironment()) {
                 isWorkingspace = 1;
             } else isWorkingspace = 2;
-
-
         }
         return isWorkingspace == 1;
+    }
+    public static boolean isDevelopmentEnvironment() {
+        Path projectDir = Paths.get(System.getProperty("user.dir")).getParent();
+        return Files.exists(projectDir.resolve(".gradle")) &&
+                Files.exists(projectDir.resolve("build"));
     }
 
     public String get() {

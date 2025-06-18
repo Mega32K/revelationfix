@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.mega.revelationfix.common.apollyon.client.WrappedTrailUpdate;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
-import com.mega.revelationfix.common.item.combat.BowOfRevelationItem;
+import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataSerializers;

@@ -8,11 +8,13 @@ import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.revelationfix.common.apollyon.common.CooldownsManager;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.init.GRItems;
+import com.mega.revelationfix.common.init.ModBlocks;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
 import com.mega.revelationfix.mixin.gr.PlayerMixin;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.java.SynchedFixedLengthList;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -117,6 +119,12 @@ public class OdamanePlayerExpandedContext {
      */
     private int invulnerableTime;
 
+    /**
+     *巫术引动台3010号仪式玩家占位时间
+     */
+    public int teleportStayingTime;
+    public int teleportStayingTimeOld;
+
     public OdamanePlayerExpandedContext(Player player) {
         this.player = player;
         playerInterface = (PlayerInterface) player;
@@ -210,6 +218,18 @@ public class OdamanePlayerExpandedContext {
     }
 
     public void tick() {
+        if (player.level.isClientSide) {
+            this.teleportStayingTimeOld = this.teleportStayingTime;
+            if (player.isShiftKeyDown()) {
+                BlockPos pos = player.blockPosition.above(-1);
+                if (player.level.getBlockState(pos).is(ModBlocks.RUNE_REACTOR.get())) {
+                    if (teleportStayingTime < 20)
+                        teleportStayingTime++;
+                } else if (teleportStayingTime > 0)
+                    teleportStayingTime--;
+            } else if (teleportStayingTime > 0)
+                teleportStayingTime--;
+        }
         this.playerHasOdamane = CuriosFinder.hasCurio(player, (stack) -> stack.getItem() instanceof OdamaneHalo);
         if (ownedMonoliths.size() > 0)
             ownedMonoliths.removeIf(obsidianMonolith -> !this.playerHasOdamane || obsidianMonolith.isRemoved());

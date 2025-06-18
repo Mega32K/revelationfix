@@ -2,6 +2,10 @@ package com.mega.revelationfix.common.init;
 
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.entity.*;
+import com.mega.revelationfix.common.entity.binding.BlockShakingEntity;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.RevelationCageEntity;
+import com.mega.revelationfix.common.entity.binding.TeleportEntity;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.cultists.HereticServant;
 import com.mega.revelationfix.common.entity.cultists.MaverickServant;
@@ -80,7 +84,14 @@ public class ModEntities {
                     .sized(0.2F, 0.2F)
                     .clientTrackingRange(4)
                     .updateInterval(20));
-
+    public static final RegistryObject<EntityType<TeleportEntity>> TELEPORT_ENTITY = register("teleport_entity", EntityType.Builder.
+                    <TeleportEntity>of(TeleportEntity::new, MobCategory.MISC)
+            .fireImmune()
+            .setShouldReceiveVelocityUpdates(false)
+            .sized(.001F, .001F)
+            .clientTrackingRange(6)
+            .updateInterval(2)
+    );
     private static <T extends Entity> RegistryObject<EntityType<T>> register(String p_20635_, EntityType.Builder<T> p_20636_) {
         return ModEntities.ENTITIES.register(p_20635_, () -> p_20636_.build(new ResourceLocation(Revelationfix.MODID, p_20635_).toString()));
     }

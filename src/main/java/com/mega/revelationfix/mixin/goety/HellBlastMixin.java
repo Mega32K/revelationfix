@@ -9,7 +9,7 @@ import com.Polarice3.Goety.common.entities.projectiles.WaterHurtingProjectile;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.*;
 import com.mega.revelationfix.common.entity.TheEndHellfire;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

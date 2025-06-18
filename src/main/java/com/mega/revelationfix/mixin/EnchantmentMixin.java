@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.common.item.ICanCurse;
+import com.mega.revelationfix.api.item.ICanCurse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.spongepowered.asm.mixin.Mixin;

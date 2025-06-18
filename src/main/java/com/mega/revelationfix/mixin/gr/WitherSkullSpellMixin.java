@@ -8,7 +8,7 @@ import com.Polarice3.Goety.common.magic.spells.nether.WitherSkullSpell;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.mega.revelationfix.common.entity.projectile.StarArrow;
 import com.mega.revelationfix.common.init.ModSounds;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;

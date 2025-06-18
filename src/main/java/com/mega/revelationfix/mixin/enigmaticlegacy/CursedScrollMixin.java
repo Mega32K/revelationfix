@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin.enigmaticlegacy;
 
 import com.aizistral.enigmaticlegacy.items.CursedScroll;
 import com.aizistral.enigmaticlegacy.items.generic.ItemBaseCurio;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

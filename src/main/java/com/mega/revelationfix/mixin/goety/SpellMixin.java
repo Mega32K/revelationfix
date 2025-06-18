@@ -3,7 +3,7 @@ package com.mega.revelationfix.mixin.goety;
 import com.Polarice3.Goety.api.magic.SpellType;
 import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.common.magic.Spell;
-import com.mega.revelationfix.common.entity.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.safe.mixinpart.goety.ILevelWand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

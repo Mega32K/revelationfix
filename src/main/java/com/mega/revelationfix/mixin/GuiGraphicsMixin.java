@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.common.event.RenderTooltipPostEvent;
+import com.mega.revelationfix.api.event.render.RenderTooltipPostEvent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;

@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.odamane.client;
 
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderBlockScreenEffectEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

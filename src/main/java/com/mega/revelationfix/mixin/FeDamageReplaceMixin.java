@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
 import com.mega.revelationfix.common.odamane.common.FeDamage;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -24,11 +24,7 @@ public abstract class FeDamageReplaceMixin extends Entity {
     public DamageSource hurtMix(DamageSource source) {
         Entity entity = source.getEntity();
         if (entity instanceof Player player && ATAHelper2.hasOdamane(player) && !source.is(ExtraDamageTypes.FE_POWER)) {
-            FeDamage damage = FeDamage.get((LivingEntity) (Object) this, player);
-            if (source.is(DamageTypes.MAGIC)) {
-
-            }
-            return damage;
+            return FeDamage.get((LivingEntity) (Object) this, player);
         }
         return source;
     }

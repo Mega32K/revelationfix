@@ -3,9 +3,9 @@ package com.mega.revelationfix.common.compat;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.cultists.Heretic;
 import com.Polarice3.Goety.common.entities.hostile.cultists.SpellCastingCultist;
-import com.Polarice3.Goety.common.entities.hostile.illagers.StormCaster;
 import com.Polarice3.Goety.common.entities.neutral.AbstractNecromancer;
 import com.mega.revelationfix.client.RendererUtils;
+import com.mega.revelationfix.common.compat.fantasy_ending.FeSafeClass;
 import com.mega.revelationfix.common.compat.ironspell.IronSpellbooksSafeClass;
 import com.mega.revelationfix.common.compat.tetra.TetraWrapped;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
@@ -18,7 +18,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -32,6 +31,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public class SafeClass {
+    private static boolean lastUsingShader;
+    private static boolean usingShader;
     private static final Date date = new Date();
     private static int yearDate;
     private static int fantasyEndingLoaded = -1;
@@ -127,8 +128,14 @@ public class SafeClass {
     }
 
     public static boolean usingShaderPack() {
-        if (isIrisLoaded())
-            return IrisApi.getInstance().isShaderPackInUse();
+        if (isIrisLoaded()) {
+            usingShader = IrisApi.getInstance().isShaderPackInUse();
+            if (usingShader != lastUsingShader) {
+                Wrapped.onShaderModeChange();
+            }
+            lastUsingShader = usingShader;
+            return usingShader;
+        }
         else return false;
     }
 
@@ -149,13 +156,13 @@ public class SafeClass {
 
     public static void enableTimeStop(LivingEntity srcE, boolean z, int ticks) {
         if (isFantasyEndingLoaded()) {
-            Wrapped.use(z, srcE, true, ticks);
+            FeSafeClass.use(z, srcE, true, ticks);
         } else TimeStopUtils.use(z, srcE, true, ticks);
     }
 
     public static void enableTimeStop(LivingEntity srcE, boolean z) {
         if (isFantasyEndingLoaded()) {
-            Wrapped.use(z, srcE, true, 180);
+            FeSafeClass.use(z, srcE, true, 180);
         } else {
             TimeStopEntityData.setTimeStopCount(srcE, !z ? 0 : 300);
             TimeStopUtils.use(z, srcE);
@@ -163,26 +170,26 @@ public class SafeClass {
     }
 
     public static int getTimeStopCount(LivingEntity living) {
-        return isFantasyEndingLoaded() ? Wrapped.getTimeStopCount(living) : TimeStopEntityData.getTimeStopCount(living);
+        return isFantasyEndingLoaded() ? FeSafeClass.getTimeStopCount(living) : TimeStopEntityData.getTimeStopCount(living);
     }
 
     public static boolean isClientTimeStop() {
         if (isFantasyEndingLoaded()) {
-            return Wrapped.isClientTimeStop();
+            return FeSafeClass.isClientTimeStop();
         } else {
             return TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension;
         }
     }
     public static boolean isTimeStop(ServerLevel serverLevel) {
         if (isFantasyEndingLoaded()) {
-            return Wrapped.isFieldTimeStop();
+            return FeSafeClass.isFieldTimeStop();
         } else {
             return TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(serverLevel);
         }
     }
     public static boolean isFieldTimeStop() {
         if (isFantasyEndingLoaded()) {
-            return Wrapped.isFieldTimeStop();
+            return FeSafeClass.isFieldTimeStop();
         } else {
             return TimeStopUtils.isTimeStop;
         }

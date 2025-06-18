@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
-import com.mega.revelationfix.common.entity.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;

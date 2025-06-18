@@ -23,9 +23,15 @@ public class ModAttributes {
     public static final RegistryObject<Attribute> ARMOR_PENETRATION = ATTRIBUTES.register("armor_penetration", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".armor_penetration", 1.0D, 0.0D, 2.0D).setSyncable(true));
     public static final RegistryObject<Attribute> ENCHANTMENT_PIERCING = ATTRIBUTES.register("enchantment_piercing", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".enchantment_piercing", 1.0D, 0.0D, 2.0D).setSyncable(true));
     public static final RegistryObject<Attribute> SPELL_POWER_MULTIPLIER = ATTRIBUTES.register("spell_power_multiplier", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".spell_power_multiplier", 1, 0, 32767D).setSyncable(true));
-    public static final RegistryObject<Attribute> SPELL_COOLDOWN = ATTRIBUTES.register("spell_cooldown", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".spell_cooldown", 1, 0, 32767D).setSyncable(true));
-    public static final RegistryObject<Attribute> SPELL_POWER = ATTRIBUTES.register("spell_power", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".spell_power", 0, 0, 32767D).setSyncable(true));
-    public static final RegistryObject<Attribute> CAST_DURATION = ATTRIBUTES.register("cast_duration", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".cast_duration", 1, 0, 32767D).setSyncable(true));
+    /**
+     * 冷却缩减
+     */
+    public static final RegistryObject<Attribute> SPELL_COOLDOWN = ATTRIBUTES.register("spell_cooldown", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".spell_cooldown", 1, -5.0, 32767D).setSyncable(true));
+    public static final RegistryObject<Attribute> SPELL_POWER = ATTRIBUTES.register("spell_power", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".spell_power", 0, -32767D, 32767D).setSyncable(true));
+    /**
+     * 吟唱缩减
+     */
+    public static final RegistryObject<Attribute> CAST_DURATION = ATTRIBUTES.register("cast_duration", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".cast_duration", 1, -5.0, 32767D).setSyncable(true));
     public static Object2ObjectOpenHashMap<SpellType, RegistryObject<Attribute>> spellAttributes = new Object2ObjectOpenHashMap<>();
 
     static {

@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.magic.EverChargeSpell;
 import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.init.ModSounds;
 import com.mega.revelationfix.common.config.GRSpellConfig;
-import com.mega.revelationfix.common.entity.RevelationCageEntity;
+import com.mega.revelationfix.common.entity.binding.RevelationCageEntity;
 import com.mega.revelationfix.common.init.ModEntities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;

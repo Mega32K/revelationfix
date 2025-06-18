@@ -2,13 +2,13 @@ package com.mega.revelationfix.common.odamane.client;
 
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.apollyon.client.render.MegaRenderType;
-import com.mega.revelationfix.client.Easing;
+import com.mega.revelationfix.api.client.Easing;
 import com.mega.revelationfix.client.citadel.GRRenderTypes;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.proxy.ClientProxy;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.time.TimeContext;
 import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.systems.RenderSystem;

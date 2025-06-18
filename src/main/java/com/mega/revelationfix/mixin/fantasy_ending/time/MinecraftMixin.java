@@ -8,6 +8,7 @@ import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
+import net.minecraft.Util;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -128,7 +129,7 @@ public abstract class MinecraftMixin {
     @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/ForgeEventFactory;onRenderTickStart(F)V", remap = false))
     private void runTick_modifyPartial(boolean p_91384_, CallbackInfo ci) {
         if (!p_91384_) return;
-        long l = TimeContext.Client.timer.advanceTime(TimeContext.Both.getRealMillis());
+        long l = TimeContext.Client.timer.advanceTime(Util.getMillis());
         if (level == null && TimeStopUtils.isTimeStop) {
             RendererUtils.isTimeStop_andSameDimension = false;
             TimeStopUtils.isTimeStop = false;

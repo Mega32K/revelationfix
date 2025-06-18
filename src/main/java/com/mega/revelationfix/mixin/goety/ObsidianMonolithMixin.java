@@ -4,7 +4,7 @@ import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.common.entities.neutral.AbstractMonolith;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

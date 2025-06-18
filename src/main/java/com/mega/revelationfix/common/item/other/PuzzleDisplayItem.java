@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.item.other;
 
-import com.mega.revelationfix.common.item.IJEIInvisibleRitualResult;
+import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;

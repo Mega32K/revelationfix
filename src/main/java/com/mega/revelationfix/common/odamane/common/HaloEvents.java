@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.odamane.common;
 
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

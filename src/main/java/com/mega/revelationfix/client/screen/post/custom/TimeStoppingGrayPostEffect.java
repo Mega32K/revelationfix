@@ -1,7 +1,7 @@
 package com.mega.revelationfix.client.screen.post.custom;
 
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.client.Easing;
+import com.mega.revelationfix.api.client.Easing;
 import com.mega.revelationfix.client.RendererUtils;
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;

@@ -6,15 +6,16 @@ import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.client.particles.CircleExplodeParticleOption;
 import com.Polarice3.Goety.common.blocks.entities.CursedCageBlockEntity;
 import com.Polarice3.Goety.common.items.ModItems;
-import com.Polarice3.Goety.common.magic.spells.FireBreathSpell;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.config.BlockConfig;
-import com.mega.revelationfix.common.entity.BlockShakingEntity;
-import com.mega.revelationfix.common.entity.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.BlockBindingEntity;
+import com.mega.revelationfix.common.entity.binding.BlockShakingEntity;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.init.ModBlocks;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -100,7 +101,7 @@ public class RuneReactorBlock extends BaseEntityBlock {
                 ItemStack handItem = player.getItemInHand(hand);
                 if (level.getBlockEntity(blockPos) instanceof RuneReactorBlockEntity blockEntity) {
                     boolean isStructurePlaced = blockState.getValue(IS_STRUCTURE_PLACED);
-                    if (!isStructurePlaced || !EntityExpandedContext.NO_GODS.test(player)) {
+                    if ((!isStructurePlaced || !EntityExpandedContext.NO_GODS.test(player)) && !player.isShiftKeyDown()) {
                         if (blockEntity.getInsertItem().isEmpty()) {
                             if (!handItem.isEmpty()) {
                                 if (isRitualStructureCore(handItem)) {
@@ -195,8 +196,11 @@ public class RuneReactorBlock extends BaseEntityBlock {
                         blockShakingEntity.discard();
                     }
                 }
-                if (blockEntity.getSpeller() != null)
-                    blockEntity.getSpeller().discard();
+                if (level instanceof ServerLevel serverLevel) {
+                    blockEntity.getListenerEntities().forEach(entity->entity.blockOwnerRemoveEvent(level, pos, blockState, blockEntity, 0));
+                    if (blockEntity.getSpeller() != null)
+                        blockEntity.getSpeller().blockOwnerRemoveEvent(level, pos, blockState, blockEntity, 0);
+                }
             }
 
         }

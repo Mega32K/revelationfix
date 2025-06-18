@@ -2,7 +2,7 @@ package com.mega.revelationfix.safe.entity;
 
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.nbt.CompoundTag;

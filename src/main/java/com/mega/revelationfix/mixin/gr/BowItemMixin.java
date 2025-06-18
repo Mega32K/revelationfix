@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin.gr;
 
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.Polarice3.Goety.init.ModSounds;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

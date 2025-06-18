@@ -1,6 +1,7 @@
 package com.mega.revelationfix.common.network;
 
 import com.mega.revelationfix.Revelationfix;
+import com.mega.revelationfix.common.network.c2s.TeleportEntityTryEvent;
 import com.mega.revelationfix.common.network.c2s.TheEndDeathPacket;
 import com.mega.revelationfix.common.network.c2s.TryTimeStopSkill;
 import com.mega.revelationfix.common.network.s2c.*;
@@ -40,6 +41,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(id(), LifeStealParticlesS2CPacket.class, LifeStealParticlesS2CPacket::encode, LifeStealParticlesS2CPacket::decode, LifeStealParticlesS2CPacket::handle);
         INSTANCE.registerMessage(id(), SpellCircleStatePacket.class, SpellCircleStatePacket::encode, SpellCircleStatePacket::decode, SpellCircleStatePacket::handle);
         INSTANCE.registerMessage(id(), IceSpellParticlePacket.class, IceSpellParticlePacket::encode, IceSpellParticlePacket::decode, IceSpellParticlePacket::handle);
+        INSTANCE.registerMessage(id(), TeleportEntityTryEvent.class, TeleportEntityTryEvent::encode, TeleportEntityTryEvent::decode, TeleportEntityTryEvent::handle);
     }
 
     public static int id() {

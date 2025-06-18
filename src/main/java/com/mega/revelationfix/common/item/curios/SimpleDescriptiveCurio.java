@@ -6,7 +6,7 @@ import com.mega.revelationfix.common.apollyon.client.effect.CuriosMutableCompone
 import com.mega.revelationfix.common.apollyon.client.effect.LoreHelper;
 import com.mega.revelationfix.common.apollyon.client.effect.LoreStyle;
 import com.mega.revelationfix.common.compat.Wrapped;
-import com.mega.revelationfix.common.item.ICanCurse;
+import com.mega.revelationfix.api.item.ICanCurse;
 import com.mega.revelationfix.util.MUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

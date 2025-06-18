@@ -5,7 +5,7 @@ import com.mega.revelationfix.common.apollyon.client.effect.CuriosMutableCompone
 import com.mega.revelationfix.common.apollyon.client.effect.LoreStyle;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.common.item.ICenterDescItem;
+import com.mega.revelationfix.api.item.ICenterDescItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;

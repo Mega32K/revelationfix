@@ -44,10 +44,9 @@ public class RitualReloadListener extends SimpleJsonResourceReloadListener {
             JsonElement element = entry.getValue();
             if (shouldLoad(element) && element instanceof JsonObject main) {
                 try {
-
                     String pluginName = main.get("ritual").getAsString();
                     String iconItem = GsonHelper.getAsString(main, "iconItem", "minecraft:air");
-                    int[] range = new int[] {8, 8, 8};
+                    int[] range = new int[] {-1, -1, -1};
                     if (main.get("range") instanceof JsonArray array) {
                         if (array.size() >= 3) {
                             range[0] = array.get(0).getAsInt();

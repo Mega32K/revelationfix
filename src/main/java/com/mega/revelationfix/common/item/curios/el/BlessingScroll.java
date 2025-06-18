@@ -11,7 +11,7 @@ import com.mega.revelationfix.common.apollyon.client.effect.LoreStyle;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.item.curios.SimpleDescriptiveCurio;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;

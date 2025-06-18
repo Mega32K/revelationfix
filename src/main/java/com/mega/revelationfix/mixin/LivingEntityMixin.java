@@ -8,7 +8,7 @@ import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.EventUtil;
 import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.nbt.CompoundTag;

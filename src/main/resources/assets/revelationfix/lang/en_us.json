@@ -25,6 +25,7 @@
   "entity.revelationfix.star_arrow":"Star Arrow",
 
   "effect.revelationfix.quietus" : "Quietus",
+  "effect.revelationfix.counterspell" : "Counterspell",
 
   "message.apollyon.ban_chain" : "Chain/Chain Sticky has been banned now.",
 
@@ -137,9 +138,18 @@
   "item.goety_revelation.puzzle.58" : "Portable submarine control devices.(Alex's Cave)",
   "item.goety_revelation.puzzle.59" : "The big-bang.(Create)",
 
+  "item.minecraft.potion.effect.counterspell" : "Potion of Counterspell",
+  "item.minecraft.splash_potion.effect.counterspell" : "Splash Potion of Counterspell",
+  "item.minecraft.lingering_potion.effect.counterspell" : "Lingering Potion of Counterspell",
+  "item.minecraft.potion.effect.long_counterspell" : "Potion of Counterspell",
+  "item.minecraft.splash_potion.effect.long_counterspell" : "Splash Potion of Counterspell",
+  "item.minecraft.lingering_potion.effect.long_counterspell" : "Lingering Potion of Counterspell",
+  "item.minecraft.potion.effect.strong_counterspell" : "Potion of Counterspell",
+  "item.minecraft.splash_potion.effect.strong_counterspell" : "Splash Potion of Counterspell",
+  "item.minecraft.lingering_potion.effect.strong_counterspell" : "Lingering Potion of Counterspell",
+
   "jei.goety.craftType.the_end": "The End",
   "jei.goety.craftType.te_magic": "Magic",
-  "jei.goety.craftType.world": "世界",
   "jei.goety_revelation.dark_ingot_hammer.title": "The Dark Ingot Hammer",
 
   "curios.goety_revelation.modifiers.slots" : "Slots",

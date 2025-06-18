@@ -15,7 +15,7 @@ import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.common.spell.nether.RevelationSpell;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;

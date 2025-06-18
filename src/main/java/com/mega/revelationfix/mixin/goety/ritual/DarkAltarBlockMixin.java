@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
 import com.Polarice3.Goety.common.blocks.entities.PedestalBlockEntity;
 import com.Polarice3.Goety.common.crafting.RitualRecipe;
 import com.Polarice3.Goety.common.ritual.Ritual;
-import com.mega.revelationfix.common.entity.BlockShakingEntity;
+import com.mega.revelationfix.common.entity.binding.BlockShakingEntity;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.TheEndRitualEventPacket;
 import com.mega.revelationfix.common.ritual.ModRitualTypes;

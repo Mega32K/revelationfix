@@ -6,10 +6,10 @@ import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.data.TimeStopSavedData;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
-import com.mega.revelationfix.common.event.EarlyLivingDeathEvent;
+import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModAttributes;
-import com.mega.revelationfix.common.item.combat.ICustomHurtWeapon;
+import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.item.curios.TheNeedleItem;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.c2s.TheEndDeathPacket;
@@ -20,7 +20,7 @@ import com.mega.revelationfix.safe.*;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.entity.LivingEventEC;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import com.mega.revelationfix.util.time.TimeStopEntityData;
 import com.mega.revelationfix.util.time.TimeStopUtils;
@@ -84,16 +84,92 @@ public class CommonEventHandler {
 
     }
      */
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onMobChangeTarget(LivingChangeTargetEvent event) {
-        LivingEntity target = event.getNewTarget();
-        LivingEntity entity = event.getEntity();
-        if (target != null && (target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(target))) {
-            if (entity.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(entity)) {
-                if (entity.tags.contains(EntityExpandedContext.GR_FT_CHURCH) && target.tags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class EntityEvents {
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        public static void onMobChangeTarget(LivingChangeTargetEvent event) {
+            LivingEntity target = event.getNewTarget();
+            LivingEntity entity = event.getEntity();
+            if (target != null && (target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(target))) {
+                if (entity.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(entity)) {
+                    if (entity.tags.contains(EntityExpandedContext.GR_FT_CHURCH) && target.tags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
+                        event.setCanceled(true);
+                    } else if (EntityExpandedContext.isOwnerFriendlyTag_Church(entity) && EntityExpandedContext.isOwnerFriendlyTag_Church(target))
+                        event.setCanceled(true);
+                }
+            }
+        }
+        @SubscribeEvent
+        public static void onPlayerAttack(AttackEntityEvent event) {
+            if (event.getTarget() instanceof ObsidianMonolith monolith) {
+                if (!monolith.level.isClientSide) {
+                    if (monolith.getMasterOwner() == event.getEntity() && monolith.getTrueOwner() instanceof ApostleServant servant && event.getEntity().isShiftKeyDown()) {
+                        monolith.die(event.getEntity().damageSources().playerAttack(event.getEntity()));
+                        event.setCanceled(true);
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public static void resistanceAttributeHandler(LivingHurtEvent event) {
+            LivingEntity living = event.getEntity();
+            if (living.level.isClientSide) return;
+            Attribute attribute = ModAttributes.DAMAGE_RESISTANCE.get();
+            AttributeInstance attributeInstance = living.getAttribute(attribute);
+            double value;
+            if (attributeInstance != null && (value = living.getAttributeValue(attribute)) > 1.0D) {
+                event.setAmount((float) (event.getAmount() * (2.0F - Mth.clamp(value, 1.0D, 2.0D))));
+            }
+        }
+        @SubscribeEvent
+        public static void odamaneFinalDeath(EarlyLivingDeathEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player && player.level.dimension() == Level.END) {
+                if (player.tags.contains("odamaneFinalDeath")) {
+                    player.tags.remove("odamaneFinalDeath");
+                    player.setHealth(player.getMaxHealth());
+                    BlockPos blockpos = player.getRespawnPosition();
+                    float f = player.getRespawnAngle();
+                    boolean flag = player.isRespawnForced();
+                    ServerLevel serverlevel = player.server.getLevel(player.getRespawnDimension());
+                    Optional<Vec3> optional;
+                    if (serverlevel != null && blockpos != null) {
+                        optional = Player.findRespawnPositionAndUseSpawnBlock(serverlevel, blockpos, f, flag, false);
+                    } else {
+                        optional = Optional.empty();
+                    }
+                    ServerLevel serverlevel1 = serverlevel != null && optional.isPresent() ? serverlevel : player.server.overworld();
+                    if (optional.isPresent()) {
+                        BlockState blockstate = serverlevel1.getBlockState(blockpos);
+                        boolean flag1 = blockstate.is(Blocks.RESPAWN_ANCHOR);
+                        Vec3 vec3 = optional.get();
+                        float f1;
+                        if (!blockstate.is(BlockTags.BEDS) && !flag1) {
+                        } else {
+                            Vec3 vec31 = Vec3.atBottomCenterOf(blockpos).subtract(vec3).normalize();
+                        }
+                        player.setPos(vec3.x, vec3.y, vec3.z);
+                        PacketHandler.sendToAll(new TheEndDeathPacket(player.getId(), new Vector3f((float) vec3.x, (float) vec3.y, (float) vec3.z)));
+                    }
+
                     event.setCanceled(true);
-                } else if (EntityExpandedContext.isOwnerFriendlyTag_Church(entity) && EntityExpandedContext.isOwnerFriendlyTag_Church(target))
-                    event.setCanceled(true);
+                }
+            }
+        }
+        @SubscribeEvent
+        public static void writeDataToNewPlayer(PlayerEvent.PlayerLoggedInEvent event) {
+            try {
+                if (event.getEntity().getServer() == null) return;
+                DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(event.getEntity().getServer());
+                GRSavedDataEC savedDataEC = (GRSavedDataEC) state;
+                GRSavedDataExpandedContext context = savedDataEC.revelationfix$dataEC();
+                if (isValid(context.getPUZZLE1()) && isValid(context.getPUZZLE2()) && isValid(context.getPUZZLE3()) && isValid(context.getPUZZLE4()) && isValid(context.getTheEndCraftItem()))
+                    PacketHandler.sendToAll(new TheEndPuzzleUpdatePacket(context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem()));
+                else
+                    RevelationFixMixinPlugin.LOGGER.debug("Checked Invalid puzzle/end_craft : {}", context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                System.exit(-1);
             }
         }
     }
@@ -184,85 +260,13 @@ public class CommonEventHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void writeDataToNewPlayer(PlayerEvent.PlayerLoggedInEvent event) {
-        try {
-            if (event.getEntity().getServer() == null) return;
-            DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(event.getEntity().getServer());
-            GRSavedDataEC savedDataEC = (GRSavedDataEC) state;
-            GRSavedDataExpandedContext context = savedDataEC.revelationfix$dataEC();
-            if (isValid(context.getPUZZLE1()) && isValid(context.getPUZZLE2()) && isValid(context.getPUZZLE3()) && isValid(context.getPUZZLE4()) && isValid(context.getTheEndCraftItem()))
-                PacketHandler.sendToAll(new TheEndPuzzleUpdatePacket(context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem()));
-            else
-                RevelationFixMixinPlugin.LOGGER.debug("Checked Invalid puzzle/end_craft : {}", context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem());
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-            System.exit(-1);
-        }
-    }
-
     static boolean isValid(ResourceLocation resourceLocation) {
         return resourceLocation != null && !resourceLocation.getPath().isEmpty();
     }
 
-    @SubscribeEvent
-    public static void onPlayerAttack(AttackEntityEvent event) {
-        if (event.getTarget() instanceof ObsidianMonolith monolith) {
-            if (!monolith.level.isClientSide) {
-                if (monolith.getMasterOwner() == event.getEntity() && monolith.getTrueOwner() instanceof ApostleServant servant && event.getEntity().isShiftKeyDown()) {
-                    monolith.die(event.getEntity().damageSources().playerAttack(event.getEntity()));
-                    event.setCanceled(true);
-                }
-            }
-        }
-    }
 
-    @SubscribeEvent
-    public static void resistanceAttributeHandler(LivingHurtEvent event) {
-        LivingEntity living = event.getEntity();
-        if (living.level.isClientSide) return;
-        Attribute attribute = ModAttributes.DAMAGE_RESISTANCE.get();
-        AttributeInstance attributeInstance = living.getAttribute(attribute);
-        double value;
-        if (attributeInstance != null && (value = living.getAttributeValue(attribute)) > 1.0D) {
-            event.setAmount((float) (event.getAmount() * (2.0F - Mth.clamp(value, 1.0D, 2.0D))));
-        }
-    }
 
-    @SubscribeEvent
-    public static void odamaneFinalDeath(EarlyLivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player && player.level.dimension() == Level.END) {
-            if (player.tags.contains("odamaneFinalDeath")) {
-                player.tags.remove("odamaneFinalDeath");
-                player.setHealth(player.getMaxHealth());
-                BlockPos blockpos = player.getRespawnPosition();
-                float f = player.getRespawnAngle();
-                boolean flag = player.isRespawnForced();
-                ServerLevel serverlevel = player.server.getLevel(player.getRespawnDimension());
-                Optional<Vec3> optional;
-                if (serverlevel != null && blockpos != null) {
-                    optional = Player.findRespawnPositionAndUseSpawnBlock(serverlevel, blockpos, f, flag, false);
-                } else {
-                    optional = Optional.empty();
-                }
-                ServerLevel serverlevel1 = serverlevel != null && optional.isPresent() ? serverlevel : player.server.overworld();
-                if (optional.isPresent()) {
-                    BlockState blockstate = serverlevel1.getBlockState(blockpos);
-                    boolean flag1 = blockstate.is(Blocks.RESPAWN_ANCHOR);
-                    Vec3 vec3 = optional.get();
-                    float f1;
-                    if (!blockstate.is(BlockTags.BEDS) && !flag1) {
-                    } else {
-                        Vec3 vec31 = Vec3.atBottomCenterOf(blockpos).subtract(vec3).normalize();
-                    }
-                    player.setPos(vec3.x, vec3.y, vec3.z);
-                    PacketHandler.sendToAll(new TheEndDeathPacket(player.getId(), new Vector3f((float) vec3.x, (float) vec3.y, (float) vec3.z)));
-                }
 
-                event.setCanceled(true);
-            }
-        }
-    }
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class TimeStopEvents {

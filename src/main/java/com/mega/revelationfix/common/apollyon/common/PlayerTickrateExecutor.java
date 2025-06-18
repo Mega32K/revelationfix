@@ -11,7 +11,7 @@ import com.mega.revelationfix.safe.entity.AttributeInstanceInterface;
 import com.mega.revelationfix.safe.GRSavedDataEC;
 import com.mega.revelationfix.safe.GRSavedDataExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;

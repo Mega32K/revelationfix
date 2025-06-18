@@ -1,29 +1,50 @@
 package com.mega.revelationfix.util;
 
 import com.Polarice3.Goety.api.magic.ISpell;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.magic.SpellStat;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.config.CommonConfig;
-import com.mega.revelationfix.common.entity.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.init.ModAttributes;
+import com.mega.revelationfix.common.init.ModEffects;
+import com.mega.revelationfix.mixin.goety.FocusCooldownMixin;
+import com.mega.revelationfix.mixin.goety.SEHelperMixin;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.mixinpart.goety.SpellStatEC;
+import com.mega.revelationfix.util.entity.ATAHelper2;
+import com.mega.revelationfix.util.time.TimeContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import z1gned.goetyrevelation.util.ATAHelper;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
 public class EventUtil {
+    public static long getMillis() {
+        return TimeContext.Both.timeStopModifyMillis;
+    }
+    public static int getLevels(Enchantment enchantment, LivingEntity livingEntity, int srcLevel) {
+        if (enchantment == ModEnchantments.POTENCY.get()) {
+            MobEffectInstance effect = livingEntity.getEffect(ModEffects.COUNTERSPELL.get());
+            if (effect != null) {
+                srcLevel = Math.max(0, ((effect.getAmplifier()+1)+1) / 2);
+            }
+        }
+        return srcLevel;
+    }
     public static LivingEntity modifyOwner(LivingEntity entity) {
         if (entity instanceof FakeSpellerEntity spellerEntity) {
             if (spellerEntity.getOwner() != null)
@@ -46,7 +67,7 @@ public class EventUtil {
                 duration = (int) (duration / Math.max(8.0F, CommonConfig.haloSpellCastingSpeed * 2.0F));
             else if (ATAHelper.hasHalo(player))
                 duration = (int) (duration / CommonConfig.haloSpellCastingSpeed);
-            duration *= (2F - player.getAttributeValue(ModAttributes.CAST_DURATION.get()));
+            duration *= Math.max(0.1F, (2F - player.getAttributeValue(ModAttributes.CAST_DURATION.get())));
         }
         return duration;
     }
@@ -60,6 +81,9 @@ public class EventUtil {
             if (Wrapped.isClientPlayerOdamane()) {
                 duration = Math.min(2, duration);
             }
+            Player player = Wrapped.clientPlayer();
+            if (player != null)
+                duration = Math.round(duration * (float)Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
         }
         return duration;
     }

@@ -9,9 +9,9 @@ import com.mega.revelationfix.common.apollyon.client.effect.CuriosMutableCompone
 import com.mega.revelationfix.common.apollyon.client.effect.LoreHelper;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.common.item.ICenterDescItem;
-import com.mega.revelationfix.common.item.IInvulnerableItem;
-import com.mega.revelationfix.common.item.IJEIInvisibleRitualResult;
+import com.mega.revelationfix.api.item.ICenterDescItem;
+import com.mega.revelationfix.api.item.IInvulnerableItem;
+import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import com.mega.revelationfix.common.odamane.common.HaloEvents;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;

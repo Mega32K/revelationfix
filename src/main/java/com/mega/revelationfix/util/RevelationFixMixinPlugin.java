@@ -1,8 +1,12 @@
 package com.mega.revelationfix.util;
 
+import com.mega.revelationfix.util.asm.GoetyClassNodeProcessor;
+import com.mega.revelationfix.util.asm.IClassNodeProcessor;
+import com.mega.revelationfix.util.asm.MillisTimeRedirector;
 import cpw.mods.modlauncher.LaunchPluginHandler;
 import cpw.mods.modlauncher.Launcher;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.Opcodes;
@@ -19,11 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
     public static final Set<String> toRemovedMixins = Collections.synchronizedSet(new HashSet<>());
     public static final Set<String> handCheckMixins = Collections.synchronizedSet(new HashSet<>());
-    public static final String ISPELL_CLASS_SPELLSTATS_FIELD = "gr_spellStatus";
     private static final String ISPELL_CLASS = "com/Polarice3/Goety/api/magic/ISpell";
     private static final String IOWNED_CLASS = "com/Polarice3/Goety/api/entities/IOwned";
-    private static final String LIVING_ENTITY_CLASS = "net/minecraft/world/entity/LivingEntity";
-    private static final String MOD_FOCUS_ITEM = "z1gned/goetyrevelation/item/ModFocusItem";
     private static final String MOB_EFFECT_EVENT$EXPIRED = "net/minecraftforge/event/entity/living/MobEffectEvent$Expired";
     private static final String ABSTRACT_SPELL_MIXIN = "com.mega.revelationfix.mixin.fantasy_ending.time.ironspellbook.AbstractSpellMixin";
     private static final String EVENT_BUS_MIXIN = "net/minecraftforge/eventbus/EventBus";
@@ -31,7 +32,8 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
     private static final String EVENT_UTIL_CLASS = "com/mega/revelationfix/util/EventUtil";
     public static boolean USE_FIX_MIXIN = true;
     public static Logger LOGGER = LogManager.getLogger("RevelationFix");
-
+    public static IClassNodeProcessor GOETY_PROCESSOR = GoetyClassNodeProcessor.INSTANCE;
+    public static IClassNodeProcessor TIME_PROCESSOR = MillisTimeRedirector.INSTANCE;
     static {
         handCheckMixins.add(ABSTRACT_SPELL_MIXIN);
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ApostleMixin");
@@ -58,7 +60,7 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
         toRemovedMixins.add("net/bettercombat.mixin/client/MinecraftClientInject");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/LivingEntityRendererMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ApostleModelMixin");
-
+        toRemovedMixins.add("com/elfmcys/yesstevemodel/mixin/client/InventoryScreenMixin");
         //toTransformClasses.add(LIVING_ENTITY_CLASS);
         if (USE_FIX_MIXIN)
             try {
@@ -85,87 +87,18 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                         String name = classNode.name;
                         AtomicBoolean shouldWrite = new AtomicBoolean(false);
                         if (phase == Phase.BEFORE) {
-                            {
-                                classNode.methods.forEach(methodNode -> {
-                                    methodNode.instructions.forEach(abstractInsnNode -> {
-                                        if (abstractInsnNode instanceof MethodInsnNode mNode) {
-                                            if (mNode.owner.equals(ISPELL_CLASS)) {
-                                                if (!isUnsupportModifyingClass(name)) {
-                                                    if (mNode.name.equals("SpellResult") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
-                                                        shouldWrite.set(true);
-                                                        methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "redirectSpellResult", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
-                                                    } else if (mNode.name.equals("startSpell") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
-                                                        shouldWrite.set(true);
-                                                        methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "redirectStartSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
-                                                    } else if (mNode.name.equals("useSpell") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
-                                                        shouldWrite.set(true);
-                                                        methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "redirectUseSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
-                                });
-                            }
-                            if (name.equals(ISPELL_CLASS)) {
-                                LOGGER.debug(ISPELL_CLASS);
-                                classNode.methods.forEach(methodNode -> {
-                                    if (methodNode.name.equals("castDuration")) {
-                                        LOGGER.debug(methodNode.name);
-                                        methodNode.instructions.forEach(insnNode -> {
-                                            int opcode = insnNode.getOpcode();
-                                            if (insnNode instanceof InsnNode node)
-                                                LOGGER.debug("InsnNode : " + node.getOpcode());
-                                            if (opcode == Opcodes.IRETURN) {
-                                                InsnList insnList = new InsnList();
-                                                insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                                                insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                                                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "castDuration", "(ILcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/world/entity/LivingEntity;)I", false));
-                                                methodNode.instructions.insertBefore(insnNode, insnList);
-                                            }
-                                        });
-                                        shouldWrite.set(true);
-                                    } else if (methodNode.name.equals("spellCooldown")) {
-                                        LOGGER.debug("MethodName : " + methodNode.name);
-                                        methodNode.instructions.forEach(insnNode -> {
-                                            int opcode = insnNode.getOpcode();
-                                            if (insnNode instanceof InsnNode node)
-                                                LOGGER.debug("InsnNode : " + node.getOpcode());
-                                            if (opcode == Opcodes.IRETURN) {
-                                                InsnList insnList = new InsnList();
-                                                insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                                                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "spellCooldown", "(ILcom/Polarice3/Goety/api/magic/ISpell;)I", false));
-                                                methodNode.instructions.insertBefore(insnNode, insnList);
-                                            }
-                                        });
-                                        shouldWrite.set(true);
-                                    }
-                                });
-
-                            } else if (name.endsWith(IOWNED_CLASS)) {
-                                classNode.methods.forEach(methodNode -> {
-                                    if (methodNode.name.equals("setTrueOwner") && methodNode.desc.equals("(Lnet/minecraft/world/entity/LivingEntity;)V")) {
-                                        AbstractInsnNode first = methodNode.instructions.getFirst();
-                                        InsnList insnList = new InsnList();
-                                        insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                                        insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "modifyOwner", "(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/entity/LivingEntity;", false));
-                                        insnList.add(new VarInsnNode(Opcodes.ASTORE, 1));
-                                        methodNode.instructions.insertBefore(first, insnList);
-                                        shouldWrite.set(true);
-                                    }
-                                });
-                            } else if (name.equals(MOB_EFFECT_EVENT$EXPIRED)) {
+                            GOETY_PROCESSOR.transform(name, classNode, classType, shouldWrite);
+                            TIME_PROCESSOR.transform(name, classNode, classType, shouldWrite);
+                            if (name.equals(MOB_EFFECT_EVENT$EXPIRED)) {
                                 classNode.visitAnnotation("Lnet/minecraftforge/eventbus/api/Cancelable;", true);
                                 shouldWrite.set(true);
                             }
-
-                        }
-                        if (name.endsWith("Mixin") && phase == Phase.BEFORE) {
-                            synchronized (toRemovedMixins) {
-                                if (toRemovedMixins.contains(name)) {
-                                    clearMixinClass(classNode);
-                                    toRemovedMixins.remove(name);
-                                    LOGGER.debug("Removed MixinClass :" + name);
+                            else if (name.endsWith("Mixin") ) {
+                                synchronized (toRemovedMixins) {
+                                    if (toRemovedMixins.contains(name)) {
+                                        clearMixinClass(classNode);
+                                        toRemovedMixins.remove(name);
+                                        LOGGER.debug("Removed MixinClass :" + name);
                                     /*
                                     if (toRemovedMixins.isEmpty()) {
                                         synchronized (plugins) {
@@ -173,11 +106,12 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                                         }
                                     }
                                      */
-                                    shouldWrite.set(true);
+                                        shouldWrite.set(true);
+                                    }
                                 }
+                                if (name.startsWith("com/mega/revelationfix/mixin"))
+                                    return false;
                             }
-                            if (name.startsWith("com/mega/revelationfix/mixin"))
-                                return false;
                         }
                         return shouldWrite.get();
                     }
@@ -187,10 +121,6 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                 System.exit(-1);
 
             }
-    }
-
-    public static boolean isUnsupportModifyingClass(String name) {
-        return name.replace('/', '.').startsWith("com.mega.revelationfix.util.EventUtil");
     }
 
     public static void clearMixinClass(ClassNode classNode) {
@@ -233,7 +163,8 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
         }
         List<AnnotationNode> annotationNodes = new ArrayList<>(node.invisibleAnnotations);
         for (AnnotationNode annotationNode : annotationNodes) {
-
+            if (annotationNode.desc.equals("com/mega/revelationfix/safe/mixinpart/DeprecatedMixin;"))
+                return false;
             if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/NonDevEnvMixin;") && MCMapping.isWorkingspaceMode())
                 return false;
             if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/DevEnvMixin;") && !MCMapping.isWorkingspaceMode())

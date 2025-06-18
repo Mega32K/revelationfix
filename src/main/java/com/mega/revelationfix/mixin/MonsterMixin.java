@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MonsterMixin {
     @Inject(method = "isPreventingPlayerRest", at = @At("HEAD"), cancellable = true)
     private void isPreventingPlayerRest(Player p_33036_, CallbackInfoReturnable<Boolean> cir) {
-        if (this instanceof IOwned)
+        if (this instanceof IOwned owned && owned.getMasterOwner() == p_33036_)
             cir.setReturnValue(false);
     }
 }

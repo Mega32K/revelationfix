@@ -13,7 +13,7 @@ import com.mega.revelationfix.safe.entity.AttributeInstanceInterface;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
 import it.unimi.dsi.fastutil.Pair;

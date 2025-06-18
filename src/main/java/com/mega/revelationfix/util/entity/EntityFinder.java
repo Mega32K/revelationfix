@@ -2,18 +2,16 @@ package com.mega.revelationfix.util.entity;
 
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.utils.SEHelper;
-import com.mega.revelationfix.common.entity.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.safe.entity.EntityCondition;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 

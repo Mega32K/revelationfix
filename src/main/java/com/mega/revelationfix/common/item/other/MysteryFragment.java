@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.item.other;
 
-import com.mega.revelationfix.common.item.IInvulnerableItem;
-import com.mega.revelationfix.common.item.IJEIInvisibleRitualResult;
+import com.mega.revelationfix.api.item.IInvulnerableItem;
+import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import net.minecraft.ChatFormatting;

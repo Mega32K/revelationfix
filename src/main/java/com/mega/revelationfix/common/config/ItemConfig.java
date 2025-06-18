@@ -16,15 +16,16 @@ public class ItemConfig {
     static final ForgeConfigSpec.ConfigValue<Double> NEEDLE_ATTRIBUTE_INCREASEMENT_MAX;
     static final ForgeConfigSpec.ConfigValue<List<? extends Float>> NEEDLE_ATTRIBUTE_WEIGHT;
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    private static final ForgeConfigSpec.ConfigValue<Double> blessingScrollDamageBoost;
-    private static final ForgeConfigSpec.ConfigValue<Double> blessingScrollAttackSpeedBoost;
-    private static final ForgeConfigSpec.ConfigValue<Double> blessingScrollDodgeBoost;
-    private static final ForgeConfigSpec.ConfigValue<Double> blessingScrollMaxDodge;
-    private static final ForgeConfigSpec.ConfigValue<Integer> dimensionalWillResistance;
-    private static final ForgeConfigSpec.ConfigValue<Integer> dimensionalWillDeathEscape;
-    private static final ForgeConfigSpec.ConfigValue<Integer> eternalWatchFreezingTime;
-    private static final ForgeConfigSpec.ConfigValue<Integer> eternalWatchCooldown;
-    private static final ForgeConfigSpec.ConfigValue<Double> eternalWatchFinalAttackPercentage;
+    private static final ForgeConfigSpec.ConfigValue<Double> BLESSING_SCROLL_DAMAGE_BOOST;
+    private static final ForgeConfigSpec.ConfigValue<Double> BLESSING_SCROLL_ATTACK_SPEED_BOOST;
+    private static final ForgeConfigSpec.ConfigValue<Double> BLESSING_SCROLL_DODGE_BOOST;
+    private static final ForgeConfigSpec.ConfigValue<Double> BLESSING_SCROLL_MAX_DODGE;
+    private static final ForgeConfigSpec.ConfigValue<Integer> DIMENSIONAL_WILL_RESISTANCE;
+    private static final ForgeConfigSpec.ConfigValue<Integer> DIMENSIONAL_WILL_DEATH_ESCAPE;
+    private static final ForgeConfigSpec.ConfigValue<Integer> ETERNAL_WATCH_FREEZING_TIME;
+    private static final ForgeConfigSpec.ConfigValue<Integer> ETERNAL_WATCH_COOLDOWN;
+    private static final ForgeConfigSpec.ConfigValue<Double> ETERNAL_WATCH_FINAL_ATTACK_PERCENTAGE;
+    private static final ForgeConfigSpec.ConfigValue<Boolean> APOCALYPTIUM_CHESTPLATE_TITLE_DISPLAY;
     public static double needleArmorPenetration;
     public static double needleEnchantmentPiercing;
     public static double needleAVMin;
@@ -39,19 +40,19 @@ public class ItemConfig {
     public static int ewFreezingTime;
     public static int ewCooldown;
     public static double ewFinalAttackPercentage;
-
+    public static boolean apocalyptiumChestplateTitle;
     static {
         BUILDER.push("Blessing Scroll");
-        blessingScrollDamageBoost = BUILDER.worldRestart().
+        BLESSING_SCROLL_DAMAGE_BOOST = BUILDER.worldRestart().
                 comment("Damage increase provided by Scroll of a Blessing for each lucky point, as percentage.").
                 defineInRange("DamageBoost", 4D, 0D, 32768D);
-        blessingScrollAttackSpeedBoost = BUILDER.worldRestart().
+        BLESSING_SCROLL_ATTACK_SPEED_BOOST = BUILDER.worldRestart().
                 comment("AttackSpeed increase provided by Scroll of a Blessing for each lucky point, as percentage.").
                 defineInRange("AttackSpeedBoost", 6D, 0D, 32768D);
-        blessingScrollDodgeBoost = BUILDER.worldRestart().
+        BLESSING_SCROLL_DODGE_BOOST = BUILDER.worldRestart().
                 comment("Dodge increase provided by Scroll of a Blessing for each lucky point, as percentage.").
                 defineInRange("DodgeBoost", 2D, 0D, 100D);
-        blessingScrollMaxDodge = BUILDER.worldRestart().
+        BLESSING_SCROLL_MAX_DODGE = BUILDER.worldRestart().
                 comment("Max Dodge provided by Scroll of a Blessing, as percentage.").
                 defineInRange("MaxDodge", 85D, 0D, 100D);
         BUILDER.pop();
@@ -73,23 +74,30 @@ public class ItemConfig {
                 .defineListAllowEmpty("needleAttributeWeight", List.of(0.12F, 0.12F, 0.4F, 3.5F), (i) -> i instanceof Float f && f >= 0F);
         BUILDER.pop();
         BUILDER.push("Dimensional Will");
-        dimensionalWillResistance = BUILDER.worldRestart()
+        DIMENSIONAL_WILL_RESISTANCE = BUILDER.worldRestart()
                 .comment("The resistance of damage provided by Dimensional Will, as percentage.")
                 .defineInRange("DamageResistance", 70, 0, 100);
-        dimensionalWillDeathEscape = BUILDER.worldRestart()
+        DIMENSIONAL_WILL_DEATH_ESCAPE = BUILDER.worldRestart()
                 .comment("The chance of escaping from death provided by Dimensional Will, as percentage.")
                 .defineInRange("DeathEscape", 33, 0, 100);
         BUILDER.pop();
         BUILDER.push("Eternal Watch");
-        eternalWatchFreezingTime = BUILDER.worldRestart()
+        ETERNAL_WATCH_FREEZING_TIME = BUILDER.worldRestart()
                 .comment("The time(in seconds) that The Eternal Watch can freeze.")
                 .defineInRange("FreezingTime", 9, 0, 32768);
-        eternalWatchCooldown = BUILDER.worldRestart()
+        ETERNAL_WATCH_COOLDOWN = BUILDER.worldRestart()
                 .comment("The cooldown of Eternal Watch after frozen the time.")
                 .defineInRange("Cooldown", 70, 0, 32768);
-        eternalWatchFinalAttackPercentage = BUILDER.worldRestart()
+        ETERNAL_WATCH_FINAL_ATTACK_PERCENTAGE = BUILDER.worldRestart()
                 .comment("The percentage of the max health of the target who was hurt by players who has the Eternal Watch")
                 .defineInRange("Percentage", 0.1D, 0D, 1D);
+        BUILDER.pop();
+        BUILDER.push("Apocalyptium Armor");
+        BUILDER.push("Chestplate");
+        APOCALYPTIUM_CHESTPLATE_TITLE_DISPLAY = BUILDER.worldRestart()
+                .comment("display player's apostle title when equipped the apocalyptium chestplate")
+                .define("displayTitle", false);
+        BUILDER.pop();
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
@@ -97,20 +105,21 @@ public class ItemConfig {
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         if (SPEC.isLoaded()) {
-            bsDamageBoost = blessingScrollDamageBoost.get();
-            bsAttackSpeedBoost = blessingScrollAttackSpeedBoost.get();
-            bsDodgeBoost = blessingScrollDodgeBoost.get();
-            bsMaxDodge = blessingScrollMaxDodge.get();
+            bsDamageBoost = BLESSING_SCROLL_DAMAGE_BOOST.get();
+            bsAttackSpeedBoost = BLESSING_SCROLL_ATTACK_SPEED_BOOST.get();
+            bsDodgeBoost = BLESSING_SCROLL_DODGE_BOOST.get();
+            bsMaxDodge = BLESSING_SCROLL_MAX_DODGE.get();
             needleArmorPenetration = NEEDLE_ARMOR_PENETRATION.get();
             needleEnchantmentPiercing = NEEDLE_ENCHANTMENT_PIERCING.get();
             needleAVMin = NEEDLE_ATTRIBUTE_INCREASEMENT_MIN.get();
             needleAVMax = NEEDLE_ATTRIBUTE_INCREASEMENT_MAX.get();
             needleAttributeWeight = NEEDLE_ATTRIBUTE_WEIGHT.get();
-            dwResistance = dimensionalWillResistance.get();
-            dwDeathEscape = dimensionalWillDeathEscape.get();
-            ewFreezingTime = eternalWatchFreezingTime.get();
-            ewCooldown = eternalWatchCooldown.get();
-            ewFinalAttackPercentage = eternalWatchFinalAttackPercentage.get();
+            dwResistance = DIMENSIONAL_WILL_RESISTANCE.get();
+            dwDeathEscape = DIMENSIONAL_WILL_DEATH_ESCAPE.get();
+            ewFreezingTime = ETERNAL_WATCH_FREEZING_TIME.get();
+            ewCooldown = ETERNAL_WATCH_COOLDOWN.get();
+            ewFinalAttackPercentage = ETERNAL_WATCH_FINAL_ATTACK_PERCENTAGE.get();
+            apocalyptiumChestplateTitle = APOCALYPTIUM_CHESTPLATE_TITLE_DISPLAY.get();
         }
     }
 }

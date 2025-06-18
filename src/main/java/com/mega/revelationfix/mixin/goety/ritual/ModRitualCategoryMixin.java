@@ -2,12 +2,13 @@ package com.mega.revelationfix.mixin.goety.ritual;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.crafting.RitualRecipe;
+import com.Polarice3.Goety.common.items.equipment.HammerItem;
 import com.Polarice3.Goety.compat.jei.ModRitualCategory;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.common.item.IJEIInvisibleRitualResult;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;

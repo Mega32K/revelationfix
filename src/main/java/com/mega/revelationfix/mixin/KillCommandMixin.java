@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.safe.DamageSourceInterface;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.commands.KillCommand;

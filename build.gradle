@@ -191,13 +191,14 @@ dependencies {
     implementation fg.deobf("curse.maven:IMBlocker-483760:4656554")
     implementation fg.deobf("curse.maven:Oculus-581495:5299671")
     implementation fg.deobf("curse.maven:Xenon-564239:5752040")
-    implementation fg.deobf("curse.maven:goety-586095:6620277")
+    implementation fg.deobf("curse.maven:goety-586095:6660730")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
     implementation fg.deobf("curse.maven:MobBattle-268746:5300817")
     implementation fg.deobf("curse.maven:IBE-256822:4994072")
     implementation fg.deobf("curse.maven:Citadel-331936:5633260")
     implementation fg.deobf("curse.maven:IAF-264231:5633453")
     implementation fg.deobf("curse.maven:JEI-238222:6075247")
+    implementation fg.deobf("curse.maven:JER-240630:5057220")
     implementation fg.deobf("curse.maven:Patchouli-306770:6164575")
     implementation fg.deobf("curse.maven:Farmer'sDelight-398521:6154802")
     implementation fg.deobf("curse.maven:playerAnimator-658587:4587214")
@@ -212,6 +213,7 @@ dependencies {
     implementation fg.deobf("curse.maven:ArtofForging-596955:6510711")
     implementation fg.deobf("curse.maven:SoulFire-662413:6248077")
     implementation fg.deobf("curse.maven:Cobweb-968456:6089406")
+
     /*
     implementation fg.deobf("curse.maven:KubeJS-238086:5853326")
     implementation fg.deobf("curse.maven:Rhino-416294:6186971")

@@ -1,11 +1,16 @@
 package com.mega.revelationfix.common.event.handler;
 
+import com.Polarice3.Goety.common.entities.ModEntityType;
+import com.Polarice3.Goety.common.entities.projectiles.SpiderWeb;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.ItemHelper;
+import com.Polarice3.Goety.utils.MathHelper;
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.common.event.StandOnFluidEvent;
+import com.mega.revelationfix.api.event.entity.StandOnFluidEvent;
 import com.mega.revelationfix.common.init.GRItems;
+import com.mega.revelationfix.common.item.armor.BaseArmorItem;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
+import com.mega.revelationfix.common.item.armor.SpectreArmor;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
@@ -15,31 +20,59 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.Nullable;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Revelationfix.MODID)
 public class ArmorEvents {
+
     @SubscribeEvent
-    public static void PlayerTick(TickEvent.PlayerTickEvent event) {
+    public static void livingHurtArmorEffects(LivingHurtEvent event) {
+        /*
+         if (event.getSource().getEntity() instanceof LivingEntity living) {
+            //幽魂套加5伤害
+            if (armorSet(living, ModArmorMaterials.SPECTRE) || armorSet(living, ModArmorMaterials.SPECTRE_DARKMAGE))
+                event.setAmount(event.getAmount() + 5.0F);
+        }
+         */
+        //蜘蛛套蛛网反制
+        LivingEntity beHurt = event.getEntity();
+        DamageSource damageSource = event.getSource();
+        ArmorMaterial currentSet = getArmorSet(beHurt);
+        if (isSpiderSet(currentSet)) {
+            if (damageSource.getEntity() instanceof LivingEntity living && living.random.nextFloat() <= 0.3F && living.distanceTo(beHurt) <= 8.01D) {
+                SpiderWeb spiderWeb = new SpiderWeb(ModEntityType.SPIDER_WEB.get(), beHurt.level);
+                spiderWeb.setOwner(beHurt);
+                spiderWeb.setLifeSpan(MathHelper.secondsToTicks(3));
+                spiderWeb.setPos(living.position());
+                beHurt.level.addFreshEntity(spiderWeb);
+            }
+        }
+        //黑魔法师套减伤
+        if (isDarkmageSet(currentSet))
+            if (isMagicDamage(damageSource))
+                event.setAmount(event.getAmount() * 0.8F);
+    }
+    @SubscribeEvent
+    public static void playerArmorTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         Level world = player.level;
         if (event.phase == TickEvent.Phase.END) {
+            if (!player.level.isClientSide) {
             //神金胸头衔效果
             if (player.tickCount % 5 == 0) {
                 if (findChestplate(player, GRItems.A_CHESTPLATE)) {
@@ -51,12 +84,45 @@ public class ArmorEvents {
                         player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1));
                 }
             }
+            ArmorMaterial currentSet = getArmorSet(player);
             //神金套回血
-            if (ItemHelper.armorSet(player, ModArmorMaterials.APOCALYPTIUM)) {
+            if (currentSet == ModArmorMaterials.APOCALYPTIUM) {
                 if (player.tickCount % 20 == 0 && player.getHealth() > 0.0F) {
                     player.setHealth(player.getHealth() + 2.0F);
                     net.minecraftforge.event.ForgeEventFactory.onLivingHeal(player, 2.0F);
                     //player.heal();
+                }
+            }
+
+                AttributeInstance attackDamage = player.getAttribute(Attributes.ATTACK_DAMAGE);
+                if (attackDamage != null) {
+                    boolean changed = false;
+                    if (currentSet == ModArmorMaterials.SPECTRE || currentSet == ModArmorMaterials.SPECTRE_DARKMAGE) {
+                        if (!attackDamage.hasModifier(SpectreArmor.ARMOR_ATTACK_DAMAGE_MODIFIER)) {
+                            attackDamage.addModifier(SpectreArmor.ARMOR_ATTACK_DAMAGE_MODIFIER);
+                            changed = true;
+                        }
+                    } else {
+                        if (attackDamage.hasModifier(SpectreArmor.ARMOR_ATTACK_DAMAGE_MODIFIER)) {
+                            attackDamage.removeModifier(SpectreArmor.ARMOR_ATTACK_DAMAGE_MODIFIER);
+                            changed = true;
+                        }
+                    }
+                    if (isDarkmageSet(currentSet)) {
+                        if (!attackDamage.hasModifier(BaseArmorItem.ATTACK_DAMAGE_MODIFIER)) {
+                            attackDamage.addModifier(BaseArmorItem.ATTACK_DAMAGE_MODIFIER);
+                            changed = true;
+                        }
+                    } else {
+                        if (attackDamage.hasModifier(BaseArmorItem.ATTACK_DAMAGE_MODIFIER)) {
+                            attackDamage.removeModifier(BaseArmorItem.ATTACK_DAMAGE_MODIFIER);
+                            changed = true;
+                        }
+                    }
+                    if (changed) {
+                        attackDamage.setDirty();
+                        player.attributes.getDirtyAttributes().add(player.getAttribute(Attributes.ATTACK_DAMAGE));
+                    }
                 }
             }
         }
@@ -65,16 +131,16 @@ public class ArmorEvents {
     @SubscribeEvent
     public static void PotionApplicationEvents(MobEffectEvent.Applicable event) {
         MobEffectInstance instance = event.getEffectInstance();
-        //神金头免疫
+        //免疫
         if (instance.getEffect() == MobEffects.BLINDNESS) {
             if (event.getEntity() instanceof Player player) {
-                if (ItemHelper.findHelmet(player, GRItems.A_HELMET)) {
+                if (ItemHelper.findHelmet(player, GRItems.A_HELMET) || findHelmet(player, ModArmorMaterials.SPIDER) || findHelmet(player, ModArmorMaterials.SPIDER_DARKMAGE) || findHelmet(player, ModArmorMaterials.SPECTRE) || findHelmet(player, ModArmorMaterials.SPECTRE_DARKMAGE)) {
                     event.setResult(Event.Result.DENY);
                 }
             }
         } else if (instance.getEffect() == MobEffects.DARKNESS) {
             if (event.getEntity() instanceof Player player) {
-                if (ItemHelper.findHelmet(player, GRItems.A_HELMET)) {
+                if (ItemHelper.findHelmet(player, GRItems.A_HELMET) || findHelmet(player, ModArmorMaterials.SPECTRE) || findHelmet(player, ModArmorMaterials.SPECTRE_DARKMAGE)) {
                     event.setResult(Event.Result.DENY);
                 }
             }
@@ -100,7 +166,7 @@ public class ArmorEvents {
         LivingEntity beHurt = event.getEntity();
         DamageSource damageSource = event.getSource();
         if (beHurt.level.isClientSide) return;
-        if (beHurt instanceof Player player) {
+        if (beHurt instanceof Player player) {ArmorMaterial currentSet = getArmorSet(player);
             //神金护腿提供50％的弹射物反射
             if (player.random.nextBoolean()) {
                 if (findLeggings(player, GRItems.A_LEGGINGS)) {
@@ -120,8 +186,24 @@ public class ArmorEvents {
             }
 
             //神金全套穿戴时提供完全的火焰免疫，爆炸免疫，魔法免疫
-            if (ItemHelper.armorSet(player, ModArmorMaterials.APOCALYPTIUM)) {
+            if (currentSet == ModArmorMaterials.APOCALYPTIUM) {
                 if (damageSource.is(DamageTypeTags.IS_EXPLOSION) || isMagicDamage(damageSource) || isFire(damageSource))
+                    event.setCanceled(true);
+            } else if (isDarkmageSet(currentSet)) {
+                if (damageSource.is(DamageTypeTags.IS_EXPLOSION) || isFire(damageSource))
+                    event.setCanceled(true);
+            }
+
+            //蜘蛛鞋免疫摔落伤害
+            if (findBoots(player, ModArmorMaterials.SPIDER) || findBoots(player, ModArmorMaterials.SPIDER_DARKMAGE)) {
+                if (damageSource.is(DamageTypeTags.IS_FALL))
+                    event.setCanceled(true);
+            }
+
+
+            //幽魂胸甲免疫音波伤害
+            if (findChestplate(player, ModArmorMaterials.SPECTRE) || findChestplate(player, ModArmorMaterials.SPECTRE_DARKMAGE)) {
+                if (damageSource.is(DamageTypes.SONIC_BOOM))
                     event.setCanceled(true);
             }
         }
@@ -185,19 +267,46 @@ public class ArmorEvents {
             return false;
         return source.is(DamageTypes.MAGIC) || source.is(DamageTypes.INDIRECT_MAGIC) || source.is(DamageTypes.DRAGON_BREATH) || source.is(DamageTypeTags.WITCH_RESISTANT_TO);
     }
-
+    public static boolean isDarkmageSet(ArmorMaterial material) {
+        return material == ModArmorMaterials.SPECTRE_DARKMAGE || material == ModArmorMaterials.SPIDER_DARKMAGE;
+    }
+    public static boolean isSpiderSet(ArmorMaterial material) {
+        return material == ModArmorMaterials.SPIDER || material == ModArmorMaterials.SPIDER_DARKMAGE;
+    }
+    public static boolean isSpectreSet(ArmorMaterial material) {
+        return material == ModArmorMaterials.SPECTRE || material == ModArmorMaterials.SPECTRE_DARKMAGE;
+    }
+    public static boolean findHelmet(Player player, Item item) {
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() == item;
+    }
     public static boolean findLeggings(Player player, Item item) {
         return player.getItemBySlot(EquipmentSlot.LEGS).getItem() == item;
     }
 
-    public static boolean findChestplate(Player player, Item item) {
+    public static boolean findChestplate(LivingEntity player, Item item) {
         return player.getItemBySlot(EquipmentSlot.CHEST).getItem() == item;
     }
 
-    public static boolean findBoots(Player player, Item item) {
+    public static boolean findBoots(LivingEntity player, Item item) {
         return player.getItemBySlot(EquipmentSlot.FEET).getItem() == item;
     }
+    public static boolean findHelmet(LivingEntity player, ArmorMaterial material) {
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(material);
+    }
+    public static boolean findLeggings(LivingEntity player, ArmorMaterial material) {
+        return player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(material);
+    }
 
+    public static boolean findChestplate(LivingEntity player, ArmorMaterial material) {
+        return player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(material);
+    }
+
+    public static boolean findBoots(LivingEntity player, ArmorMaterial material) {
+        return player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(material);
+    }
+    public static boolean armorSet(LivingEntity living, ArmorMaterial material) {
+        return ItemHelper.armorSet(living, material);
+    }
     public static int armorSetCount(LivingEntity living, ArmorMaterial material) {
         int i = 0;
         Item firstCheck = living.getItemBySlot(EquipmentSlot.HEAD).getItem();
@@ -220,5 +329,28 @@ public class ArmorEvents {
         }
 
         return i;
+    }
+    public static @Nullable ArmorMaterial getArmorSet(LivingEntity living) {
+        int i = 0;
+        Item firstCheck = living.getItemBySlot(EquipmentSlot.HEAD).getItem();
+        ArmorMaterial material = null;
+        if (firstCheck instanceof ArmorItem helmet) {
+            material = helmet.getMaterial();
+            EquipmentSlot[] var10 = EquipmentSlot.values();
+            int var5 = var10.length;
+
+            for (EquipmentSlot equipmentSlot : var10) {
+                if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR) {
+                    Item item = living.getItemBySlot(equipmentSlot).getItem();
+                    if (item instanceof ArmorItem armorItem) {
+                        if (armorItem.getMaterial() == material) {
+                            ++i;
+                        }
+                    }
+                }
+            }
+        }
+
+        return i >= 4 ? material : null;
     }
 }

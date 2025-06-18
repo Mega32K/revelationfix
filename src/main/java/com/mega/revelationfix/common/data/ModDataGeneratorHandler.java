@@ -1,6 +1,8 @@
 package com.mega.revelationfix.common.data;
 
 import com.mega.revelationfix.Revelationfix;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.packs.VanillaEntityLoot;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;

@@ -2,30 +2,36 @@ package com.mega.revelationfix.common.event.handler;
 
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.revelationfix.Revelationfix;
+import com.mega.revelationfix.api.event.render.ItemRendererEvent;
+import com.mega.revelationfix.api.event.render.RenderTooltipPostEvent;
+import com.mega.revelationfix.api.item.ICenterDescItem;
+import com.mega.revelationfix.api.item.IDragonLightRendererItem;
+import com.mega.revelationfix.client.RendererUtils;
+import com.mega.revelationfix.client.font.OdamaneFont;
+import com.mega.revelationfix.client.renderer.item.Dragon2DLightRenderer;
+import com.mega.revelationfix.client.renderer.item.ItemRendererContext;
 import com.mega.revelationfix.client.spell.SpellClientContext;
 import com.mega.revelationfix.common.apollyon.client.render.VFRBuilders;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
-import com.mega.revelationfix.client.RendererUtils;
-import com.mega.revelationfix.client.font.OdamaneFont;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.config.CommonConfig;
-import com.mega.revelationfix.common.event.RenderTooltipPostEvent;
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.common.item.ICenterDescItem;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
-import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.time.TimeStopUtils;
+import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -47,8 +53,10 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -394,6 +402,27 @@ public class ClientEventHandler {
         Minecraft mc = Minecraft.getInstance();
         if (SpellClientContext.circle != null) {
             SpellClientContext.circle.render(event.getPartialTick(), event.getPoseStack());
+        }
+    }
+    @SubscribeEvent
+    public static void drawDragonLightItemRenderer(ItemRendererEvent.RenderModelListEvent event) {
+        ItemStack itemStack = event.getItemStack();
+        ItemDisplayContext displayContext = event.getItemDisplayContext();
+        if (displayContext == ItemDisplayContext.GUI) {
+            if (itemStack.getItem() instanceof IDragonLightRendererItem rendererItem) {
+                ItemRendererContext.TRACKED_COUNT++;
+                float time = ItemRendererContext.getTrackerTime(event.getPartialTicks());
+
+                MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+                PoseStack poseStack = event.getPoseStack();
+                RenderSystem.disableDepthTest();
+                //RenderSystem.enableDepthTest();
+                poseStack.pushPose();
+                poseStack.translate(0.5F, 0.5F, 0.5F);
+                Dragon2DLightRenderer.render(event.getPoseStack(), bufferSource, Vec2.ZERO, 4F, time, rendererItem.dragonRendererStartColor(itemStack), rendererItem.dragonRendererEndColor(itemStack));
+                poseStack.popPose();
+                RenderSystem.enableDepthTest();
+            }
         }
     }
 }

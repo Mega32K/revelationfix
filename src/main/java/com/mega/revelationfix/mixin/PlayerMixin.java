@@ -6,6 +6,7 @@ import com.Polarice3.Goety.utils.OwnedDamageSource;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.common.compat.Wrapped;
+import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.DamageSourceInterface;
@@ -79,8 +80,10 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerInterfac
     @Inject(method = "getDisplayName", at = @At("RETURN"), cancellable = true)
     private void getDisplayName(CallbackInfoReturnable<Component> cir) {
         Player player = (Player) (Object) this;
-        if (ArmorEvents.findChestplate(player, GRItems.A_CHESTPLATE) && cir.getReturnValue() instanceof MutableComponent component)
-            cir.setReturnValue(component.append(ArmorEvents.getTitle(ArmorEvents.getApocalyptiumTitleId(player))));
+        if (ItemConfig.apocalyptiumChestplateTitle) {
+            if (ArmorEvents.findChestplate(player, GRItems.A_CHESTPLATE) && cir.getReturnValue() instanceof MutableComponent component)
+                cir.setReturnValue(component.append(ArmorEvents.getTitle(ArmorEvents.getApocalyptiumTitleId(player))));
+        }
         if (revelationfix$odamaneHaloExpandedContext().isBlasphemous() && cir.getReturnValue() instanceof MutableComponent component)
             cir.setReturnValue(component.append(Component.translatable("message.goety_revelation.blasphemous_priest_fix").withStyle(ModChatFormatting.APOLLYON)));
     }

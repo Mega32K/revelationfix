@@ -14,6 +14,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraftforge.client.model.lighting.ForgeModelBlockRenderer;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -43,6 +44,8 @@ public class NormalBlockRequirement extends BlockRequirement {
 
         if (blockState != null) {
             for (var pro : blockState.getProperties()) {
+                if (pro instanceof DirectionProperty)
+                    continue;
                 if (!state.hasProperty(pro) || !state.getValue(pro).equals(blockState.getValue(pro))) {
                     check = false;
                 }

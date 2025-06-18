@@ -19,7 +19,7 @@ import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
-import com.mega.revelationfix.common.item.combat.BowOfRevelationItem;
+import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

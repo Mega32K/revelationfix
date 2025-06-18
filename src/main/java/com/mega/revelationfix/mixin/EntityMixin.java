@@ -1,10 +1,13 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.common.event.StandOnFluidEvent;
+import com.mega.revelationfix.api.event.entity.StandOnFluidEvent;
+import com.mega.revelationfix.common.event.handler.ArmorEvents;
+import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
@@ -14,7 +17,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public class EntityMixin {
@@ -74,5 +79,11 @@ public class EntityMixin {
         }
 
         return original;
+    }
+    @Inject(method = "dampensVibrations", at = @At("HEAD"), cancellable = true)
+    private void dampensVibrations(CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this instanceof Player player)
+            if (ArmorEvents.findBoots(player, ModArmorMaterials.SPECTRE) || ArmorEvents.findBoots(player, ModArmorMaterials.SPECTRE_DARKMAGE))
+                cir.setReturnValue(true);
     }
 }

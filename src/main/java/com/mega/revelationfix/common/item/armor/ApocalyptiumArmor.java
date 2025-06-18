@@ -2,7 +2,9 @@ package com.mega.revelationfix.common.item.armor;
 
 import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.api.items.armor.ISoulDiscount;
-import com.mega.revelationfix.common.item.IInvulnerableItem;
+import com.mega.revelationfix.api.item.IDamageLimitItem;
+import com.mega.revelationfix.api.item.IInvulnerableItem;
+import com.mega.revelationfix.mixin.PlayerMixin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -19,18 +21,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ApocalyptiumArmor extends ArmorItem implements ISoulRepair, ISoulDiscount, IInvulnerableItem {
+public class ApocalyptiumArmor extends ArmorItem implements ISoulRepair, ISoulDiscount, IInvulnerableItem, IDamageLimitItem {
     public ApocalyptiumArmor(ArmorItem.Type p_40387_) {
         super(ModArmorMaterials.APOCALYPTIUM, p_40387_, new Properties().fireResistant().rarity(Rarity.UNCOMMON));
-    }
-
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String layer) {
-        if (slot == EquipmentSlot.LEGS) {
-            return ModMain.MODID + ":textures/models/armor/apocalyptium_armor_layer_1.png";
-        } else {
-            return ModMain.MODID + ":textures/models/armor/apocalyptium_armor_layer_0.png";
-        }
     }
 
     public int getSoulDiscount(EquipmentSlot equipmentSlot) {
@@ -78,4 +71,8 @@ public class ApocalyptiumArmor extends ArmorItem implements ISoulRepair, ISoulDi
         tooltip.add(this.soulDiscountTooltip(stack));
     }
 
+    @Override
+    public int getUseDamageLimit(ItemStack stack) {
+        return 20;
+    }
 }

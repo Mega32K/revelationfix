@@ -46,21 +46,21 @@ public class ModMainMixin {
                     //output.accept(GRItems.HALO_OF_THE_END);
                     output.accept(ModItems.ASCENSION_HALO.get());
                     output.accept(ModItems.BROKEN_HALO.get());
-                    int index = 0;
                     for (Field field : GRItems.class.getDeclaredFields()) {
                         if (!field.isAnnotationPresent(Self.class) && Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(RegistryObject.class)) {
                             try {
                                 RegistryObject<Item> ro = ((RegistryObject<Item>) field.get(null));
-                                if (ro != null)
+                                if (ro != null) {
                                     output.accept(ro.get());
+                                    if (GRItems.insertAfterTabMap.containsKey(ro)) {
+                                        for (ItemStack stack : GRItems.insertAfterTabMap.get(ro).get())
+                                            output.accept(stack);
+                                    }
+                                }
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
                             }
-                            if (GRItems.insertAfterTabMap.containsKey(index)) {
-                                for (ItemStack stack : GRItems.insertAfterTabMap.get(index).get())
-                                    output.accept(stack);
-                            }
-                            index++;
+
                         }
                     }
                 })

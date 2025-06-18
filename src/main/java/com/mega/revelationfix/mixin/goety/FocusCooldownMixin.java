@@ -3,7 +3,7 @@ package com.mega.revelationfix.mixin.goety;
 import com.Polarice3.Goety.common.capabilities.soulenergy.FocusCooldown;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.init.ModAttributes;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -51,7 +51,7 @@ public abstract class FocusCooldownMixin {
     @Inject(method = "addCooldown", at = @At("HEAD"), cancellable = true)
     private void addCooldown(Player player, Level level, Item item, int coolDown, CallbackInfo ci) {
         ci.cancel();
-        coolDown = (int) (coolDown * Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
+        coolDown = Math.round(coolDown * (float)Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
         this.cooldowns.put(item, new FocusCooldown.CooldownInstance(coolDown));
         if (!level.isClientSide) {
             this.onCooldownStarted(player, item, coolDown);

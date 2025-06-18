@@ -4,7 +4,7 @@ import com.mega.revelationfix.common.apollyon.common.CooldownsManager;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.util.ATAHelper2;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

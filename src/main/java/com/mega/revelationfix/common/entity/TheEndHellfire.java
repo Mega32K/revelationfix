@@ -1,6 +1,7 @@
 package com.mega.revelationfix.common.entity;
 
 import com.Polarice3.Goety.common.entities.projectiles.Hellfire;
+import com.mega.revelationfix.client.renderer.entity.HellfireTextures;
 import com.mega.revelationfix.common.init.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -44,6 +45,6 @@ public class TheEndHellfire extends Hellfire {
 
     @Override
     public ResourceLocation getResourceLocation() {
-        return com.mega.revelationfix.common.entity.renderer.HellfireTextures.TEXTURES.getOrDefault(this.getAnimation(), (ResourceLocation) com.mega.revelationfix.common.entity.renderer.HellfireTextures.TEXTURES.get(0));
+        return HellfireTextures.TEXTURES.getOrDefault(this.getAnimation(), (ResourceLocation) HellfireTextures.TEXTURES.get(0));
     }
 }

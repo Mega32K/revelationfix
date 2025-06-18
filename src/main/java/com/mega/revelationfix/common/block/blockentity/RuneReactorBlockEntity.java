@@ -13,21 +13,24 @@ import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.common.items.magic.TotemOfSouls;
 import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.common.magic.SummonSpell;
-import com.Polarice3.Goety.common.magic.spells.CorruptedBeamSpell;
-import com.Polarice3.Goety.common.magic.spells.storm.ThunderboltSpell;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.utils.SEHelper;
+import com.mega.revelationfix.api.event.block.RuneReactorChangeEvent;
 import com.mega.revelationfix.common.block.RuneReactorBlock;
 import com.mega.revelationfix.common.block.RunestoneEngravedTableBlock;
 import com.mega.revelationfix.common.config.BlockConfig;
-import com.mega.revelationfix.common.entity.BlockShakingEntity;
-import com.mega.revelationfix.common.entity.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.BlockBindingEntity;
+import com.mega.revelationfix.common.entity.binding.BlockShakingEntity;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
+import com.mega.revelationfix.common.entity.binding.TeleportEntity;
 import com.mega.revelationfix.common.init.ModBlocks;
 import com.mega.revelationfix.common.init.RunestoneRitualInit;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.util.entity.EntityFinder;
 import com.mega.revelationfix.util.entity.RotationUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,6 +46,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.entity.npc.Villager;
@@ -55,21 +59,30 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class RuneReactorBlockEntity extends BlockEntity {
+    private static final Supplier<Item> ANIMATION_CORE = ModItems.ANIMATION_CORE;
+    private static final Supplier<Item> HUNGER_CORE = ModItems.HUNGER_CORE;
+    private static final Supplier<Item> MYSTIC_CORE = ModItems.MYSTIC_CORE;
+    private static final Supplier<Item> WIND_CORE = ModItems.WIND_CORE;
+    private final Set<UUID> listenerEntityUUIDS = new HashSet<>();
+    private final Set<BlockBindingEntity> listenerEntities = new HashSet<>();
     public final int randId = (int) (Math.random() * Util.getMillis());
     private final Object2IntOpenHashMap<Item> structureCodes = new Object2IntOpenHashMap<>();
-    public int tickCount = 0;
-    private ItemStack insertItem = ItemStack.EMPTY;
-    private final BlockPos[] runestonePoses = new BlockPos[] {new BlockPos(0,0,0),new BlockPos(0,0,0),new BlockPos(0,0,0),new BlockPos(0,0,0)};
+    private final BlockPos[] runestonePoses = new BlockPos[]{new BlockPos(0, 0, 0), new BlockPos(0, 0, 0), new BlockPos(0, 0, 0), new BlockPos(0, 0, 0)};
     //index -> runestone index
-    private final BlockPos[] bestSort = new BlockPos[] {new BlockPos(0,0,0),new BlockPos(0,0,0),new BlockPos(0,0,0),new BlockPos(0,0,0)};
+    private final BlockPos[] bestSort = new BlockPos[]{new BlockPos(0, 0, 0), new BlockPos(0, 0, 0), new BlockPos(0, 0, 0), new BlockPos(0, 0, 0)};
+    public int tickCount = 0;
+    public int spellUseTimeRemaining = 72000;
+    public boolean using;
+    public @Nullable LivingEntity currentSpellTarget;
+    private ItemStack insertItem = ItemStack.EMPTY;
     private boolean needSyncItem;
     private boolean needSyncRunestones;
     private boolean needSyncOwner;
@@ -82,20 +95,107 @@ public class RuneReactorBlockEntity extends BlockEntity {
     private FakeSpellerEntity spellerEntity;
     @Nullable
     private UUID spellerID;
-    public int spellUseTimeRemaining = 72000;
-    public boolean using;
-    public @Nullable LivingEntity currentSpellTarget;
 
     public RuneReactorBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.RUNE_REACTOR_ENTITY.get(), blockPos, blockState);
-        structureCodes.put(ModItems.ANIMATION_CORE.get(), 0);
-        structureCodes.put(ModItems.HUNGER_CORE.get(), 0);
-        structureCodes.put(ModItems.MYSTIC_CORE.get(), 0);
-        structureCodes.put(ModItems.WIND_CORE.get(), 0);
+        structureCodes.put(ANIMATION_CORE.get(), 0);
+        structureCodes.put(HUNGER_CORE.get(), 0);
+        structureCodes.put(MYSTIC_CORE.get(), 0);
+        structureCodes.put(WIND_CORE.get(), 0);
+    }
+
+    public static void serverTick(Level level, BlockPos reactorPos, BlockState reactorState, RuneReactorBlockEntity reactorBlockEntity) {
+        Set<BlockBindingEntity> entities = new HashSet<>();
+        if (level instanceof ServerLevel serverLevel) {
+            for (UUID uuid : reactorBlockEntity.getListenerEntityUUIDS()) {
+                Entity entity = serverLevel.getEntity(uuid);
+                if (entity instanceof BlockBindingEntity blockBindingEntity)
+                    entities.add(blockBindingEntity);
+            }
+        }
+        Set<BlockBindingEntity> listenerEntities = reactorBlockEntity.getListenerEntities();
+        if (!entities.isEmpty())
+            listenerEntities.addAll(entities);
+        entities.clear();
+        listenerEntities.removeIf(e -> e instanceof Entity entity && (entity.isRemoved() || !entity.isAlive()));
+        listenerEntities.forEach(e -> e.blockOwnerTickEvent(level, reactorPos, reactorState, reactorBlockEntity, 0));
+        reactorBlockEntity.tickCount++;
+        {
+            if (reactorBlockEntity.level instanceof ServerLevel world) {
+                ChunkPos chunkPos = world.getChunkAt(reactorBlockEntity.worldPosition).getPos();
+                if (!world.getForcedChunks().contains(chunkPos.toLong())) {
+                    world.setChunkForced(chunkPos.x, chunkPos.z, true);
+                    if (!world.isLoaded(reactorBlockEntity.worldPosition)) {
+                        world.getChunkAt(reactorBlockEntity.worldPosition).setLoaded(true);
+                    }
+                }
+            }
+        }
+
+        ItemStack insertItem = reactorBlockEntity.getInsertItem();
+        if (reactorBlockEntity.tickCount == 1) {
+            reactorBlockEntity.needSyncItem = true;
+            reactorBlockEntity.needSyncRunestones = true;
+            reactorBlockEntity.needSyncOwner = true;
+            reactorBlockEntity.needSyncSpeller = true;
+            level.sendBlockUpdated(reactorPos, level.getBlockState(reactorPos), level.getBlockState(reactorPos), 2);
+        } else if (RuneReactorBlock.canUseStructure(level, reactorPos, reactorState)) {
+            if (reactorBlockEntity.tickCount % 20 == 0) {
+                reactorBlockEntity.checkStructure(level, reactorPos, reactorState);
+                level.sendBlockUpdated(reactorPos, level.getBlockState(reactorPos), level.getBlockState(reactorPos), 2);
+                if (RuneReactorBlock.isKindOfCore(insertItem)) {
+                    if (RuneReactorBlock.isRitualStructureCore(insertItem)) {
+                        if (level.getBlockEntity(reactorPos.above(-1)) instanceof CursedCageBlockEntity cageBlockEntity && cageBlockEntity.getSouls() > 0) {
+                            cageBlockEntity.decreaseSouls(Math.min(cageBlockEntity.getSouls(), reactorBlockEntity.soulCost_ns()));
+                        } else if (level.getBlockEntity(reactorPos.above(-2)) instanceof CursedCageBlockEntity cageBlockEntity && cageBlockEntity.getSouls() > 0) {
+                            cageBlockEntity.decreaseSouls(Math.min(cageBlockEntity.getSouls(), reactorBlockEntity.soulCost_ns()));
+                        }
+                    }
+                    int count = 0;
+                    for (BlockShakingEntity blockShakingEntity : level.getEntitiesOfClass(BlockShakingEntity.class, new AABB(reactorPos.above(2)))) {
+                        if (blockShakingEntity.getBlockState().is(ModBlocks.RUNE_REACTOR.get())) {
+                            count++;
+                        }
+                    }
+                    if (count == 0) {
+                        BlockShakingEntity blockShakingEntity = new BlockShakingEntity(level, reactorPos.getX(), reactorPos.getY() + 2, reactorPos.getZ(), reactorState, 160);
+                        level.addFreshEntity(blockShakingEntity);
+                    }
+                }
+            }
+
+            if (RuneReactorBlock.isKindOfCore(insertItem) && reactorBlockEntity.structureCodes.values().intStream().sum() >= 4) {
+                ISpell spell;
+                if ((spell = RuneReactorBlock.getSpell(insertItem)) != null) {
+                    reactorBlockEntity.runAutoSpellingEvents(spell, level, reactorPos, reactorState);
+                } else reactorBlockEntity.runNormalStructureEvents(level, reactorPos, reactorState);
+            } else {
+                reactorBlockEntity.using = false;
+                reactorBlockEntity.spellUseTimeRemaining = -1;
+
+            }
+        } else {
+            reactorBlockEntity.using = false;
+            reactorBlockEntity.spellUseTimeRemaining = -1;
+        }
+        listenerEntities.forEach(e -> e.blockOwnerTickEvent(level, reactorPos, reactorState, reactorBlockEntity, 1));
+    }
+
+    public Set<UUID> getListenerEntityUUIDS() {
+        return listenerEntityUUIDS;
+    }
+
+    public Set<BlockBindingEntity> getListenerEntities() {
+        return listenerEntities;
+    }
+
+    public void addListener(BlockBindingEntity entity, UUID uuid) {
+        this.listenerEntityUUIDS.add(uuid);
     }
     public ItemStack getInsertItem() {
         return insertItem;
     }
+
     public void setInsertItem(ItemStack insertItem) {
         this.insertItem = insertItem;
         this.needSyncItem = true;
@@ -107,13 +207,19 @@ public class RuneReactorBlockEntity extends BlockEntity {
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
+
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         handleUpdateTag(pkt.getTag());
     }
+
     public int toSimpleStructureCode() {
-        return structureCodes.getInt(ModItems.ANIMATION_CORE.get()) * 1000 + structureCodes.getInt(ModItems.HUNGER_CORE.get()) * 100 + structureCodes.getInt(ModItems.MYSTIC_CORE.get()) * 10 + structureCodes.getInt(ModItems.WIND_CORE.get());
+        return toSimpleStructureCode(structureCodes);
     }
+    public int toSimpleStructureCode(Object2IntOpenHashMap<Item> structureCodes) {
+        return structureCodes.getInt(ANIMATION_CORE.get()) * 1000 + structureCodes.getInt(HUNGER_CORE.get()) * 100 + structureCodes.getInt(MYSTIC_CORE.get()) * 10 + structureCodes.getInt(WIND_CORE.get());
+    }
+
     @Override
     public @NotNull CompoundTag getUpdateTag() {
         CompoundTag tag = new CompoundTag();
@@ -172,13 +278,14 @@ public class RuneReactorBlockEntity extends BlockEntity {
     public void load(@NotNull CompoundTag compoundTag) {
         load0(compoundTag);
         {
-            structureCodes.put(ModItems.ANIMATION_CORE.get(), compoundTag.getByte("StructureCode1"));
-            structureCodes.put(ModItems.HUNGER_CORE.get(), compoundTag.getByte("StructureCode2"));
-            structureCodes.put(ModItems.MYSTIC_CORE.get(), compoundTag.getByte("StructureCode3"));
-            structureCodes.put(ModItems.WIND_CORE.get(), compoundTag.getByte("StructureCode4"));
+            structureCodes.put(ANIMATION_CORE.get(), compoundTag.getByte("StructureCode1"));
+            structureCodes.put(HUNGER_CORE.get(), compoundTag.getByte("StructureCode2"));
+            structureCodes.put(MYSTIC_CORE.get(), compoundTag.getByte("StructureCode3"));
+            structureCodes.put(WIND_CORE.get(), compoundTag.getByte("StructureCode4"));
         }
         super.load(compoundTag);
     }
+
     protected void load0(@NotNull CompoundTag compoundTag) {
         spellUseTimeRemaining = compoundTag.getInt("spellUseTimeRemaining");
         if (compoundTag.contains("InsertItem", 10)) {
@@ -187,7 +294,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
         {
             ListTag listTag = compoundTag.getList("RunestonesPoses", 10);
             if (!listTag.isEmpty()) {
-                for (int i=0;i<4;i++) {
+                for (int i = 0; i < 4; i++) {
                     try {
                         CompoundTag compoundTag1 = listTag.getCompound(i);
                         runestonePoses[i] = new BlockPos(compoundTag1.getInt("X"), compoundTag1.getInt("Y"), compoundTag1.getInt("Z"));
@@ -200,7 +307,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
         {
             ListTag listTag = compoundTag.getList("RunestonesSort", 10);
             if (!listTag.isEmpty()) {
-                for (int i=0;i<4;i++) {
+                for (int i = 0; i < 4; i++) {
                     try {
                         CompoundTag compoundTag1 = listTag.getCompound(i);
                         bestSort[i] = new BlockPos(compoundTag1.getInt("X"), compoundTag1.getInt("Y"), compoundTag1.getInt("Z"));
@@ -255,10 +362,10 @@ public class RuneReactorBlockEntity extends BlockEntity {
             compoundTag.put("RunestonesSort", listTag);
         }
         {
-            compoundTag.putByte("StructureCode1", (byte) structureCodes.getInt(ModItems.ANIMATION_CORE.get()));
-            compoundTag.putByte("StructureCode2", (byte) structureCodes.getInt(ModItems.HUNGER_CORE.get()));
-            compoundTag.putByte("StructureCode3", (byte) structureCodes.getInt(ModItems.MYSTIC_CORE.get()));
-            compoundTag.putByte("StructureCode4", (byte) structureCodes.getInt(ModItems.WIND_CORE.get()));
+            compoundTag.putByte("StructureCode1", (byte) structureCodes.getInt(ANIMATION_CORE.get()));
+            compoundTag.putByte("StructureCode2", (byte) structureCodes.getInt(HUNGER_CORE.get()));
+            compoundTag.putByte("StructureCode3", (byte) structureCodes.getInt(MYSTIC_CORE.get()));
+            compoundTag.putByte("StructureCode4", (byte) structureCodes.getInt(WIND_CORE.get()));
         }
         if (ownerID != null)
             compoundTag.putUUID("Owner", ownerID);
@@ -269,15 +376,11 @@ public class RuneReactorBlockEntity extends BlockEntity {
 
     public Player getOwner() {
         if (this.level != null) {
-            if (this.ownerEntity == null && ownerID != null) {
+            if ((this.ownerEntity == null || !this.ownerEntity.isAlive()) && ownerID != null) {
                 this.ownerEntity = this.level.getPlayerByUUID(ownerID);
             }
         }
         return ownerEntity;
-    }
-
-    public @Nullable UUID getOwnerID() {
-        return ownerID;
     }
 
     public void setOwner(Player ownerEntity) {
@@ -288,6 +391,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
             needSyncOwner = true;
         }
     }
+
     public void setOwner(UUID ownerID) {
         if (this.ownerID != ownerID) {
             this.ownerID = ownerID;
@@ -299,19 +403,20 @@ public class RuneReactorBlockEntity extends BlockEntity {
             needSyncOwner = true;
         }
     }
+
+    public @Nullable UUID getOwnerID() {
+        return ownerID;
+    }
+
     public FakeSpellerEntity getSpeller() {
         if (this.level != null) {
-            if (this.spellerEntity == null && spellerID != null) {
-                Optional<FakeSpellerEntity> o = this.level.getEntitiesOfClass(FakeSpellerEntity.class, new AABB(this.getBlockPos()).inflate(3D)).stream().filter(e ->e.getUUID().equals(spellerID)).findFirst();
+            if ((this.spellerEntity == null || !this.spellerEntity.isAlive()) && spellerID != null) {
+                Optional<FakeSpellerEntity> o = this.level.getEntitiesOfClass(FakeSpellerEntity.class, new AABB(this.getBlockPos()).inflate(3D)).stream().filter(e -> e.getUUID().equals(spellerID)).findFirst();
                 if (o != null && o.isPresent())
                     this.spellerEntity = o.get();
             }
         }
         return spellerEntity;
-    }
-
-    public @Nullable UUID getSpellerID() {
-        return spellerID;
     }
 
     public void setSpeller(FakeSpellerEntity spellerEntity) {
@@ -322,24 +427,31 @@ public class RuneReactorBlockEntity extends BlockEntity {
             needSyncSpeller = true;
         }
     }
+
     public void setSpeller(UUID spellerID) {
         if (this.spellerID != spellerID) {
             this.spellerID = spellerID;
             if (level != null && spellerID != null)
-                this.spellerEntity = this.level.getEntitiesOfClass(FakeSpellerEntity.class, new AABB(this.getBlockPos()).inflate(3D)).stream().filter(e ->e.getUUID().equals(spellerID)).findFirst().orElseGet(null);
+                this.spellerEntity = this.level.getEntitiesOfClass(FakeSpellerEntity.class, new AABB(this.getBlockPos()).inflate(3D)).stream().filter(e -> e.getUUID().equals(spellerID)).findFirst().orElseGet(null);
             if (spellerID == null)
                 this.spellerEntity = null;
             setChanged();
             needSyncSpeller = true;
         }
     }
+
+    public @Nullable UUID getSpellerID() {
+        return spellerID;
+    }
+
     public BlockPos[] getRunestonePoses() {
 
         return Arrays.copyOf(this.runestonePoses, 4);
     }
+
     @SuppressWarnings("ManualArrayCopy")
     public void modifyRunestonePoses(BlockPos[] runestonePoses) {
-        for (int i=0;i<runestonePoses.length;i++) {
+        for (int i = 0; i < runestonePoses.length; i++) {
             this.runestonePoses[i] = runestonePoses[i];
         }
         sort();
@@ -356,8 +468,8 @@ public class RuneReactorBlockEntity extends BlockEntity {
         BlockPos b = runestonePoses[1];
         BlockPos c = runestonePoses[2];
         BlockPos d = runestonePoses[3];
-        int[] allX = new int[] {a.getX(), b.getX(), c.getX(), d.getX()};
-        int[] allZ = new int[] {a.getZ(), b.getZ(), c.getZ(), d.getZ()};
+        int[] allX = new int[]{a.getX(), b.getX(), c.getX(), d.getX()};
+        int[] allZ = new int[]{a.getZ(), b.getZ(), c.getZ(), d.getZ()};
         Arrays.sort(allX);
         Arrays.sort(allZ);
         bestSort[0] = new BlockPos(allX[0], getBlockPos().getY(), allZ[0]);
@@ -366,12 +478,15 @@ public class RuneReactorBlockEntity extends BlockEntity {
         bestSort[3] = new BlockPos(allX[0], getBlockPos().getY(), allZ[3]);
         setChanged();
     }
+
     public AABB getRitualRange() {
-        return new AABB(bestSort[0].getX(), bestSort[0].getY()-9, bestSort[0].getZ(), bestSort[2].getX(), bestSort[2].getY()+9, bestSort[2].getZ());
+        return new AABB(bestSort[0].getX(), bestSort[0].getY() - 9, bestSort[0].getZ(), bestSort[2].getX(), bestSort[2].getY() + 9, bestSort[2].getZ());
     }
+
     public AABB getRitualRangeOnePiece() {
         return new AABB(bestSort[0].getX(), bestSort[0].getY(), bestSort[0].getZ(), bestSort[2].getX(), bestSort[2].getY(), bestSort[2].getZ());
     }
+
     public int getRitualDelay() {
         ItemStack stack = getInsertItem();
         if (stack.getItem() instanceof TotemOfSouls souls) {
@@ -381,77 +496,19 @@ public class RuneReactorBlockEntity extends BlockEntity {
         }
         return 2;
     }
+
     public int soulCost_ns() {
-        return structureCodes.getInt(ModItems.ANIMATION_CORE.get()) * BlockConfig.runeReactor_AnimationCoreCost
-                + structureCodes.getInt(ModItems.HUNGER_CORE.get()) * BlockConfig.runeReactor_HungerCoreCost
-                + structureCodes.getInt(ModItems.MYSTIC_CORE.get()) * BlockConfig.runeReactor_MysticCoreCost
-                + structureCodes.getInt(ModItems.WIND_CORE.get()) * BlockConfig.runeReactor_WindCoreCost;
+        return structureCodes.getInt(ANIMATION_CORE.get()) * BlockConfig.runeReactor_AnimationCoreCost
+                + structureCodes.getInt(HUNGER_CORE.get()) * BlockConfig.runeReactor_HungerCoreCost
+                + structureCodes.getInt(MYSTIC_CORE.get()) * BlockConfig.runeReactor_MysticCoreCost
+                + structureCodes.getInt(WIND_CORE.get()) * BlockConfig.runeReactor_WindCoreCost;
     }
+
     public int soulCost_as() {
-        return (int) ((structureCodes.getInt(ModItems.ANIMATION_CORE.get()) * BlockConfig.runeReactor_AnimationCoreCost_Focus
-                + structureCodes.getInt(ModItems.HUNGER_CORE.get()) * BlockConfig.runeReactor_HungerCoreCost_Focus
-                + structureCodes.getInt(ModItems.MYSTIC_CORE.get()) * BlockConfig.runeReactor_MysticCoreCost_Focus
-                + structureCodes.getInt(ModItems.WIND_CORE.get()) * BlockConfig.runeReactor_WindCoreCost_Focus) * BlockConfig.runeReactor_spellingCostMultiplier);
-    }
-    public static void serverTick(Level level, BlockPos reactorPos, BlockState reactorState, RuneReactorBlockEntity reactorBlockEntity) {
-        reactorBlockEntity.tickCount++;
-        labelForceLoad: {
-            if (reactorBlockEntity.level instanceof ServerLevel world) {
-                ChunkPos chunkPos = world.getChunkAt(reactorBlockEntity.worldPosition).getPos();
-                if (!world.getForcedChunks().contains(chunkPos.toLong())) {
-                    world.setChunkForced(chunkPos.x, chunkPos.z, true);
-                    if (!world.isLoaded(reactorBlockEntity.worldPosition)) {
-                        world.getChunkAt(reactorBlockEntity.worldPosition).setLoaded(true);
-                    }
-                }
-            }
-        }
-        ItemStack insertItem = reactorBlockEntity.getInsertItem();
-        if (reactorBlockEntity.tickCount == 1) {
-            reactorBlockEntity.needSyncItem = true;
-            reactorBlockEntity.needSyncRunestones = true;
-            reactorBlockEntity.needSyncOwner = true;
-            reactorBlockEntity.needSyncSpeller = true;
-            level.sendBlockUpdated(reactorPos, level.getBlockState(reactorPos), level.getBlockState(reactorPos), 2);
-        } else if (RuneReactorBlock.canUseStructure(level, reactorPos, reactorState)) {
-            if (reactorBlockEntity.tickCount % 20 == 0) {
-                reactorBlockEntity.checkStructure(level, reactorPos, reactorState);
-                level.sendBlockUpdated(reactorPos, level.getBlockState(reactorPos), level.getBlockState(reactorPos), 2);
-                if (RuneReactorBlock.isKindOfCore(insertItem)) {
-                    if ( RuneReactorBlock.isRitualStructureCore(insertItem)) {
-                        if (level.getBlockEntity(reactorPos.above(-1)) instanceof CursedCageBlockEntity cageBlockEntity && cageBlockEntity.getSouls() > 0) {
-                            cageBlockEntity.decreaseSouls(Math.min(cageBlockEntity.getSouls(), reactorBlockEntity.soulCost_ns()));
-                        } else if (level.getBlockEntity(reactorPos.above(-2)) instanceof CursedCageBlockEntity cageBlockEntity && cageBlockEntity.getSouls() > 0) {
-                            cageBlockEntity.decreaseSouls(Math.min(cageBlockEntity.getSouls(), reactorBlockEntity.soulCost_ns()));
-                        }
-                    }
-                    int count = 0;
-                    for (BlockShakingEntity blockShakingEntity : level.getEntitiesOfClass(BlockShakingEntity.class, new AABB(reactorPos.above(2)))) {
-                        if (blockShakingEntity.getBlockState().is(ModBlocks.RUNE_REACTOR.get())) {
-                            count++;
-                        }
-                    }
-                    if (count == 0) {
-                        BlockShakingEntity blockShakingEntity = new BlockShakingEntity(level, reactorPos.getX(), reactorPos.getY() + 2, reactorPos.getZ(), reactorState, 160);
-                        level.addFreshEntity(blockShakingEntity);
-                    }
-                }
-            }
-
-            if (RuneReactorBlock.isKindOfCore(insertItem) && reactorBlockEntity.structureCodes.values().intStream().sum() >= 4) {
-                ISpell spell;
-                if ((spell = RuneReactorBlock.getSpell(insertItem)) != null) {
-                    reactorBlockEntity.runAutoSpellingEvents(spell, level, reactorPos, reactorState);
-                }  else reactorBlockEntity.runNormalStructureEvents(level, reactorPos, reactorState);
-            } else {
-                reactorBlockEntity.using = false;
-                reactorBlockEntity.spellUseTimeRemaining = -1;
-
-            }
-        } else {
-            reactorBlockEntity.using = false;
-            reactorBlockEntity.spellUseTimeRemaining = -1;
-        }
+        return (int) ((structureCodes.getInt(ANIMATION_CORE.get()) * BlockConfig.runeReactor_AnimationCoreCost_Focus
+                + structureCodes.getInt(HUNGER_CORE.get()) * BlockConfig.runeReactor_HungerCoreCost_Focus
+                + structureCodes.getInt(MYSTIC_CORE.get()) * BlockConfig.runeReactor_MysticCoreCost_Focus
+                + structureCodes.getInt(WIND_CORE.get()) * BlockConfig.runeReactor_WindCoreCost_Focus) * BlockConfig.runeReactor_spellingCostMultiplier);
     }
 
     /**
@@ -471,7 +528,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
         } else if (!speller.isAddedToWorld())
             level.addFreshEntity(speller);
         if (level instanceof ServerLevel serverLevel && player != null && player.isAlive() && wand.getItem() instanceof DarkWand wandItem) {
-            wandItem.inventoryTick(wand ,level, player, 0, true);
+            wandItem.inventoryTick(wand, level, player, 0, true);
             {
                 if (spell instanceof IBlockSpell blockSpells) {
 
@@ -481,7 +538,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                         profilerfiller.push("rune_reactor_block_spells");
                         for (int i = (int) aabb.minX; i <= (int) aabb.maxX; i++) {
                             for (int j = (int) aabb.minZ; j <= (int) aabb.maxZ; j++) {
-                                for (int k0 = (int) aabb.minY + 6; k0 <= (int) aabb.maxY - 6; k0++) {
+                                for (int k0 = (int) aabb.maxY - 6; k0 > (int) aabb.minY + 6; k0--) {
                                     BlockPos pos = new BlockPos(i, k0, j);
                                     if (blockSpells.rightBlock(serverLevel, speller, pos, Direction.DOWN)) {
                                         if (canCastTouch(wandItem, spell, wand, level, speller, player)) {
@@ -504,20 +561,31 @@ public class RuneReactorBlockEntity extends BlockEntity {
 
         }
     }
+
     public SpellStat modifySpellStats(SpellStat spellStat) {
-        int animationCoreCounts = this.structureCodes.getInt(ModItems.ANIMATION_CORE.get());
-        int hungerCoreCounts = this.structureCodes.getInt(ModItems.ANIMATION_CORE.get());
-        int mysticCoreCounts = this.structureCodes.getInt(ModItems.ANIMATION_CORE.get());
-        int windCoreCounts = this.structureCodes.getInt(ModItems.ANIMATION_CORE.get());
-        spellStat.setPotency((int) (spellStat.getPotency() * (1+animationCoreCounts / 4F)));
-        spellStat.setDuration((int) (spellStat.getDuration() * (1+hungerCoreCounts / 4F)));
-        spellStat.setRadius((int) (spellStat.getRadius() * (1+mysticCoreCounts / 4F)));
-        spellStat.setVelocity((int) (spellStat.getVelocity() * (1+windCoreCounts / 4F)));
+        int animationCoreCounts = this.structureCodes.getInt(ANIMATION_CORE.get());
+        int hungerCoreCounts = this.structureCodes.getInt(ANIMATION_CORE.get());
+        int mysticCoreCounts = this.structureCodes.getInt(ANIMATION_CORE.get());
+        int windCoreCounts = this.structureCodes.getInt(ANIMATION_CORE.get());
+        if (animationCoreCounts <= 0)
+            spellStat.setPotency(1);
+        if (hungerCoreCounts <= 0)
+            spellStat.setDuration(1);
+        if (mysticCoreCounts <= 0)
+            spellStat.setRadius(1);
+        if (windCoreCounts <= 0)
+            spellStat.setVelocity(1);
+        spellStat.setPotency((int) (spellStat.getPotency() * (1 + animationCoreCounts / 4F)));
+        spellStat.setDuration((int) (spellStat.getDuration() * (1 + hungerCoreCounts / 4F)));
+        spellStat.setRadius((int) (spellStat.getRadius() * (1 + mysticCoreCounts / 4F)));
+        spellStat.setVelocity((int) (spellStat.getVelocity() * (1 + windCoreCounts / 4F)));
         return spellStat;
     }
+
     public int spellerSoulUse(DarkWand wand, LivingEntity speller, ItemStack stack) {
         return wand.SoulUse(speller, stack) + soulCost_as();
     }
+
     public boolean canCastTouch(DarkWand wandB, ISpell spell, ItemStack stack, Level worldIn, LivingEntity speller, Player player) {
         if (!worldIn.isClientSide && spell != null && !this.cannotCast(wandB, speller, stack)) {
             if (player.isCreative()) {
@@ -536,9 +604,11 @@ public class RuneReactorBlockEntity extends BlockEntity {
 
         return false;
     }
+
     public int getSpellUseDuration(DarkWand wand, ItemStack stack) {
         return stack.getTag() != null ? stack.getTag().getInt("Cast Time") : wand.CastDuration(stack);
     }
+
     public boolean cannotCast(DarkWand wandB, LivingEntity livingEntity, ItemStack stack) {
         boolean flag = false;
         Level var5 = livingEntity.level;
@@ -561,23 +631,26 @@ public class RuneReactorBlockEntity extends BlockEntity {
 
         return wandB.isOnCooldown(livingEntity, stack);
     }
+
     public boolean getSoulsAmount(Player player, int souls) {
         return SEHelper.getSoulsAmount(player, souls);
     }
+
     public void simulateOnUseTick(DarkWand wandB, @NotNull ISpell spellB, Level worldIn, @NotNull LivingEntity livingEntityIn, ItemStack stack) {
         Player playerOwner = getOwner();
         if (currentSpellTarget == null || (currentSpellTarget.isDeadOrDying() || !this.getRitualRange().contains(currentSpellTarget.position())) || currentSpellTarget.isRemoved()) {
 
             BlockPos blockPos = this.getBlockPos();
+            AABB ritualRange = this.getRitualRange();
             LivingEntity nearestTarget = EntityFinder.getNearestEntity(level, LivingEntity.class, EntityExpandedContext.NO_GODS, EntityFinder.STRICT_NOT_ALLIED_NE, playerOwner, blockPos.getX(), blockPos.getY(), blockPos.getZ(), this.getRitualRange());
-
             if (nearestTarget != currentSpellTarget) {
                 this.currentSpellTarget = nearestTarget;
 
             }
-        }
+        } else if (!livingEntityIn.hasLineOfSight(currentSpellTarget))
+            currentSpellTarget = null;
         if (this.currentSpellTarget != null && this.currentSpellTarget.isAlive()) {
-            Vec3 vec3 = currentSpellTarget.getBoundingBox().getCenter();
+            Vec3 vec3 = currentSpellTarget.getBoundingBox().getCenter().add(0F, currentSpellTarget.getBoundingBox().getYsize() / 2.1f, 0F);
             RotationUtils.rotationAtoB(livingEntityIn, vec3);
             if (livingEntityIn instanceof FakeSpellerEntity mob) {
                 mob.setTarget(currentSpellTarget);
@@ -687,12 +760,13 @@ public class RuneReactorBlockEntity extends BlockEntity {
             }
         }
     }
+
     public void MagicResults(DarkWand wandB, ISpell spellB, ItemStack stack, Level worldIn, LivingEntity caster, Player playerOwner) {
-         if (spellB != null && caster instanceof FakeSpellerEntity) {
+        if (spellB != null && caster instanceof FakeSpellerEntity) {
             ISpell spell = GoetyEventFactory.onCastSpell(caster, spellB);
             if (spell != null) {
                 if (!worldIn.isClientSide) {
-                    ServerLevel serverWorld = (ServerLevel)worldIn;
+                    ServerLevel serverWorld = (ServerLevel) worldIn;
                     boolean spent;
                     IChargingSpell spell1;
                     if (playerOwner.isCreative()) {
@@ -700,7 +774,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                             spell.SpellResult(serverWorld, caster, stack, spell.defaultStats());
                             spent = false;
                             if (spell instanceof IChargingSpell) {
-                                spell1 = (IChargingSpell)spell;
+                                spell1 = (IChargingSpell) spell;
                                 if (spell1.shotsNumber(playerOwner, stack) > 0 && wandB.ShotsFired(stack) >= spell1.shotsNumber(playerOwner, stack)) {
                                     spent = true;
                                 }
@@ -717,7 +791,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                     } else if (this.getSoulsAmount(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack))) {
                         spent = true;
                         if (spell instanceof IChargingSpell) {
-                            spell1 = (IChargingSpell)spell;
+                            spell1 = (IChargingSpell) spell;
                             if (spell1.everCharge() && stack.getTag() != null) {
                                 stack.getTag().putInt("Seconds", stack.getTag().getInt("Seconds") + 1);
                                 if (stack.getTag().getInt("Seconds") != 20) {
@@ -767,12 +841,12 @@ public class RuneReactorBlockEntity extends BlockEntity {
                     IBreathingSpell breathingSpells;
                     if (playerOwner.isCreative()) {
                         if (spell instanceof IBreathingSpell) {
-                            breathingSpells = (IBreathingSpell)spell;
+                            breathingSpells = (IBreathingSpell) spell;
                             breathingSpells.showWandBreath(caster);
                         }
                     } else if (this.getSoulsAmount(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack))) {
                         if (spell instanceof IBreathingSpell) {
-                            breathingSpells = (IBreathingSpell)spell;
+                            breathingSpells = (IBreathingSpell) spell;
                             breathingSpells.showWandBreath(caster);
                         }
                     } else {
@@ -791,6 +865,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
         }
 
     }
+
     /**
      * 每server tick运行
      */
@@ -803,32 +878,33 @@ public class RuneReactorBlockEntity extends BlockEntity {
             }
         }
     }
+
     public void checkStructure(Level level, BlockPos reactorPos, BlockState reactorState) {
         boolean shouldReCheck = false;
         AABB tempStructureAABB = new AABB(reactorPos).inflate(RuneReactorBlock.RANGE);
-        structureCodes.put(ModItems.ANIMATION_CORE.get(), 0);
-        structureCodes.put(ModItems.HUNGER_CORE.get(), 0);
-        structureCodes.put(ModItems.MYSTIC_CORE.get(), 0);
-        structureCodes.put(ModItems.WIND_CORE.get(), 0);
+        structureCodes.put(ANIMATION_CORE.get(), 0);
+        structureCodes.put(HUNGER_CORE.get(), 0);
+        structureCodes.put(MYSTIC_CORE.get(), 0);
+        structureCodes.put(WIND_CORE.get(), 0);
         for (BlockPos pos : this.runestonePoses) {
             if (!tempStructureAABB.contains(pos.getCenter()) || (!(level.getBlockState(pos).getBlock() instanceof RunestoneEngravedTableBlock engravedTableBlock) || level.getBlockState(pos).getValue(RunestoneEngravedTableBlock.CORE) <= 0)) {
                 shouldReCheck = true;
                 break;
             } else {
                 Item runestoneCoreItem = engravedTableBlock.getCore(level.getBlockState(pos).getValue(RunestoneEngravedTableBlock.CORE));
-                structureCodes.put(runestoneCoreItem, structureCodes.getInt(runestoneCoreItem)+1);
+                structureCodes.put(runestoneCoreItem, structureCodes.getInt(runestoneCoreItem) + 1);
             }
         }
         if (shouldReCheck) {
             int count = 0;
-            BlockPos[] newRunestones = new BlockPos[] {BlockPos.ZERO, BlockPos.ZERO, BlockPos.ZERO, BlockPos.ZERO};
-            for (int i=-9;i<=9;i++) {
-                for (int j=-9;j<=9;j++) {
-                    for (int k=-9;k<=9;k++) {
+            BlockPos[] newRunestones = new BlockPos[]{BlockPos.ZERO, BlockPos.ZERO, BlockPos.ZERO, BlockPos.ZERO};
+            for (int j = 9; j > -9; j--) {
+                for (int i = -9; i <= 9; i++) {
+                    for (int k = -9; k <= 9; k++) {
                         BlockPos newBlockpos = new BlockPos(reactorPos.getX() + i, reactorPos.getY() + j, reactorPos.getZ() + k);
                         BlockState state = level.getBlockState(newBlockpos);
                         if (level.getBlockState(newBlockpos).getBlock() instanceof RunestoneEngravedTableBlock engravedTableBlock) {
-                            if (state.getValue(RunestoneEngravedTableBlock.CORE) > 0) {
+                            if (state.getValue(RunestoneEngravedTableBlock.CORE) > 0 && count < 4) {
                                 newRunestones[count] = newBlockpos;
                                 count++;
 
@@ -836,10 +912,12 @@ public class RuneReactorBlockEntity extends BlockEntity {
 
                                 level.levelEvent(232424314, newBlockpos, 2);
                                 if (count >= 4) {
+                                    MinecraftForge.EVENT_BUS.post(new RuneReactorChangeEvent.CheckStructureEvent(level, reactorPos, reactorState, this, RuneReactorChangeEvent.CheckStructureEvent.Phase.COUNT_4));
                                     for (BlockPos toSpawnParticle : newRunestones) {
                                         level.levelEvent(232424314, toSpawnParticle, 4);
                                     }
                                     level.levelEvent(232424314, reactorPos, 3);
+                                    this.getListenerEntities().forEach(entity -> entity.blockOwnerCheckEvent(level, reactorPos, reactorState, this, 2));
                                     break;
                                 }
                             }
@@ -847,14 +925,42 @@ public class RuneReactorBlockEntity extends BlockEntity {
                     }
                 }
             }
+            MinecraftForge.EVENT_BUS.post(new RuneReactorChangeEvent.CheckStructureEvent(level, reactorPos, reactorState, this, RuneReactorChangeEvent.CheckStructureEvent.Phase.BEFORE_MODIFY));
+            this.getListenerEntities().forEach(entity -> entity.blockOwnerCheckEvent(level, reactorPos, reactorState, this, 0));
             this.modifyRunestonePoses(newRunestones);
+            MinecraftForge.EVENT_BUS.post(new RuneReactorChangeEvent.CheckStructureEvent(level, reactorPos, reactorState, this, RuneReactorChangeEvent.CheckStructureEvent.Phase.AFTER_MODIFY));
+            this.getListenerEntities().forEach(entity -> entity.blockOwnerCheckEvent(level, reactorPos, reactorState, this, 1));
         }
+        Object2IntOpenHashMap<Item> tempStructureCodes = new Object2IntOpenHashMap<>();
         for (BlockPos pos : this.runestonePoses) {
-            if (tempStructureAABB.contains(pos.getCenter()) && (level.getBlockState(pos).getBlock() instanceof RunestoneEngravedTableBlock engravedTableBlock) && level.getBlockState(pos).getValue(RunestoneEngravedTableBlock.CORE) <= 0) {
+            if (tempStructureAABB.contains(pos.getCenter()) && (level.getBlockState(pos).getBlock() instanceof RunestoneEngravedTableBlock engravedTableBlock) && level.getBlockState(pos).getValue(RunestoneEngravedTableBlock.CORE) > 0) {
                 Item runestoneCoreItem = engravedTableBlock.getCore(level.getBlockState(pos).getValue(RunestoneEngravedTableBlock.CORE));
-                structureCodes.put(runestoneCoreItem, structureCodes.getInt(runestoneCoreItem)+1);
-
+                tempStructureCodes.put(runestoneCoreItem, tempStructureCodes.getInt(runestoneCoreItem) + 1);
             }
         }
+        int originCode = toSimpleStructureCode();
+        int currentCode = toSimpleStructureCode(tempStructureCodes);
+        RuneReactorChangeEvent.ChangeSimpleCodeEvent event = new RuneReactorChangeEvent.ChangeSimpleCodeEvent(level, reactorPos, reactorState, this, originCode, currentCode);
+        if (!MinecraftForge.EVENT_BUS.post(event)) {
+            int i = event.getCurrentCode();
+            if (!Integer.valueOf(i).equals(originCode)) {
+                if (Integer.valueOf(i).equals(RunestoneRitualInit.RITUAL_9)) {
+                    if (this.getListenerEntities().stream().noneMatch(e-> e instanceof TeleportEntity)) {
+                        TeleportEntity teleportEntity = new TeleportEntity(level, reactorPos);
+                        level.addFreshEntity(teleportEntity);
+                    }
+                }
+                this.structureCodes.put(ANIMATION_CORE.get(), getDigitByMath(i, 4));
+                this.structureCodes.put(HUNGER_CORE.get(), getDigitByMath(i, 3));
+                this.structureCodes.put(MYSTIC_CORE.get(), getDigitByMath(i, 2));
+                this.structureCodes.put(WIND_CORE.get(), getDigitByMath(i, 1));
+            }
+        }
+        tempStructureCodes.clear();
+    }
+    static int getDigitByMath(int number, int pos) {
+        number = Math.abs(number);
+        int divisor = (int) Math.pow(10, pos - 1);
+        return (number / divisor) % 10;
     }
 }

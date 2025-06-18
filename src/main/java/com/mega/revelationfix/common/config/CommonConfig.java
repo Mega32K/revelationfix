@@ -28,6 +28,7 @@ public class CommonConfig {
     private static final ForgeConfigSpec.ConfigValue<Double> HALO_DAMAGE_CAP;
     private static final ForgeConfigSpec.ConfigValue<Integer> APOLLYON_BARRIER_PREPARATION;
     private static final ForgeConfigSpec.ConfigValue<Integer> APOLLYON_SHOOTING_COOLDOWN;
+    private static final ForgeConfigSpec.ConfigValue<Boolean> TARGET_REDIRECT_TO_SERVANTS;
     public static Set<Item> whitelistItems;
     public static Set<EntityType<?>> whitelistEntities;
     public static boolean barrierKillingMobsHealingMode;
@@ -40,7 +41,7 @@ public class CommonConfig {
     public static double haloDamageCap;
     public static int apollyonBarrierPreparation = 3;
     public static int apollyonShootingCooldown = 1600;
-
+    public static boolean redirectTargetToServantOption;
     static {
         BUILDER.push("The Apocalypse");
         WHITE_LIST_ITEM_STRINGS = BUILDER.worldRestart().comment("A list of items(curios!) won't be banned when The Nether Apollyon in the phase \"The Apocalypse\".")
@@ -90,6 +91,11 @@ public class CommonConfig {
                 .comment("Define the cooldown of apollyon shooting skill(in ticks).default : 1600")
                 .defineInRange("shootingCooldown", 1600, 0, 32767);
         BUILDER.pop();
+        BUILDER.push("Servants");
+        TARGET_REDIRECT_TO_SERVANTS = BUILDER.worldRestart()
+                .comment("If true, your servant will redirect the target of hostile creatures towards you to themselves.")
+                .define("redirectTargetToServantOption", false);
+        BUILDER.pop();
         SPEC = BUILDER.build();
 
     }
@@ -126,6 +132,7 @@ public class CommonConfig {
             haloSpellCooldownReduction = HALO_SPEL_COOLDOWN_REDUCTION.get();
             apollyonBarrierPreparation = APOLLYON_BARRIER_PREPARATION.get();
             apollyonShootingCooldown = APOLLYON_SHOOTING_COOLDOWN.get();
+            redirectTargetToServantOption = TARGET_REDIRECT_TO_SERVANTS.get();
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin;
 
+import com.mega.revelationfix.api.item.IDamageLimitItem;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.item.armor.ApocalyptiumArmor;
 import com.mega.revelationfix.common.item.other.MysteryFragment;
@@ -68,8 +69,8 @@ public abstract class ItemStackMixin {
 
     @ModifyVariable(method = "hurt", at = @At("HEAD"), argsOnly = true)
     private int maxHurtDamage(int orginal) {
-        if (this.getItem() instanceof ApocalyptiumArmor)
-            return Math.min(20, orginal);
+        if (this.getItem() instanceof IDamageLimitItem item)
+            return Math.min(item.getUseDamageLimit((ItemStack) (Object)this), orginal);
         return orginal;
     }
 }

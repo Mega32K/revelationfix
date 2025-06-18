@@ -2,6 +2,7 @@ package com.mega.revelationfix.common.data.ritual;
 
 import com.Polarice3.Goety.common.blocks.entities.RitualBlockEntity;
 import com.Polarice3.Goety.common.effects.brew.BrewEffects;
+import com.Polarice3.Goety.common.ritual.RitualRequirements;
 import com.mega.revelationfix.common.data.ritual.requirement.DimensionTypeRequirement;
 import com.mega.revelationfix.common.data.ritual.requirement.PositionRequirement;
 import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
@@ -88,6 +89,8 @@ public class RitualDataManager {
         int xRange = range.getX();
         int yRange = range.getY();
         int zRange = range.getZ();
+        if (xRange < 0 || yRange < 0 || zRange < 0)
+            xRange = yRange = zRange = RitualRequirements.RANGE;
         Set<Requirement> blockRequirements = ritualData.requirements.get(RitualData.BLOCKS);
         Set<Requirement> entityRequirements = ritualData.requirements.get(RitualData.ENTITIES);
         int blockLength = blockRequirements.size();

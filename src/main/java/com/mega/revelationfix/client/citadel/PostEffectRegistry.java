@@ -56,7 +56,6 @@ public class PostEffectRegistry {
     }
 
     public static void resize(int x, int y) {
-        if (SafeClass.usingShaderPack()) return;
         for (PostEffect postEffect : postEffects.values()) {
             postEffect.resize(x, y);
         }
@@ -87,6 +86,7 @@ public class PostEffectRegistry {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         for (PostEffect postEffect : postEffects.values()) {
             if (postEffect.getPostChain() != null && postEffect.isEnabled()) {
+
                 postEffect.getRenderTarget().blitToScreen(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(), false);
                 postEffect.setEnabled(false);
                 postEffect.getRenderTarget().clear(Minecraft.ON_OSX);
