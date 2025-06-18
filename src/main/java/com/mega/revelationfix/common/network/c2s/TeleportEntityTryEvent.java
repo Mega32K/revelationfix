@@ -1,23 +1,14 @@
 package com.mega.revelationfix.common.network.c2s;
 
-import com.Polarice3.Goety.utils.MobUtil;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.entity.binding.TeleportEntity;
 import com.mega.revelationfix.common.init.ModBlocks;
-import com.mega.revelationfix.common.network.PacketHandler;
-import com.mega.revelationfix.util.other.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.EnderMan;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 import org.joml.Matrix3d;
 import org.joml.Vector3d;
@@ -67,7 +58,7 @@ public class TeleportEntityTryEvent {
                         preparation.sort((e1, e2) -> (int) ((e1.distanceToSqr(serverPlayer) - e2.distanceToSqr(serverPlayer)) * 100));
                         TeleportEntity target = null;
                         for (TeleportEntity teleportEntity : preparation) {
-                             if (teleportEntity.isLookingAtMe(serverPlayer)) {
+                             if (teleportEntity.isLookingAtMe(serverPlayer) && teleportEntity.distanceToSqr(serverPlayer) > 2) {
                                  target = teleportEntity;
                                  break;
                              }

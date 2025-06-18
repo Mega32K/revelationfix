@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.apollyon.client;
 
-import com.mega.revelationfix.common.apollyon.client.render.trail.TrailPoint;
+import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;

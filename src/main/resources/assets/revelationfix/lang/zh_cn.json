@@ -147,6 +147,9 @@
   "item.minecraft.potion.effect.strong_counterspell" : "强化法术反制药水",
   "item.minecraft.splash_potion.effect.strong_counterspell" : "强化喷溅型法术反制药水",
   "item.minecraft.lingering_potion.effect.strong_counterspell" : "强化滞留型法术反制药水",
+  "item.minecraft.tipped_arrow.effect.counterspell" : "魔寂之箭",
+  "item.minecraft.tipped_arrow.effect.long_counterspell" : "魔寂之箭",
+  "item.minecraft.tipped_arrow.effect.strong_counterspell" : "魔寂之箭",
 
   "jei.goety.craftType.the_end": "终末",
   "jei.goety.craftType.te_magic": "魔法",

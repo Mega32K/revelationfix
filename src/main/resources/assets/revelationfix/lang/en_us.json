@@ -147,6 +147,9 @@
   "item.minecraft.potion.effect.strong_counterspell" : "Potion of Counterspell",
   "item.minecraft.splash_potion.effect.strong_counterspell" : "Splash Potion of Counterspell",
   "item.minecraft.lingering_potion.effect.strong_counterspell" : "Lingering Potion of Counterspell",
+  "item.minecraft.tipped_arrow.effect.counterspell" : "Arrow of Magic Disruption",
+  "item.minecraft.tipped_arrow.effect.long_counterspell" : "Arrow of Magic Disruption",
+  "item.minecraft.tipped_arrow.effect.strong_counterspell" : "Arrow of Magic Disruption",
 
   "jei.goety.craftType.the_end": "The End",
   "jei.goety.craftType.te_magic": "Magic",
@@ -435,5 +438,4 @@
 
   "config.jade.plugin_goety_revelation.runestone_id" : "Runestone Engraved Table",
   "config.jade.plugin_goety_revelation.rune_reactor_id" : "Rune Reactor"
-
 }

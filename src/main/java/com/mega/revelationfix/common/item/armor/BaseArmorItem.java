@@ -3,8 +3,11 @@ package com.mega.revelationfix.common.item.armor;
 import com.Polarice3.Goety.api.items.armor.ISoulDiscount;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.mega.revelationfix.common.event.handler.ArmorEvents;
+import com.mega.revelationfix.api.item.IExtraAttributesInjector;
+import com.mega.revelationfix.client.font.effect.LoreHelper;
+import com.mega.revelationfix.common.item.curios.CuriosBaseItem;
 import net.minecraft.Util;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -26,7 +29,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public abstract class BaseArmorItem extends ArmorItem {
+public abstract class BaseArmorItem extends ArmorItem implements IExtraAttributesInjector {
     public static final AttributeModifier ATTACK_DAMAGE_MODIFIER = new AttributeModifier(UUID.fromString("5f90fe78-8c3a-4c1c-a3f7-ea61fa77425b"), "ArmorSet Modifier", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL);
     protected static final EnumMap<Type, UUID> EXTRA_MODIFIER_UUID_PER_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266744_) -> {
         p_266744_.put(ArmorItem.Type.BOOTS, UUID.fromString("7c3fcaa9-ca78-402c-b204-10e2dc351421"));
@@ -35,11 +38,12 @@ public abstract class BaseArmorItem extends ArmorItem {
         p_266744_.put(ArmorItem.Type.HELMET, UUID.fromString("3b222938-b3e8-4faf-abae-10f731d4c34c"));
     });
     private final Multimap<Attribute, AttributeModifier> allModifiers;
-    public BaseArmorItem(ArmorMaterial p_40386_, Type p_266831_, Properties p_40388_, Supplier<ImmutableMultimap.Builder<Attribute, AttributeModifier>> extraAttributes) {
-        super(p_40386_, p_266831_, p_40388_);
+    public BaseArmorItem(ArmorMaterial armorMaterial, Type type, Properties p_40388_, Supplier<ImmutableMultimap.Builder<Attribute, AttributeModifier>> extraAttributes) {
+        super(armorMaterial, type, p_40388_);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(this.defaultModifiers);
         builder.putAll(extraAttributes.get().build());
+        injectExtraAttributes(armorMaterial, type, builder);
         allModifiers = builder.build();
     }
     public abstract void onArmorTick(Level level, LivingEntity living, ItemStack itemStack, Type type);
@@ -98,13 +102,27 @@ public abstract class BaseArmorItem extends ArmorItem {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @javax.annotation.Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        if (hasShiftDescription()) {
+            if (LoreHelper.hasShiftDown())
+                tooltip.add(Component.translatable("tooltip.revelationfix.holdShiftEffect"));
+            else appendHoverEffectText(stack, worldIn, tooltip, flagIn);
+        }
         if (this instanceof ISoulDiscount soulDiscount) {
             tooltip.add(soulDiscount.soulDiscountTooltip(stack));
         }
     }
-
     @Override
     public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot equipmentSlot) {
         return equipmentSlot == this.type.getSlot() ? this.allModifiers : super.getDefaultAttributeModifiers(equipmentSlot);
+    }
+    @Override
+    public void injectExtraAttributes(ArmorMaterial armorMaterial, Type type, ImmutableMultimap.Builder<Attribute, AttributeModifier> builder) {
+
+    }
+    protected boolean hasShiftDescription() {
+        return false;
+    }
+    protected void appendHoverEffectText(@NotNull ItemStack stack, @javax.annotation.Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+
     }
 }

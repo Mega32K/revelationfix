@@ -1,10 +1,10 @@
 package com.mega.revelationfix.client.renderer.entity;
 
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.common.apollyon.client.render.MegaRenderType;
-import com.mega.revelationfix.common.apollyon.client.render.RendererUtils;
-import com.mega.revelationfix.common.apollyon.client.render.VFRBuilders;
-import com.mega.revelationfix.common.apollyon.client.render.trail.TrailPoint;
+import com.mega.revelationfix.client.renderer.MegaRenderType;
+import com.mega.revelationfix.client.renderer.RendererUtils;
+import com.mega.revelationfix.client.renderer.VFRBuilders;
+import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.api.client.Easing;
 import com.mega.revelationfix.client.TimeContext;
 import com.mega.revelationfix.client.citadel.GRRenderTypes;

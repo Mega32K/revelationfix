@@ -3,7 +3,7 @@ package com.mega.revelationfix.common.entity.projectile;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.mega.revelationfix.common.apollyon.client.render.trail.TrailPoint;
+import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.common.init.ModSounds;
 import com.mega.revelationfix.common.odamane.common.FeDamage;

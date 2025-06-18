@@ -3,7 +3,7 @@ package com.mega.revelationfix.common.entity.projectile;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.projectiles.Hellfire;
-import com.mega.revelationfix.common.apollyon.client.render.trail.TrailPoint;
+import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.safe.DamageSourceInterface;

@@ -36,7 +36,7 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
     public void onArmorTick(Level level, LivingEntity living, ItemStack itemStack, Type type) {
         if (!level.isClientSide) {
             if (type == Type.HELMET)
-                living.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1360, 0));
+                living.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1360, 0, false, false));
         }
     }
 }

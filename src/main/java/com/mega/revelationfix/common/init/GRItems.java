@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.init;
 
+import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
@@ -32,6 +33,7 @@ import com.mega.revelationfix.util.java.Self;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
@@ -222,7 +224,7 @@ public class GRItems {
         STAFF_FROSTBLOOM = ITEMS.register("frostbloom_staff", FrostbloomStaff::new);
         BI_RUNE_REACTOR = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNE_REACTOR);
         BI_RUNESTONE_ENGRAVED_TABLE = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNESTONE_ENGRAVED_TABLE);
-        SPIDER_FANG = ITEMS.register("spider_fang", ()-> new Item(new Item.Properties().stacksTo(64).food(new FoodProperties.Builder().fast().nutrition(3).saturationMod(0.6F).build())));
+        SPIDER_FANG = ITEMS.register("spider_fang", ()-> new Item(new Item.Properties().stacksTo(64).food(new FoodProperties.Builder().fast().nutrition(3).saturationMod(0.6F).effect(()-> new MobEffectInstance(GoetyEffects.ACID_VENOM.get(), 40, 2), 1F).build())));
         VENOMOUS_SPIDER_WHIP = ITEMS.register("venomous_spider_whip", ()-> new VenomousSpiderWhipItem(1F, -2.2F));
         SPECTRE_WHIP = ITEMS.register("spectre_whip", ()-> new SpectreWhipItem(1F, -2.2F));
         HAUNTED_WHIP_HILT = ITEMS.register("haunted_whip_hilt", ()-> new Item(new Item.Properties().stacksTo(1)));

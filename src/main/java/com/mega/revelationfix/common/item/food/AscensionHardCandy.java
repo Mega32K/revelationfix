@@ -1,8 +1,8 @@
 package com.mega.revelationfix.common.item.food;
 
-import com.mega.revelationfix.common.apollyon.client.effect.CuriosMutableComponent;
-import com.mega.revelationfix.common.apollyon.client.effect.LoreHelper;
-import com.mega.revelationfix.common.apollyon.client.effect.LoreStyle;
+import com.mega.revelationfix.client.font.effect.CuriosMutableComponent;
+import com.mega.revelationfix.client.font.effect.LoreHelper;
+import com.mega.revelationfix.client.font.effect.LoreStyle;
 import com.mega.revelationfix.safe.GRSavedDataEC;
 import com.mega.revelationfix.safe.GRSavedDataExpandedContext;
 import net.minecraft.ChatFormatting;

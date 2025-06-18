@@ -2,9 +2,9 @@ package com.mega.revelationfix.common.item.curios;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.mega.revelationfix.common.apollyon.client.effect.CuriosMutableComponent;
-import com.mega.revelationfix.common.apollyon.client.effect.LoreHelper;
-import com.mega.revelationfix.common.apollyon.client.effect.LoreStyle;
+import com.mega.revelationfix.client.font.effect.CuriosMutableComponent;
+import com.mega.revelationfix.client.font.effect.LoreHelper;
+import com.mega.revelationfix.client.font.effect.LoreStyle;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.api.item.ICanCurse;
 import com.mega.revelationfix.util.MUtils;

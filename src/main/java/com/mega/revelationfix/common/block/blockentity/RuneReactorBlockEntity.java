@@ -898,9 +898,13 @@ public class RuneReactorBlockEntity extends BlockEntity {
         if (shouldReCheck) {
             int count = 0;
             BlockPos[] newRunestones = new BlockPos[]{BlockPos.ZERO, BlockPos.ZERO, BlockPos.ZERO, BlockPos.ZERO};
+            //j -> y轴偏移
+            //i -> x轴偏移
+            //k -> z轴偏移
             for (int j = 9; j > -9; j--) {
                 for (int i = -9; i <= 9; i++) {
                     for (int k = -9; k <= 9; k++) {
+                        //通过i j k获取方块
                         BlockPos newBlockpos = new BlockPos(reactorPos.getX() + i, reactorPos.getY() + j, reactorPos.getZ() + k);
                         BlockState state = level.getBlockState(newBlockpos);
                         if (level.getBlockState(newBlockpos).getBlock() instanceof RunestoneEngravedTableBlock engravedTableBlock) {

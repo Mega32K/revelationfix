@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.common.items.magic.NamelessStaff;
 import com.Polarice3.Goety.common.magic.Spell;
-import com.mega.revelationfix.common.apollyon.client.effect.LoreHelper;
+import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.safe.mixinpart.goety.ILevelWand;
 import com.mega.revelationfix.util.entity.ATAHelper2;

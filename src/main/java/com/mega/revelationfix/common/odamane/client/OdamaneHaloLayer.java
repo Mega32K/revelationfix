@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.odamane.client;
 
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.common.apollyon.client.render.MegaRenderType;
+import com.mega.revelationfix.client.renderer.MegaRenderType;
 import com.mega.revelationfix.api.client.Easing;
 import com.mega.revelationfix.client.citadel.GRRenderTypes;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;

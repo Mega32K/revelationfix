@@ -4,7 +4,7 @@ package com.mega.revelationfix.client.model.entity;// Made with Blockbench 4.12.
 
 
 import com.mega.revelationfix.api.client.Easing;
-import com.mega.revelationfix.common.apollyon.client.render.MegaRenderType;
+import com.mega.revelationfix.client.renderer.MegaRenderType;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.entity.binding.TeleportEntity;
 import com.mojang.blaze3d.Blaze3D;

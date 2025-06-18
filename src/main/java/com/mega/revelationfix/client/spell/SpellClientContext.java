@@ -4,7 +4,7 @@ import com.Polarice3.Goety.api.magic.IChargingSpell;
 import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.api.magic.SpellType;
 import com.Polarice3.Goety.utils.WandUtil;
-import com.mega.revelationfix.common.apollyon.client.render.VFRBuilders;
+import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.network.s2c.SpellCircleStatePacket;
 import com.mojang.blaze3d.vertex.PoseStack;

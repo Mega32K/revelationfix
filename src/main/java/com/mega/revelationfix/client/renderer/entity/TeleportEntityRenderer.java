@@ -1,6 +1,6 @@
 package com.mega.revelationfix.client.renderer.entity;
 
-import com.mega.revelationfix.common.apollyon.client.render.VFRBuilders;
+import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.entity.binding.TeleportEntity;
 import com.mega.revelationfix.client.model.entity.TeleportEntityModel;

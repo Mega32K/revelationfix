@@ -66,7 +66,7 @@ public class CuriosSkillKeyMapping {
                                 preparation.sort((e1, e2) -> (int) ((e1.distanceToSqr(player) - e2.distanceToSqr(player)) * 100));
                                 TeleportEntity target = null;
                                 for (TeleportEntity teleportEntity : preparation) {
-                                    if (teleportEntity.isLookingAtMe(player)) {
+                                    if (teleportEntity.isLookingAtMe(player) && teleportEntity.distanceToSqr(player) > 2) {
                                         target = teleportEntity;
                                         break;
                                     }

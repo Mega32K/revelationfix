@@ -6,6 +6,7 @@ import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.ItemHelper;
 import com.Polarice3.Goety.utils.MathHelper;
 import com.mega.revelationfix.Revelationfix;
+import com.mega.revelationfix.api.event.entity.LivingHurtByTargetGoalEvent;
 import com.mega.revelationfix.api.event.entity.StandOnFluidEvent;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.item.armor.BaseArmorItem;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArmorItem;
@@ -39,6 +41,15 @@ import org.jetbrains.annotations.Nullable;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = Revelationfix.MODID)
 public class ArmorEvents {
+    @SubscribeEvent
+    public static void hurtByTargetCanUse(LivingHurtByTargetGoalEvent.CanUse event) {
+        if (event.getEventPhase() == LivingHurtByTargetGoalEvent.CanUse.Phase.TAIL) {
+            if (event.getGoalMob() instanceof Spider && event.getEntity() != null) {
+                if (ArmorEvents.getArmorSet(event.getEntity()) == ModArmorMaterials.SPIDER_DARKMAGE)
+                    event.setResult(Event.Result.DENY);
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void livingHurtArmorEffects(LivingHurtEvent event) {
@@ -66,6 +77,16 @@ public class ArmorEvents {
         if (isDarkmageSet(currentSet))
             if (isMagicDamage(damageSource))
                 event.setAmount(event.getAmount() * 0.8F);
+        //神经蚀刻套吸血
+        if (currentSet == ModArmorMaterials.SPIDER_DARKMAGE)
+            if (beHurt.random.nextFloat() <= 0.2F) {
+                float f0 = 2F;
+                float f1 = 2F;
+                AttributeInstance instance = beHurt.getAttribute(Attributes.ATTACK_DAMAGE);
+                if (instance != null)
+                    f1 = (float) instance.getValue() * 0.1F;
+                beHurt.heal(Math.max(f0, f1));
+            }
     }
     @SubscribeEvent
     public static void playerArmorTick(TickEvent.PlayerTickEvent event) {
@@ -79,9 +100,9 @@ public class ArmorEvents {
                     int title = getApocalyptiumTitleId(player);
 
                     if (title == 1)
-                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0, false, false));
                     else if (title == 2)
-                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1));
+                        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1, false, false));
                 }
             }
             ArmorMaterial currentSet = getArmorSet(player);

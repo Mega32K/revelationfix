@@ -1,8 +1,8 @@
 package com.mega.revelationfix.common.item.curios;
 
 import com.google.common.collect.HashMultimap;
-import com.mega.revelationfix.common.apollyon.client.effect.CuriosMutableComponent;
-import com.mega.revelationfix.common.apollyon.client.effect.LoreStyle;
+import com.mega.revelationfix.client.font.effect.CuriosMutableComponent;
+import com.mega.revelationfix.client.font.effect.LoreStyle;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.api.item.ICenterDescItem;

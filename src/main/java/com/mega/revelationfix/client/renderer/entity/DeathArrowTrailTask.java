@@ -1,7 +1,7 @@
 package com.mega.revelationfix.client.renderer.entity;
 
-import com.mega.revelationfix.common.apollyon.client.render.VFRBuilders;
-import com.mega.revelationfix.common.apollyon.client.render.trail.TrailPoint;
+import com.mega.revelationfix.client.renderer.VFRBuilders;
+import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.List;

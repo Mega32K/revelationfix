@@ -1,14 +1,11 @@
 package com.mega.revelationfix.client.renderer.item;
 
 import com.mega.revelationfix.api.client.Easing;
-import com.mega.revelationfix.common.apollyon.client.render.MegaRenderType;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mega.revelationfix.client.renderer.MegaRenderType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Matrix4f;
