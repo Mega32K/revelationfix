@@ -437,5 +437,7 @@
   "item.tetra.scroll.sword/aeglos.details" : "§7The Final Arbiter of Existential Threats.",
 
   "config.jade.plugin_goety_revelation.runestone_id" : "Runestone Engraved Table",
-  "config.jade.plugin_goety_revelation.rune_reactor_id" : "Rune Reactor"
+  "config.jade.plugin_goety_revelation.rune_reactor_id" : "Rune Reactor",
+
+  "patchouli.witch_brew.goety_revelation.capacity.extra_parts" : "Extra Parts"
 }

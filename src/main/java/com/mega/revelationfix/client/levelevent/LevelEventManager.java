@@ -20,7 +20,6 @@ public class LevelEventManager {
         registries.put(232424314, (pos, rand, i) -> {
             Level level = Minecraft.getInstance().level;
             if (level == null) return;
-            System.out.println(i);
             switch ((byte) i) {
                 case 0 -> {
                     Minecraft.getInstance().level.playLocalSound(pos, SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 1.0F, 0.5F + rand.nextFloat() * 1.2F, false);

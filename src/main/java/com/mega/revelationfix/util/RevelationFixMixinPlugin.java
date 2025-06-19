@@ -92,6 +92,16 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                             if (name.equals(MOB_EFFECT_EVENT$EXPIRED)) {
                                 classNode.visitAnnotation("Lnet/minecraftforge/eventbus/api/Cancelable;", true);
                                 shouldWrite.set(true);
+                            } else if (name.equals(EVENT_BUS_MIXIN)) {
+                                classNode.methods.forEach(methodNode -> {
+                                    if (methodNode.name.equals("handleException") && methodNode.desc.equals("(Lnet/minecraftforge/eventbus/api/IEventBus;Lnet/minecraftforge/eventbus/api/Event;[Lnet/minecraftforge/eventbus/api/IEventListener;ILjava/lang/Throwable;)V")) {
+                                        InsnList list = new InsnList();
+                                        list.add(new VarInsnNode(Opcodes.ALOAD, 5));
+                                        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "tryCaughtThrowable", "(Ljava/lang/Throwable;)V", false));
+                                        methodNode.instructions.insertBefore(methodNode.instructions.get(0), list);
+                                        shouldWrite.set(true);
+                                    }
+                                });
                             }
                             else if (name.endsWith("Mixin") ) {
                                 synchronized (toRemovedMixins) {

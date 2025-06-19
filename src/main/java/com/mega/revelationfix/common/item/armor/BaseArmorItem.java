@@ -30,6 +30,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public abstract class BaseArmorItem extends ArmorItem implements IExtraAttributesInjector {
+    public static final float MAGIC_DAMAGE_DIV = 25.0F;
+    public static final float HOT_DIV = 10.0F;
+    public static final EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     public static final AttributeModifier ATTACK_DAMAGE_MODIFIER = new AttributeModifier(UUID.fromString("5f90fe78-8c3a-4c1c-a3f7-ea61fa77425b"), "ArmorSet Modifier", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL);
     protected static final EnumMap<Type, UUID> EXTRA_MODIFIER_UUID_PER_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266744_) -> {
         p_266744_.put(ArmorItem.Type.BOOTS, UUID.fromString("7c3fcaa9-ca78-402c-b204-10e2dc351421"));

@@ -29,6 +29,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.event.TickEvent;
@@ -50,7 +51,25 @@ public class ArmorEvents {
             }
         }
     }
-
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void goetyArmorDamageReduce(LivingDamageEvent event) {
+        LivingEntity target = event.getEntity();
+        float damageAmount = event.getAmount();
+        float totalReduce = 0;
+        for (EquipmentSlot equipmentSlot : BaseArmorItem.EQUIPMENT_SLOTS){
+            if (target.getItemBySlot(equipmentSlot).getItem() instanceof ArmorItem armorItem){
+                if (isDarkmageSet(armorItem.getMaterial())) {
+                    float reducedDamage = getReducedDamage(event, armorItem);
+                    totalReduce += reducedDamage;
+                }
+            }
+        }
+        if (totalReduce > 0) {
+            damageAmount -= totalReduce;
+            damageAmount = Math.max(0, damageAmount);
+            event.setAmount(damageAmount);
+        }
+    }
     @SubscribeEvent
     public static void livingHurtArmorEffects(LivingHurtEvent event) {
         /*
@@ -288,6 +307,9 @@ public class ArmorEvents {
             return false;
         return source.is(DamageTypes.MAGIC) || source.is(DamageTypes.INDIRECT_MAGIC) || source.is(DamageTypes.DRAGON_BREATH) || source.is(DamageTypeTags.WITCH_RESISTANT_TO);
     }
+    public static boolean isMagicArmor(ArmorMaterial material) {
+        return material instanceof ModArmorMaterials;
+    }
     public static boolean isDarkmageSet(ArmorMaterial material) {
         return material == ModArmorMaterials.SPECTRE_DARKMAGE || material == ModArmorMaterials.SPIDER_DARKMAGE;
     }
@@ -374,4 +396,17 @@ public class ArmorEvents {
 
         return i >= 4 ? material : null;
     }
+    /**
+     * Goety同款魔法 火焰 熔岩减伤
+     */
+    private static float getReducedDamage(LivingDamageEvent event, ArmorItem armorItem) {
+        float reduction = 0;
+        if (event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO)) {
+            reduction = armorItem.getDefense() / BaseArmorItem.MAGIC_DAMAGE_DIV;
+        } else if (event.getSource().is(DamageTypeTags.IS_FIRE) || event.getSource().is(DamageTypeTags.IS_EXPLOSION)) {
+            reduction = armorItem.getDefense() / BaseArmorItem.HOT_DIV;
+        }
+        return event.getAmount() * reduction;
+    }
+
 }

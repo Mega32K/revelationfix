@@ -31,13 +31,10 @@ import java.util.function.BooleanSupplier;
 public abstract class ServerMixin implements ServerEC {
     @Unique
     private ServerExpandedContext serverEC;
-
     @Shadow
     public abstract int getPlayerCount();
-
     @Shadow
     public abstract Iterable<ServerLevel> getAllLevels();
-
     @Inject(method = "<init>", at = @At("RETURN"))
     private void init(Thread p_236723_, LevelStorageSource.LevelStorageAccess p_236724_, PackRepository p_236725_, WorldStem p_236726_, Proxy p_236727_, DataFixer p_236728_, Services p_236729_, ChunkProgressListenerFactory p_236730_, CallbackInfo ci) {
         this.uom$setECData(new ServerExpandedContext((MinecraftServer) (Object) this));
@@ -50,7 +47,6 @@ public abstract class ServerMixin implements ServerEC {
     private void startReloadTrack(Collection<String> selectedIds, CallbackInfoReturnable<CompletableFuture<Void>> cir) {
         MinecraftServerReloadTracker.ACTIVE_RELOADS++;
     }
-
     @ModifyExpressionValue(method = "reloadResources", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;thenAcceptAsync(Ljava/util/function/Consumer;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;", ordinal = 0))
     private CompletableFuture<Void> mfix$endReloadTrack(CompletableFuture<Void> original) {
         return original.thenAcceptAsync(val -> {

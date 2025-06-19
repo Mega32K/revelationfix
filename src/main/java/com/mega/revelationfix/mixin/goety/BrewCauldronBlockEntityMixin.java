@@ -486,7 +486,6 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
         if (BrewEffects.INSTANCE == null) {
             BrewEffects.INSTANCE = new BrewEffects();
             BrewData.reRegister();
-
         }
         ItemStack brew = new ItemStack(ModItems.BREW.get());
         if (this.level != null && !this.level.isClientSide) {

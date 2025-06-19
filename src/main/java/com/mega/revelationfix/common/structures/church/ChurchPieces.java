@@ -7,29 +7,22 @@ import com.google.common.collect.ImmutableMap;
 import com.mega.revelationfix.common.data.loot.ModLootTables;
 import com.mega.revelationfix.common.init.ModStructurePieceTypes;
 import com.mega.revelationfix.mixin.DecoratedPotBlockEntityAccessor;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DecoratedPotBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.StructureMode;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
@@ -188,7 +181,7 @@ public class ChurchPieces {
                 for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.BARREL)) {
                     if (pLevel.getBlockEntity(structuretemplate$structureblockinfo.pos()) instanceof BarrelBlockEntity barrelBlockEntity && barrelBlockEntity.isEmpty()) {
                         if (rl.equals(ChurchPieces.STRUCTURE_LOCATION_CHURCH_1)) {
-                            barrelBlockEntity.setLootTable(ModLootTables.CHURCH_FOOD, pRandom.nextLong());
+                            barrelBlockEntity.setLootTable(pRandom.nextBoolean() ? ModLootTables.Chests.CHURCH_FOOD : ModLootTables.Chests.CHURCH_FOOD_2, pRandom.nextLong());
                         } else {
                             int i = pRandom.nextInt(0, 4);
                             if (i < 2) {

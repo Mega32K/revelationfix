@@ -437,5 +437,7 @@
   "item.tetra.scroll.sword/aeglos.details" : "§7对抗一切实体的终极武器",
 
   "config.jade.plugin_goety_revelation.runestone_id" : "符文镶嵌台",
-  "config.jade.plugin_goety_revelation.rune_reactor_id" : "符文反应台"
+  "config.jade.plugin_goety_revelation.rune_reactor_id" : "符文反应台",
+
+  "patchouli.witch_brew.goety_revelation.capacity.extra_parts" : "额外扩展部分"
 }

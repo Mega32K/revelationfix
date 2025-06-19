@@ -27,7 +27,6 @@ public abstract class ItemEntityMixin {
             lifespan = Integer.MAX_VALUE;
         }
     }
-
     @Unique
     private boolean revelationfix$isInvulItem() {
         return this.getItem().getItem() instanceof IInvulnerableItem;
