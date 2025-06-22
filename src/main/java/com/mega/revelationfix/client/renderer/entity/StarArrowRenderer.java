@@ -5,13 +5,13 @@ import com.mega.revelationfix.client.renderer.MegaRenderType;
 import com.mega.revelationfix.client.renderer.RendererUtils;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
-import com.mega.revelationfix.api.client.Easing;
 import com.mega.revelationfix.client.TimeContext;
 import com.mega.revelationfix.client.citadel.GRRenderTypes;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.entity.projectile.StarArrow;
 import com.mega.revelationfix.common.event.handler.ClientEventHandler;
+import com.mega.endinglib.api.client.Easing;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -132,7 +132,7 @@ public class StarArrowRenderer extends EntityRenderer<StarArrow> {
         }
         {
             VertexConsumer consumer = source.getBuffer(RenderType.lines());
-            float degrees = com.mega.revelationfix.util.time.TimeContext.Client.getCommonDegrees();
+            float degrees = com.mega.endinglib.util.time.TimeContext.Client.getCommonDegrees();
             float degrees1 = degrees / 1.3F;
             float degrees2 = degrees1 / 2.0F;
             finalScaleBox = hTime > dyingSizeBox ? 1F - (hTime - dyingSizeBox) / (1F - dyingSizeBox) : (hTime < growingSizeBox ? hTime / growingSizeBox : 1F);

@@ -1,13 +1,13 @@
 package com.mega.revelationfix.client.screen.post.custom;
 
+import com.mega.endinglib.api.client.Easing;
+import com.mega.endinglib.util.time.TimeContext;
+import com.mega.endinglib.util.time.TimeStopUtils;
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.api.client.Easing;
 import com.mega.revelationfix.client.RendererUtils;
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;
 import com.mega.revelationfix.common.config.ClientConfig;
-import com.mega.revelationfix.util.time.TimeContext;
-import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;

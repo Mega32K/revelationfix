@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.ironspellbooks.goety_revelation;
 
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import net.minecraft.world.entity.player.Player;

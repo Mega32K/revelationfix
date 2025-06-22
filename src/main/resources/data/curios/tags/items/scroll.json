@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "goety_revelation:blessing_scroll"
+    {
+      "id" : "goety_revelation:blessing_scroll",
+      "required" : false
+    }
   ]
 }

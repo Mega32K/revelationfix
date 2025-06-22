@@ -1,6 +1,5 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.api.event.render.ItemRendererEvent;
 import com.mega.revelationfix.common.event.handler.ClientEventHandler;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -56,16 +55,5 @@ public class ItemRendererMixin {
             return ClientEventHandler.randomPuzzleDisplayItem.getDefaultInstance();
         }
         return stack;
-    }
-    @Inject(method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderModelLists(Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/item/ItemStack;IILcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V",
-                    shift = At.Shift.BEFORE
-            ),
-            locals = LocalCapture.CAPTURE_FAILHARD
-    )
-    private void render(ItemStack p_115144_, ItemDisplayContext p_270188_, boolean p_115146_, PoseStack p_115147_, MultiBufferSource p_115148_, int p_115149_, int p_115150_, BakedModel p_115151_, CallbackInfo ci, boolean flag, boolean flag1, Iterator var11, BakedModel model, Iterator var13, RenderType rendertype, VertexConsumer vertexconsumer) {
-        MinecraftForge.EVENT_BUS.post(new ItemRendererEvent.RenderModelListEvent(p_115144_, p_115147_, minecraft.getPartialTick(), p_270188_, vertexconsumer, model, p_115149_, p_115150_));
     }
 }

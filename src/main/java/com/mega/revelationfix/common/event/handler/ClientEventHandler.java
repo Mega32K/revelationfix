@@ -2,14 +2,10 @@ package com.mega.revelationfix.common.event.handler;
 
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.api.event.render.ItemRendererEvent;
 import com.mega.revelationfix.api.event.render.RenderTooltipPostEvent;
 import com.mega.revelationfix.api.item.ICenterDescItem;
-import com.mega.revelationfix.api.item.IDragonLightRendererItem;
 import com.mega.revelationfix.client.RendererUtils;
 import com.mega.revelationfix.client.font.OdamaneFont;
-import com.mega.revelationfix.client.renderer.item.Dragon2DLightRenderer;
-import com.mega.revelationfix.client.renderer.item.ItemRendererContext;
 import com.mega.revelationfix.client.spell.SpellClientContext;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
@@ -23,7 +19,6 @@ import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import com.mega.revelationfix.util.entity.ATAHelper2;
-import com.mega.revelationfix.util.time.TimeStopUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Either;
@@ -384,43 +379,12 @@ public class ClientEventHandler {
             }
         }
     }
-
-    @SubscribeEvent
-    public static void disableMouseEventWhenTimeStopping(ScreenEvent.MouseButtonPressed.Pre event) {
-        if (SafeClass.isFantasyEndingLoaded()) return;
-        Minecraft mc = Minecraft.getInstance();
-        if (TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension && (mc.player != null && (!TimeStopUtils.canMove(mc.player)))) {
-            if (!(mc.screen instanceof DeathScreen))
-                event.setCanceled(true);
-        }
-    }
     @SubscribeEvent
     public static void renderSpellCircle(RenderPlayerEvent event) {
         if (SafeClass.isYSMLoaded()) return;
         Minecraft mc = Minecraft.getInstance();
         if (SpellClientContext.circle != null) {
             SpellClientContext.circle.render(event.getPartialTick(), event.getPoseStack());
-        }
-    }
-    @SubscribeEvent
-    public static void drawDragonLightItemRenderer(ItemRendererEvent.RenderModelListEvent event) {
-        ItemStack itemStack = event.getItemStack();
-        ItemDisplayContext displayContext = event.getItemDisplayContext();
-        if (displayContext == ItemDisplayContext.GUI) {
-            if (itemStack.getItem() instanceof IDragonLightRendererItem rendererItem) {
-                ItemRendererContext.TRACKED_COUNT++;
-                float time = ItemRendererContext.getTrackerTime(event.getPartialTicks());
-
-                MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-                PoseStack poseStack = event.getPoseStack();
-                RenderSystem.disableDepthTest();
-                //RenderSystem.enableDepthTest();
-                poseStack.pushPose();
-                poseStack.translate(0.5F, 0.5F, 0.5F);
-                Dragon2DLightRenderer.render(event.getPoseStack(), bufferSource, Vec2.ZERO, 4F, time, rendererItem.dragonRendererStartColor(itemStack), rendererItem.dragonRendererEndColor(itemStack));
-                poseStack.popPose();
-                RenderSystem.enableDepthTest();
-            }
         }
     }
 }

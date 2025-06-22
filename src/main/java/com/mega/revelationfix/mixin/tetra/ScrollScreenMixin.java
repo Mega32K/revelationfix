@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.tetra;
 
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.safe.mixinpart.tetra.ScrollScreenData;
 import com.mega.revelationfix.safe.mixinpart.tetra.ScrollScreenEC;
 import net.minecraft.client.gui.screens.Screen;

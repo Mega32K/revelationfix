@@ -3,10 +3,10 @@ package com.mega.revelationfix.client.model.entity;// Made with Blockbench 4.12.
 // Paste this class into your mod and generate all required imports
 
 
-import com.mega.revelationfix.api.client.Easing;
 import com.mega.revelationfix.client.renderer.MegaRenderType;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.entity.binding.TeleportEntity;
+import com.mega.endinglib.api.client.Easing;
 import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

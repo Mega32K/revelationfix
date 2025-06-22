@@ -10,8 +10,6 @@ import com.mega.revelationfix.proxy.CommonProxy;
 import com.mega.revelationfix.proxy.ModProxy;
 import com.mega.revelationfix.proxy.ServerProxy;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
-import com.mega.revelationfix.util.time.TimeContext;
-import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
@@ -72,19 +70,6 @@ public class Revelationfix {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, MODID + "/" + MODID + "-client.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
 
-        if (!SafeClass.isFantasyEndingLoaded()) {
-            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-                Timer timer = new Timer(true);
-                TimerTask task = new TimerTask() {
-                    public void run() {
-                        if (!TimeStopUtils.isTimeStop) {
-                            ++TimeContext.Both.timeStopModifyMillis;
-                        }
-                    }
-                };
-                timer.scheduleAtFixedRate(task, 1L, 1L);
-            });
-        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

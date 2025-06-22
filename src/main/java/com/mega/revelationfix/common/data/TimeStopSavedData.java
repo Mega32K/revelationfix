@@ -45,7 +45,7 @@ public class TimeStopSavedData extends SavedData {
     }
 
     public static TimeStopSavedData readOrCreate(MinecraftServer server) {
-        TimeStopSavedData data = server.overworld().getDataStorage().computeIfAbsent(TimeStopSavedData::create, TimeStopSavedData::new, "time_stop_saved_data");
+        TimeStopSavedData data = server.overworld().getDataStorage().computeIfAbsent(TimeStopSavedData::create, TimeStopSavedData::new, "goety-revelation-misc-data");
         data.server = server;
         return data;
     }

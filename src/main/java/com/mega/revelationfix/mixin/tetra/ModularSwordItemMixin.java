@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.tetra;
 
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.common.compat.tetra.effect.FadingEffect;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;

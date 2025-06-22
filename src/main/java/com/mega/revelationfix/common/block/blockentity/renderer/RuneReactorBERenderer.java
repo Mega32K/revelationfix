@@ -1,9 +1,9 @@
 package com.mega.revelationfix.common.block.blockentity.renderer;
-
-import com.mega.revelationfix.api.client.Easing;
+ 
 import com.mega.revelationfix.common.block.RuneReactorBlock;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.compat.SafeClass;
+import com.mega.endinglib.api.client.Easing;
 import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

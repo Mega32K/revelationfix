@@ -1,10 +1,10 @@
 package com.mega.revelationfix.mixin.ironspellbooks.goety_revelation;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.common.item.armor.BaseArmorItem;
 import com.mega.revelationfix.common.item.armor.SpiderArmor;
 import com.mega.revelationfix.common.item.armor.SpiderDarkmageArmor;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;

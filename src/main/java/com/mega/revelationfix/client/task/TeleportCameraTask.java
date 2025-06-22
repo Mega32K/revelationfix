@@ -1,7 +1,7 @@
 package com.mega.revelationfix.client.task;
 
 import com.Polarice3.Goety.common.entities.hostile.WebSpider;
-import com.mega.revelationfix.api.client.ClientTaskInstance;
+import com.mega.endinglib.api.client.ClientTaskInstance;
 import com.mega.revelationfix.client.screen.post.custom.BarrelDistortionCoordinatesPostEffect;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;

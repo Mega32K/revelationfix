@@ -1,6 +1,5 @@
 package com.mega.revelationfix.mixin.gr;
 
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +12,6 @@ import z1gned.goetyrevelation.ModMain;
 import z1gned.goetyrevelation.client.render.WitherServantRenderer;
 
 @Mixin(WitherServantRenderer.class)
-@ModDependsMixin("com.mega.revelationfix.mixin.gr")
 public class WitherServantRendererMixin {
     @Mutable
     @Shadow(remap = false)

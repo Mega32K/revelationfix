@@ -15,7 +15,6 @@ import com.mega.revelationfix.mixin.goety.SEHelperMixin;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.mixinpart.goety.SpellStatEC;
 import com.mega.revelationfix.util.entity.ATAHelper2;
-import com.mega.revelationfix.util.time.TimeContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -33,9 +32,6 @@ import z1gned.goetyrevelation.util.ATAHelper;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
 public class EventUtil {
-    public static long getMillis() {
-        return TimeContext.Both.timeStopModifyMillis;
-    }
     public static int getLevels(Enchantment enchantment, LivingEntity livingEntity, int srcLevel) {
         if (enchantment == ModEnchantments.POTENCY.get()) {
             MobEffectInstance effect = livingEntity.getEffect(ModEffects.COUNTERSPELL.get());

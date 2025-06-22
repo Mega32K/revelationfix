@@ -1,11 +1,10 @@
 package com.mega.revelationfix.common.item.armor;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.mega.endinglib.api.item.IDragonLightRendererItem;
 import com.mega.revelationfix.api.item.IDamageLimitItem;
-import com.mega.revelationfix.api.item.IDragonLightRendererItem;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.init.ModAttributes;
-import com.mega.revelationfix.common.item.tool.wand.FrostbloomStaff;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

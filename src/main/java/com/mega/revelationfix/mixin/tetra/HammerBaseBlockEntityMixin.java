@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.tetra;
 
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.safe.mixinpart.tetra.HammerBaseEntityEC;
 import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,6 +1,7 @@
 package com.mega.revelationfix.mixin.fantasy_ending;
 
-import com.mega.uom.item.egg.UomSpawnEgg;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
+import com.mega.uom.common.items.egg.UomSpawnEgg;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import java.util.function.Supplier;
 
 @Mixin(UomSpawnEgg.class)
+@ModDependsMixin("fantasy_ending")
 public abstract class UomSpawnEggMixin extends ForgeSpawnEggItem {
     UomSpawnEggMixin(Supplier<? extends EntityType<? extends Mob>> type, int backgroundColor, int highlightColor, Properties props) {
         super(type, backgroundColor, highlightColor, props);

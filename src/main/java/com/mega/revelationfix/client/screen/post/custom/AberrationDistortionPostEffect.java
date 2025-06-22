@@ -1,12 +1,12 @@
 package com.mega.revelationfix.client.screen.post.custom;
 
 import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
-import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.api.client.Easing;
+import com.mega.revelationfix.Revelationfix; 
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;
 import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
 import com.mega.revelationfix.safe.level.ClientLevelInterface;
+import com.mega.endinglib.api.client.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;

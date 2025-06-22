@@ -1,19 +1,17 @@
 package com.mega.revelationfix.mixin.oculus.xenon;
 
-import com.mega.revelationfix.safe.mixinpart.DevEnvMixin;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
+import com.mega.endinglib.util.annotation.DeprecatedMixin;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@ModDependsMixin("xenon")
-@DevEnvMixin
 @Mixin(SodiumClientMod.class)
+@DeprecatedMixin
+@ModDependsMixin("xenon")
 public abstract class SodiumClientModFixMixin {
     @Shadow(remap = false)
     private static void updateFingerprint() {

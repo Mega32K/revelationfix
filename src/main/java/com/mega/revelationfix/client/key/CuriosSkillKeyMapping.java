@@ -1,6 +1,6 @@
 package com.mega.revelationfix.client.key;
 
-import com.mega.revelationfix.api.client.ClientTaskInstance;
+import com.mega.endinglib.api.client.ClientTaskInstance;
 import com.mega.revelationfix.client.screen.post.custom.BarrelDistortionCoordinatesPostEffect;
 import com.mega.revelationfix.client.task.TeleportCameraTask;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;

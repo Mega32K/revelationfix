@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin.curios;
 
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.init.GRItems;
@@ -13,6 +14,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.mixin.CuriosImplMixinHooks;
 
 @Mixin(value = CuriosImplMixinHooks.class, priority = 0, remap = false)
+@ModDependsMixin("curios")
 public class CuriosImplMixinHooksMixin {
     @Inject(method = "isStackValid", at = @At("HEAD"), cancellable = true)
     private static void isStackValid(SlotContext slotContext, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {

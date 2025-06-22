@@ -1,32 +1,27 @@
 package com.mega.revelationfix.common.event.handler;
 
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
-import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.common.config.ItemConfig;
+import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
+import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.data.TimeStopSavedData;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
-import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModAttributes;
-import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.item.curios.TheNeedleItem;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.c2s.TheEndDeathPacket;
 import com.mega.revelationfix.common.network.s2c.TheEndPuzzleUpdatePacket;
-import com.mega.revelationfix.common.network.s2c.timestop.TimeStopSkillPacket;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
-import com.mega.revelationfix.safe.*;
+import com.mega.revelationfix.safe.GRSavedDataEC;
+import com.mega.revelationfix.safe.GRSavedDataExpandedContext;
+import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.entity.LivingEventEC;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
-import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
-import com.mega.revelationfix.util.time.TimeStopEntityData;
-import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,11 +40,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -262,150 +255,6 @@ public class CommonEventHandler {
 
     static boolean isValid(ResourceLocation resourceLocation) {
         return resourceLocation != null && !resourceLocation.getPath().isEmpty();
-    }
-
-
-
-
-
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-    public static class TimeStopEvents {
-        static boolean cannotMove(PlayerInteractEvent event) {
-            return TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(event.getLevel()) && !TimeStopUtils.canMove(event.getEntity());
-        }
-
-        @SubscribeEvent
-        public static void disablePlayerInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (cannotMove(event))
-                event.setCanceled(true);
-        }
-
-        @SubscribeEvent
-        public static void disablePlayerInteract(PlayerInteractEvent.EntityInteract event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (cannotMove(event))
-                event.setCanceled(true);
-        }
-
-        @SubscribeEvent
-        public static void disablePlayerInteract(PlayerInteractEvent.RightClickBlock event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (cannotMove(event))
-                event.setCanceled(true);
-        }
-
-        @SubscribeEvent
-        public static void disablePlayerInteract(PlayerInteractEvent.RightClickItem event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (cannotMove(event))
-                event.setCanceled(true);
-        }
-
-        @SubscribeEvent
-        public static void disablePlayerInteract(PlayerInteractEvent.LeftClickBlock event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (cannotMove(event))
-                event.setCanceled(true);
-        }
-
-        @SubscribeEvent
-        //only server
-        public static void dimensionChangeEvent(EntityTravelToDimensionEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (event.getEntity() instanceof Player player) {
-                if (TimeStopUtils.isTimeStop) {
-                    ResourceKey<Level> travellingTo = event.getDimension();
-                    if (!player.level.isClientSide) {
-                        if (travellingTo != null && !travellingTo.location().equals(player.level.dimension().location())) {
-                            TimeStopEntityData.setTimeStopCount(player, 0);
-                            TimeStopUtils.use(false, player);
-                        }
-                    }
-                }
-            }
-        }
-
-        @SubscribeEvent
-        public static void disableTimeStop2(LivingDeathEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (event.getEntity() instanceof Player player && event.getPhase() == EventPriority.LOWEST) {
-                if (TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(player.level())) {
-                    Level level = player.level();
-                    if (!level.isClientSide) {
-                        TimeStopUtils.use(false, player);
-                    }
-                }
-            }
-        }
-
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static void hurtTime0(LivingHurtEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(event.getEntity().level()) && !(event.getEntity() instanceof Player)) {
-                event.getEntity().invulnerableTime = 0;
-            }
-        }
-
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static void hurtTime0(LivingDamageEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(event.getEntity().level()) && !(event.getEntity() instanceof Player)) {
-                event.getEntity().invulnerableTime = 0;
-            }
-        }
-
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static void hurtTime0(LivingAttackEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(event.getEntity().level()) && !(event.getEntity() instanceof Player)) {
-                event.getEntity().invulnerableTime = 0;
-            }
-        }
-
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public static void attack(AttackEntityEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            Level level = event.getEntity().level;
-            if (TimeStopUtils.isTimeStop && !TimeStopUtils.canMove(event.getEntity()) && TimeStopUtils.andSameDimension(level)) {
-                event.setCanceled(true);
-            }
-        }
-
-        @SubscribeEvent
-        public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(event.getEntity().level)) {
-                try {
-                    TimeStopEntityData.setTimeStopCount(event.getEntity(), 0);
-                    PacketHandler.sendToPlayer((ServerPlayer) event.getEntity(), new TimeStopSkillPacket(false, event.getEntity().getUUID()));
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-            }
-        }
-
-        @SubscribeEvent
-        public static void onPlayerLeave(PlayerEvent.PlayerLoggedInEvent event) {
-            if (SafeClass.isFantasyEndingLoaded()) return;
-            if (TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(event.getEntity().level)) {
-                try {
-                    PacketHandler.sendToPlayer((ServerPlayer) event.getEntity(), new TimeStopSkillPacket(true, event.getEntity().getUUID()));
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-            }
-        }
-
-        @SubscribeEvent
-        public static void eternalWatchFinalAttack(LivingDamageEvent event) {
-            if (event.getSource().getEntity() instanceof ServerPlayer player && ATAHelper2.hasEternalWatch(player)) {
-                if (SafeClass.getTimeStopCount(player) > 1) {
-                    SafeClass.enableTimeStop(player, false);
-                    event.setAmount(event.getAmount() + event.getEntity().getMaxHealth() * (float) ItemConfig.ewFinalAttackPercentage);
-                }
-            }
-        }
     }
 
     @Mod.EventBusSubscriber

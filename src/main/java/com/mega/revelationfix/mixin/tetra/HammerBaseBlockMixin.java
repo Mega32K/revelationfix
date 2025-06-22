@@ -1,8 +1,8 @@
 package com.mega.revelationfix.mixin.tetra;
 
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.common.advancement.ModCriteriaTriggers;
 import com.mega.revelationfix.common.compat.tetra.hammer.DarkIngotHammerContext;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import com.mega.revelationfix.safe.mixinpart.tetra.HammerBaseEntityEC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

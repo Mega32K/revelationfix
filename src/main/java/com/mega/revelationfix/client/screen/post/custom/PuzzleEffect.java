@@ -1,13 +1,13 @@
 package com.mega.revelationfix.client.screen.post.custom;
 
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.client.MyGuiGraphics;
-import com.mega.revelationfix.api.client.Easing;
+import com.mega.revelationfix.client.MyGuiGraphics; 
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
+import com.mega.endinglib.api.client.Easing;
 import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;

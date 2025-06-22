@@ -2,6 +2,7 @@ package com.mega.revelationfix.mixin.enigmaticlegacy;
 
 import com.aizistral.enigmaticlegacy.items.CursedScroll;
 import com.aizistral.enigmaticlegacy.items.generic.ItemBaseCurio;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.curios.api.SlotContext;
 
 @Mixin(CursedScroll.class)
+@ModDependsMixin("enigmaticlegacy")
 public abstract class CursedScrollMixin extends ItemBaseCurio {
     @Inject(method = "canEquip", at = @At("HEAD"), cancellable = true, remap = false)
     private void canEquip(SlotContext context, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {

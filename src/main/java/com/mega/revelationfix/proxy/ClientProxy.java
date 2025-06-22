@@ -23,7 +23,6 @@ import com.mega.revelationfix.common.odamane.client.OdamaneHaloLayer;
 import com.mega.revelationfix.common.odamane.client.OdamaneHaloModel;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
-import com.mega.revelationfix.util.time.TimeContext;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -145,21 +144,6 @@ public class ClientProxy implements ModProxy {
                     -> livingEntity != null ? itemStack.getOrCreateTag().getInt("fragment") : 0);
             copyOldArtIfMissing();
         });
-        if (!SafeClass.isFantasyEndingLoaded())
-            event.enqueueWork(() -> {
-                Minecraft mc = Minecraft.getInstance();
-                Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-                    if (TimeContext.Client.timeStopGLFW == 0L)
-                        TimeContext.Client.timeStopGLFW = (long) (GLFW.glfwGetTime() * 1000L);
-
-                    if (!SafeClass.isClientTimeStop()) {
-                        ++TimeContext.Both.timeStopModifyMillis;
-
-                        if (!mc.isPaused()) TimeContext.Client.timeStopGLFW++;
-                    }
-                    TimeContext.Client.count = 0;
-                }, 0L, 1L, TimeUnit.MILLISECONDS);
-            });
     }
     public void registerKeys(RegisterKeyMappingsEvent evt) {
         evt.register(CuriosSkillKeyMapping.ACTIVE_SKILL);

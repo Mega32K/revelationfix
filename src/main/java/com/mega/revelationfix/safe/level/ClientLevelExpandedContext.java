@@ -3,9 +3,9 @@ package com.mega.revelationfix.safe.level;
 import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.mega.endinglib.util.time.TimeStopUtils;
 import com.mega.revelationfix.client.RendererUtils;
 import com.mega.revelationfix.common.config.ClientConfig;
-import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -37,9 +37,6 @@ public class ClientLevelExpandedContext extends LevelExpandedContext {
     public ResourceLocation TE_END_CRAFT;
     public BlockPos teEndRitualBE;
     public boolean teEndRitualRunning;
-    //当前玩家所在的维度
-    //如果时停 为非空，否则 null
-    public ResourceKey<Level> currentTimeStopDimension = null;
 
     public ClientLevelExpandedContext(ClientLevel clientLevel) {
         super(clientLevel);
@@ -51,10 +48,6 @@ public class ClientLevelExpandedContext extends LevelExpandedContext {
         if (level != null) {
             return ((ClientLevelInterface) level).revelationfix$ECData();
         } else throw new RuntimeException(new NullPointerException("ClientLevel is Null"));
-    }
-
-    public boolean isCurrentTS() {
-        return currentTimeStopDimension != null;
     }
 
     public void tick(TickEvent.Phase phase) {
@@ -106,12 +99,6 @@ public class ClientLevelExpandedContext extends LevelExpandedContext {
 
     @Override
     public void tickHead(BooleanSupplier booleanSupplier, CallbackInfo ci) {
-        if (TimeStopUtils.isTimeStop) {
-            RendererUtils.isTimeStop_andSameDimension = TimeStopUtils.andSameDimension(level);
-            if (RendererUtils.isTimeStop_andSameDimension) {
-                ci.cancel();
-            }
-        } else RendererUtils.isTimeStop_andSameDimension = false;
     }
 
     public boolean isNetherScarletRaining() {

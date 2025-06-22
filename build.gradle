@@ -141,9 +141,9 @@ repositories {
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-    // flatDir {
-    //     dir 'libs'
-    // }
+    flatDir {
+        dir 'libs'
+    }
     maven {
         url "https://cursemaven.com"
         content {
@@ -183,7 +183,7 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-    implementation fileTree("libs")
+    implementation fileTree(".libs")
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
         jarJar.ranged(it, "[0.4.1,)")
@@ -218,11 +218,10 @@ dependencies {
     implementation fg.deobf("curse.maven:SoulFire-662413:6248077")
     implementation fg.deobf("curse.maven:Cobweb-968456:6089406")
 
-    /*
-    implementation fg.deobf("curse.maven:KubeJS-238086:5853326")
-    implementation fg.deobf("curse.maven:Rhino-416294:6186971")
+    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.1"))  {
+        jarJar.ranged(it, "[1.1,)")
+    }
 
-     */ 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("maven.modrinth:tetraclip:1.0.5")
 }

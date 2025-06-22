@@ -24,10 +24,5 @@
     "sounds": [
       "revelationfix:star_arrow_cast"
     ]
-  },
-  "time_stop": {
-    "sounds" : [
-      "revelationfix:stop"
-    ]
   }
 }

@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
-import com.mega.revelationfix.safe.mixinpart.NoModDependsMixin;
+import com.mega.tetraclip.util.NoModDependsMixin;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
@@ -16,10 +16,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Collection;
-import java.util.List;
 
 @Mixin(value = Ingredient.TagValue.class, priority = 600)
 @NoModDependsMixin("modernfix")

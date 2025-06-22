@@ -1,18 +1,16 @@
 package com.mega.revelationfix.util;
 
+import com.mega.endinglib.coremod.forge.IClassProcessor;
+import com.mega.endinglib.util.mixin.ApplyCheckMixinConfigPlugin;
 import com.mega.revelationfix.util.asm.GoetyClassNodeProcessor;
-import com.mega.revelationfix.util.asm.IClassNodeProcessor;
-import com.mega.revelationfix.util.asm.MillisTimeRedirector;
 import cpw.mods.modlauncher.LaunchPluginHandler;
 import cpw.mods.modlauncher.Launcher;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
-import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import org.spongepowered.asm.service.MixinService;
 
@@ -20,7 +18,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
+public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
     public static final Set<String> toRemovedMixins = Collections.synchronizedSet(new HashSet<>());
     public static final Set<String> handCheckMixins = Collections.synchronizedSet(new HashSet<>());
     private static final String ISPELL_CLASS = "com/Polarice3/Goety/api/magic/ISpell";
@@ -32,8 +30,7 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
     private static final String EVENT_UTIL_CLASS = "com/mega/revelationfix/util/EventUtil";
     public static boolean USE_FIX_MIXIN = true;
     public static Logger LOGGER = LogManager.getLogger("RevelationFix");
-    public static IClassNodeProcessor GOETY_PROCESSOR = GoetyClassNodeProcessor.INSTANCE;
-    public static IClassNodeProcessor TIME_PROCESSOR = MillisTimeRedirector.INSTANCE;
+    public static IClassProcessor GOETY_PROCESSOR = GoetyClassNodeProcessor.INSTANCE;
     static {
         handCheckMixins.add(ABSTRACT_SPELL_MIXIN);
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ApostleMixin");
@@ -87,8 +84,7 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                         String name = classNode.name;
                         AtomicBoolean shouldWrite = new AtomicBoolean(false);
                         if (phase == Phase.BEFORE) {
-                            GOETY_PROCESSOR.transform(name, classNode, classType, shouldWrite);
-                            TIME_PROCESSOR.transform(name, classNode, classType, shouldWrite);
+                            GOETY_PROCESSOR.processClass(Phase.BEFORE, classNode, classType, shouldWrite);
                             if (name.equals(MOB_EFFECT_EVENT$EXPIRED)) {
                                 classNode.visitAnnotation("Lnet/minecraftforge/eventbus/api/Cancelable;", true);
                                 shouldWrite.set(true);
@@ -109,13 +105,6 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
                                         clearMixinClass(classNode);
                                         toRemovedMixins.remove(name);
                                         LOGGER.debug("Removed MixinClass :" + name);
-                                    /*
-                                    if (toRemovedMixins.isEmpty()) {
-                                        synchronized (plugins) {
-                                            plugins.remove("RevelationFixPlugin");
-                                        }
-                                    }
-                                     */
                                         shouldWrite.set(true);
                                     }
                                 }
@@ -154,43 +143,6 @@ public class RevelationFixMixinPlugin implements IMixinConfigPlugin {
     public String getRefMapperConfig() {
         return null;
     }
-
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        LOGGER.debug("Added RF MixinClass :" + mixinClassName);
-        ClassNode node;
-        try {
-            node = MixinService.getService().getBytecodeProvider().getClassNode(mixinClassName);
-        } catch (Exception var9) {
-            return false;
-        }
-        if (!handCheckMixins.isEmpty()) {
-            if (mixinClassName.equals(ABSTRACT_SPELL_MIXIN)) {
-                if (EarlyConfig.modIds.contains("fantasy_ending"))
-                    return false;
-                else return EarlyConfig.modIds.contains("irons_spellbooks");
-            }
-        }
-        List<AnnotationNode> annotationNodes = new ArrayList<>(node.invisibleAnnotations);
-        for (AnnotationNode annotationNode : annotationNodes) {
-            if (annotationNode.desc.equals("com/mega/revelationfix/safe/mixinpart/DeprecatedMixin;"))
-                return false;
-            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/NonDevEnvMixin;") && MCMapping.isWorkingspaceMode())
-                return false;
-            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/DevEnvMixin;") && !MCMapping.isWorkingspaceMode())
-                return false;
-            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/ModDependsMixin;")) {
-                //0-> value 1-> modid
-                return EarlyConfig.modIds.contains((String) annotationNode.values.get(1));
-            }
-            if (annotationNode.desc.equals("Lcom/mega/revelationfix/safe/mixinpart/NoModDependsMixin;")) {
-                //0-> value 1-> modid
-                return !EarlyConfig.modIds.contains((String) annotationNode.values.get(1));
-            }
-        }
-        return true;
-    }
-
     @Override
     public void acceptTargets(Set<String> set, Set<String> set1) {
 

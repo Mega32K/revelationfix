@@ -4,14 +4,14 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.cultists.Heretic;
 import com.Polarice3.Goety.common.entities.hostile.cultists.SpellCastingCultist;
 import com.Polarice3.Goety.common.entities.neutral.AbstractNecromancer;
-import com.mega.revelationfix.client.RendererUtils;
+import com.mega.endinglib.client.RendererUtils;
+import com.mega.endinglib.util.time.TimeStopEntityData;
+import com.mega.endinglib.util.time.TimeStopUtils;
 import com.mega.revelationfix.common.compat.fantasy_ending.FeSafeClass;
 import com.mega.revelationfix.common.compat.ironspell.IronSpellbooksSafeClass;
 import com.mega.revelationfix.common.compat.tetra.TetraWrapped;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
 import com.mega.revelationfix.util.EarlyConfig;
-import com.mega.revelationfix.util.time.TimeStopEntityData;
-import com.mega.revelationfix.util.time.TimeStopUtils;
 import net.irisshaders.iris.api.v0.IrisApi;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -155,44 +155,26 @@ public class SafeClass {
     }
 
     public static void enableTimeStop(LivingEntity srcE, boolean z, int ticks) {
-        if (isFantasyEndingLoaded()) {
-            FeSafeClass.use(z, srcE, true, ticks);
-        } else TimeStopUtils.use(z, srcE, true, ticks);
+        TimeStopUtils.use(z, srcE, true, ticks);
     }
 
     public static void enableTimeStop(LivingEntity srcE, boolean z) {
-        if (isFantasyEndingLoaded()) {
-            FeSafeClass.use(z, srcE, true, 180);
-        } else {
-            TimeStopEntityData.setTimeStopCount(srcE, !z ? 0 : 300);
-            TimeStopUtils.use(z, srcE);
-        }
+        TimeStopEntityData.setTimeStopCount(srcE, !z ? 0 : 300);
+        TimeStopUtils.use(z, srcE);
     }
 
     public static int getTimeStopCount(LivingEntity living) {
-        return isFantasyEndingLoaded() ? FeSafeClass.getTimeStopCount(living) : TimeStopEntityData.getTimeStopCount(living);
+        return TimeStopEntityData.getTimeStopCount(living);
     }
 
     public static boolean isClientTimeStop() {
-        if (isFantasyEndingLoaded()) {
-            return FeSafeClass.isClientTimeStop();
-        } else {
-            return TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension;
-        }
+        return TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension;
     }
     public static boolean isTimeStop(ServerLevel serverLevel) {
-        if (isFantasyEndingLoaded()) {
-            return FeSafeClass.isFieldTimeStop();
-        } else {
-            return TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(serverLevel);
-        }
+        return TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(serverLevel);
     }
     public static boolean isFieldTimeStop() {
-        if (isFantasyEndingLoaded()) {
-            return FeSafeClass.isFieldTimeStop();
-        } else {
-            return TimeStopUtils.isTimeStop;
-        }
+        return TimeStopUtils.isTimeStop;
     }
 
     public static ItemStack setupSchematics(String key, String details, String[] schematics, boolean isIntricate, int material, int tint, Integer... glyphs) {

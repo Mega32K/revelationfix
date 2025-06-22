@@ -1,7 +1,6 @@
 package com.mega.revelationfix.mixin.ironspellbooks;
 
-import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.util.LivingEntityEC;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.SpellData;

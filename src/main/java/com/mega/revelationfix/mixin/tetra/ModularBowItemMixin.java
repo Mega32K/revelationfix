@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin.tetra;
 
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

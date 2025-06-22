@@ -1,11 +1,10 @@
 package com.mega.revelationfix.mixin.ironspellbooks.goety_revelation;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.mega.revelationfix.api.item.IExtraAttributesInjector;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.revelationfix.common.item.armor.BaseArmorItem;
 import com.mega.revelationfix.common.item.armor.SpectreArmor;
 import com.mega.revelationfix.common.item.armor.SpectreDarkmageArmor;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 

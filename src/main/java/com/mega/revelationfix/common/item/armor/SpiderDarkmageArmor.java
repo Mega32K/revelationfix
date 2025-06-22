@@ -1,8 +1,8 @@
 package com.mega.revelationfix.common.item.armor;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.mega.endinglib.api.item.IDragonLightRendererItem;
 import com.mega.revelationfix.api.item.IDamageLimitItem;
-import com.mega.revelationfix.api.item.IDragonLightRendererItem;
 import com.mega.revelationfix.client.model.entity.SpiderDarkmageArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;

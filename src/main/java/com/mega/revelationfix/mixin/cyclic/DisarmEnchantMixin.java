@@ -2,7 +2,7 @@ package com.mega.revelationfix.mixin.cyclic;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.lothrazar.cyclic.enchant.DisarmEnchant;
-import com.mega.revelationfix.safe.mixinpart.ModDependsMixin;
+import com.mega.endinglib.util.annotation.ModDependsMixin;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
