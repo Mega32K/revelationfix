@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin;
 
+import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.event.entity.StandOnFluidEvent;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
@@ -83,7 +84,7 @@ public class EntityMixin {
     @Inject(method = "dampensVibrations", at = @At("HEAD"), cancellable = true)
     private void dampensVibrations(CallbackInfoReturnable<Boolean> cir) {
         if ((Object) this instanceof Player player)
-            if (ArmorEvents.findBoots(player, ModArmorMaterials.SPECTRE) || ArmorEvents.findBoots(player, ModArmorMaterials.SPECTRE_DARKMAGE))
+            if (ArmorUtils.findBoots(player, ModArmorMaterials.SPECTRE) || ArmorUtils.findBoots(player, ModArmorMaterials.SPECTRE_DARKMAGE))
                 cir.setReturnValue(true);
     }
 }

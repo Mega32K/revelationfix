@@ -5,7 +5,12 @@ import com.mega.revelationfix.common.init.ModStructurePlacementTypes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
@@ -20,8 +25,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChurchPlacement extends StructurePlacement {
-    public static final Map<Integer, Vector2i> map = Util.make(() -> {
-        ImmutableMap.Builder<Integer, Vector2i> temp = new ImmutableMap.Builder<>();
+    public static final Int2ObjectMap<Vector2i> map = Util.make(() -> {
+        Int2ObjectOpenHashMap<Vector2i> temp = new Int2ObjectOpenHashMap<>();
         temp.put(41, new Vector2i(41));
         temp.put(416, new Vector2i(416, -417));
         temp.put(-417, new Vector2i(416, -417));
@@ -29,7 +34,7 @@ public class ChurchPlacement extends StructurePlacement {
         temp.put(-4163, new Vector2i(4162, -4163));
         temp.put(41625, new Vector2i(41625, -41625));
         temp.put(-41625, new Vector2i(41625, -41625));
-        return temp.build();
+        return Int2ObjectMaps.unmodifiable(temp);
     });
     public static final Codec<ChurchPlacement> CODEC = ExtraCodecs.validate(RecordCodecBuilder.mapCodec((p_204996_) -> {
         return placementCodec(p_204996_).apply(p_204996_, ChurchPlacement::new);
@@ -61,5 +66,18 @@ public class ChurchPlacement extends StructurePlacement {
 
     public StructurePlacementType<?> type() {
         return ModStructurePlacementTypes.CHURCH.get();
+    }
+    public static boolean mayInChurch(BlockPos blockPos) {
+        int i = blockPos.getX() >> 4;
+        int j = blockPos.getZ() >> 4;
+        for (var entry : map.int2ObjectEntrySet()) {
+            if (Math.abs(entry.getIntKey() - i) < 4) {
+                Vector2i v = entry.getValue();
+                if (Math.abs(v.x - j) < 4 || Math.abs(v.y - j) < 4) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

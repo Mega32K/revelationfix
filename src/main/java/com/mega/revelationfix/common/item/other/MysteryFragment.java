@@ -1,6 +1,5 @@
 package com.mega.revelationfix.common.item.other;
 
-import com.mega.revelationfix.api.item.IInvulnerableItem;
 import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class MysteryFragment extends PuzzleItem implements IInvulnerableItem, IJEIInvisibleRitualResult {
+public class MysteryFragment extends PuzzleItem implements IJEIInvisibleRitualResult {
     public static final String TYPE = "mysteryType";
 
     public MysteryFragment(Properties p_41383_) {

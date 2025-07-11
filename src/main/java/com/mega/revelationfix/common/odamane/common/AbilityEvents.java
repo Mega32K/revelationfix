@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.odamane.common;
 
+import com.mega.endinglib.util.time.TimeStopEntityData;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.init.GRItems;
@@ -87,7 +88,8 @@ public class AbilityEvents {
                 else if (event.getSource().is(DamageTypeTags.IS_PROJECTILE) || event.getSource().getEntity() instanceof Projectile || event.getSource().getDirectEntity() instanceof Projectile)
                     event.setAmount(event.getAmount() * (1.0F - OdamanePlayerExpandedContext.PROJECTILE_DAMAGE_REDUCE));
                 //维度意志玩家减伤
-            } else if (ATAHelper2.hasDimensionalWill(player)) {
+            }
+            if (ATAHelper2.hasDimensionalWill(player)) {
                 event.setAmount(event.getAmount() * (100 - ItemConfig.dwResistance) / 100.0F);
             }
         }
@@ -130,6 +132,16 @@ public class AbilityEvents {
                     player.level.broadcastEntityEvent(player, OdamanePlayerExpandedContext.REVIVE_EVENT);
                 }
             }
+        }
+    }
+    /**
+     * 时停表的固定伤害
+     */
+    @SubscribeEvent
+    public static void eternalWatchDamage(LivingDamageEvent event) {
+        if (event.getSource().getEntity() instanceof LivingEntity living && ATAHelper2.hasEternalWatch(living) && TimeStopEntityData.getTimeStopCount(living) > 1) {
+            event.setAmount(event.getAmount() + 10.0F);
+            TimeStopEntityData.setTimeStopCount(living, 1);
         }
     }
 }

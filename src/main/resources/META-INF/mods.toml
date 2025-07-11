@@ -68,8 +68,20 @@ side = "BOTH"# Here's another dependency
     ordering="BEFORE"
     side="BOTH"
 [[dependencies."${mod_id}"]]
+    modId="ending_library"
+    mandatory=true
+    versionRange="[1.2.9,)"
+    ordering="BEFORE"
+    side="BOTH"
+[[dependencies."${mod_id}"]]
     modId="tetra"
     mandatory=false
     versionRange="[6.3.0,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies."${mod_id}"]]
+    modId="fantasy_ending"
+    mandatory=false
+    versionRange="[2.7.19,)"
     ordering="AFTER"
     side="BOTH"

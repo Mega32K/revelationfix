@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.crafting.RitualRecipe;
 import com.Polarice3.Goety.common.items.equipment.HammerItem;
 import com.Polarice3.Goety.compat.jei.ModRitualCategory;
 import com.mega.revelationfix.common.compat.Wrapped;
+import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredient;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
@@ -36,7 +37,7 @@ public class ModRitualCategoryMixin {
             return false;
         if (resultItem.getItem() instanceof IJEIInvisibleRitualResult itf && itf.isInvisibleInJEI(resultItem))
             return true;
-        else return (resultItem.is(GRItems.THE_END_CRAFTING));
+        else return TheEndCraftingIngredient.INSTANCE.test(resultItem);
     }
 
     @Inject(method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/Polarice3/Goety/common/crafting/RitualRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V", at = @At("HEAD"), cancellable = true)
@@ -60,7 +61,7 @@ public class ModRitualCategoryMixin {
     private void getTypeIcon(RitualRecipe recipe, CallbackInfoReturnable<ItemStack> cir) {
         String craftType = recipe.getCraftType();
         for (var entry : RitualDataManager.getRegistries().entrySet()) {
-            if (craftType.endsWith(entry.getKey()))
+            if (craftType.equals(entry.getKey()))
                 cir.setReturnValue(entry.getValue().getIconItem());
         }
     }

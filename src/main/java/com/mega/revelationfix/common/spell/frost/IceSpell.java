@@ -91,11 +91,10 @@ public class IceSpell extends EverChargeSpell {
     }
 
     @Override
-    public void stopSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff, int useTimeRemaining) {
+    public void stopSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff, ItemStack focus, int castTime, SpellStat spellStat) {
         if (caster instanceof ServerPlayer player) {
             PacketHandler.sendToPlayer(player, new SpellCircleStatePacket(this.getSpellType(), SpellCircleStatePacket.STATE_CANCEL_SPELL_CIRCLE, true, 0));
         }
-        super.stopSpell(worldIn, caster, staff, useTimeRemaining);
     }
 
     public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
@@ -144,7 +143,7 @@ public class IceSpell extends EverChargeSpell {
         }
         float radius4 = frostAreaRadius * 4F;
         float radius2 = frostAreaRadius * 2F;
-        for (int j = 0; j < potency + 1; ++j) {
+        for (int j = 0; j < Math.min(potency + 1, 8); ++j) {
             IceSpike arrow = new IceSpike(caster, worldIn);
             arrow.setExtraDamage(arrow.getExtraDamage() + 3F + potency);
             if (this.rightStaff(staff)) {

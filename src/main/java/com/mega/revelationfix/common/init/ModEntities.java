@@ -12,15 +12,19 @@ import com.mega.revelationfix.common.entity.cultists.MaverickServant;
 import com.mega.revelationfix.common.entity.misc.QuietusVirtualEntity;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
 import com.mega.revelationfix.common.entity.projectile.StarArrow;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import z1gned.goetyrevelation.ModMain;
 
 public class ModEntities {
+    public static final TagKey<EntityType<?>> PREVENT_DISCARD_BY_APOLLYON = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(ModMain.MODID, "prevent_apollyon_discard"));
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Revelationfix.MODID);
     public static final RegistryObject<EntityType<FakeItemEntity>> FAKE_ITEM_ENTITY = register("fake_item_entity", EntityType.Builder
             .<FakeItemEntity>of(FakeItemEntity::new, MobCategory.MISC)

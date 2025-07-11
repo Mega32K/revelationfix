@@ -7,6 +7,8 @@ import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.item.AllRightsServantEgg;
 import com.mega.revelationfix.common.item.armor.*;
+import com.mega.revelationfix.common.item.research.EdenResearchScrollItem;
+import com.mega.revelationfix.common.item.research.GodForgingResearchScrollItem;
 import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
 import com.mega.revelationfix.common.item.tool.combat.trident.GungnirItem;
 import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
@@ -36,6 +38,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.entity.SculkShriekerBlockEntity;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryObject;
@@ -99,6 +102,7 @@ public class GRItems {
     @ObjectHolder(value = "goety_revelation:the_tip_of_the_longinus", registryName = "item")
     public static final Item TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM = null;
     public static Map<RegistryObject<Item>, Supplier<List<ItemStack>>> insertAfterTabMap = new HashMap<>();
+    public static RegistryObject<Item> GOD_FORGING_SCROLL;
     public static RegistryObject<Item> ASCENSION_HARD_CANDY;
     public static RegistryObject<Item> VALETTEIN;
     public static RegistryObject<Item> GUNGNIR;
@@ -154,7 +158,6 @@ public class GRItems {
     public static RegistryObject<Item> SPECTRE_DARKMAGE_LEGGINGS;
     @Self
     public static RegistryObject<Item> SPECTRE_DARKMAGE_BOOTS;
-    @Self
     public static RegistryObject<Item> REVELATION_FOCUS;
     public static RegistryObject<Item> WITHER_QUIETUS_FOCUS;
     public static RegistryObject<Item> HERETIC_FOCUS;
@@ -181,6 +184,8 @@ public class GRItems {
     public static RegistryObject<Item> DISC_3;
     public static RegistryObject<BlockItem> BI_RUNE_REACTOR;
     public static RegistryObject<BlockItem> BI_RUNESTONE_ENGRAVED_TABLE;
+    @Self
+    public static RegistryObject<Item> EDEN_SCROLL;
 
     public static void init(DeferredRegister<Item> ITEMS) {
         ODAMANE_HALO = ITEMS.register("halo_of_the_end", OdamaneHalo::new);
@@ -244,6 +249,8 @@ public class GRItems {
         SPECTRE_DARKMAGE_CHESTPLATE = ITEMS.register("spectre_darkmage_chestplate", ()-> new SpectreDarkmageArmor(ArmorItem.Type.CHESTPLATE));
         SPECTRE_DARKMAGE_LEGGINGS = ITEMS.register("spectre_darkmage_leggings", ()-> new SpectreDarkmageArmor(ArmorItem.Type.LEGGINGS));
         SPECTRE_DARKMAGE_BOOTS = ITEMS.register("spectre_darkmage_boots", ()-> new SpectreDarkmageArmor(ArmorItem.Type.BOOTS));
+        GOD_FORGING_SCROLL = ITEMS.register("god_forging_scroll", GodForgingResearchScrollItem::new);
+        EDEN_SCROLL = ITEMS.register("eden_scroll", EdenResearchScrollItem::new);
         if (SafeClass.isEnigmaticLegacyLoaded())
             EnigmaticLegacyItemInit.init();
 
@@ -268,6 +275,7 @@ public class GRItems {
                 List.of(new ItemStack(com.Polarice3.Goety.common.items.ModItems.DARK_WAND.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.OMINOUS_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.NECRO_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.GEO_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.WIND_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.STORM_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.FROST_STAFF.get()),

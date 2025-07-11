@@ -3,6 +3,10 @@ package com.mega.revelationfix;
 import com.google.common.collect.ImmutableList;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.*;
+import com.mega.revelationfix.common.data.ingrident.EnchantmentBookIngredientSerializer;
+import com.mega.revelationfix.common.data.ingrident.MysteryFragmentIngredientSerializer;
+import com.mega.revelationfix.common.data.ingrident.PuzzleIngredientSerializer;
+import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredientSerializer;
 import com.mega.revelationfix.common.init.*;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.proxy.ClientProxy;
@@ -10,10 +14,11 @@ import com.mega.revelationfix.proxy.CommonProxy;
 import com.mega.revelationfix.proxy.ModProxy;
 import com.mega.revelationfix.proxy.ServerProxy;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,11 +28,12 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
+import z1gned.goetyrevelation.ModMain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Revelationfix.MODID)
@@ -50,6 +56,7 @@ public class Revelationfix {
         ModStructureTypes.STRUCTURE_TYPES.register(modBus);
         ModStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(modBus);
         ModParticleTypes.PARTICLE_TYPES.register(modBus);
+        modBus.addListener(this::registerRecipeSerializers);
         ModPotions.register(modBus);
         new CommonProxy();
         if (SafeClass.isTetraLoaded()) {
@@ -76,6 +83,13 @@ public class Revelationfix {
     public static void addAttributes(EntityAttributeModificationEvent event) {
         ModAttributes.addAttributes(event);
     }
-
+    public void registerRecipeSerializers(RegisterEvent event) {
+        if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
+            CraftingHelper.register(new ResourceLocation(ModMain.MODID, "puzzle"), PuzzleIngredientSerializer.INSTANCE);
+            CraftingHelper.register(new ResourceLocation(ModMain.MODID, "mystery_fragment"), MysteryFragmentIngredientSerializer.INSTANCE);
+            CraftingHelper.register(new ResourceLocation(ModMain.MODID, "te_craft"), TheEndCraftingIngredientSerializer.INSTANCE);
+            CraftingHelper.register(new ResourceLocation(ModMain.MODID, "enchantment"), EnchantmentBookIngredientSerializer.INSTANCE);
+        }
+    }
 
 }

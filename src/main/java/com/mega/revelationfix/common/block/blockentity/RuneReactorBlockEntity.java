@@ -6,7 +6,7 @@ import com.Polarice3.Goety.api.magic.IBreathingSpell;
 import com.Polarice3.Goety.api.magic.IChargingSpell;
 import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.common.blocks.entities.CursedCageBlockEntity;
-import com.Polarice3.Goety.common.events.GoetyEventFactory;
+import com.Polarice3.Goety.common.events.spell.GoetyEventFactory;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.common.items.SoulTransferItem;
 import com.Polarice3.Goety.common.items.magic.DarkWand;
@@ -29,8 +29,6 @@ import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.util.entity.EntityFinder;
 import com.mega.revelationfix.util.entity.RotationUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -664,8 +662,11 @@ public class RuneReactorBlockEntity extends BlockEntity {
                 using = true;
             }
         } else if (wandB.notTouch(spellB)) {
-            if (!this.isOnCooldown(wandB, livingEntityIn, stack) && (currentSpellTarget != null && !currentSpellTarget.isRemoved()))
-                this.MagicResults(wandB, spellB, stack, worldIn, livingEntityIn, playerOwner);
+            if (!this.isOnCooldown(wandB, livingEntityIn, stack) && (currentSpellTarget != null && !currentSpellTarget.isRemoved())) {
+                spellB = GoetyEventFactory.onCastSpell(playerOwner, spellB);
+                if (spellB != null)
+                    this.MagicResults(wandB, spellB, stack, worldIn, livingEntityIn, playerOwner);
+            }
         }
         if (!using || spellUseTimeRemaining == -1) {
             spellUseTimeRemaining = getSpellUseDuration(wandB, stack);
@@ -676,8 +677,9 @@ public class RuneReactorBlockEntity extends BlockEntity {
                     {
 
                         if ((!(spellB instanceof IChargingSpell) || wandB.isNotInstant(spellB) || wandB.notTouch(spellB)) && !this.cannotCast(wandB, livingEntityIn, stack)) {
-
-                            this.MagicResults(wandB, spellB, stack, worldIn, livingEntityIn, playerOwner);
+                            spellB = GoetyEventFactory.onCastSpell(playerOwner, spellB);
+                            if (spellB != null)
+                                this.MagicResults(wandB, spellB, stack, worldIn, livingEntityIn, playerOwner);
                         }
 
                         if (stack.getTag() != null) {
@@ -693,21 +695,25 @@ public class RuneReactorBlockEntity extends BlockEntity {
                     }
                 } else if (this.cannotCast(wandB, livingEntityIn, stack)) {
                     {
-                        spellB.stopSpell(serverLevel, livingEntityIn, stack, spellUseTimeRemaining);
-                        if (livingEntityIn instanceof FakeSpellerEntity fakeSpellerEntity) {
-                            if (spellB instanceof IChargingSpell spell) {
-                                if (spell.shotsNumber(playerOwner, stack) > 0) {
-                                    if (wandB.ShotsFired(stack) > 0) {
-                                        float coolPercent = (float) wandB.ShotsFired(stack) / (float) spell.shotsNumber(playerOwner, stack);
-                                        wandB.setShots(stack, 0);
-                                        SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), Mth.floor((float) spell.spellCooldown() * coolPercent));
+                        int CastTime = stack.getUseDuration() - spellUseTimeRemaining;
+                        spellB = GoetyEventFactory.onStopSpell(playerOwner, stack, spellB,  CastTime, spellUseTimeRemaining);
+                        if (spellB != null) {
+                            spellB.stopSpell(serverLevel, livingEntityIn, stack, IWand.getFocus(stack), CastTime, spellB.defaultStats());
+                            if (livingEntityIn instanceof FakeSpellerEntity fakeSpellerEntity) {
+                                if (spellB instanceof IChargingSpell spell) {
+                                    if (spell.shotsNumber(playerOwner, stack) > 0) {
+                                        if (wandB.ShotsFired(stack) > 0) {
+                                            float coolPercent = (float) wandB.ShotsFired(stack) / (float) spell.shotsNumber(playerOwner, stack);
+                                            wandB.setShots(stack, 0);
+                                            SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), Mth.floor((float) spell.spellCooldown() * coolPercent));
+                                        }
+                                    } else {
+                                        SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), Mth.floor((float) spell.spellCooldown()));
                                     }
-                                } else {
-                                    SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), Mth.floor((float) spell.spellCooldown()));
                                 }
                             }
+                            using = false;
                         }
-                        using = false;
                     }
                 } else {
                     int CastTime = stack.getUseDuration() - spellUseTimeRemaining;
@@ -719,8 +725,10 @@ public class RuneReactorBlockEntity extends BlockEntity {
                             spellB.startSpell(serverLevel, livingEntityIn, stack, spellB.defaultStats());
                             worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), soundevent, SoundSource.PLAYERS, wandB.castingVolume(stack), wandB.castingPitch(stack));
                         }
-                        spellB.useSpell(serverLevel, livingEntityIn, stack, CastTime, spellB.defaultStats());
-
+                        spellB = GoetyEventFactory.onCastingSpell(livingEntityIn, stack, spellB, CastTime);
+                        if (spellB != null)
+                            spellB.useSpell(serverLevel, livingEntityIn, stack, CastTime, spellB.defaultStats());
+                        else using = false;
                         label59:
                         {
                             if (spellB instanceof IChargingSpell chargingSpell) {
@@ -750,7 +758,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                                 }
                             }
 
-                            if (!this.getSoulsAmount(playerOwner, spellB.soulCost(playerOwner)) && !playerOwner.isCreative()) {
+                            if (!this.getSoulsAmount(playerOwner, spellB.soulCost(playerOwner, stack)) && !playerOwner.isCreative()) {
                                 using = false;
                             }
                         }
@@ -763,100 +771,93 @@ public class RuneReactorBlockEntity extends BlockEntity {
 
     public void MagicResults(DarkWand wandB, ISpell spellB, ItemStack stack, Level worldIn, LivingEntity caster, Player playerOwner) {
         if (spellB != null && caster instanceof FakeSpellerEntity) {
-            ISpell spell = GoetyEventFactory.onCastSpell(caster, spellB);
-            if (spell != null) {
-                if (!worldIn.isClientSide) {
-                    ServerLevel serverWorld = (ServerLevel) worldIn;
-                    boolean spent;
-                    IChargingSpell spell1;
-                    if (playerOwner.isCreative()) {
-                        if (stack.getTag() != null) {
-                            spell.SpellResult(serverWorld, caster, stack, spell.defaultStats());
-                            spent = false;
-                            if (spell instanceof IChargingSpell) {
-                                spell1 = (IChargingSpell) spell;
-                                if (spell1.shotsNumber(playerOwner, stack) > 0 && wandB.ShotsFired(stack) >= spell1.shotsNumber(playerOwner, stack)) {
-                                    spent = true;
-                                }
-                            } else {
+            if (!worldIn.isClientSide) {
+                ServerLevel serverWorld = (ServerLevel) worldIn;
+                boolean spent;
+                IChargingSpell spell1;
+                if (playerOwner.isCreative()) {
+                    if (stack.getTag() != null) {
+                        spellB.SpellResult(serverWorld, caster, stack, spellB.defaultStats());
+                        spent = false;
+                        if (spellB instanceof IChargingSpell) {
+                            spell1 = (IChargingSpell) spellB;
+                            if (spell1.shotsNumber(playerOwner, stack) > 0 && wandB.ShotsFired(stack) >= spell1.shotsNumber(playerOwner, stack)) {
                                 spent = true;
                             }
-
-                            if (spent) {
-                                wandB.setShots(stack, 0);
-                                SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), spell.spellCooldown());
-                            }
-                        }
-
-                    } else if (this.getSoulsAmount(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack))) {
-                        spent = true;
-                        if (spell instanceof IChargingSpell) {
-                            spell1 = (IChargingSpell) spell;
-                            if (spell1.everCharge() && stack.getTag() != null) {
-                                stack.getTag().putInt("Seconds", stack.getTag().getInt("Seconds") + 1);
-                                if (stack.getTag().getInt("Seconds") != 20) {
-                                    spent = false;
-                                } else {
-                                    stack.getTag().putInt("Seconds", 0);
-                                }
-                            }
+                        } else {
+                            spent = true;
                         }
 
                         if (spent) {
-                            SEHelper.decreaseSouls(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack));
-                            SEHelper.sendSEUpdatePacket(playerOwner);
-                            if (MobsConfig.VillagerHateSpells.get() > 0) {
+                            wandB.setShots(stack, 0);
+                            SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), spellB.spellCooldown());
+                        }
+                    }
 
-                                for (Villager villager : caster.level.getEntitiesOfClass(Villager.class, caster.getBoundingBox().inflate(16.0))) {
-                                    if (villager.hasLineOfSight(caster)) {
-                                        villager.getGossips().add(caster.getUUID(), GossipType.MINOR_NEGATIVE, MobsConfig.VillagerHateSpells.get());
-                                    }
+                } else if (this.getSoulsAmount(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack))) {
+                    spent = true;
+                    if (spellB instanceof IChargingSpell) {
+                        spell1 = (IChargingSpell) spellB;
+                        if (spell1.everCharge() && stack.getTag() != null) {
+                            stack.getTag().putInt("Seconds", stack.getTag().getInt("Seconds") + 1);
+                            if (stack.getTag().getInt("Seconds") != 20) {
+                                spent = false;
+                            } else {
+                                stack.getTag().putInt("Seconds", 0);
+                            }
+                        }
+                    }
+
+                    if (spent) {
+                        SEHelper.decreaseSouls(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack));
+                        SEHelper.sendSEUpdatePacket(playerOwner);
+                        if (MobsConfig.VillagerHateSpells.get() > 0) {
+
+                            for (Villager villager : caster.level.getEntitiesOfClass(Villager.class, caster.getBoundingBox().inflate(16.0))) {
+                                if (villager.hasLineOfSight(caster)) {
+                                    villager.getGossips().add(caster.getUUID(), GossipType.MINOR_NEGATIVE, MobsConfig.VillagerHateSpells.get());
                                 }
                             }
                         }
+                    }
 
-                        if (stack.getTag() != null) {
-                            spell.SpellResult(serverWorld, caster, stack, spell.defaultStats());
-                            boolean flag = false;
-                            if (spell instanceof IChargingSpell chargingSpell) {
-                                if (chargingSpell.shotsNumber(playerOwner, stack) > 0 && wandB.ShotsFired(stack) >= chargingSpell.shotsNumber(playerOwner, stack)) {
-                                    flag = true;
-                                }
-                            } else {
+                    if (stack.getTag() != null) {
+                        spellB.SpellResult(serverWorld, caster, stack, spellB.defaultStats());
+                        boolean flag = false;
+                        if (spellB instanceof IChargingSpell chargingSpell) {
+                            if (chargingSpell.shotsNumber(playerOwner, stack) > 0 && wandB.ShotsFired(stack) >= chargingSpell.shotsNumber(playerOwner, stack)) {
                                 flag = true;
                             }
-
-                            if (flag) {
-                                wandB.setShots(stack, 0);
-                                SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), spell.spellCooldown());
-                            }
+                        } else {
+                            flag = true;
                         }
-                    } else {
 
-                        worldIn.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                        if (flag) {
+                            wandB.setShots(stack, 0);
+                            SEHelper.addCooldown(playerOwner, IWand.getFocus(stack).getItem(), spellB.spellCooldown());
+                        }
                     }
-                }
+                } else {
 
-                if (worldIn.isClientSide) {
-                    IBreathingSpell breathingSpells;
-                    if (playerOwner.isCreative()) {
-                        if (spell instanceof IBreathingSpell) {
-                            breathingSpells = (IBreathingSpell) spell;
-                            breathingSpells.showWandBreath(caster);
-                        }
-                    } else if (this.getSoulsAmount(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack))) {
-                        if (spell instanceof IBreathingSpell) {
-                            breathingSpells = (IBreathingSpell) spell;
-                            breathingSpells.showWandBreath(caster);
-                        }
-                    } else {
-                        wandB.failParticles(worldIn, caster);
+                    worldIn.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                }
+            }
+
+            if (worldIn.isClientSide) {
+                IBreathingSpell breathingSpells;
+                if (playerOwner.isCreative()) {
+                    if (spellB instanceof IBreathingSpell) {
+                        breathingSpells = (IBreathingSpell) spellB;
+                        breathingSpells.showWandBreath(caster);
                     }
+                } else if (this.getSoulsAmount(playerOwner, this.spellerSoulUse(wandB, playerOwner, stack))) {
+                    if (spellB instanceof IBreathingSpell) {
+                        breathingSpells = (IBreathingSpell) spellB;
+                        breathingSpells.showWandBreath(caster);
+                    }
+                } else {
+                    wandB.failParticles(worldIn, caster);
                 }
-            } else {
-                wandB.failParticles(worldIn, caster);
-
-                worldIn.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
             }
         } else {
             wandB.failParticles(worldIn, caster);

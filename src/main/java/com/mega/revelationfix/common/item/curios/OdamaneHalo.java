@@ -5,17 +5,17 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.google.common.collect.HashMultimap;
-import com.mega.revelationfix.client.font.effect.CuriosMutableComponent;
+import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
+import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
+import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.api.item.ICenterDescItem;
-import com.mega.revelationfix.api.item.IInvulnerableItem;
 import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import com.mega.revelationfix.common.odamane.common.HaloEvents;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.commands.CommandSourceStack;
@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -107,12 +106,12 @@ import java.util.function.Consumer;
  * {@link OdamanePlayerExpandedContext#baseTick(Level)}<br><br>
  */
 @SuppressWarnings("JavadocReference")
-public class OdamaneHalo extends SimpleDescriptiveCurio implements IInvulnerableItem, IJEIInvisibleRitualResult, ICenterDescItem {
+public class OdamaneHalo extends SimpleDescriptiveCurio implements IJEIInvisibleRitualResult, ICenterDescItem {
     //c&s
     public static final int ABILITY_DESC_COUNT = 26;
     static final char nextLineChar = '`';
     static final char colorChar = '§';
-    static final String COLOR_PURPLE = LoreHelper.codeMode(ChatFormatting.DARK_PURPLE);
+    static final String COLOR_EDEN = LoreHelper.codeMode(ModChatFormatting.EDEN);
     static final String COLOR_APOLLYON = LoreHelper.codeMode(ModChatFormatting.APOLLYON);
     public static int maxTickCount = 64;
     public static boolean shouldTick;
@@ -123,7 +122,7 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IInvulnerable
     private static int apollyonTypeTickCount2 = 0;
 
     public OdamaneHalo() {
-        super(new Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), "head", () -> {
+        super(new Properties().stacksTo(1).fireResistant().rarity(RevelationRarity.EDEN_NAME), "head", () -> {
             HashMultimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
             CuriosApi.addSlotModifier(multimap, "head",
                     UUID.fromString("7a5e737b-693d-4f84-bce0-79667c67e7d6"), 1.0D, AttributeModifier.Operation.ADDITION);
@@ -134,8 +133,8 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IInvulnerable
             tailDesc.add(CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.desc" + i)));
         }
         this.withHead(
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.default_1").withStyle(ChatFormatting.DARK_PURPLE)),
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.default_2").withStyle(ChatFormatting.DARK_PURPLE))
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.default_1").withStyle(ModChatFormatting.EDEN)),
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.default_2").withStyle(ModChatFormatting.EDEN))
         ).withTail(
                 tailDesc.toArray(new CuriosMutableComponent[]{})
         );
@@ -156,13 +155,14 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IInvulnerable
         //复制要替换的索引头索引尾
         int toReplaceSrcStart = Math.min(apollyonTypeTickCount2, end), toReplaceSrcEnd = end;
         StringBuilder toModifyString = new StringBuilder(example.substring(Math.min(apollyonTypeTickCount2, end), end));
-        {
+        //已使用伊甸字样
+        if (false) {
             //替换所有颜色字符块为空,替换所有换行字符为换行字符+亚波伦字体颜色字符块
             toModifyString = new StringBuilder(toModifyString.toString().replaceAll("§.", "").replaceAll(String.valueOf(nextLineChar), nextLineChar + COLOR_APOLLYON));
             //在前插入亚波伦颜色字符块
             toModifyString.insert(0, COLOR_APOLLYON);
             //末尾插入原颜色
-            toModifyString.insert(toModifyString.length(), COLOR_PURPLE);
+            toModifyString.insert(toModifyString.length(), COLOR_EDEN);
         }
         //替换截取部分
         sourceString.replace(toReplaceSrcStart, toReplaceSrcEnd, toModifyString.toString());
@@ -229,7 +229,7 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IInvulnerable
         else {
             StringBuilder stringBuilder = new StringBuilder();
             for (MutableComponent component : head.stream().map(cmc -> cmc.build(stack)).toList())
-                stringBuilder.append(stringBuilder.isEmpty() ? COLOR_PURPLE : nextLineChar + COLOR_PURPLE).append(component.getString());
+                stringBuilder.append(stringBuilder.isEmpty() ? COLOR_EDEN : nextLineChar + COLOR_EDEN).append(component.getString());
             apollyonTypeTickCount2 = apollyonTypeTickCount;
             String baked;
             try {

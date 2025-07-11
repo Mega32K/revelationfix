@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin.gr;
 
+import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.projectiles.GroundProjectile;
 import com.Polarice3.Goety.common.entities.projectiles.Hellfire;
 import com.mega.revelationfix.util.entity.ATAHelper2;
@@ -10,11 +11,10 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import z1gned.goetyrevelation.config.ModConfig;
+import z1gned.goetyrevelation.util.ATAHelper;
 
 @Mixin(Hellfire.class)
 public abstract class HellfireMixin extends GroundProjectile {
@@ -32,15 +32,13 @@ public abstract class HellfireMixin extends GroundProjectile {
     private void getTarget(LivingEntity target, CallbackInfo ci) {
         this.allTitlesApostle_1_20_1$target = target;
     }
-
-    @ModifyVariable(
-            at = @At("STORE"),
-            method = {"dealDamageTo"},
-            remap = false
-    )
+    @ModifyConstant(method = "dealDamageTo", constant = @Constant(floatValue = 2.0F), remap = false)
     private float damageAmount(float value) {
-        if (ATAHelper2.hasOdamane(this.getOwner()))
+        LivingEntity owner = this.getOwner();
+        if (ATAHelper2.hasOdamane(owner))
             return this.allTitlesApostle_1_20_1$target.getMaxHealth() * 0.044F;
-        return (float) ((double) this.allTitlesApostle_1_20_1$target.getMaxHealth() * ModConfig.HELLFIRE_DAMAGE_AMOUNT.get());
+        else if (owner instanceof Apostle || ATAHelper.hasHalo(owner))
+            return this.allTitlesApostle_1_20_1$target.getMaxHealth() * ModConfig.HELLFIRE_DAMAGE_AMOUNT.get().floatValue();
+        return value;
     }
 }

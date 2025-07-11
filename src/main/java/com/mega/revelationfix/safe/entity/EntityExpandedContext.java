@@ -1,7 +1,9 @@
 package com.mega.revelationfix.safe.entity;
 
 import com.Polarice3.Goety.api.entities.IOwned;
+import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.compat.SafeClass;
+import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
@@ -10,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.WalkAnimationState;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 
@@ -17,6 +20,8 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public class EntityExpandedContext {
@@ -34,6 +39,9 @@ public class EntityExpandedContext {
     @Nullable
     private LivingEntity quietusCaster;
     public int banAnySpelling;
+    public CompoundTag tempTagForServer;
+    private final Lock LOCK = new ReentrantLock();
+    public WalkAnimationState customArmorWalkAnimState = new WalkAnimationState();
     public EntityExpandedContext(LivingEntity entity) {
         this.entity = entity;
         this.className = entity.getClass().getName();
@@ -97,7 +105,8 @@ public class EntityExpandedContext {
             }
 
             if (tetraFadingTime == 0) {
-                synchronized (this) {
+                try {
+                    LOCK.lock();
                     Map<Attribute, UUID> attributeUUIDMap = Collections.synchronizedMap(SafeClass.getAttributes());
                     for (Map.Entry<Attribute, UUID> s : attributeUUIDMap.entrySet()) {
                         AttributeInstance instance = entity.getAttribute(s.getKey());
@@ -105,6 +114,21 @@ public class EntityExpandedContext {
                             instance.removeModifier(s.getValue());
                         }
                     }
+                } finally {
+                    LOCK.unlock();
+                }
+            }
+        }
+        if (entity.tickCount % 40 == 0)
+            tempTagForServer = null;
+        if (ArmorUtils.findChestplate(entity, ModArmorMaterials.SPIDER_DARKMAGE)) {
+            if (entity.onClimbable())
+                customArmorWalkAnimState.update(customArmorWalkAnimState.speed()+0.2F, 0.4F);
+            else {
+                if (customArmorWalkAnimState.speed() > 0F)
+                    customArmorWalkAnimState.update(customArmorWalkAnimState.speed() - 0.2F, 0.4F);
+                else {
+                    customArmorWalkAnimState.setSpeed(0F);
                 }
             }
         }

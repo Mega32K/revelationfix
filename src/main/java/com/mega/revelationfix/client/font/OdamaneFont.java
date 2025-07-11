@@ -1,6 +1,7 @@
 package com.mega.revelationfix.client.font;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.FontManager;
@@ -8,9 +9,12 @@ import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 
+import java.awt.*;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -45,18 +49,55 @@ public class OdamaneFont extends Font {
     }
 
     @Override
-    public int drawInBatch(FormattedCharSequence p_273262_, float p_273006_, float p_273254_, int p_273375_, boolean p_273674_, Matrix4f p_273525_, MultiBufferSource p_272624_, DisplayMode p_273418_, int p_273330_, int p_272981_) {
+    public int drawInBatch(FormattedCharSequence p_273262_, float startX, float startY, int iColor, boolean p_273674_, Matrix4f matrix4f, MultiBufferSource bufferSource, DisplayMode displayMode, int overlay, int light) {
         String text = FontTextBuilder.formattedCharSequenceToString(p_273262_);
         if (width > 0F) {
             for (CenterComponentGroup ccg : centerComponentGroups) {
                 if (ccg.is(text)) {
-                    p_273525_.translate(-width(p_273262_) / 2F + width / 2F, 0, 0);
-                    int i = super.drawInBatch(p_273262_, p_273006_, p_273254_, p_273375_, p_273674_, p_273525_, p_272624_, p_273418_, p_273330_, p_272981_);
-                    p_273525_.translate(width(p_273262_) / 2F - width / 2F, 0, 0);
-                    return i;
+                    matrix4f.translate(-width(p_273262_) / 2F + width / 2F, 0, 0);
+                    int finalColor = 0;
+                    String text2 = FontTextBuilder.formattedCharSequenceToStringEden(p_273262_);
+                    if (!text2.isEmpty() && (!text2.replace(" ", "").isEmpty())) {
+                        finalColor = renderEden(text2, startX, startY, iColor, p_273674_, matrix4f, bufferSource, displayMode, overlay, light);;
+                    } else {
+                        finalColor = super.drawInBatch(p_273262_, startX, startY, iColor, p_273674_, matrix4f, bufferSource, displayMode, overlay, light);
+                    }
+                    matrix4f.translate(width(p_273262_) / 2F - width / 2F, 0, 0);
+                    return finalColor;
                 }
             }
         }
-        return super.drawInBatch(p_273262_, p_273006_, p_273254_, p_273375_, p_273674_, p_273525_, p_272624_, p_273418_, p_273330_, p_272981_);
+        String text2 = FontTextBuilder.formattedCharSequenceToStringEden(p_273262_);
+
+        if (!text2.isEmpty() && (!text2.replace(" ", "").isEmpty())) {
+            return renderEden(text2, startX, startY, iColor, p_273674_, matrix4f, bufferSource, displayMode, overlay, light);
+        }
+        return super.drawInBatch(p_273262_, startX, startY, iColor, p_273674_, matrix4f, bufferSource, displayMode, overlay, light);
+    }
+    public int renderEden(String text2, float startX, float startY, int iColor, boolean p_273674_, Matrix4f matrix4f, MultiBufferSource bufferSource, DisplayMode displayMode, int overlay, int light) {
+        float colorr = (float) milliTime() * 0.0025F % 1.0F;
+        float colorrStep = (float) rangeRemap(
+                Mth.sin(((float) milliTime()* 0.005F)) % 6.28318D, -0.9D, 2.5D, 0.025D, 0.15D);
+        float posX = startX;
+        float xOffset = Mth.cos((float) milliTime() * 0.000833F);
+        matrix4f.translate(xOffset, 0, 0);
+        for (int i = 0; i < text2.length(); i++) {
+            float yOffset = Mth.sin((i * (0.5F) + (float) milliTime() * 0.00166F));
+            matrix4f.translate(0, yOffset, 0);
+
+            int c = (int) (Mth.clamp((Mth.abs(Mth.cos(i * (0.2F) + (float) milliTime() / 720F)) * 255), 70, 200)) << 24 | 8323072 | 33792 | 146;
+            posX = super.drawInBatch(String.valueOf(text2.charAt(i)), posX, startY, c, p_273674_, matrix4f, bufferSource, displayMode, overlay, light);
+            matrix4f.translate(0, -yOffset, 0);
+            colorr += colorrStep;
+            colorr %= 1.0F;
+        }
+        matrix4f.translate(-xOffset, 0, 0);
+        return (int) posX;
+    }
+    public static long milliTime() {
+        return Util.getMillis();
+    }
+    public static double rangeRemap(double value, double low1, double high1, double low2, double high2) {
+        return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
     }
 }

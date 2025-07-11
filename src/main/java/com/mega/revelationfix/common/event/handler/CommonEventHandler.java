@@ -142,6 +142,7 @@ public class CommonEventHandler {
                             Vec3 vec31 = Vec3.atBottomCenterOf(blockpos).subtract(vec3).normalize();
                         }
                         player.setPos(vec3.x, vec3.y, vec3.z);
+                        player.setRespawnPosition(player.level.dimension(), null, 0F, true, false);
                         PacketHandler.sendToAll(new TheEndDeathPacket(player.getId(), new Vector3f((float) vec3.x, (float) vec3.y, (float) vec3.z)));
                     }
 

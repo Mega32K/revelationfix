@@ -49,7 +49,7 @@ public class TryTimeStopSkill {
                     return;
                 if (SafeClass.isTimeStop(serverLevel)) {
                     SafeClass.enableTimeStop(serverPlayer, false);
-                    CooldownsManager.setItemCooldowns(serverPlayer, GRItems.HALO_OF_THE_END, 1400);
+                    CooldownsManager.setItemCooldowns(serverPlayer, GRItems.HALO_OF_THE_END, (int) (ItemConfig.ewCooldown * 20 * 1.666F));
                     CooldownsManager.setItemCooldowns(serverPlayer, GRItems.ETERNAL_WATCH.get(), ItemConfig.ewCooldown * 20);
                 } else {
                     if (serverPlayer.isCreative()) {

@@ -24,7 +24,6 @@ public class BypassInvulArrow {
         }
         return instance.hurt(damageSource, damage);
     }
-
     public static boolean phase2Arrow(AbstractArrow arrow, Entity instance, DamageSource damageSource, float damage) {
         if (arrow instanceof DeathArrow deathArrow) {
             if (damageSource.typeHolder().is(DamageTypes.ARROW)) {

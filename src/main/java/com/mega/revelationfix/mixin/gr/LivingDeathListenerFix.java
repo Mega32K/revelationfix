@@ -22,33 +22,6 @@ public class LivingDeathListenerFix {
     @Inject(method = "onLivingDeath", at = @At("HEAD"), cancellable = true)
     private static void fix(LivingDeathEvent event, CallbackInfo ci) {
         ci.cancel();
-        Entity entity = event.getEntity();
-        if (entity.level().isClientSide || !(entity.level() instanceof ServerLevel)) {
-            return;
-        }
-        if (entity instanceof Apostle apostle) {
-            if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon()) {
-                ItemStack medalS = new ItemStack(ModItems.DOOM_MEDAL.get());
-                if (apostle.isInNether()) {
-                    apostle.spawnAtLocation(new ItemStack(GRItems.DISC_2.get()));
-                } else {
-                    apostle.spawnAtLocation(new ItemStack(GRItems.DISC_1.get()));
-                }
-                if (apostle.isInNether()) medalS.setCount(10);
-                ItemEntity medal = new ItemEntity(entity.level(), apostle.getX(), apostle.getY(), apostle.getZ(), medalS);
-                ServerLevel world = (ServerLevel) entity.level();
-                world.addFreshEntity(medal);
-                if (apostle.isInNether()) {
-                    DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(((ServerLevel) entity.level()).server);
-                    if (!state.isDropped()) {
-                        state.setDropped(true);
-                        ItemEntity item = new ItemEntity(world, apostle.getX(), apostle.getY(), apostle.getZ(), new ItemStack(ModItems.WITHER_QUIETUS.get()));
-                        world.addFreshEntity(item);
-                        state.setDirty();
-                    }
-                }
-            }
-        }
 
     }
 }

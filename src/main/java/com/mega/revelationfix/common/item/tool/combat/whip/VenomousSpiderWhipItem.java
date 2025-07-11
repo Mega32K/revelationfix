@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.neutral.Wartling;
 import com.Polarice3.Goety.utils.MathHelper;
+import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
@@ -29,7 +30,7 @@ public class VenomousSpiderWhipItem extends BaseWhipItem implements ISoulRepair,
 
     @Override
     public boolean hurtEnemy(@NotNull ItemStack itemStack, @NotNull LivingEntity entity, @NotNull LivingEntity player) {
-        boolean set = ArmorEvents.isSpiderSet(ArmorEvents.getArmorSet(player));
+        boolean set = ArmorEvents.isSpiderSet(ArmorUtils.getArmorSet(player));
         if (set) {
             if (entity.random.nextFloat() < 0.35F)
                 entity.addEffect(new MobEffectInstance(GoetyEffects.ACID_VENOM.get(), 80 , 4));
@@ -45,7 +46,7 @@ public class VenomousSpiderWhipItem extends BaseWhipItem implements ISoulRepair,
         if (event.getEntity() instanceof Player player && !player.level.isClientSide) {
             if (!player.getCooldowns().isOnCooldown(this)) {
                 warlockUse(player.level, player);
-                player.getCooldowns().addCooldown(this, ArmorEvents.armorSet(player, ModArmorMaterials.SPIDER_DARKMAGE) ? 20 : 40);
+                player.getCooldowns().addCooldown(this, ArmorUtils.armorSet(player, ModArmorMaterials.SPIDER_DARKMAGE) ? 20 : 40);
             }
         }
     }

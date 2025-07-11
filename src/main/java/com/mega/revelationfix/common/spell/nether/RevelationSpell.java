@@ -34,7 +34,7 @@ public class RevelationSpell extends EverChargeSpell {
     }
 
     @Override
-    public void stopSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff, int useTimeRemaining) {
+    public void stopSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff, ItemStack focus, int castTime, SpellStat spellStat) {
         playSound(worldIn, caster, SoundEvents.BEACON_DEACTIVATE);
     }
 

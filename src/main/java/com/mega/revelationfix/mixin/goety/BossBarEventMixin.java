@@ -1,4 +1,4 @@
-package com.mega.revelationfix.mixin;
+package com.mega.revelationfix.mixin.goety;
 
 import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.common.entities.boss.Apostle;

@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin;
 
+import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import net.minecraft.core.BlockPos;
@@ -33,7 +34,7 @@ public class ForgeHooksMixin {
     private static void isLivingOnLadder(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull LivingEntity entity, CallbackInfoReturnable<Optional<BlockPos>> cir) {
         if (entity.horizontalCollision)
 
-            if (ArmorEvents.isSpiderSet(ArmorEvents.getArmorSet(entity))) {
+            if (ArmorEvents.isSpiderSet(ArmorUtils.getArmorSet(entity))) {
                 boolean isSpectator = (entity instanceof Player && entity.isSpectator());
                 if (isSpectator) cir.setReturnValue(Optional.empty());
                 if (!ForgeConfig.SERVER.fullBoundingBoxLadders.get())

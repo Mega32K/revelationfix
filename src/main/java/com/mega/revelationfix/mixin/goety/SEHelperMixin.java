@@ -2,8 +2,6 @@ package com.mega.revelationfix.mixin.goety;
 
 import com.Polarice3.Goety.utils.SEHelper;
 import com.mega.revelationfix.common.config.CommonConfig;
-import com.mega.revelationfix.common.event.handler.ArmorEvents;
-import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;

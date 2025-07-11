@@ -52,6 +52,7 @@ public abstract class GhastSpellMixin extends SummonSpell {
             malghast.setFireBallDamage((float) (boost - EffectsUtil.getAmplifierPlus(this.allTitlesApostle_1_20_1$user, MobEffects.WEAKNESS)));
             float extraBlast = (float) Mth.clamp(this.allTitlesApostle_1_20_1$spellStat.potency, 0, SpellConfig.MaxRadiusLevel.get()) / 2.5F;
             malghast.setExplosionPower((malghast).getExplosionPower() + extraBlast);
+            malghast.setLimitedLife(((Malghast) p_8837_).getLifespan());
             this.setTarget(this.allTitlesApostle_1_20_1$user, malghast);
             p_8837_ = malghast;
         }

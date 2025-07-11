@@ -13,10 +13,12 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
@@ -31,12 +33,7 @@ public class CheckChestBlockRequirement extends BlockRequirement {
             for (JsonElement jElement : jsonArray) {
                 if (jElement instanceof JsonObject elementLoop) {
                     int minCount = GsonHelper.getAsInt(elementLoop, "minCount", 1);
-                    Pair<Item, TagKey<Item>> ingredient;
-                    String originalString = GsonHelper.getAsString(elementLoop, "item", "minecraft:air");
-                    if (originalString.startsWith("#")) {
-                        ingredient = Pair.of(null, ItemTags.create(new ResourceLocation(originalString.replace("#", ""))));
-                    } else ingredient = Pair.of(ForgeRegistries.ITEMS.getValue(new ResourceLocation(originalString)), null);
-                    this.containers.add(new ContainerIngredient(minCount, ingredient));
+                    this.containers.add(new ContainerIngredient(minCount, CraftingHelper.getIngredient(elementLoop.get("slot"), true)));
                 }
             }
         }
@@ -56,20 +53,12 @@ public class CheckChestBlockRequirement extends BlockRequirement {
         }
         return match >= containers.size();
     }
-    record ContainerIngredient(int minCount, Pair<Item, TagKey<Item>> ingredient) {
+    record ContainerIngredient(int minCount, Ingredient ingredient) {
         boolean is(ItemStack stack) {
             if (minCount <= 0)
                 return true;
-            if (stack.isEmpty())
-                return false;
-            else {
-                if (ingredient.first() != null) {
-                    if (ingredient.first() == Items.AIR)
-                        return true;
-                    else return stack.is(ingredient.first()) && stack.getCount() >= minCount;
-                } else if (ingredient.right() != null) {
-                    return stack.is(ingredient.right()) && stack.getCount() >= minCount;
-                }
+            else if (ingredient != null) {
+                return ingredient.test(stack);
             }
             return false;
         }

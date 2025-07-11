@@ -18,7 +18,9 @@ import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModMobType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.*;
+import com.mega.revelationfix.common.entity.IMonsterServant;
 import com.mega.revelationfix.mixin.PatrollingMonsterAccessor;
+import com.mega.revelationfix.util.entity.GRServantUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -58,7 +60,7 @@ import java.util.function.Predicate;
  * 修改原先施法goal
  * {@link com.mega.revelationfix.mixin.goety.HereticMixin}<br>
  */
-public class HereticServant extends Heretic implements IServant {
+public class HereticServant extends Heretic implements IMonsterServant {
     //Summoned
     public static final EntityDataAccessor<Byte> SUMMONED_FLAGS;
     public static final EntityDataAccessor<Byte> UPGRADE_FLAGS;
@@ -215,6 +217,15 @@ public class HereticServant extends Heretic implements IServant {
         this.setStaying(false);
         this.setBoundPos(null);
         return pSpawnData;
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity p_21171_) {
+        if (MobUtil.areAllies(p_21171_, this))
+            return false;
+        else if (GRServantUtil.isOwnerNotOnline(this))
+            return false;
+        return super.canAttack(p_21171_);
     }
 
     public boolean canSpawnArmor() {
@@ -874,6 +885,11 @@ public class HereticServant extends Heretic implements IServant {
     @Override
     public boolean isPatrolling() {
         return ((PatrollingMonsterAccessor) this).patrolling();
+    }
+
+    @Override
+    public Entity getIMSTarget() {
+        return this.getTarget();
     }
 
     public static class ChantAtTargetGoal extends Goal {

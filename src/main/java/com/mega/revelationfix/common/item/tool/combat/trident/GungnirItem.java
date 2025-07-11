@@ -7,7 +7,6 @@ import com.google.common.collect.Multimap;
 import com.mega.revelationfix.client.enums.ModUseAnim;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
 import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.api.item.IInvulnerableItem;
 import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.entity.LivingEventEC;
@@ -48,7 +47,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class GungnirItem extends Item implements Vanishable, IInvulnerableItem, ICustomHurtWeapon {
+public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon {
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 8.0F;
     public static final float SHOOT_POWER = 2.5F;

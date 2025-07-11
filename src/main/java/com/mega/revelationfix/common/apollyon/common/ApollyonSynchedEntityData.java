@@ -19,6 +19,7 @@ import java.lang.reflect.Modifier;
 
 /**
  * 归元  细分  无敌
+ * 暂时退役
  */
 public class ApollyonSynchedEntityData extends SynchedEntityData {
     private Apostle apostle;
@@ -52,6 +53,7 @@ public class ApollyonSynchedEntityData extends SynchedEntityData {
         }
     }
 
+    /*
     @Override
     public <T> void set(@NotNull EntityDataAccessor<T> dataAccessor, @NotNull T value) {
         if (apollyonAbilityHelper.allTitlesApostle_1_20_1$isApollyon() && apostle.isInNether())
@@ -97,4 +99,5 @@ public class ApollyonSynchedEntityData extends SynchedEntityData {
 
         return dataitem;
     }
+     */
 }

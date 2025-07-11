@@ -1,6 +1,7 @@
 package com.mega.revelationfix.mixin.gr;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.mega.revelationfix.common.apollyon.common.AttackDamageChangeHandler;
 import com.mega.revelationfix.common.apollyon.common.CommonEventHandler;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -43,7 +44,7 @@ public class LivingEntityHurtEventMixin {
         }
 
         if (event.getEntity() instanceof Apostle apostle && ((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
-            ((ApollyonAbilityHelper) apostle).setApollyonTime(30);
+            ((ApollyonAbilityHelper) apostle).setApollyonTime(AttackDamageChangeHandler.vanillaLimitTime);
 
     }
 }

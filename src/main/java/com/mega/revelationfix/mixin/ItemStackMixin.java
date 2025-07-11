@@ -1,8 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.revelationfix.api.item.IDamageLimitItem;
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.common.item.armor.ApocalyptiumArmor;
 import com.mega.revelationfix.common.item.other.MysteryFragment;
 import com.mega.revelationfix.common.item.other.RandomDisplayItem;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
@@ -44,6 +42,7 @@ public abstract class ItemStackMixin {
                 cir.setReturnValue(bookItem.getEnchantmentLevel((ItemStack) (Object) this, Enchantments.VANISHING_CURSE) > 0);
             }
         }
+        /*
         if (p_204118_ == GRItems.THE_END_CRAFTING) {
             cir.setReturnValue((this.hasTag() && this.getTag().getBoolean(GRItems.NBT_CRAFTING) && this.getItem() == TheEndRitualItemContext.THE_END_CRAFT) || this.getItem() instanceof RandomDisplayItem);
         } else if (p_204118_ == GRItems.THE_END_PUZZLES) {
@@ -65,12 +64,6 @@ public abstract class ItemStackMixin {
                 cir.setReturnValue(this.hasTag() && this.getTag().getInt("fragment") == 3);
             }
         }
-    }
-
-    @ModifyVariable(method = "hurt", at = @At("HEAD"), argsOnly = true)
-    private int maxHurtDamage(int orginal) {
-        if (this.getItem() instanceof IDamageLimitItem item)
-            return Math.min(item.getUseDamageLimit((ItemStack) (Object)this), orginal);
-        return orginal;
+         */
     }
 }

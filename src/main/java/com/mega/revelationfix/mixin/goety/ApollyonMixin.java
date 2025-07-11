@@ -11,10 +11,12 @@ import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.mega.revelationfix.common.apollyon.common.*;
 import com.mega.revelationfix.common.compat.SafeClass;
+import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
 import com.mega.revelationfix.common.init.GRItems;
+import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
 import com.mega.revelationfix.common.item.curios.TheNeedleItem;
 import com.mega.revelationfix.mixin.MobAccessor;
@@ -44,6 +46,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -59,6 +62,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -68,6 +72,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import z1gned.goetyrevelation.config.ModConfig;
 import z1gned.goetyrevelation.data.DefeatApollyonInNetherState;
 import z1gned.goetyrevelation.item.AscensionHalo;
+import z1gned.goetyrevelation.item.ModItems;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
 import java.util.ArrayList;
@@ -123,15 +128,19 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         }
     }
 
-    @ModifyConstant(remap = false, method = "teleport", constant = @Constant(doubleValue = 32.0F))
+    @ModifyConstant(remap = false, method = "teleport", constant = @Constant(doubleValue = 32.0))
     private double smiteModeTeleport1(double srcDistance) {
         return isSmited() && revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon() ? srcDistance / 2F : srcDistance;
     }
 
     @Override
     public boolean randomTeleport(double p_20985_, double p_20986_, double p_20987_, boolean p_20988_) {
-        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon() && this.isInNether() && getY() >= 99.5F) {
-            p_20986_ = Math.max(100F, p_20986_);
+        ApollyonAbilityHelper helper = revelationfix$asApollyonHelper();
+        if (helper.allTitlesApostle_1_20_1$isApollyon() && this.isInNether()) {
+            if (helper.getDoom())
+                helper.allTitlesApostle_1_20_1$setShooting(false);
+            if (this.getY() >= 99.5F)
+                return super.randomTeleport(p_20985_, Math.max(this.getX(), 129.0F), p_20987_, p_20988_);
         }
         return super.randomTeleport(p_20985_, p_20986_, p_20987_, p_20988_);
     }
@@ -160,6 +169,10 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     @Shadow(remap = false)
     public abstract boolean isSmited();
 
+    @Shadow(remap = false) private boolean killedPlayer;
+
+    @Shadow(remap = false) private int lastKilledPlayer;
+
     @Override
     public int revelaionfix$getHitCooldown() {
         return entityData.get(HIT_COOLDOWN2);
@@ -183,9 +196,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         this.entityData.define(DeathPerformance.FLAGS, (byte) 0);
         this.entityData.define(AttackDamageChangeHandler.LIMIT_TIME, AttackDamageChangeHandler.vanillaLimitTime);
         ApollyonSynchedEntityData.hackData(revelationfix$asApostle(), this.entityData);
-    }
-
-
+    } 
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
     private void readAdditionalSaveData(CompoundTag pCompound, CallbackInfo ci) {
         Apostle apostle = revelationfix$asApostle();
@@ -241,38 +252,70 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     }
 
     @Override
+    public void dropAllDeathLoot(DamageSource p_21192_) {
+        if (DeathPerformance.isDropped(revelationfix$asApostle()))
+            return;
+        DeathPerformance.setDropped(revelationfix$asApostle(), true);
+        super.dropAllDeathLoot(p_21192_);
+    }
+
+    @Override
     public void dropFromLootTable(@NotNull DamageSource p_21021_, boolean p_21022_) {
-        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon() && this.isInNether()) {
+        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
             {
-                ItemStack stack0 = new ItemStack(Items.NETHERITE_INGOT);
-                stack0.setCount(this.random.nextInt(16, 48 + 1));
-                this.spawnAtLocation(stack0);
+                ItemStack medalS = new ItemStack(ModItems.DOOM_MEDAL.get());
+                if (this.isInNether()) {
+                    this.spawnAtLocation(new ItemStack(GRItems.DISC_2.get()));
+                } else {
+                    this.spawnAtLocation(new ItemStack(GRItems.DISC_1.get()));
+                }
+                if (this.isInNether()) medalS.setCount(10);
+                ItemEntity medal = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), medalS);
+                ServerLevel world = (ServerLevel) this.level();
+                world.addFreshEntity(medal);
+                if (this.isInNether()) {
+                    DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(((ServerLevel) this.level()).server);
+                    if (!state.isDropped()) {
+                        state.setDropped(true);
+                        ItemEntity item = new ItemEntity(world, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.WITHER_QUIETUS.get()));
+                        world.addFreshEntity(item);
+                        state.setDirty();
+                    }
+                }
             }
-            {
-                ItemStack stack0 = new ItemStack(Items.NETHERITE_BLOCK);
-                stack0.setCount(this.random.nextInt(12, 32 + 1));
-                this.spawnAtLocation(stack0);
+            if (this.isInNether()) {
+                {
+                    ItemStack stack0 = new ItemStack(Items.NETHERITE_INGOT);
+                    stack0.setCount(this.random.nextInt(16, 48 + 1));
+                    this.spawnAtLocation(stack0);
+                }
+                {
+                    ItemStack stack0 = new ItemStack(Items.NETHERITE_BLOCK);
+                    stack0.setCount(this.random.nextInt(12, 32 + 1));
+                    this.spawnAtLocation(stack0);
+                }
+                {
+                    ItemStack stack0 = new ItemStack(Items.ENCHANTED_GOLDEN_APPLE);
+                    stack0.setCount(24);
+                    this.spawnAtLocation(stack0);
+                }
+                {
+                    ItemStack stack0 = new ItemStack(Items.BLAZE_ROD);
+                    stack0.setCount(this.random.nextInt(2, 4 + 1));
+                    this.spawnAtLocation(stack0);
+                }
+                {
+                    ItemStack stack0 = new ItemStack(GRItems.THE_NEEDLE.get());
+                    stack0.setCount(1);
+                    stack0.getOrCreateTag().putBoolean(TheNeedleItem.IS_REAL_NBT, true);
+                    this.spawnAtLocation(stack0);
+                }
+
+                MobAccessor mobAccessor = (MobAccessor) this;
+                mobAccessor.setLootTable(null);
+                int reward = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, this.getExperienceReward());
+                ExperienceOrb.award((ServerLevel) this.level(), this.position(), reward);
             }
-            {
-                ItemStack stack0 = new ItemStack(Items.ENCHANTED_GOLDEN_APPLE);
-                stack0.setCount(24);
-                this.spawnAtLocation(stack0);
-            }
-            {
-                ItemStack stack0 = new ItemStack(Items.BLAZE_ROD);
-                stack0.setCount(this.random.nextInt(2, 4 + 1));
-                this.spawnAtLocation(stack0);
-            }
-            {
-                ItemStack stack0 = new ItemStack(GRItems.THE_NEEDLE.get());
-                stack0.setCount(1);
-                stack0.getOrCreateTag().putBoolean(TheNeedleItem.IS_REAL_NBT, true);
-                this.spawnAtLocation(stack0);
-            }
-            MobAccessor mobAccessor = (MobAccessor) this;
-            mobAccessor.setLootTable(null);
-            int reward = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, this.getExperienceReward());
-            ExperienceOrb.award((ServerLevel) this.level(), this.position(), reward);
         } else super.dropFromLootTable(p_21021_, p_21022_);
     }
 
@@ -640,28 +683,44 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
 
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void aiStep(CallbackInfo ci) {
-        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon() && this.isInNether()) {
-            if (this.level().isClientSide && this.isDoomNow()) {
-                --this.clientSideIllusionTicks;
-                if (this.clientSideIllusionTicks < 0) {
-                    this.clientSideIllusionTicks = 0;
-                }
+        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
+            //禁止亚波伦杀完玩家后消失
+            this.killedPlayer = false;
+            this.lastKilledPlayer = 200;
+            if (this.level.isClientSide) {
+                if (this.tickCount == 1 || this.tickCount % 60 == 1) {
+                    AttributeInstance armorP = this.getAttribute(ModAttributes.ARMOR_PENETRATION.get());
+                    if (armorP != null)
+                        armorP.setBaseValue(CommonConfig.apollyon_armorPiercing);
 
-                if (this.hurtTime != 1 && this.tickCount % 1200 != 0) {
-                    if (this.hurtTime == this.hurtDuration - 1) {
+                    AttributeInstance enchantP = this.getAttribute(ModAttributes.ENCHANTMENT_PIERCING.get());
+                    if (enchantP != null)
+                        enchantP.setBaseValue(CommonConfig.apollyon_enchantmentPiercing);
+                }
+            }
+            if (this.isInNether()) {
+                if (this.level().isClientSide && this.isDoomNow()) {
+                    --this.clientSideIllusionTicks;
+                    if (this.clientSideIllusionTicks < 0) {
+                        this.clientSideIllusionTicks = 0;
+                    }
+
+                    if (this.hurtTime != 1 && this.tickCount % 1200 != 0) {
+                        if (this.hurtTime == this.hurtDuration - 1) {
+                            this.clientSideIllusionTicks = 3;
+
+                            for (int k = 0; k < 4; ++k) {
+                                this.clientSideIllusionOffsets[0][k] = this.clientSideIllusionOffsets[1][k];
+                                this.clientSideIllusionOffsets[1][k] = new Vec3(0.0D, 0.0D, 0.0D);
+                            }
+                        }
+                    } else {
                         this.clientSideIllusionTicks = 3;
 
-                        for (int k = 0; k < 4; ++k) {
-                            this.clientSideIllusionOffsets[0][k] = this.clientSideIllusionOffsets[1][k];
-                            this.clientSideIllusionOffsets[1][k] = new Vec3(0.0D, 0.0D, 0.0D);
+                        for (int j = 0; j < 4; ++j) {
+                            this.clientSideIllusionOffsets[0][j] = this.clientSideIllusionOffsets[1][j];
+                            this.clientSideIllusionOffsets[1][j] = new Vec3((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
                         }
-                    }
-                } else {
-                    this.clientSideIllusionTicks = 3;
-
-                    for (int j = 0; j < 4; ++j) {
-                        this.clientSideIllusionOffsets[0][j] = this.clientSideIllusionOffsets[1][j];
-                        this.clientSideIllusionOffsets[1][j] = new Vec3((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
                     }
                 }
             }
@@ -752,7 +811,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
 
     @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/boss/Apostle;heal(F)V"),
             slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/boss/Apostle;heal(F)V", ordinal = 0, shift = At.Shift.AFTER),
+                    from = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/boss/Apostle;heal(F)V", ordinal = 1, shift = At.Shift.AFTER),
                     to = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/boss/Apostle;heal(F)V", ordinal = 4, shift = At.Shift.AFTER)
             )
     )
@@ -839,8 +898,8 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                 revelaionfix$setApollyonHealth(health);
                 //无敌帧
                 if (delta < 0.0F) {
-                    this.revelaionfix$setHitCooldown(30);
-                    helper.allTitlesApostle_1_20_1$setHitCooldown(30);
+                    this.revelaionfix$setHitCooldown(AttackDamageChangeHandler.vanillaLimitTime);
+                    helper.allTitlesApostle_1_20_1$setHitCooldown(AttackDamageChangeHandler.vanillaLimitTime);
                 }
                 return;
             } else {

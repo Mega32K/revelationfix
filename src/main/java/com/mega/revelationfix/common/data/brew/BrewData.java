@@ -199,10 +199,10 @@ public class BrewData {
             //若有存在的覆盖描述，进行覆盖
             for (JsonElement jsonElement : pages) {
                 if (jsonElement instanceof JsonObject page) {
-                    String jsonEffect = GsonHelper.getAsString(page, "recipe", "");
+                    String jsonEffect = GsonHelper.getAsString(page, "text", "");
                     if (!jsonEffect.isEmpty()) {
                         Optional<String> optionalText = getText(jsonEffect);
-                        optionalText.ifPresent(s -> page.addProperty("recipe", s));
+                        optionalText.ifPresent(s -> page.addProperty("text", s));
                     }
                 }
             }

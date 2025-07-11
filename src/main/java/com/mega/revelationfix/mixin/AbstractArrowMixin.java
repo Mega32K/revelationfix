@@ -1,6 +1,8 @@
 package com.mega.revelationfix.mixin;
 
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,13 +28,13 @@ public abstract class AbstractArrowMixin extends Projectile {
         super(p_37248_, p_37249_);
     }
 
-    @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-    private boolean doomDeathArrow(Entity instance, DamageSource p_19946_, float p_19947_) {
+    @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+    private boolean doomDeathArrow(Entity instance, DamageSource p_19946_, float p_19947_, Operation<Boolean> original) {
         if (this.tags.contains(BypassInvulArrow.TAG_NAME))
             return BypassInvulArrow.doomDeathArrow((AbstractArrow) (Object) this, instance, p_19946_, p_19947_);
         else if (this.tags.contains(BypassInvulArrow.TAG_BYPASS_NAME))
             return BypassInvulArrow.phase2Arrow((AbstractArrow) (Object) this, instance, p_19946_, p_19947_);
-        return instance.hurt(p_19946_, p_19947_);
+        return original.call(instance, p_19946_, p_19947_);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;isCritArrow()Z"))

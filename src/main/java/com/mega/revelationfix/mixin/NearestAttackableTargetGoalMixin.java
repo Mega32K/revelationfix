@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin;
 
+import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -32,7 +33,7 @@ public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> e
         if (this.mob instanceof Spider && cir.getReturnValue()) {
             if (this.targetType.isAssignableFrom(Player.class)) {
                 if (this.target != null) {
-                    if (ArmorEvents.isSpiderSet(ArmorEvents.getArmorSet(this.target)))
+                    if (ArmorEvents.isSpiderSet(ArmorUtils.getArmorSet(this.target)))
                         cir.setReturnValue(false);
                 }
             }

@@ -1,8 +1,19 @@
 package com.mega.revelationfix.common.item.other;
 
-import com.mega.revelationfix.api.item.IInvulnerableItem;
+import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
+import com.Polarice3.Goety.common.magic.spells.abyss.BubbleStreamSpell;
+import com.Polarice3.Goety.common.magic.spells.abyss.SteamSpell;
+import com.Polarice3.Goety.common.magic.spells.geomancy.BarricadeSpell;
+import com.Polarice3.Goety.common.magic.spells.nether.WitherSkullSpell;
+import com.Polarice3.Goety.common.magic.spells.wind.LaunchSpell;
+import com.google.gson.JsonObject;
+import com.mega.endinglib.util.forge.ClassBytecodesGetter;
+import com.mega.endinglib.util.java.ClassHelper;
+import com.mojang.serialization.JsonOps;
+import cpw.mods.modlauncher.api.ITransformerActivity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -19,12 +30,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.util.List;
 
-public class CuriosStorageCrystal extends Item implements IInvulnerableItem {
+public class CuriosStorageCrystal extends Item {
     public CuriosStorageCrystal(Properties p_41383_) {
         super(p_41383_);
     }
@@ -76,20 +91,36 @@ public class CuriosStorageCrystal extends Item implements IInvulnerableItem {
     public @NotNull InteractionResult useOn(UseOnContext context) {
         ItemStack itemStack = context.getItemInHand();
         Player player = context.getPlayer();
-        if (itemStack.hasTag() && player != null) {
+        BlockPos p = context.getClickedPos();
+        if (itemStack.hasTag() && itemStack.getTag() != null && player != null) {
             if (itemStack.getTag().contains("BannedCurios", 9)) {
                 if (!context.getLevel().isClientSide) {
                     ListTag listtag = itemStack.getTag().getList("BannedCurios", 10);
-                    if (!listtag.isEmpty() && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
-                        CompoundTag compoundTag = listtag.getCompound(listtag.size() - 1);
-                        ItemStack stack = ItemStack.of(compoundTag);
-                        ItemEntity itementity = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), stack);
-                        itementity.setDefaultPickUpDelay();
-                        context.getLevel().addFreshEntity(itementity);
-                        listtag.remove(compoundTag);
-                        itemStack.getTag().put("BannedCurios", listtag);
-                        if (player instanceof ServerPlayer serverPlayer)
-                            serverPlayer.playNotifySound(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 4F, 1F + (player.random.nextFloat() * 0.2F));
+                    if (player.isShiftKeyDown()) {
+                        if (!listtag.isEmpty())
+                            if (player instanceof ServerPlayer serverPlayer)
+                                serverPlayer.playNotifySound(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 4F, 1F + (player.random.nextFloat() * 0.2F));
+                        while (!listtag.isEmpty()) {
+                            CompoundTag compoundTag = listtag.getCompound(listtag.size() - 1);
+                            ItemStack stack = ItemStack.of(compoundTag);
+                            ItemEntity itementity = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), stack);
+                            itementity.setDefaultPickUpDelay();
+                            context.getLevel().addFreshEntity(itementity);
+                            listtag.remove(compoundTag);
+                            itemStack.getTag().put("BannedCurios", listtag);
+                        }
+                    } else {
+                        if (!listtag.isEmpty() && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
+                            CompoundTag compoundTag = listtag.getCompound(listtag.size() - 1);
+                            ItemStack stack = ItemStack.of(compoundTag);
+                            ItemEntity itementity = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), stack);
+                            itementity.setDefaultPickUpDelay();
+                            context.getLevel().addFreshEntity(itementity);
+                            listtag.remove(compoundTag);
+                            itemStack.getTag().put("BannedCurios", listtag);
+                            if (player instanceof ServerPlayer serverPlayer)
+                                serverPlayer.playNotifySound(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 4F, 1F + (player.random.nextFloat() * 0.2F));
+                        }
                     }
                     if (listtag.isEmpty() && !player.getAbilities().instabuild) {
                         itemStack.shrink(1);

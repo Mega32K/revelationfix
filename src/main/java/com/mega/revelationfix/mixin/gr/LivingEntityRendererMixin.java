@@ -26,7 +26,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
             method = {"<init>"}
     )
     private void addPlayerLayer(EntityRendererProvider.Context p_174289_, EntityModel p_174290_, float p_174291_, CallbackInfo ci) {
-        if (SafeClass.isYSMLoaded()) return;
+        //if (SafeClass.isYSMLoaded()) return;
         LivingEntityRenderer var6 = (LivingEntityRenderer) (Object) this;
         if (var6 instanceof PlayerRenderer playerRenderer) {
             playerRenderer.addLayer(new PlayerHaloLayer(playerRenderer, p_174289_.getModelSet()));

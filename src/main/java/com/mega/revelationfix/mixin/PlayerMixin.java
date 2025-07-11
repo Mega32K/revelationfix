@@ -3,12 +3,15 @@ package com.mega.revelationfix.mixin;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.utils.NoKnockBackDamageSource;
 import com.Polarice3.Goety.utils.OwnedDamageSource;
+import com.Polarice3.Goety.utils.SEHelper;
+import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.common.init.GRItems;
+import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
@@ -27,6 +30,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.extensions.IForgeAdvancementBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -81,7 +85,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerInterfac
     private void getDisplayName(CallbackInfoReturnable<Component> cir) {
         Player player = (Player) (Object) this;
         if (ItemConfig.apocalyptiumChestplateTitle) {
-            if (ArmorEvents.findChestplate(player, GRItems.A_CHESTPLATE) && cir.getReturnValue() instanceof MutableComponent component)
+            if (ArmorUtils.findChestplate(player, ModArmorMaterials.APOCALYPTIUM) && cir.getReturnValue() instanceof MutableComponent component)
                 cir.setReturnValue(component.append(ArmorEvents.getTitle(ArmorEvents.getApocalyptiumTitleId(player))));
         }
         if (revelationfix$odamaneHaloExpandedContext().isBlasphemous() && cir.getReturnValue() instanceof MutableComponent component)

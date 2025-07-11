@@ -16,7 +16,9 @@ import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModMobType;
 import com.Polarice3.Goety.utils.*;
+import com.mega.revelationfix.common.entity.IMonsterServant;
 import com.mega.revelationfix.mixin.goety.ApostleAccessor;
+import com.mega.revelationfix.util.entity.GRServantUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -56,7 +58,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ApostleServant extends Apostle implements IServant {
+public class ApostleServant extends Apostle implements IMonsterServant {
 
     //Summoned
     public static final EntityDataAccessor<Byte> SUMMONED_FLAGS;
@@ -515,11 +517,10 @@ public class ApostleServant extends Apostle implements IServant {
 
     @Override
     public boolean canAttack(LivingEntity p_21171_) {
-        if (p_21171_ instanceof IOwned owned) {
-            if (owned.getTrueOwner() == this.getTrueOwner()) return false;
-            else if (owned.getOwnerId() != null && this.getOwnerId() != null && owned.getOwnerId().equals(this.getOwnerId()))
-                return false;
-        }
+        if (MobUtil.areAllies(p_21171_, this))
+            return false;
+        else if (GRServantUtil.isOwnerNotOnline(this))
+            return false;
         return super.canAttack(p_21171_);
     }
 
@@ -870,5 +871,10 @@ public class ApostleServant extends Apostle implements IServant {
     @Override
     public boolean isPatrolling() {
         return super.isPatrolling();
+    }
+
+    @Override
+    public Entity getIMSTarget() {
+        return this.getTarget();
     }
 }

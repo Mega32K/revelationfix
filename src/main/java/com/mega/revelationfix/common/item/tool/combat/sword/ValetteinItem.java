@@ -5,7 +5,6 @@ import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.youkai.YoukaiKiller;
-import com.mega.revelationfix.api.item.IInvulnerableItem;
 import com.mega.revelationfix.common.item.ModItemTiers;
 import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.safe.DamageSourceInterface;
@@ -28,15 +27,15 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.EventPriority;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class ValetteinItem extends SwordItem implements IInvulnerableItem, ICustomHurtWeapon {
+public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon {
     private static final UUID MAX_HEALTH_ID = UUID.fromString("ae3f67b9-08e3-4866-8644-53770179117a");
 
     public ValetteinItem() {
@@ -45,6 +44,11 @@ public class ValetteinItem extends SwordItem implements IInvulnerableItem, ICust
 
     static boolean isOwned(Entity entity, Player player) {
         return entity instanceof IOwned o && o.getTrueOwner() == player || entity instanceof OwnableEntity oe && oe.getOwner() == player;
+    }
+
+    @Override
+    public @NotNull AABB getSweepHitBox(@NotNull ItemStack stack, @NotNull Player player, @NotNull Entity target) {
+        return super.getSweepHitBox(stack, player, target).inflate(0.3F, 0F, 0.3F);
     }
 
     @Override

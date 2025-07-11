@@ -1,14 +1,11 @@
 package com.mega.revelationfix.common.item.tool.combat.whip;
 
 import com.Polarice3.Goety.api.items.ISoulRepair;
-import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.utils.SEHelper;
-import com.mega.revelationfix.client.levelevent.LevelEventManager;
+import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.common.init.ModEffects;
-import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +23,7 @@ public class SpectreWhipItem extends BaseWhipItem implements ISoulRepair {
     public boolean hurtEnemy(@NotNull ItemStack itemStack, @NotNull LivingEntity entity, @NotNull LivingEntity player) {
         if (player instanceof Player pE) {
             SEHelper.increaseSouls(pE, 1);
-            if ((entity.random.nextFloat() < 0.25F || ArmorEvents.isSpectreSet(ArmorEvents.getArmorSet(player))) && !pE.getCooldowns().isOnCooldown(this)) {
+            if ((entity.random.nextFloat() < 0.25F || ArmorEvents.isSpectreSet(ArmorUtils.getArmorSet(player))) && !pE.getCooldowns().isOnCooldown(this)) {
                 int invul = entity.invulnerableTime;
                 entity.invulnerableTime = 0;
                 if (entity.hurt(entity.damageSources().source(DamageTypes.SONIC_BOOM, player), 5.0F))

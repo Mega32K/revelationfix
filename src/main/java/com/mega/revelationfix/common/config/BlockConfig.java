@@ -31,6 +31,7 @@ public class BlockConfig {
     private static final ForgeConfigSpec.ConfigValue<Integer> RUNE_REACTOR_WIND_CORE_COST_FOCUS;
     private static final ForgeConfigSpec.ConfigValue<Double> SpellingCostMultiplier;
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> RUNE_REACTOR_BLACK_LIST_FOCUS;
+    private static final ForgeConfigSpec.ConfigValue<Integer> DARK_ANVIL_BREAK_MAX_ENCHANTMENT_LEVEL;
     public static int runeReactor_rootCoreDelay;
     public static int runeReactor_soulCoreDelay;
     public static int runeReactor_transferCoreDelay;
@@ -44,6 +45,7 @@ public class BlockConfig {
     public static int runeReactor_WindCoreCost_Focus;
     public static double runeReactor_spellingCostMultiplier = 1D;
     public static Set<String> blacklistSpellNames = new ReferenceOpenHashSet<>();
+    public static int darkAnvilLimitLevel;
     static {
         BUILDER.push("Rune Reactor");
         RUNE_REACTOR_ROOT_CORE_DELAY = BUILDER.worldRestart()
@@ -85,6 +87,11 @@ public class BlockConfig {
         RUNE_REACTOR_BLACK_LIST_FOCUS = BUILDER.worldRestart().comment("A list of focus items will be banned when Rune Reactor auto-spelling.")
                 .defineListAllowEmpty("blacklistSpellNames", List.of(), BlockConfig::validateFocusName);
         BUILDER.pop();
+        BUILDER.push("Dark Anvil");
+        DARK_ANVIL_BREAK_MAX_ENCHANTMENT_LEVEL = BUILDER.worldRestart()
+                .comment("Defined the ability of Dark Anvil to break through the upper limit of enchantment levels for items, default : 4")
+                .define("levelLimit", 4);
+        BUILDER.pop();
         SPEC = BUILDER.build();
     }
     public static boolean validateFocusName(final Object obj) {
@@ -106,6 +113,7 @@ public class BlockConfig {
             runeReactor_WindCoreCost_Focus = RUNE_REACTOR_WIND_CORE_COST_FOCUS.get();
             runeReactor_spellingCostMultiplier = SpellingCostMultiplier.get();
             blacklistSpellNames = RUNE_REACTOR_BLACK_LIST_FOCUS.get().stream().map(itemName -> ((MagicFocus)ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName))).getSpell().getClass().getName()).collect(Collectors.toSet());
+            darkAnvilLimitLevel = DARK_ANVIL_BREAK_MAX_ENCHANTMENT_LEVEL.get();
         }
     }
 }

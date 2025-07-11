@@ -59,29 +59,34 @@ public class RitualDataManager {
         return REGISTRIES.containsKey(craftType);
     }
     public static boolean getProperStructure(String craftType, RitualBlockEntity pTileEntity, BlockPos pPos, Level pLevel) {
-
         RitualData ritualData = REGISTRIES.get(craftType);
         {
             Set<Requirement> requirements = ritualData.requirements.get(RitualData.DIMENSION);
-            for (Requirement requirement : requirements) {
-                if (requirement instanceof DimensionTypeRequirement dimensionTypeRequirement && !dimensionTypeRequirement.canUse(pLevel)) {
-                    return false;
+            if (!requirements.isEmpty()) {
+                for (Requirement requirement : requirements) {
+                    if (requirement instanceof DimensionTypeRequirement dimensionTypeRequirement && !dimensionTypeRequirement.canUse(pLevel)) {
+                        return false;
+                    }
                 }
             }
         }
         {
             Set<Requirement> requirements = ritualData.requirements.get(RitualData.TIME);
-            for (Requirement requirement : requirements) {
-                if (requirement instanceof TimeRequirement timeRequirement && !timeRequirement.canUse(pLevel)) {
-                    return false;
+            if (!requirements.isEmpty()) {
+                for (Requirement requirement : requirements) {
+                    if (requirement instanceof TimeRequirement timeRequirement && !timeRequirement.canUse(pLevel)) {
+                        return false;
+                    }
                 }
             }
         }
         {
             Set<Requirement> requirements = ritualData.requirements.get(RitualData.POSITION);
-            for (Requirement requirement : requirements) {
-                if (requirement instanceof PositionRequirement positionRequirement && !positionRequirement.canUse(pLevel, pPos)) {
-                    return false;
+            if (!requirements.isEmpty()) {
+                for (Requirement requirement : requirements) {
+                    if (requirement instanceof PositionRequirement positionRequirement && !positionRequirement.canUse(pLevel, pPos)) {
+                        return false;
+                    }
                 }
             }
         }
@@ -107,8 +112,9 @@ public class RitualDataManager {
                         BlockPos blockpos1 = pPos.offset(i, j, k);
                         BlockState blockstate = pLevel.getBlockState(blockpos1);
                         for (BlockRequirement requirement : map.keySet()) {
-                            if (requirement.canUse(pLevel, blockpos1, blockstate))
+                            if (requirement.canUse(pLevel, blockpos1, blockstate)) {
                                 map.put(requirement, map.get(requirement)+1);
+                            }
                         }
                     }
                 }
@@ -130,9 +136,9 @@ public class RitualDataManager {
                         map.put(requirement, map.get(requirement)+1);
                 }
             }
+
             for (var entryToCheck : map.entrySet()) {
                 if (entryToCheck.getKey().getRequiredCount() > entryToCheck.getValue()) {
-
                     return false;
                 }
             }

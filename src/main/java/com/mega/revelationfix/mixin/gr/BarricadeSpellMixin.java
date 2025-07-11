@@ -8,13 +8,18 @@ import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.common.magic.spells.geomancy.BarricadeSpell;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
+import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
+import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -31,66 +36,92 @@ public abstract class BarricadeSpellMixin extends Spell {
 
     @Inject(at = @At("HEAD"), method = "SpellResult", cancellable = true, remap = false)
     private void createObsidianMonolith(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat, CallbackInfo ci) {
+        boolean isFakeSpeller = false;
+        boolean cannotUse = true;
+        if (caster instanceof FakeSpellerEntity fakeSpellerEntity) {
+            caster = fakeSpellerEntity.getOwner();
+            isFakeSpeller = true;
+        }
+        if (!(caster instanceof Player)) return;
         if (ATAHelper2.hasOdamane(caster)) {
             ci.cancel();
-            HitResult rayTraceResult = this.rayTrace(worldIn, caster, 24, 3.0);
-            if (rayTraceResult instanceof BlockHitResult) {
-                BlockPos blockPos = ((BlockHitResult) rayTraceResult).getBlockPos();
-                blockPos = blockPos.offset(0, 1, 0);
-                Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
-                ObsidianMonolith monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
-                if (monolith != null) {
-                    EntityType<?> entityType = monolith.getVariant(worldIn, blockPos);
-                    if (entityType != null) {
-                        monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
-                    }
-
+            if (isFakeSpeller) {
+                Player playerOwner = (Player) caster;
+                PlayerAbilityHelper playerAbilityHelper = (PlayerAbilityHelper) playerOwner;
+                OdamanePlayerExpandedContext ec = ((PlayerInterface) playerOwner).revelationfix$odamaneHaloExpandedContext();
+                for (Entity entity : ec.getOwnedMonoliths()) {
+                    if (!entity.isAlive())
+                        cannotUse = false;
+                }
+            }
+            if (!isFakeSpeller || !cannotUse) {
+                HitResult rayTraceResult = this.rayTrace(worldIn, caster, 24, 3.0);
+                if (rayTraceResult instanceof BlockHitResult) {
+                    BlockPos blockPos = ((BlockHitResult) rayTraceResult).getBlockPos();
+                    blockPos = blockPos.offset(0, 1, 0);
+                    Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
+                    ObsidianMonolith monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
                     if (monolith != null) {
-                        monolith.setTrueOwner(caster);
-                        monolith.setPos(vec3.x(), vec3.y(), vec3.z());
-                        if (worldIn instanceof ServerLevel) {
-                            monolith.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(blockPos), MobSpawnType.MOB_SUMMONED, null, null);
+                        EntityType<?> entityType = monolith.getVariant(worldIn, blockPos);
+                        if (entityType != null) {
+                            monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
                         }
-                        worldIn.addFreshEntity(monolith);
-                        ((PlayerAbilityHelper) caster).setMonolith(monolith);
-                        MobUtil.setBaseAttributes(monolith.getAttribute(Attributes.MAX_HEALTH), Math.max(200.0F, AttributesConfig.ObsidianMonolithHealth.get()));
-                        monolith.setHealth(monolith.getMaxHealth());
+
+                        if (monolith != null) {
+                            monolith.setTrueOwner(caster);
+                            monolith.setPos(vec3.x(), vec3.y(), vec3.z());
+                            if (worldIn instanceof ServerLevel) {
+                                monolith.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(blockPos), MobSpawnType.MOB_SUMMONED, null, null);
+                            }
+                            worldIn.addFreshEntity(monolith);
+                            ((PlayerAbilityHelper) caster).setMonolith(monolith);
+                            MobUtil.setBaseAttributes(monolith.getAttribute(Attributes.MAX_HEALTH), Math.max(200.0F, AttributesConfig.ObsidianMonolithHealth.get()));
+                            monolith.setHealth(monolith.getMaxHealth());
+                        }
                     }
                 }
             }
         } else if (ATAHelper.hasHalo(caster) && staff.is(ModItems.NETHER_STAFF.get())) {
             ci.cancel();
-            HitResult rayTraceResult = this.rayTrace(worldIn, caster, 16, 3.0);
-            if (rayTraceResult instanceof BlockHitResult) {
-                BlockPos blockPos = ((BlockHitResult) rayTraceResult).getBlockPos();
-                blockPos = blockPos.offset(0, 1, 0);
-                Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
-                ObsidianMonolith monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
-                if (monolith != null) {
-                    EntityType<?> entityType = monolith.getVariant(worldIn, blockPos);
-                    if (entityType != null) {
-                        monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
-                    }
-
+            if (isFakeSpeller) {
+                Player playerOwner = (Player) caster;
+                PlayerAbilityHelper playerAbilityHelper = (PlayerAbilityHelper) playerOwner;
+                ObsidianMonolith obsidianMonolith = playerAbilityHelper.getMonolith();
+                if (obsidianMonolith == null || !obsidianMonolith.isAlive())
+                    cannotUse = false;
+            }
+            if (!isFakeSpeller || !cannotUse) {
+                HitResult rayTraceResult = this.rayTrace(worldIn, caster, 16, 3.0);
+                if (rayTraceResult instanceof BlockHitResult) {
+                    BlockPos blockPos = ((BlockHitResult) rayTraceResult).getBlockPos();
+                    blockPos = blockPos.offset(0, 1, 0);
+                    Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
+                    ObsidianMonolith monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
                     if (monolith != null) {
-                        monolith.setTrueOwner(caster);
-                        monolith.setPos(vec3.x(), vec3.y(), vec3.z());
-                        if (worldIn instanceof ServerLevel) {
-                            monolith.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(blockPos), MobSpawnType.MOB_SUMMONED, null, null);
+                        EntityType<?> entityType = monolith.getVariant(worldIn, blockPos);
+                        if (entityType != null) {
+                            monolith = ModEntityType.OBSIDIAN_MONOLITH.get().create(worldIn);
                         }
 
-                        worldIn.addFreshEntity(monolith);
+                        if (monolith != null) {
+                            monolith.setTrueOwner(caster);
+                            monolith.setPos(vec3.x(), vec3.y(), vec3.z());
+                            if (worldIn instanceof ServerLevel) {
+                                monolith.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(blockPos), MobSpawnType.MOB_SUMMONED, null, null);
+                            }
 
-                        if (((PlayerAbilityHelper) caster).getMonolith() == null) {
-                            ((PlayerAbilityHelper) caster).setMonolith(monolith);
-                        } else {
-                            ((PlayerAbilityHelper) caster).getMonolith().silentDie(caster.damageSources().starve());
-                            ((PlayerAbilityHelper) caster).setMonolith(monolith);
+                            worldIn.addFreshEntity(monolith);
+
+                            if (((PlayerAbilityHelper) caster).getMonolith() == null) {
+                                ((PlayerAbilityHelper) caster).setMonolith(monolith);
+                            } else {
+                                ((PlayerAbilityHelper) caster).getMonolith().silentDie(caster.damageSources().starve());
+                                ((PlayerAbilityHelper) caster).setMonolith(monolith);
+                            }
                         }
                     }
                 }
             }
         }
     }
-
 }

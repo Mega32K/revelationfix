@@ -81,7 +81,18 @@ public class DeathPerformance {
         else return false;
 
     }
+    public static void setDropped(Apostle apostle, boolean z) {
+        if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
+            setFlags(apostle, 4, z);
 
+    }
+
+    public static boolean isDropped(Apostle apostle) {
+        if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
+            return getFlag(apostle, 4);
+        else return false;
+
+    }
     public static void setBarrierKilled(Apostle apostle, boolean z) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
             setFlags(apostle, 2, z);
@@ -184,7 +195,7 @@ public class DeathPerformance {
                         gameRules.getRule(GameRules.RULE_KEEPINVENTORY).set(true, ((ServerLevel) level).getServer());
                 }
 
-                for (Entity entity : apostle.level().getEntities(apostle, new AABB(apostle.blockPosition()).inflate(17.0D), EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
+                for (Entity entity : apostle.level().getEntities(apostle, new AABB(apostle.blockPosition()).inflate(17.0D), (e) -> !(e instanceof Player p) || !p.isCreative())) {
                     if (entity instanceof LivingEntity living && !(living instanceof FakeSpellerEntity)) {
                         double fireScale = living.getBoundingBox().getYsize() / 2D;
                         float percentAmount = living.getMaxHealth() / 17F / 20 / 20 + 0.01F;

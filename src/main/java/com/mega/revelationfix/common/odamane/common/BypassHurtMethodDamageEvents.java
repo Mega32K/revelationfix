@@ -2,6 +2,7 @@ package com.mega.revelationfix.common.odamane.common;
 
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
+import com.mega.revelationfix.util.entity.EntityRedirectUtils;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,8 +20,8 @@ import net.minecraftforge.fml.common.Mod;
  * {@link com.mega.revelationfix.mixin.DamageSourcesMixin}<br>
  * {@link com.mega.revelationfix.mixin.DamageSourceMixin}<br>
  * {@link com.mega.revelationfix.mixin.LivingDamageMixin}<br>
- * {@link com.mega.revelationfix.common.effect.QuietusEffect#quietusArmorAbility(LivingEntity, float, float, DamageSource)}<br>
- * {@link com.mega.revelationfix.common.effect.QuietusEffect#quietusEnchantmentAbility(LivingEntity, float, float, DamageSource, Pair)}<br>
+ * {@link EntityRedirectUtils#quietusArmorAbility(LivingEntity, float, float, DamageSource)}<br>
+ * {@link EntityRedirectUtils#quietusEnchantmentAbility(LivingEntity, float, float, DamageSource, Pair)}<br>
  */
 @Mod.EventBusSubscriber
 public class BypassHurtMethodDamageEvents {

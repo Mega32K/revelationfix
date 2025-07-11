@@ -11,25 +11,24 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class NormalEntityRequirement extends EntityRequirement {
-    private Pair<EntityType<?>, TagKey<EntityType<?>>> ingredient;
+    private EntityType<?> entityType;
+    private TagKey<EntityType<?>> typeTag;
     @Override
     protected void compileSelfData(JsonObject jsonObject) {
         if (jsonObject.has("entity")) {
             String entity = jsonObject.get("entity").getAsString();
             if (entity.startsWith("#")) {
-                ingredient = Pair.of(null, TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(entity.replace("#", ""))));
-            } else ingredient = Pair.of(ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(entity)), null);
+                typeTag = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(entity.replace("#", "")));
+            } else entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(entity));
         }
     }
 
     @Override
     public boolean canUse(Level level, Entity entity) {
-         if (ingredient != null) {
-            if (ingredient.left() != null)
-                return entity.getType().equals(ingredient.left());
-            else if (ingredient.right() != null)
-                return entity.getType().is(ingredient.right());
-        }
+        if (entityType != null)
+            return entityType.equals(entity.getType());
+        else if (typeTag != null)
+            return entity.getType().is(typeTag);
         return false;
     }
 }

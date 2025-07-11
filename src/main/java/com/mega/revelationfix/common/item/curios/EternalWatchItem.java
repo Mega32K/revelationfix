@@ -1,8 +1,9 @@
 package com.mega.revelationfix.common.item.curios;
 
 import com.google.common.collect.HashMultimap;
-import com.mega.revelationfix.client.font.effect.CuriosMutableComponent;
-import com.mega.revelationfix.client.font.effect.LoreStyle;
+import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
+import com.mega.endinglib.api.client.cmc.LoreStyle;
+import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.api.item.ICenterDescItem;
@@ -57,7 +58,7 @@ public class EternalWatchItem extends SimpleDescriptiveCurio implements IJEIInvi
         list.add(CuriosMutableComponent.EMPTY);
         list.add(CuriosMutableComponent.create(Component.translatable("tooltip.goety_revelation.passive_skill"), LoreStyle.NONE));
         list.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.eternal_watch.real_desc1"), LoreStyle.ATTRIBUTE_PREFIX));
-        list.add(CuriosMutableComponent.create(LoreStyle.INDENTATION).appendFormat("%s", s -> new Object[]{I18n.get("item.goety_revelation.eternal_watch.real_desc2", String.format("%.1f", ItemConfig.ewFinalAttackPercentage * 100.0F))}));
+        list.add(CuriosMutableComponent.create(LoreStyle.INDENTATION).appendFormat("%s", s -> new Object[]{I18n.get("item.goety_revelation.eternal_watch.real_desc2", 10.0F)}));
         list.add(CuriosMutableComponent.create(LoreStyle.INDENTATION).appendComponent(Component.translatable("item.goety_revelation.eternal_watch.real_desc3")));
         components.addAll(CuriosMutableComponent.listBake(list, stack));
     }

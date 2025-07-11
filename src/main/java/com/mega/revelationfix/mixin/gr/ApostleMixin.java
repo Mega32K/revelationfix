@@ -466,7 +466,7 @@ public abstract class ApostleMixin extends SpellCastingCultist implements Apolly
                     }
                     //MODIFIED
                     for (Entity entity : this.level().getEntities(this, new AABB(this.blockPosition()).inflate(32.0D),
-                            (e -> !(e instanceof LivingEntity) && !(CommonConfig.inWhitelist(e.getType()))))) {
+                            (e -> !(e instanceof LivingEntity) && !(CommonConfig.inWhitelist(e))))) {
                         if (entity instanceof Projectile projectile) {
                             if (projectile.getOwner() != this) {
                                 projectile.discard();

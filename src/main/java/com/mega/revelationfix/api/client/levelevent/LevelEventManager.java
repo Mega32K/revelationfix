@@ -1,4 +1,4 @@
-package com.mega.revelationfix.client.levelevent;
+package com.mega.revelationfix.api.client.levelevent;
 
 import com.Polarice3.Goety.client.particles.CircleExplodeParticleOption;
 import com.mega.revelationfix.common.block.RuneReactorBlock;
@@ -6,6 +6,7 @@ import com.mega.revelationfix.common.network.PacketClientProxy;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -45,6 +46,20 @@ public class LevelEventManager {
                     level.addDestroyBlockEffect(pos, state);
                 }
                 case 7 -> level.playLocalSound(pos, SoundEvents.WARDEN_ATTACK_IMPACT, SoundSource.PLAYERS, 1.0F, 1.0F, false);
+            }
+        });
+        registries.put(499366777, (pos, rand, i) -> {
+            Level level = Minecraft.getInstance().level;
+            if (level == null) return;
+            switch ((byte) i) {
+                case 0 -> {
+                    for(int j = 0; j < 40; ++j) {
+                        double d0 = rand.nextGaussian() * 0.2;
+                        double d1 = rand.nextGaussian() * 0.2;
+                        double d2 = rand.nextGaussian() * 0.2;
+                        level.addAlwaysVisibleParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, d0, d1, d2);
+                    }
+                }
             }
         });
     }

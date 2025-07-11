@@ -1,4 +1,4 @@
-package com.mega.revelationfix.client.levelevent;
+package com.mega.revelationfix.api.client.levelevent;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;

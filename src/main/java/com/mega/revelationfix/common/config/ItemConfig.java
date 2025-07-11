@@ -24,7 +24,7 @@ public class ItemConfig {
     private static final ForgeConfigSpec.ConfigValue<Integer> DIMENSIONAL_WILL_DEATH_ESCAPE;
     private static final ForgeConfigSpec.ConfigValue<Integer> ETERNAL_WATCH_FREEZING_TIME;
     private static final ForgeConfigSpec.ConfigValue<Integer> ETERNAL_WATCH_COOLDOWN;
-    private static final ForgeConfigSpec.ConfigValue<Double> ETERNAL_WATCH_FINAL_ATTACK_PERCENTAGE;
+    private static final ForgeConfigSpec.ConfigValue<Boolean> ETERNAL_WATCH_COOLDOWN_CAN_BE_REDUCED;
     private static final ForgeConfigSpec.ConfigValue<Boolean> APOCALYPTIUM_CHESTPLATE_TITLE_DISPLAY;
     public static double needleArmorPenetration;
     public static double needleEnchantmentPiercing;
@@ -39,7 +39,7 @@ public class ItemConfig {
     public static int dwDeathEscape;
     public static int ewFreezingTime;
     public static int ewCooldown;
-    public static double ewFinalAttackPercentage;
+    public static boolean ewCooldownsCanBeReduced;
     public static boolean apocalyptiumChestplateTitle;
     static {
         BUILDER.push("Blessing Scroll");
@@ -88,9 +88,9 @@ public class ItemConfig {
         ETERNAL_WATCH_COOLDOWN = BUILDER.worldRestart()
                 .comment("The cooldown of Eternal Watch after frozen the time.")
                 .defineInRange("Cooldown", 70, 0, 32768);
-        ETERNAL_WATCH_FINAL_ATTACK_PERCENTAGE = BUILDER.worldRestart()
-                .comment("The percentage of the max health of the target who was hurt by players who has the Eternal Watch")
-                .defineInRange("Percentage", 0.1D, 0D, 1D);
+        ETERNAL_WATCH_COOLDOWN_CAN_BE_REDUCED = BUILDER.worldRestart()
+                .comment("if true, the cooldowns of the eternal watch can can be reduced by other items")
+                .define("canCooldownsBeReduced", false);
         BUILDER.pop();
         BUILDER.push("Apocalyptium Armor");
         BUILDER.push("Chestplate");
@@ -118,8 +118,8 @@ public class ItemConfig {
             dwDeathEscape = DIMENSIONAL_WILL_DEATH_ESCAPE.get();
             ewFreezingTime = ETERNAL_WATCH_FREEZING_TIME.get();
             ewCooldown = ETERNAL_WATCH_COOLDOWN.get();
-            ewFinalAttackPercentage = ETERNAL_WATCH_FINAL_ATTACK_PERCENTAGE.get();
             apocalyptiumChestplateTitle = APOCALYPTIUM_CHESTPLATE_TITLE_DISPLAY.get();
+            ewCooldownsCanBeReduced = ETERNAL_WATCH_COOLDOWN_CAN_BE_REDUCED.get();
         }
     }
 }

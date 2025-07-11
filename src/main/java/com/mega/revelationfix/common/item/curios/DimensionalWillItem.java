@@ -1,8 +1,9 @@
 package com.mega.revelationfix.common.item.curios;
 
 import com.google.common.collect.HashMultimap;
-import com.mega.revelationfix.client.font.effect.CuriosMutableComponent;
-import com.mega.revelationfix.client.font.effect.LoreStyle;
+import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
+import com.mega.endinglib.api.client.cmc.LoreStyle;
+import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.api.item.ICenterDescItem;

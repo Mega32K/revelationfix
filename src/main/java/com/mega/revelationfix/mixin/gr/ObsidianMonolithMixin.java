@@ -14,6 +14,7 @@ import com.Polarice3.Goety.common.entities.util.SummonCircle;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.cultists.HereticServant;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.util.entity.ATAHelper2;
@@ -114,7 +115,8 @@ public abstract class ObsidianMonolithMixin extends AbstractMonolith implements 
     @Redirect(at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/hostile/servants/ObsidianMonolith;getTrueOwner()Lnet/minecraft/world/entity/LivingEntity;", remap = false), method = "aiStep")
     private LivingEntity getPlayerOwner(ObsidianMonolith instance) {
         LivingEntity living = instance.getTrueOwner();
-
+        if (living instanceof FakeSpellerEntity spellerEntity)
+            living = spellerEntity.getOwner();
         if (living instanceof Player player) {
             //MODIFIED
             if (ATAHelper.hasHalo(player) || ATAHelper2.hasOdamane(player)) {

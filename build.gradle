@@ -195,7 +195,7 @@ dependencies {
     implementation fg.deobf("curse.maven:IMBlocker-483760:4656554")
     implementation fg.deobf("curse.maven:Oculus-581495:5299671")
     implementation fg.deobf("curse.maven:Xenon-564239:5752040")
-    implementation fg.deobf("curse.maven:goety-586095:6660730")
+    implementation fg.deobf("curse.maven:goety-586095:6706891")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
     implementation fg.deobf("curse.maven:MobBattle-268746:5300817")
     implementation fg.deobf("curse.maven:IBE-256822:4994072")
@@ -217,9 +217,11 @@ dependencies {
     implementation fg.deobf("curse.maven:ArtofForging-596955:6510711")
     implementation fg.deobf("curse.maven:SoulFire-662413:6248077")
     implementation fg.deobf("curse.maven:Cobweb-968456:6089406")
+    implementation fg.deobf("curse.maven:nether-depths-upgrade-670011:5340329")
+    implementation fg.deobf("curse.maven:GeckoLib-388172:5675221")
 
-    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.1"))  {
-        jarJar.ranged(it, "[1.1,)")
+    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.2.10"))  {
+        jarJar.ranged(it, "[1.2.10,)")
     }
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

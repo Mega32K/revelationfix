@@ -7,16 +7,13 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.util.SummonCircle;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
-import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.init.ModEffects;
 import com.mega.revelationfix.safe.entity.AttributeInstanceInterface;
-import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
-import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -32,7 +29,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -85,80 +81,6 @@ public class QuietusEffect extends MobEffect {
 
             }
         }
-    }
-
-    /**
-     * @param living        受伤实体
-     * @param srcDamage     源伤害
-     * @param armoredDamage 收到被盔甲减免后的伤害
-     * @param damageSource  (可能为null)从调用方法参数获取到的伤害类型
-     * @return 伤害
-     */
-    public static float quietusArmorAbility(LivingEntity living, float srcDamage, float armoredDamage, DamageSource damageSource) {
-        if (damageSource != null && damageSource.is(ExtraDamageTypes.FE_POWER) && damageSource.getEntity() != living)
-            return Math.max(srcDamage, armoredDamage);
-        if (living.hasEffect(ModEffects.QUIETUS.get())) {
-            if (armoredDamage < srcDamage) {
-                armoredDamage = armoredDamage + (srcDamage - armoredDamage) * (living.getEffect(ModEffects.QUIETUS.get()).getAmplifier() + 1) * 0.1F;
-            }
-        }
-        if (damageSource != null && damageSource.getEntity() instanceof Player player) {
-            if (armoredDamage < srcDamage) {
-                armoredDamage = armoredDamage + (srcDamage - armoredDamage) * (float) (Mth.clamp(player.getAttributeValue(ModAttributes.ARMOR_PENETRATION.get()), 1F, 2F) - 1.0F);
-            }
-        }
-        return armoredDamage;
-    }
-
-    /**
-     * @param living          受伤实体
-     * @param srcDamage       源伤害
-     * @param enchantedDamage 收到被盔甲减免后的伤害
-     * @param damageSource    (可能为null)从调用方法参数获取到的伤害类型
-     * @param pair            (可能为null)从调用方法参数获取到的伤害类型和伤害(在抗性效果之前)(actuallyHurt -> getDamageAfterMagicAbsorb)
-     * @return 伤害
-     */
-    public static float quietusEnchantmentAbility(LivingEntity living, float srcDamage, float enchantedDamage, DamageSource damageSource, Pair<DamageSource, Float> pair) {
-        if (damageSource != null && damageSource.is(ExtraDamageTypes.FE_POWER) && damageSource.getEntity() != living) {
-            if (pair != null && pair.first().equals(damageSource))
-                return Math.max(Math.max(srcDamage, enchantedDamage), pair.right());
-            return Math.max(srcDamage, enchantedDamage);
-        }
-        if (living.hasEffect(ModEffects.QUIETUS.get())) {
-            if (pair != null && pair.first().equals(damageSource))
-                if (pair.right() > srcDamage)
-                    srcDamage = pair.right();
-            if (enchantedDamage < srcDamage) {
-                enchantedDamage = enchantedDamage + (srcDamage - enchantedDamage) * (living.getEffect(ModEffects.QUIETUS.get()).getAmplifier() + 1) * 0.1F;
-            }
-        }
-
-        if (damageSource != null) {
-            if (damageSource.getEntity() instanceof Player player) {
-                if (enchantedDamage < srcDamage) {
-                    enchantedDamage = enchantedDamage + (srcDamage - enchantedDamage) * (float) (Mth.clamp(player.getAttributeValue(ModAttributes.ENCHANTMENT_PIERCING.get()), 1F, 2F) - 1.0F);
-                }
-            }
-            DamageSourceInterface dsi = (DamageSourceInterface) damageSource;
-
-            if (dsi.hasTag((byte) 5)) {
-                if (enchantedDamage < srcDamage) {
-                    enchantedDamage = enchantedDamage + (srcDamage - enchantedDamage) * (1 - 0.6F);
-                }
-            } else if (dsi.hasTag((byte) 4)) {
-                if (enchantedDamage < srcDamage) {
-                    enchantedDamage = srcDamage;
-                }
-            }
-        }
-        return enchantedDamage;
-    }
-
-    public static float quietusHealingAbility(LivingEntity living, float srcAmount) {
-        if (living.hasEffect(ModEffects.QUIETUS.get())) {
-            srcAmount *= (1.0F - (living.getEffect(ModEffects.QUIETUS.get()).getAmplifier() + 1) * 0.1F);
-        }
-        return srcAmount;
     }
 
     @Override

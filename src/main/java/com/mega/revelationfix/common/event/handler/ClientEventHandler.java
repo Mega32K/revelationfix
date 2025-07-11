@@ -12,6 +12,7 @@ import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.config.CommonConfig;
+import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredient;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
@@ -137,7 +138,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void addTECraftingTooltip(ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
-        if (itemStack.is(GRItems.THE_END_CRAFTING)) {
+        if (TheEndCraftingIngredient.INSTANCE.test(itemStack)) {
             event.getToolTip().add(Component.translatable("tooltip.revelationfix.t_e_crafting").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
         } else if (itemStack.hasTag()) {
             Item item = null;
@@ -381,7 +382,7 @@ public class ClientEventHandler {
     }
     @SubscribeEvent
     public static void renderSpellCircle(RenderPlayerEvent event) {
-        if (SafeClass.isYSMLoaded()) return;
+        //if (SafeClass.isYSMLoaded()) return;
         Minecraft mc = Minecraft.getInstance();
         if (SpellClientContext.circle != null) {
             SpellClientContext.circle.render(event.getPartialTick(), event.getPoseStack());

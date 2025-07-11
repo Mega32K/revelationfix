@@ -6,6 +6,7 @@ import com.mega.revelationfix.client.PlayerRendererContext;
 import com.mega.revelationfix.client.citadel.GRShaders;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
 import com.mega.revelationfix.client.key.CuriosSkillKeyMapping;
+import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
 import com.mega.revelationfix.client.model.entity.SpiderDarkmageArmorModel;
 import com.mega.revelationfix.client.particle.FrostFlowerParticle;
 import com.mega.revelationfix.client.renderer.entity.*;
@@ -38,7 +39,6 @@ import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.lwjgl.glfw.GLFW;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 import z1gned.goetyrevelation.util.ATAHelper;
 
@@ -46,8 +46,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class ClientProxy implements ModProxy {
     public static final ResourceLocation HOLOGRAM_SHADER = new ResourceLocation(Revelationfix.MODID, "shaders/post/hologram.json");
@@ -103,6 +101,7 @@ public class ClientProxy implements ModProxy {
         event.registerLayerDefinition(QuietusVirtualRenderer.MODEL_LAYER_LOCATION, QuietusVirtualRenderer::createBodyLayer);
         event.registerLayerDefinition(OdamaneHaloModel.LAYER_LOCATION, OdamaneHaloModel::createBodyLayer);
         event.registerLayerDefinition(TeleportEntityModel.LAYER_LOCATION, TeleportEntityModel::createBodyLayer);
+        event.registerLayerDefinition(SpiderArmorModel.OUTER, SpiderArmorModel::creteOuter);
         event.registerLayerDefinition(SpiderDarkmageArmorModel.OUTER, SpiderDarkmageArmorModel::creteOuter);
     }
 
@@ -123,7 +122,7 @@ public class ClientProxy implements ModProxy {
             EntityRenderers.register(ModEntities.GUNGNIR.get(), GungnirSpearRenderer::new);
             EntityRenderers.register(ModEntities.FAKE_SPELLER.get(), FakeSpellerRenderer::new);
             EntityRenderers.register(ModEntities.TELEPORT_ENTITY.get(), TeleportEntityRenderer::new);
-            if (!SafeClass.isYSMLoaded())
+            //if (!SafeClass.isYSMLoaded())
                 CuriosRendererRegistry.register(GRItems.HALO_OF_THE_END, OdamaneHaloLayer::new);
             BlockEntityRenderers.register(ModBlocks.RUNE_REACTOR_ENTITY.get(), RuneReactorBERenderer::new);
             BowOfRevelationItem bow = (BowOfRevelationItem) GRItems.BOW_OF_REVELATION.get();
@@ -143,6 +142,7 @@ public class ClientProxy implements ModProxy {
             ItemProperties.register(mysteryFragment, new ResourceLocation("fragment"), (itemStack, clientWorld, livingEntity, i)
                     -> livingEntity != null ? itemStack.getOrCreateTag().getInt("fragment") : 0);
             copyOldArtIfMissing();
+            copyGrArtIfMissing();
         });
     }
     public void registerKeys(RegisterKeyMappingsEvent evt) {
@@ -158,6 +158,30 @@ public class ClientProxy implements ModProxy {
             try {
                 dir.mkdirs();
                 InputStream in = Revelationfix.class.getResourceAsStream("/assets/revelationfix/gr_old_textures.zip");
+                FileOutputStream out = new FileOutputStream(target);
+                byte[] buf = new byte[16384];
+                if (in != null) {
+                    int len;
+                    while((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+
+                    in.close();
+                }
+
+                out.close();
+            } catch (IOException var6) {
+            }
+        }
+
+    }
+    private static void copyGrArtIfMissing() {
+        File dir = new File(".", "resourcepacks");
+        File target = new File(dir, "GoetyRevelation art style.zip");
+        if (!target.exists()) {
+            try {
+                dir.mkdirs();
+                InputStream in = Revelationfix.class.getResourceAsStream("/assets/revelationfix/gr_art_style_textures.zip");
                 FileOutputStream out = new FileOutputStream(target);
                 byte[] buf = new byte[16384];
                 if (in != null) {

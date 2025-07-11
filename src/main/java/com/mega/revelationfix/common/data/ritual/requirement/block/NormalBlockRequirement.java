@@ -46,6 +46,7 @@ public class NormalBlockRequirement extends BlockRequirement {
             for (var pro : blockState.getProperties()) {
                 if (pro instanceof DirectionProperty)
                     continue;
+
                 if (!state.hasProperty(pro) || !state.getValue(pro).equals(blockState.getValue(pro))) {
                     check = false;
                 }

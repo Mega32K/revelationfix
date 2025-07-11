@@ -1,4 +1,4 @@
-package com.mega.revelationfix.api.item;
+package com.mega.revelationfix.api.item.combat;
 
 import com.google.common.collect.ImmutableMultimap;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -6,6 +6,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 
-public interface IExtraAttributesInjector {
-    void injectExtraAttributes(ArmorMaterial armorMaterial, ArmorItem.Type type, ImmutableMultimap.Builder<Attribute, AttributeModifier> builder);
+public interface IWeaponExtraAttributesInjector {
+    void injectExtraAttributes(ImmutableMultimap.Builder<Attribute, AttributeModifier> builder);
 }

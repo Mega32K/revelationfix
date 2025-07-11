@@ -1,6 +1,7 @@
 package com.mega.revelationfix.client.key;
 
 import com.mega.endinglib.api.client.ClientTaskInstance;
+import com.mega.endinglib.api.event.render.EventItf;
 import com.mega.revelationfix.client.screen.post.custom.BarrelDistortionCoordinatesPostEffect;
 import com.mega.revelationfix.client.task.TeleportCameraTask;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
@@ -13,19 +14,16 @@ import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHandler;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
@@ -38,11 +36,12 @@ public class CuriosSkillKeyMapping {
     private static final Minecraft mc = Minecraft.getInstance();
     public static KeyMapping ACTIVE_SKILL = new KeyMapping("key.revelationfix.curios_skill", GLFW.GLFW_KEY_K, "key.revelationfix.category");
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onKeyboard(InputEvent.Key event) {
         if (mc.screen == null && event.getAction() == GLFW.GLFW_PRESS && event.getKey() == ACTIVE_SKILL.getKey().getValue()) {
             if (ATAHelper2.hasOdamane(mc.player) || ATAHelper2.hasEternalWatch(mc.player)) {
                 PacketHandler.sendToServer(new TryTimeStopSkill(mc.player.getId()));
+                ((EventItf) event).el_setEventUnCancelable(true);
             }
         }
     }

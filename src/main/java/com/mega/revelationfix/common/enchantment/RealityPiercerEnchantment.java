@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.enchantment;
 
+import com.Polarice3.Goety.client.inventory.container.DarkAnvilMenu;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.eeeab.eeeabsmobs.sever.entity.guling.EntityNamelessGuardian;
 import com.eeeab.eeeabsmobs.sever.entity.immortal.EntityImmortal;
@@ -21,7 +22,7 @@ public class RealityPiercerEnchantment extends Enchantment {
     }
 
     @Override
-    public void doPostHurt(@NotNull LivingEntity living, @NotNull Entity beHurt, int p_44694_) {
+    public void doPostHurt(@NotNull LivingEntity beHurt, @NotNull Entity source, int p_44694_) {
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 public class FontTextBuilder {
     static MyFormattedCharSink NORMAL = new MyFormattedCharSink((t) -> true);
     static MyFormattedCharSink APOLLYON = new MyFormattedCharSink((t) -> t.getColor() != null && ((TextColorInterface) (Object) t.getColor()).revelationfix$getCode() == 'q');
+    static MyFormattedCharSink EDEN = new MyFormattedCharSink((t) -> t.getColor() != null && ((TextColorInterface) (Object) t.getColor()).revelationfix$getCode() == '-');
 
     public static String formattedCharSequenceToString(FormattedCharSequence text) {
         text.accept(NORMAL);
@@ -24,7 +25,12 @@ public class FontTextBuilder {
         APOLLYON.text = new StringBuilder();
         return s;
     }
-
+    public static String formattedCharSequenceToStringEden(FormattedCharSequence text) {
+        text.accept(EDEN);
+        String s = EDEN.getText();
+        EDEN.text = new StringBuilder();
+        return s;
+    }
     public static class MyFormattedCharSink implements FormattedCharSink {
         public Predicate<Style> stylePredicate;
         private StringBuilder text = new StringBuilder();

@@ -1,7 +1,9 @@
 package com.mega.revelationfix.util;
 
 import com.mega.endinglib.coremod.forge.IClassProcessor;
+import com.mega.endinglib.util.asm.injection.InjectionFinder;
 import com.mega.endinglib.util.mixin.ApplyCheckMixinConfigPlugin;
+import com.mega.revelationfix.util.asm.CompatClassNodeProcessor;
 import com.mega.revelationfix.util.asm.GoetyClassNodeProcessor;
 import cpw.mods.modlauncher.LaunchPluginHandler;
 import cpw.mods.modlauncher.Launcher;
@@ -27,11 +29,13 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
     private static final String ABSTRACT_SPELL_MIXIN = "com.mega.revelationfix.mixin.fantasy_ending.time.ironspellbook.AbstractSpellMixin";
     private static final String EVENT_BUS_MIXIN = "net/minecraftforge/eventbus/EventBus";
     private static final String IMODULAR_ITEM_CLASS = "se.mickelus.tetra.items.modular.IModularItem".replace('.', '/');
-    private static final String EVENT_UTIL_CLASS = "com/mega/revelationfix/util/EventUtil";
+    public static final String EVENT_UTIL_CLASS;
     public static boolean USE_FIX_MIXIN = true;
     public static Logger LOGGER = LogManager.getLogger("RevelationFix");
     public static IClassProcessor GOETY_PROCESSOR = GoetyClassNodeProcessor.INSTANCE;
+    public static IClassProcessor COMPAT_PROCESSOR = CompatClassNodeProcessor.INSTANCE;
     static {
+        EVENT_UTIL_CLASS = EventUtil.class.getName().replace(".", "/");
         handCheckMixins.add(ABSTRACT_SPELL_MIXIN);
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ApostleMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/BossLoopMusicMixin");
@@ -44,7 +48,7 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/CycloneSpellMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ChatFormattingMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ClientEventsMixin");
-        toRemovedMixins.add("dev/shadowsoffire/attributeslib/mixin/LivingEntityMixin");
+        //toRemovedMixins.add("dev/shadowsoffire/attributeslib/mixin/LivingEntityMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/LavaballSpellMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/FireballSpellMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/WitherSkullSpellMixin");
@@ -54,10 +58,12 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/HellfireMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/BarricadeSpellMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/BowItemMixin");
+        //BC兼容
         toRemovedMixins.add("net/bettercombat.mixin/client/MinecraftClientInject");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/LivingEntityRendererMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ApostleModelMixin");
         toRemovedMixins.add("com/elfmcys/yesstevemodel/mixin/client/InventoryScreenMixin");
+
         //toTransformClasses.add(LIVING_ENTITY_CLASS);
         if (USE_FIX_MIXIN)
             try {
@@ -83,8 +89,9 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
                     public boolean processClass(Phase phase, ClassNode classNode, Type classType) {
                         String name = classNode.name;
                         AtomicBoolean shouldWrite = new AtomicBoolean(false);
+                        COMPAT_PROCESSOR.processClass(phase, classNode, classType, shouldWrite);
+                        GOETY_PROCESSOR.processClass(phase, classNode, classType, shouldWrite);
                         if (phase == Phase.BEFORE) {
-                            GOETY_PROCESSOR.processClass(Phase.BEFORE, classNode, classType, shouldWrite);
                             if (name.equals(MOB_EFFECT_EVENT$EXPIRED)) {
                                 classNode.visitAnnotation("Lnet/minecraftforge/eventbus/api/Cancelable;", true);
                                 shouldWrite.set(true);
@@ -94,7 +101,7 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
                                         InsnList list = new InsnList();
                                         list.add(new VarInsnNode(Opcodes.ALOAD, 5));
                                         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, EVENT_UTIL_CLASS, "tryCaughtThrowable", "(Ljava/lang/Throwable;)V", false));
-                                        methodNode.instructions.insertBefore(methodNode.instructions.get(0), list);
+                                        methodNode.instructions.insertBefore(InjectionFinder.head(methodNode.instructions), list);
                                         shouldWrite.set(true);
                                     }
                                 });
@@ -132,6 +139,10 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
         if (classNode.invisibleAnnotations != null) {
             classNode.invisibleAnnotations.removeIf(n -> !n.desc.equals("Lorg/spongepowered/asm/mixin/Mixin;"));
         }
+    }
+
+    public static boolean isUnsupportModifyingClass(String name) {
+        return EventUtil.EVENT_UTIL_CLASS.equals(name) || name.startsWith("com/mega/revelationfix/util/asm");
     }
 
     @Override

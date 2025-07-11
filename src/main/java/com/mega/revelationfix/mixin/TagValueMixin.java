@@ -1,8 +1,9 @@
 package com.mega.revelationfix.mixin;
 
+import com.mega.endinglib.util.annotation.DeprecatedMixin;
+import com.mega.endinglib.util.annotation.NoModDependsMixin;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
-import com.mega.tetraclip.util.NoModDependsMixin;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
@@ -21,6 +22,7 @@ import java.util.Collection;
 
 @Mixin(value = Ingredient.TagValue.class, priority = 600)
 @NoModDependsMixin("modernfix")
+@DeprecatedMixin
 public class TagValueMixin {
     @Shadow
     @Final
@@ -60,3 +62,4 @@ public class TagValueMixin {
         cir.setReturnValue(list);
     }
 }
+

@@ -1,5 +1,7 @@
 package com.mega.revelationfix.common.item.armor;
 
+import com.mega.endinglib.api.item.armor.ArmorOption;
+import com.mega.endinglib.api.item.armor.OptionArmorMaterial;
 import com.mega.revelationfix.common.init.GRItems;
 import net.minecraft.Util;
 import net.minecraft.sounds.SoundEvent;
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumMap;
 import java.util.function.Supplier;
 
-public enum ModArmorMaterials implements ArmorMaterial {
+public enum ModArmorMaterials implements OptionArmorMaterial {
     APOCALYPTIUM("goety_revelation:apocalyptium_armor", Util.make(new EnumMap<>(ArmorItem.Type.class), (typeIntegerEnumMap) -> {
         typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 666);
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 666);
@@ -25,7 +27,8 @@ public enum ModArmorMaterials implements ArmorMaterial {
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 9);
         typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 11);
         typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 6);
-    }), 4F, 25, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.3F, () -> Ingredient.of(GRItems.APOCALYPTIUM_INGOT_ITEM)),
+    }), 4F, 25, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.3F, () -> Ingredient.of(GRItems.APOCALYPTIUM_INGOT_ITEM),
+            ArmorOption.Builder.create().armorSetEffect().attackEvent().armorSetAttackEvent().deathEvent().build()),
     SPIDER("goety_revelation:spider_armor", Util.make(new EnumMap<>(ArmorItem.Type.class), (typeIntegerEnumMap) -> {
         typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 520);
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 600);
@@ -36,7 +39,8 @@ public enum ModArmorMaterials implements ArmorMaterial {
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 6);
         typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 8);
         typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 3);
-    }), 2F, 18, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(GRItems.SPIDERS)),
+    }), 2F, 18, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(GRItems.SPIDERS),
+            ArmorOption.Builder.create().attackEvent().armorSetHurtEvent().build()),
     SPECTRE("goety_revelation:spectre_armor", Util.make(new EnumMap<>(ArmorItem.Type.class), (typeIntegerEnumMap) -> {
         typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 650);
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 750);
@@ -47,29 +51,32 @@ public enum ModArmorMaterials implements ArmorMaterial {
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 6);
         typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 8);
         typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 3);
-    }), 2F, 18, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(Items.ECHO_SHARD)),
+    }), 2F, 18, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(Items.ECHO_SHARD),
+            ArmorOption.Builder.create().armorSetEffect().attackEvent().build()),
     SPIDER_DARKMAGE("goety_revelation:spider_darkmage_armor", Util.make(new EnumMap<>(ArmorItem.Type.class), (typeIntegerEnumMap) -> {
         typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 920);
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 1000);
         typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 1040);
         typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 840);
     }), Util.make(new EnumMap<>(ArmorItem.Type.class), (typeIntegerEnumMap) -> {
-        typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 4);
-        typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 7);
-        typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 9);
-        typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 4);
-    }), 3.5F, 25, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(GRItems.SPIDERS)),
+        typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 3);
+        typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 6);
+        typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 8);
+        typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 3);
+    }), 3.5F, 25, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(GRItems.SPIDERS),
+            ArmorOption.Builder.create().armorSetEffect().attackEvent().armorSetHurtEvent().armorSetAttackEvent().armorSetHurtOther().build()),
     SPECTRE_DARKMAGE("goety_revelation:spectre_darkmage_armor", Util.make(new EnumMap<>(ArmorItem.Type.class), (typeIntegerEnumMap) -> {
         typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 1050);
         typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 1150);
         typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 1200);
         typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 950);
     }), Util.make(new EnumMap<>(ArmorItem.Type.class), (typeIntegerEnumMap) -> {
-        typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 4);
-        typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 7);
+        typeIntegerEnumMap.put(ArmorItem.Type.BOOTS, 3);
+        typeIntegerEnumMap.put(ArmorItem.Type.LEGGINGS, 6);
         typeIntegerEnumMap.put(ArmorItem.Type.CHESTPLATE, 8);
-        typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 4);
-    }), 3.5F, 25, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(Items.ECHO_SHARD));
+        typeIntegerEnumMap.put(ArmorItem.Type.HELMET, 3);
+    }), 3.5F, 25, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.1F, () -> Ingredient.of(Items.ECHO_SHARD),
+            ArmorOption.Builder.create().armorSetEffect().attackEvent().armorSetAttackEvent().build());
     private final String name;
     private final EnumMap<ArmorItem.Type, Integer> durabilityFunctionForType;
     private final EnumMap<ArmorItem.Type, Integer> protectionFunctionForType;
@@ -78,7 +85,7 @@ public enum ModArmorMaterials implements ArmorMaterial {
     private final SoundEvent sound;
     private final float knockbackResistance;
     private final LazyLoadedValue<Ingredient> repairIngredient;
-
+    private ArmorOption option;
     ModArmorMaterials(String name,
                       EnumMap<ArmorItem.Type, Integer> durabilityFunctionForType,
                       EnumMap<ArmorItem.Type, Integer> protectionFunctionForType,
@@ -86,7 +93,8 @@ public enum ModArmorMaterials implements ArmorMaterial {
                       int enchantmentValue,
                       SoundEvent soundEvent,
                       float knockbackResistance,
-                      Supplier<Ingredient> repairIngredient) {
+                      Supplier<Ingredient> repairIngredient,
+                      ArmorOption option) {
         this.name = name;
         this.durabilityFunctionForType = durabilityFunctionForType;
         this.protectionFunctionForType = protectionFunctionForType;
@@ -95,6 +103,12 @@ public enum ModArmorMaterials implements ArmorMaterial {
         this.sound = soundEvent;
         this.knockbackResistance = knockbackResistance;
         this.repairIngredient = new LazyLoadedValue<>(repairIngredient);
+        this.option = option;
+    }
+
+    @Override
+    public ArmorOption getOption() {
+        return option;
     }
 
     public int getDurabilityForType(ArmorItem.@NotNull Type type) {

@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.entities.util.SummonCircle;
 import com.Polarice3.Goety.init.ModSounds;
+import com.mega.revelationfix.common.apollyon.common.AttackDamageChangeHandler;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.server.level.ServerLevel;
@@ -147,7 +148,7 @@ public abstract class LivingEntityMixin extends Entity {
     private void setCooldown(DamageSource p_21240_, float p_21241_, CallbackInfo ci) {
         if ((LivingEntity) (Object) this instanceof Apostle apostle) {
             if (apostle.isInNether() && ((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon()) {
-                ((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$setHitCooldown(30);
+                ((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$setHitCooldown(AttackDamageChangeHandler.vanillaLimitTime);
             }
         }
     }

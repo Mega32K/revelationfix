@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
-import com.mega.revelationfix.client.levelevent.LevelEventManager;
+import com.mega.revelationfix.api.client.levelevent.LevelEventManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;

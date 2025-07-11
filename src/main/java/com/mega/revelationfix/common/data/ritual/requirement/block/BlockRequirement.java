@@ -5,6 +5,9 @@ import com.google.gson.JsonObject;
 import com.mega.revelationfix.common.data.ritual.RitualData;
 import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
 import com.mega.revelationfix.util.ClassHandler;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.ReportedException;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.GsonHelper;
@@ -17,10 +20,14 @@ import java.util.Map;
 public abstract class BlockRequirement implements Requirement {
     public static final String TYPE_NORMAL = "normal";
     public static final String TYPE_CHEST = "check_chest";
+    public static final String TYPE_OR = "or";
+    public static final String TYPE_AND = "and";
     public static Map<String, Class<? extends BlockRequirement>> BUILDERS = Util.make(() -> {
         Map<String, Class<? extends BlockRequirement>> m = new HashMap<>();
         m.put(TYPE_NORMAL, NormalBlockRequirement.class);
         m.put(TYPE_CHEST, CheckChestBlockRequirement.class);
+        m.put(TYPE_OR, BlockOrRequirement.class);
+        m.put(TYPE_AND, BlockAndRequirement.class);
         return m;
     });
     private int requiredCount;
@@ -39,7 +46,13 @@ public abstract class BlockRequirement implements Requirement {
     public final void compileData(JsonElement jsonElement) {
         if (jsonElement instanceof JsonObject jsonObject) {
             this.requiredCount = GsonHelper.getAsInt(jsonObject, "count", 1);
-            this.compileSelfData(jsonObject);
+            try {
+                this.compileSelfData(jsonObject);
+            } catch (Throwable throwable) {
+                CrashReport report = CrashReport.forThrowable(throwable, "Reading Requirement: %s, jsonData : %s".formatted(this.getClass(), jsonElement));
+                new ReportedException(report).printStackTrace();
+                throwable.printStackTrace();
+            }
         }
     }
     protected abstract void compileSelfData(JsonObject jsonObject);

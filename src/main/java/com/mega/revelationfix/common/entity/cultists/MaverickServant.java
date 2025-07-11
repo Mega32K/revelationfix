@@ -15,8 +15,10 @@ import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModMobType;
 import com.Polarice3.Goety.utils.*;
+import com.mega.revelationfix.common.entity.IMonsterServant;
 import com.mega.revelationfix.mixin.PatrollingMonsterAccessor;
 import com.mega.revelationfix.mixin.goety.MaverickAccessor;
+import com.mega.revelationfix.util.entity.GRServantUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -59,7 +61,7 @@ import java.util.function.Predicate;
 /**
  * 独行者
  */
-public class MaverickServant extends Maverick implements IServant {
+public class MaverickServant extends Maverick implements IMonsterServant {
     //Summoned
     protected static final EntityDataAccessor<Byte> SUMMONED_FLAGS;
     protected static final EntityDataAccessor<Byte> UPGRADE_FLAGS;
@@ -922,5 +924,19 @@ public class MaverickServant extends Maverick implements IServant {
     @Override
     public boolean isPatrolling() {
         return ((PatrollingMonsterAccessor) this).patrolling();
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity p_21171_) {
+        if (MobUtil.areAllies(p_21171_, this))
+            return false;
+        else if (GRServantUtil.isOwnerNotOnline(this))
+            return false;
+        return super.canAttack(p_21171_);
+    }
+
+    @Override
+    public Entity getIMSTarget() {
+        return this.getTarget();
     }
 }
