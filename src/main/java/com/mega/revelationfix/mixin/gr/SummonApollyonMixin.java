@@ -23,18 +23,17 @@ public class SummonApollyonMixin extends SummonApostle {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.level instanceof ServerLevel serverLevel) {
+        Level level = this.level();
+        if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
             DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(serverLevel);
             GRSavedDataEC savedDataEC = (GRSavedDataEC) state;
             GRSavedDataExpandedContext context = savedDataEC.revelationfix$dataEC();
-            if (this.level.dimension() != Level.NETHER)
+            if (level.dimension() != Level.NETHER)
                 context.setSummonedApollyonOverworld(true);
         }
         if (this.tickCount == 150) {
             this.playSound(SoundEvents.AMBIENT_NETHER_WASTES_MOOD.get(), 1.0F, 1.0F);
-            Iterator var1 = this.level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32.0)).iterator();
-            while (var1.hasNext()) {
-                Player player = (Player) var1.next();
+            for (Player player : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32.0))) {
                 player.displayClientMessage(Component.translatable("info.goety.apollyon.summon"), true);
             }
         }

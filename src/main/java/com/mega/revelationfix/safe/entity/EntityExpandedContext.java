@@ -51,10 +51,10 @@ public class EntityExpandedContext {
         }
     }
     public static boolean isOwnerFriendlyTag(Entity owned) {
-        return owned instanceof IOwned iOwned && iOwned.getTrueOwner() != null && iOwned.getTrueOwner().tags.contains(GR_MAY_FRIENDLY_TAG);
+        return owned instanceof IOwned iOwned && iOwned.getTrueOwner() != null && iOwned.getTrueOwner().getTags().contains(GR_MAY_FRIENDLY_TAG);
     }
     public static boolean isOwnerFriendlyTag_Church(Entity owned) {
-        return owned instanceof IOwned iOwned && iOwned.getTrueOwner() != null && iOwned.getTrueOwner().tags.contains(GR_FT_CHURCH);
+        return owned instanceof IOwned iOwned && iOwned.getTrueOwner() != null && iOwned.getTrueOwner().getTags().contains(GR_FT_CHURCH);
     }
     public static EntityActuallyHurt.IndexAndType getIndexAndType(LivingEntity living) {
         if (living == null) return null;
@@ -85,8 +85,8 @@ public class EntityExpandedContext {
     @Nullable
     public LivingEntity getQuietusCaster() {
         if (quietusCasterID == null) return null;
-        if (entity.level.isClientSide) return null;
-        else if (entity.level instanceof ServerLevel serverLevel) {
+        if (entity.level().isClientSide) return null;
+        else if (entity.level() instanceof ServerLevel serverLevel) {
             if (serverLevel.getEntities().get(quietusCasterID) instanceof LivingEntity living && quietusCaster == null)
                 quietusCaster = living;
             return quietusCaster;

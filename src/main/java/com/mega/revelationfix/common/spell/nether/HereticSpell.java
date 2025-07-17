@@ -104,7 +104,7 @@ public class HereticSpell extends SummonSpell {
                     summonedentity.setNetherStaffSummoned(netherStaff);
                 }
 
-                summonedentity.finalizeSpawn(worldIn, caster.level.getCurrentDifficultyAt(caster.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                summonedentity.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(caster.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                 this.SummonSap(caster, summonedentity);
                 this.setTarget(caster, summonedentity);
                 worldIn.addFreshEntity(summonedentity);
@@ -121,7 +121,7 @@ public class HereticSpell extends SummonSpell {
                 {
                     summonedentity.setNetherStaffSummoned(netherStaff);
                 }
-                summonedentity.finalizeSpawn(worldIn, caster.level.getCurrentDifficultyAt(caster.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                summonedentity.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(caster.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                 this.SummonSap(caster, summonedentity);
                 this.setTarget(caster, summonedentity);
                 worldIn.addFreshEntity(summonedentity);

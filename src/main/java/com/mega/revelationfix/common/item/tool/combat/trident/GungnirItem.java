@@ -104,7 +104,7 @@ public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon {
                                     player.getInventory().removeItem(itemStack);
                                 }
                                 //itemStack.hurtAndBreak(5, player, (p_43388_) -> p_43388_.broadcastBreakEvent(livingEntity.getUsedItemHand()));
-                                int rand = livingEntity.random.nextInt(0, 3);
+                                int rand = livingEntity.getRandom().nextInt(0, 3);
                                 SoundEvent soundEvent;
                                 if (rand == 0) {
                                     soundEvent = SoundEvents.TRIDENT_RIPTIDE_3;
@@ -119,7 +119,7 @@ public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon {
                             CompoundTag itemTag = itemStack.getOrCreateTag();
                             if (itemTag.hasUUID("TargetID")) {
                                 if (level instanceof ServerLevel serverLevel) {
-                                    Entity target = serverLevel.getEntity(itemTag.getUUID("TargetID"));
+                                    Entity target = serverLevel.getEntity(itemTag.getInt("TargetID"));
                                     if (target != null && !target.isRemoved()) {
                                         gungnirSpear.setTarget(target);
                                     }

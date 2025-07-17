@@ -58,7 +58,7 @@ public class VizirEffect {
         LivingEntity target = event.getEntity();
         if (!((DamageSourceInterface) event.getSource()).hasTag((byte) 3)) {
             if (attackingEntity instanceof LivingEntity attacker) {
-                if (attacker.level instanceof ServerLevel worldIn) {
+                if (attacker.level() instanceof ServerLevel worldIn) {
                     ItemStack heldStack = attacker.getMainHandItem();
                     Item stackItem = heldStack.getItem();
                     if (stackItem instanceof ModularItem item) {
@@ -70,7 +70,7 @@ public class VizirEffect {
                             AllyVex vexentity = new AllyVex(ModEntityType.ALLY_VEX.get(), worldIn);
                             vexentity.setTrueOwner(attacker);
                             vexentity.moveTo(blockpos, 0.0F, 0.0F);
-                            vexentity.finalizeSpawn(worldIn, attacker.level.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
+                            vexentity.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
                             vexentity.setBoundOrigin(blockpos);
                             vexentity.setLimitedLife(100);
                             {

@@ -18,7 +18,7 @@ public class PhantomServantRendererMixin {
 
     @Inject(remap = false, method = "getTextureLocation(Lz1gned/goetyrevelation/entitiy/PhantomServant;)Lnet/minecraft/resources/ResourceLocation;", at = @At("HEAD"), cancellable = true)
     private void getTextureLocation(PhantomServant p_115679_, CallbackInfoReturnable<ResourceLocation> cir) {
-        if (p_115679_.level.dimension() == Level.NETHER)
+        if (p_115679_.level().dimension() == Level.NETHER)
             cir.setReturnValue(NETHER_TEXTURE);
     }
 }

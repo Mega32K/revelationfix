@@ -272,7 +272,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     public void die(DamageSource pCause) {
-        if (!this.level.isClientSide && this.hasCustomName() && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
+        if (!this.level().isClientSide && this.hasCustomName() && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
             this.getTrueOwner().sendSystemMessage(this.getCombatTracker().getDeathMessage());
         }
 
@@ -306,7 +306,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
         boolean flag = doHurtTarget_owned(entityIn);
         if (flag) {
             if (this.getMobType() == MobType.UNDEAD) {
-                float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+                float f = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
                 if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f * 0.3F) {
                     entityIn.setSecondsOnFire(2 * (int) f);
                 }
@@ -363,7 +363,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
             float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
             if (this.random.nextFloat() < f) {
                 player.getCooldowns().addCooldown(Items.SHIELD, 100);
-                this.level.broadcastEntityEvent(player, (byte) 30);
+                this.level().broadcastEntityEvent(player, (byte) 30);
             }
         }
 
@@ -735,7 +735,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
 
     //Owned
     public void convertNewEquipment(Entity entity) {
-        this.populateDefaultEquipmentSlots(this.random, this.level.getCurrentDifficultyAt(this.blockPosition()));
+        this.populateDefaultEquipmentSlots(this.random, this.level().getCurrentDifficultyAt(this.blockPosition()));
     }
 
     //Owned
@@ -747,16 +747,16 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     //Owned
     @javax.annotation.Nullable
     public LivingEntity getTrueOwner() {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(this.level, uuid);
+            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(this.level(), uuid);
         } else {
             int id = this.getOwnerClientId();
             LivingEntity var10000;
             if (id <= -1) {
                 var10000 = null;
             } else {
-                Entity var3 = this.level.getEntity(this.getOwnerClientId());
+                Entity var3 = this.level().getEntity(this.getOwnerClientId());
                 if (var3 instanceof LivingEntity living) {
                     if (living != this) {
                         var10000 = living;
@@ -871,7 +871,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
 
     //Owned
     public void push(Entity p_21294_) {
-        if (!this.level.isClientSide && p_21294_ != this.getTrueOwner()) {
+        if (!this.level().isClientSide && p_21294_ != this.getTrueOwner()) {
             super.push(p_21294_);
         }
 
@@ -879,7 +879,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
 
     //Owned
     public void doPush(Entity p_20971_) {
-        if (!this.level.isClientSide && p_20971_ != this.getTrueOwner()) {
+        if (!this.level().isClientSide && p_20971_ != this.getTrueOwner()) {
             super.doPush(p_20971_);
         }
 

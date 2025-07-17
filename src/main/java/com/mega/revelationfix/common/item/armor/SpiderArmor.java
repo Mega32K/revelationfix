@@ -112,12 +112,12 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
         //蜘蛛套蛛网反制
         LivingEntity beHurt = event.getEntity();
         DamageSource damageSource = event.getSource();
-        if (damageSource.getEntity() instanceof LivingEntity living && living.random.nextFloat() <= 0.3F && living.distanceTo(beHurt) <= 8.01D) {
-            SpiderWeb spiderWeb = new SpiderWeb(ModEntityType.SPIDER_WEB.get(), beHurt.level);
+        if (damageSource.getEntity() instanceof LivingEntity living && living.getRandom().nextFloat() <= 0.3F && living.distanceTo(beHurt) <= 8.01D) {
+            SpiderWeb spiderWeb = new SpiderWeb(ModEntityType.SPIDER_WEB.get(), beHurt.level());
             spiderWeb.setOwner(beHurt);
             spiderWeb.setLifeSpan(MathHelper.secondsToTicks(3));
             spiderWeb.setPos(living.position());
-            beHurt.level.addFreshEntity(spiderWeb);
+            beHurt.level().addFreshEntity(spiderWeb);
         }
     }
 

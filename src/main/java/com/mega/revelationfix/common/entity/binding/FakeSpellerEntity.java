@@ -3,6 +3,7 @@ package com.mega.revelationfix.common.entity.binding;
 import com.Polarice3.Goety.api.items.magic.IWand;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.ModDamageSource;
+import com.mega.endinglib.mixin.accessor.AccessorEntity;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.init.ModBlocks;
@@ -44,11 +45,12 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     public static EntityDataAccessor<ItemStack> INSERT_WAND = SynchedEntityData.defineId(FakeSpellerEntity.class, EntityDataSerializers.ITEM_STACK);
     public static EntityDataAccessor<BlockPos> REACTOR_POS = SynchedEntityData.defineId(FakeSpellerEntity.class, EntityDataSerializers.BLOCK_POS);
-
+    private AccessorEntity accessorEntity;
     public FakeSpellerEntity(Level worldIn, ItemStack wand, BlockPos reactorPos) {
         super(ModEntities.FAKE_SPELLER.get(), worldIn);
         this.setWand(wand);
         this.setReactorPos(reactorPos);
+        this.accessorEntity = (AccessorEntity) this;
     }
     public FakeSpellerEntity(EntityType<? extends Owned> type, Level worldIn) {
         super(type, worldIn);
@@ -62,7 +64,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public void setTarget(@Nullable LivingEntity p_21544_) {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (p_21544_ != null)
                 this.entityData.set(TARGET_UUID, Optional.of(p_21544_.getUUID()));
             else this.entityData.set(TARGET_UUID, Optional.empty());
@@ -70,14 +72,14 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     }
     public void setTarget(UUID uuid) {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             this.entityData.set(TARGET_UUID, Optional.of(uuid));
         }
     }
 
     public BlockPos getReactorPos() {
         BlockPos pos = this.entityData.get(REACTOR_POS);
-        this.customPos = this.position = new Vec3(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
+        this.customPos = new Vec3(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
         return pos;
     }
     public void setReactorPos(BlockPos pos) {
@@ -85,7 +87,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     }
     public Vec3 customPos = Vec3.ZERO;
     public BlockState getReactorBlockState() {
-        return this.level.getBlockState(this.getReactorPos());
+        return this.level().getBlockState(this.getReactorPos());
     }
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
@@ -120,7 +122,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     @Nullable
     @Override
     public LivingEntity getTarget() {
-        if (level instanceof ServerLevel serverLevel) {
+        if (level() instanceof ServerLevel serverLevel) {
             if (entityData.get(TARGET_UUID).isPresent() && serverLevel.getEntity(entityData.get(TARGET_UUID).get()) instanceof LivingEntity living) {
                 return living;
             } else return super.getTarget();
@@ -134,14 +136,14 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     @Override
     public void tick() {
         this.customPos = getReactorPos().getCenter().add(0.5, 1, 0.5);
-        this.position = customPos;
+        this.accessorEntity.setPositionField(this.customPos);
         this.setBoundingBox(makeBoundingBox());
 
         RuneReactorBlockEntity reactorBlockEntity = null;
-        if (level.getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity b)
+        if (level().getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity b)
             reactorBlockEntity = b;
-        this.blockPosition = new BlockPos((int) customPos.x, (int) customPos.y, (int) customPos.z);
-        if (!level.isClientSide) {
+        this.accessorEntity.setBlockPositionField(new BlockPos((int) customPos.x, (int) customPos.y, (int) customPos.z));
+        if (!level().isClientSide) {
             if (!(getWand().getItem() instanceof IWand)) {
                 if (this.tickCount > 5) {
                     discard();
@@ -169,7 +171,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
         this.setXRot(xR);
         this.setYRot(yR);
         this.setYHeadRot(yHR);
-        this.position = customPos;
+        this.accessorEntity.setPositionField(customPos);
     }
 
     @Override
@@ -379,7 +381,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public boolean isUsingItem() {
-        if (this.level.getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity blockEntity) {
+        if (this.level().getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity blockEntity) {
             if (blockEntity.using && getTarget() != null && getTarget().isAlive()) {
                 return true;
             }
@@ -395,8 +397,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public int getUseItemRemainingTicks() {
-        if (this.level.getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity blockEntity) {
-
+        if (this.level().getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity blockEntity) {
             return blockEntity.spellUseTimeRemaining;
         }
         return super.getUseItemRemainingTicks();

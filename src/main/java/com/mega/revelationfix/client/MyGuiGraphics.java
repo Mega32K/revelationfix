@@ -1,6 +1,7 @@
 package com.mega.revelationfix.client;
 
 
+import com.mega.endinglib.mixin.accessor.AccessorGuiGraphics;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -38,7 +39,7 @@ public class MyGuiGraphics extends GuiGraphics implements net.minecraftforge.cli
     public final PoseStack pose;
     public final MultiBufferSource.BufferSource bufferSource;
     public final ItemStack tooltipStack = ItemStack.EMPTY;
-
+    private final AccessorGuiGraphics accessorGuiGraphics = (AccessorGuiGraphics) this;
     public MyGuiGraphics(Minecraft p_282144_, PoseStack p_281551_, MultiBufferSource.BufferSource p_281460_) {
         super(p_282144_, p_281460_);
         this.minecraft = p_282144_;
@@ -168,7 +169,7 @@ public class MyGuiGraphics extends GuiGraphics implements net.minecraftforge.cli
         vertexconsumer.vertex(matrix4f, p_286234_, p_286411_, p_286671_).color(f, f1, f2, f3).endVertex();
         vertexconsumer.vertex(matrix4f, p_286244_, p_286411_, p_286671_).color(f, f1, f2, f3).endVertex();
         vertexconsumer.vertex(matrix4f, p_286244_, p_286444_, p_286671_).color(f, f1, f2, f3).endVertex();
-        this.flushIfUnmanaged();
+        accessorGuiGraphics.callFlushIfUnmanaged();
     }
 
     public void fillGradient(float p_282702_, float p_282331_, float p_281415_, float p_283118_, float p_282419_, float p_281954_, float p_282607_) {
@@ -178,7 +179,7 @@ public class MyGuiGraphics extends GuiGraphics implements net.minecraftforge.cli
     public void fillGradient(RenderType p_286522_, float p_286535_, float p_286839_, float p_286242_, float p_286856_, float p_286809_, float p_286833_, float p_286706_) {
         VertexConsumer vertexconsumer = this.bufferSource.getBuffer(p_286522_);
         this.fillGradient(vertexconsumer, p_286535_, p_286839_, p_286242_, p_286856_, p_286706_, p_286809_, p_286833_);
-        this.flushIfUnmanaged();
+        accessorGuiGraphics.callFlushIfUnmanaged();
     }
 
     public void fillGradient(VertexConsumer p_286862_, float p_283414_, float p_281397_, float p_283587_, float p_281521_, float p_283505_, float p_283131_, float p_282949_) {
@@ -344,7 +345,7 @@ public class MyGuiGraphics extends GuiGraphics implements net.minecraftforge.cli
     public void drawString8x8(Font p_283343_, @Nullable String p_281896_, float p_283569_, float p_283418_, int p_281560_, int out) {
         if (p_281896_ != null) {
             p_283343_.drawInBatch8xOutline(FormattedCharSequence.forward(p_281896_, Style.EMPTY), p_283569_, p_283418_, out, p_281560_, this.pose.last().pose(), this.bufferSource, 15728880);
-            this.flushIfUnmanaged();
+            accessorGuiGraphics.callFlushIfUnmanaged();
         }
     }
 }

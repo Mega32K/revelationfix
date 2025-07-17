@@ -9,6 +9,6 @@ import org.jetbrains.annotations.Nullable;
 public class FontItemExtensions implements IClientItemExtensions {
     @Override
     public @Nullable Font getFont(ItemStack stack, FontContext context) {
-        return OdamaneFont.INSTANCE;
+        return IClientItemExtensions.super.getFont(stack, context);
     }
 }

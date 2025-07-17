@@ -2,6 +2,8 @@ package com.mega.revelationfix.mixin.goety;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
+import com.mega.endinglib.mixin.accessor.AccessorArrow;
+import com.mega.endinglib.util.entity.MobEffectUtils;
 import com.mega.revelationfix.common.apollyon.client.WrappedTrailUpdate;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
@@ -70,12 +72,13 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        if (this.onGround)
+        if (this.onGround())
             revelationfix$inGroundTime++;
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (revelationfix$inGroundTime > 20 && revelationfix$getTrailData().shouldRenderTrail())
                 revelationfix$wrappedTrailUpdate.setShouldRenderTrail(false);
-        }
+        } else if (revelationfix$inGroundTime > 30)
+            this.discard();
     }
 
     @Redirect(method = "doPostHurtEffects", at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/boss/Apostle;heal(F)V"))
@@ -103,7 +106,7 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
 
     @Override
     public AABB getBoundingBoxForCulling() {
-        if (this.tags.contains(BypassInvulArrow.TAG_BYPASS_NAME))
+        if (this.getTags().contains(BypassInvulArrow.TAG_BYPASS_NAME))
             return super.getBoundingBoxForCulling().inflate(2d);
         return super.getBoundingBoxForCulling();
     }
@@ -115,27 +118,18 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
         return super.displayFireAnimation();
     }
 
-    @Override
-    public void makeParticle(int p_36877_) {
-        if (revelationfix$getTrailData().shouldRenderTrail())
-            return;
-        super.makeParticle(p_36877_);
-    }
-
-    @Inject(method = "doPostHurtEffects", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "doPostHurtEffects", at = @At("TAIL") )
     private void doPostHurtEffects(LivingEntity livingEntity, CallbackInfo ci) {
-        if (this.tags.contains(BowOfRevelationItem.FORCE_ADD_EFFECT)) {
+        if (this.getTags().contains(BowOfRevelationItem.FORCE_ADD_EFFECT)) {
             Entity entity = this.getEffectSource();
-
-            for (MobEffectInstance mobeffectinstance : this.potion.getEffects()) {
-                BowOfRevelationItem.forceAddEffect(livingEntity, new MobEffectInstance(mobeffectinstance.getEffect(), Math.max(mobeffectinstance.mapDuration((p_268168_) -> {
-                    return p_268168_ / 8;
-                }), 1), mobeffectinstance.getAmplifier(), mobeffectinstance.isAmbient(), mobeffectinstance.isVisible()), entity);
+            AccessorArrow accessorArrow = (AccessorArrow) this;
+            for (MobEffectInstance mobeffectinstance : accessorArrow.getPotion().getEffects()) {
+                MobEffectUtils.forceAdd(livingEntity, new MobEffectInstance(mobeffectinstance.getEffect(), Math.max(mobeffectinstance.mapDuration((p_268168_) -> p_268168_ / 8), 1), mobeffectinstance.getAmplifier(), mobeffectinstance.isAmbient(), mobeffectinstance.isVisible()), entity);
             }
 
-            if (!this.effects.isEmpty()) {
-                for (MobEffectInstance mobeffectinstance1 : this.effects) {
-                    BowOfRevelationItem.forceAddEffect(livingEntity, mobeffectinstance1, entity);
+            if (!accessorArrow.getEffects().isEmpty()) {
+                for (MobEffectInstance mobeffectinstance1 : accessorArrow.getEffects()) {
+                    MobEffectUtils.forceAdd(livingEntity, mobeffectinstance1, entity);
                 }
             }
         }

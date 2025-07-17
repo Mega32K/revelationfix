@@ -11,7 +11,7 @@ public class CenterComponentGroup {
 
     public CenterComponentGroup(final Component... components) {
         toCenter.addAll(Arrays.asList(components));
-        OdamaneFont.centerComponentGroups.add(this);
+        //OdamaneFont.centerComponentGroups.add(this);
     }
 
     public boolean is(String text) {

@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
+import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.common.compat.Wrapped;
@@ -63,8 +64,8 @@ public class TheNeedleItem extends SimpleDescriptiveCurio {
                 CuriosMutableComponent.create().appendFormat("%s", (stack) -> isFake(stack) ? CuriosMutableComponent.NULL_ARRAY : new Object[]{""}),
                 CuriosMutableComponent.create().appendTranslation("item.goety_revelation.the_needle.desc0")
         ).withTail(
-                CuriosMutableComponent.create().appendTranslation("item.goety_revelation.the_needle.tail0"),
-                CuriosMutableComponent.create().appendTranslation("item.goety_revelation.the_needle.tail1")
+                CuriosMutableComponent.create(Component.translatable("item.goety_revelation.the_needle.tail0").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC), LoreStyle.NONE),
+                CuriosMutableComponent.create(Component.translatable("item.goety_revelation.the_needle.tail1").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC), LoreStyle.NONE)
         );
     }
 
@@ -120,7 +121,7 @@ public class TheNeedleItem extends SimpleDescriptiveCurio {
         if (isFake(itemstack))
             return InteractionResultHolder.pass(itemstack);
         player.startUsingItem(hand);
-        player.playSound(ModSounds.ALTAR_START.get(), 1F, (float) player.random.triangle(1F, 0.1F));
+        player.playSound(ModSounds.ALTAR_START.get(), 1F, (float) player.getRandom().triangle(1F, 0.1F));
         return InteractionResultHolder.consume(itemstack);
     }
 
@@ -138,7 +139,7 @@ public class TheNeedleItem extends SimpleDescriptiveCurio {
                 tag.putInt(tag0, usedCount + 1);
                 usedCount++;
                 {
-                    float random = player.random.nextFloat();
+                    float random = player.getRandom().nextFloat();
                     int index;
                     //                           health  damage  attackSpd resistance
                     float[] base = new float[]{0.25F, 0.25F, 0.25F, 0.25F};
@@ -200,7 +201,7 @@ public class TheNeedleItem extends SimpleDescriptiveCurio {
                                 attributeInstance.addPermanentModifier(ATTACK_DAMAGE);
                             }
                         }
-                        player.attributes.getDirtyAttributes().add(attributeInstance);
+                        player.getAttributes().getDirtyAttributes().add(attributeInstance);
                     } else if (index == 2) {
                         attribute = Attributes.ATTACK_SPEED;
                         attributeInstance = player.getAttribute(attribute);
@@ -232,8 +233,8 @@ public class TheNeedleItem extends SimpleDescriptiveCurio {
                     }
                     timeStopSavedData.setPlayerNeedleTimes(player, playerNeedleTimes + 1);
                 }
-                PacketHandler.playSound(player, ModSounds.ABYSS_PREPARE_SPELL.get(), SoundSource.PLAYERS, 1F, (float) living.random.triangle(1F, 0.15F));
-                PacketHandler.playSound(player, ModSounds.BIOMINE_SPAWN.get(), SoundSource.PLAYERS, 1F, (float) living.random.triangle(1F, 0.15F));
+                PacketHandler.playSound(player, ModSounds.ABYSS_PREPARE_SPELL.get(), SoundSource.PLAYERS, 1F, (float) living.getRandom().triangle(1F, 0.15F));
+                PacketHandler.playSound(player, ModSounds.BIOMINE_SPAWN.get(), SoundSource.PLAYERS, 1F, (float) living.getRandom().triangle(1F, 0.15F));
                 player.hurt(player.damageSources().indirectMagic(player, player), player.getHealth() / 2.0F);
                 player.getCooldowns().addCooldown(itemStack.getItem(), 20);
                 if (usedCount == 14) {

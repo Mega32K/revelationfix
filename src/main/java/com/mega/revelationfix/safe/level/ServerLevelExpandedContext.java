@@ -19,7 +19,7 @@ public class ServerLevelExpandedContext extends LevelExpandedContext {
     }
 
     private ServerExpandedContext serverEC() {
-        return ((ServerEC) ((ServerLevel) level).server).uom$serverECData();
+        return ((ServerEC) ((ServerLevel) level).getServer()).uom$serverECData();
     }
 
     @Override

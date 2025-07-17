@@ -16,7 +16,7 @@ public class GungnirClient {
     public static void handTick(Player src, ItemStack stack) {
         if (src != null) {
             if (src.isShiftKeyDown()) {
-                src.level.getProfiler().push("pick");
+                src.level().getProfiler().push("pick");
                 float partial = 1F;
                 double d0 = 128;
                 double d1;
@@ -56,12 +56,12 @@ public class GungnirClient {
                     } else if (d2 < d1 || hitResult == null) {
                         if (entity1 instanceof LivingEntity || entity1 instanceof ItemFrame) {
                             selectEntity = entity1;
-                            if (!src.level.isClientSide)
-                                stack.getOrCreateTag().putUUID("TargetID", entity1.uuid);
+                            if (!src.level().isClientSide)
+                                stack.getOrCreateTag().putInt("TargetID", entity1.getId());
                         }
                     }
                 }
-                src.level.getProfiler().pop();
+                src.level().getProfiler().pop();
             }
         }
     }

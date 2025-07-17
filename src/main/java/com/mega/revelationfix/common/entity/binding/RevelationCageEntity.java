@@ -8,6 +8,7 @@ import com.Polarice3.Goety.common.network.client.CBeamPacket;
 import com.Polarice3.Goety.config.SpellConfig;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ParticleUtil;
+import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
 import com.mega.revelationfix.common.apollyon.common.DeathPerformance;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
@@ -49,7 +50,7 @@ public class RevelationCageEntity extends AbstractBeam {
     public void tick() {
         LivingEntity owner = this.getOwner();
         if (this.getMaxAge() < 0) {
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 if (this.owner instanceof Player) {
                     ModNetwork.INSTANCE.sendToServer(new CBeamPacket(this));
                 }
@@ -96,7 +97,7 @@ public class RevelationCageEntity extends AbstractBeam {
                                             label0:
                                             {
                                                 if (ATAHelper2.hasOdamane(living)) break label0;
-                                                if (living.isAlive() && living.level.isClientSide) {
+                                                if (living.isAlive() && living.level().isClientSide) {
                                                     ParticleUtil.addParticleInternal(ModParticleTypes.BIG_FIRE.get(), false, living.getRandomX(0.3D * fireScale), living.getY(0.2) + randomSource.nextFloat(), living.getRandomZ(0.3D * fireScale), randomSource.triangle(0D, 0.25D * fireScale), randomSource.nextFloat() * 0.1F + 0.25F * fireScale, randomSource.triangle(0D, 0.25D * fireScale));
                                                 }
                                                 new EntityActuallyHurt(living).actuallyHurt(source, percentAmount, true);
@@ -106,7 +107,7 @@ public class RevelationCageEntity extends AbstractBeam {
                                         }
                                         if (living instanceof Player player && !living.isAlive()) {
                                             if (!player.isSpectator()) {
-                                                player.dropAllDeathLoot(source);
+                                                ((AccessorLivingEntity) player).callDropAllDeathLoot(source);
                                             }
                                         }
                                     }
@@ -132,7 +133,7 @@ public class RevelationCageEntity extends AbstractBeam {
                 owner.zza = 0.0F;
             }
         }
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.setAliveTicks(this.getAliveTicks() + 1);
             if (owner == null || !owner.isAlive() || this.itemBase && !MobUtil.isSpellCasting(owner)) {
                 if (this.getMaxAge() < 0) {

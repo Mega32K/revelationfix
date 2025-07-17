@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.compat.tetra.effect;
 
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.tetra.TetraVersionCompat;
@@ -44,7 +45,7 @@ public class DoomEffect {
                 int level = item.getEffectLevel(heldStack, itemEffect);
                 if (level <= 0) return;
                 if (livingTarget.isAlive() && livingTarget.getHealth() <= livingTarget.getMaxHealth() * (level / 100.0F)) {
-                    DamageSource damageSource = attacker.damageSources().source(ExtraDamageTypes.FE_POWER, attacker);
+                    DamageSource damageSource = new DamageSourceGenerator(attacker).source(ExtraDamageTypes.FE_POWER, attacker);
                     livingTarget.hurt(damageSource, livingTarget.getHealth() * 2.0F);
                 }
             }

@@ -61,8 +61,8 @@ public class PacketHandler {
     public static void playSound(ServerPlayer serverPlayer, SoundEvent soundEvent, SoundSource source, float volume, float s) {
         ServerLevel serverLevel = serverPlayer.serverLevel();
         for (ServerPlayer player : serverLevel.players()) {
-            if (player.level.dimension() == serverPlayer.level.dimension()) {
-                player.connection.send(new ClientboundSoundEntityPacket(Holder.direct(soundEvent), source, serverPlayer, volume, s, player.random.nextLong()));
+            if (player.level().dimension() == serverPlayer.level().dimension()) {
+                player.connection.send(new ClientboundSoundEntityPacket(Holder.direct(soundEvent), source, serverPlayer, volume, s, player.getRandom().nextLong()));
             }
         }
     }
@@ -73,16 +73,16 @@ public class PacketHandler {
 
     public static void playSound(ServerLevel level, Entity source, SoundEvent soundEvent, SoundSource soundSource, float volume, float s) {
         for (ServerPlayer player : level.players()) {
-            if (player.level.dimension() == source.level.dimension()) {
-                player.connection.send(new ClientboundSoundEntityPacket(Holder.direct(soundEvent), soundSource, source, volume, s, player.random.nextLong()));
+            if (player.level().dimension() == source.level().dimension()) {
+                player.connection.send(new ClientboundSoundEntityPacket(Holder.direct(soundEvent), soundSource, source, volume, s, player.getRandom().nextLong()));
             }
         }
     }
 
     public static void playSound(ServerLevel level, Entity source, SoundEvent soundEvent, float volume, float s) {
         for (ServerPlayer player : level.players()) {
-            if (player.level.dimension() == source.level.dimension()) {
-                player.connection.send(new ClientboundSoundEntityPacket(Holder.direct(soundEvent), SoundSource.VOICE, source, volume, s, player.random.nextLong()));
+            if (player.level().dimension() == source.level().dimension()) {
+                player.connection.send(new ClientboundSoundEntityPacket(Holder.direct(soundEvent), SoundSource.VOICE, source, volume, s, player.getRandom().nextLong()));
             }
         }
     }

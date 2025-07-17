@@ -609,7 +609,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
 
     public boolean cannotCast(DarkWand wandB, LivingEntity livingEntity, ItemStack stack) {
         boolean flag = false;
-        Level var5 = livingEntity.level;
+        Level var5 = livingEntity.level();
         if (var5 instanceof ServerLevel serverLevel) {
             if (wandB.getSpell(stack) != null && !wandB.getSpell(stack).conditionsMet(serverLevel, livingEntity)) {
                 flag = true;
@@ -813,7 +813,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                         SEHelper.sendSEUpdatePacket(playerOwner);
                         if (MobsConfig.VillagerHateSpells.get() > 0) {
 
-                            for (Villager villager : caster.level.getEntitiesOfClass(Villager.class, caster.getBoundingBox().inflate(16.0))) {
+                            for (Villager villager : caster.level().getEntitiesOfClass(Villager.class, caster.getBoundingBox().inflate(16.0))) {
                                 if (villager.hasLineOfSight(caster)) {
                                     villager.getGossips().add(caster.getUUID(), GossipType.MINOR_NEGATIVE, MobsConfig.VillagerHateSpells.get());
                                 }

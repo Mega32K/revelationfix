@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.compat.tetra.client;
 
+import com.mega.endinglib.api.client.GuiGraphicsItf;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -29,10 +30,10 @@ public class ZGuiTexture extends GuiTexture {
             PoseStack stack = graphics.pose();
             stack.pushPose();
             stack.translate(0.5F, 0.5F, 0F);
-            graphics.innerBlit(textureLocation, x, x + width, y, y + height, z, (float) u / (float) this.textureWidth, (float) (u + width) / (float) this.textureWidth, (float) v / (float) this.textureHeight, (float) (v + height) / (float) this.textureHeight, (float) (color >> 16 & 255) / 255.0F, (float) (color >> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F, opacity);
+            ((GuiGraphicsItf) graphics).endingLibrary$innerBlit(textureLocation, x, x + width, y, y + height, z, (float) u / (float) this.textureWidth, (float) (u + width) / (float) this.textureWidth, (float) v / (float) this.textureHeight, (float) (v + height) / (float) this.textureHeight, (float) (color >> 16 & 255) / 255.0F, (float) (color >> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F, opacity);
             stack.popPose();
         } else {
-            graphics.innerBlit(textureLocation, x, x + width, y, y + height, z, (float) u / (float) this.textureWidth, (float) (u + width) / (float) this.textureWidth, (float) v / (float) this.textureHeight, (float) (v + height) / (float) this.textureHeight, (float) (color >> 16 & 255) / 255.0F, (float) (color >> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F, opacity);
+            ((GuiGraphicsItf) graphics).endingLibrary$innerBlit(textureLocation, x, x + width, y, y + height, z, (float) u / (float) this.textureWidth, (float) (u + width) / (float) this.textureWidth, (float) v / (float) this.textureHeight, (float) (v + height) / (float) this.textureHeight, (float) (color >> 16 & 255) / 255.0F, (float) (color >> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F, opacity);
 
         }
     }

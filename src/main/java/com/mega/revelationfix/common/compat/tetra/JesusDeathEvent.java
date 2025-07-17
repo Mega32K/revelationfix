@@ -34,7 +34,7 @@ public class JesusDeathEvent {
                             });
                             itemStack.shrink(1);
                             if (player instanceof ServerPlayer serverPlayer)
-                                PacketHandler.playSound(serverPlayer, ModSounds.BIOMINE_SPAWN.get(), SoundSource.PLAYERS, 2f, (float) player.random.triangle(1F, 0.1F));
+                                PacketHandler.playSound(serverPlayer, ModSounds.BIOMINE_SPAWN.get(), SoundSource.PLAYERS, 2f, (float) player.getRandom().triangle(1F, 0.1F));
                             ItemEntity itemEntity = player.spawnAtLocation(GRItems.TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM.getDefaultInstance());
                             if (itemEntity != null) {
                                 itemEntity.setGlowingTag(true);
@@ -58,7 +58,7 @@ public class JesusDeathEvent {
     @SubscribeEvent
     public static void nameTagEvent(LivingEvent.LivingTickEvent event) {
         if (event.getEntity() instanceof Villager villager) {
-            if (!villager.level.isClientSide && !villager.isNoAi())
+            if (!villager.level().isClientSide && !villager.isNoAi())
                 if (isJesus(villager)) {
                     villager.playSound(SoundEvents.BEACON_DEACTIVATE, 4F, 0.3F);
                     villager.setXRot(20);

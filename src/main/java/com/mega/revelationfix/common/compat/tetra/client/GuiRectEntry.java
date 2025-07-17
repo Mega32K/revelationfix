@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.compat.tetra.client;
 
+import com.mega.endinglib.mixin.accessor.AccessorGuiGraphics;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
@@ -179,6 +180,6 @@ public class GuiRectEntry extends GuiElement {
         vertexconsumer.vertex(matrix4f, leftBottom.x, leftBottom.y, (float) zOffset).color(f, f1, f2, f3 * opacity).endVertex();
         vertexconsumer.vertex(matrix4f, rightBottom.x, rightBottom.y, (float) zOffset).color(f, f1, f2, f3 * opacity).endVertex();
         vertexconsumer.vertex(matrix4f, rightTop.x, rightTop.y, (float) zOffset).color(f, f1, f2, f3 * opacity).endVertex();
-        graphics.flushIfUnmanaged();
+        ((AccessorGuiGraphics)graphics).callFlushIfUnmanaged();
     }
 }

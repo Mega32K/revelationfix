@@ -164,7 +164,7 @@ public class RunestoneRitualInit {
                         if (living.hurt(living.damageSources().starve(), 1.5F)) {
                             living.addEffect(new MobEffectInstance(MobEffects.HUNGER, 80, 1));
                             living.addEffect(new MobEffectInstance(GoetyEffects.SOUL_HUNGER.get(), 80, 0));
-                            living.level.levelEvent(232424314, living.blockPosition(), 5);
+                            living.level().levelEvent(232424314, living.blockPosition(), 5);
                             if (reactorBlockEntity.getOwner() != null)
                                 reactorBlockEntity.getOwner().addEffect(new MobEffectInstance(MobEffects.SATURATION, 10, 0));
                         }
@@ -180,7 +180,7 @@ public class RunestoneRitualInit {
                     double speed = Math.sqrt(d0*d0 + d1*d1);
                     if (speed <= 0.05) continue;
                     if (living.hurt(living.damageSources().flyIntoWall(), (float) Math.max(1F, speed / ZOMBIE_SPEED))) {
-                        living.level.levelEvent(232424314, living.blockPosition(), 6);
+                        living.level().levelEvent(232424314, living.blockPosition(), 6);
                     }
                 }
             }));

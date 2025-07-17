@@ -41,7 +41,7 @@ public class TheEndStructureMessagePacket {
 
     static void handle0(TheEndStructureMessagePacket packet, Supplier<NetworkEvent.Context> context) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.level != null && mc.level.dimension() == Level.END && mc.player.position.distanceTo(packet.pos.getCenter()) < 64) {
+        if (mc.player != null && mc.level != null && mc.level.dimension() == Level.END && mc.player.position().distanceTo(packet.pos.getCenter()) < 64) {
             mc.player.displayClientMessage(Component.translatable("info.revelationfix.ritual.structure.fail", packet.i, packet.max), false);
 
         }

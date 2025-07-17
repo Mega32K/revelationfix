@@ -123,7 +123,7 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
 
             this.discard();
         } else {
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
 
                 Entity entity = getApollyon();
                 if (entity instanceof Apostle apostle && !apostle.isRemoved()) {
@@ -147,11 +147,11 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
                         }
                     }
                 } else {
-                    ServerLevel serverLevel = (ServerLevel) level;
+                    ServerLevel serverLevel = (ServerLevel) level();
                     Apostle apostle = serverLevel.getNearestEntity(serverLevel.getEntitiesOfClass(Apostle.class, this.getBoundingBox().inflate(128.0))
                             , TargetingConditions.forNonCombat(), null, this.getX(), this.getY(), this.getZ());
                     if (apostle != null && SafeClass.isNetherDoomApollyon(apostle)) {
-                        this.apollyon = apostle.uuid;
+                        this.apollyon = apostle.getUUID();
                     }
                     if (apostle == null || apostle.isRemoved())
                         this.discard();

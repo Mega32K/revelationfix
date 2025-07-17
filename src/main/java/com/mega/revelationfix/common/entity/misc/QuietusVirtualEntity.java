@@ -31,11 +31,11 @@ public class QuietusVirtualEntity extends Entity implements IEntityAdditionalSpa
 
     public void tick() {
         if (this.tickCount == 1) {
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 Vec3 forward = this.getForward();
                 for (float i = 1.0F; i < this.distance; i += 0.5F) {
                     Vec3 pos = this.position().add(forward.scale(i));
-                    this.level.addParticle(ParticleTypes.SMOKE, false, pos.x, pos.y + 0.5, pos.z, 0.0, 0.0, 0.0);
+                    this.level().addParticle(ParticleTypes.SMOKE, false, pos.x, pos.y + 0.5, pos.z, 0.0, 0.0, 0.0);
                 }
             }
         } else if (this.tickCount > 8) {

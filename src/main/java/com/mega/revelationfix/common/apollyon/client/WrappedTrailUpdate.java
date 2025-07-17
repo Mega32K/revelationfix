@@ -1,8 +1,10 @@
 package com.mega.revelationfix.common.apollyon.client;
 
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
+import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class WrappedTrailUpdate {
     public void join(int size) {
         synchronized (trailPoints) {
             for (int i = 0; i < size; i++) {
-                trailPoints.add(new TrailPoint(entity.position, 0));
+                trailPoints.add(new TrailPoint(entity.position(), 0));
             }
         }
     }
@@ -46,10 +48,10 @@ public class WrappedTrailUpdate {
     }
 
     public void setShouldRenderTrail(boolean z) {
-        entity.entityData.set(SHOULD_RENDER_TRAIL, z);
+        entity.getEntityData().set(SHOULD_RENDER_TRAIL, z);
     }
 
     public boolean shouldRenderTrail() {
-        return entity.entityData.get(SHOULD_RENDER_TRAIL);
+        return entity.getEntityData().get(SHOULD_RENDER_TRAIL);
     }
 }

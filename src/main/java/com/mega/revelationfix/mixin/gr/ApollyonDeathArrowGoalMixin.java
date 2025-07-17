@@ -38,7 +38,7 @@ public abstract class ApollyonDeathArrowGoalMixin extends CastingGoal {
     @Override
     public void tick() {
         if (this.spellWarmup > 0) {
-            Level level = this.apostle.level;
+            Level level = this.apostle.level();
             if (!level.isClientSide)
                 level.levelEvent(499366777, apostle.blockPosition(), 0);
         }

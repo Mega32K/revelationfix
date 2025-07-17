@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.odamane.common;
 
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -22,12 +23,12 @@ public class FeDamage extends DamageSource {
     }
 
     public static FeDamage get(LivingEntity target, LivingEntity attacker) {
-        return new FeDamage(target.level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ExtraDamageTypes.FE_POWER), attacker);
+        return new FeDamage(new DamageSourceGenerator(target).toHolder(ExtraDamageTypes.FE_POWER), attacker);
     }
 
     @Override
     public Component getLocalizedDeathMessage(LivingEntity living) {
-        String s = "death.attack." + this.type().msgId().replace(".0", "") + "." + living.level.random.nextInt(0, 3);
+        String s = "death.attack." + this.type().msgId().replace(".0", "") + "." + living.level().random.nextInt(0, 3);
         if (getEntity() != null)
             return Component.translatable(s, living.getDisplayName(), getEntity().getDisplayName());
         else if (getDirectEntity() != null)

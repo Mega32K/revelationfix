@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.endinglib.util.time.TimeStopUtils;
 import com.mega.revelationfix.client.RendererUtils;
+import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -91,7 +92,7 @@ public class ClientLevelExpandedContext extends LevelExpandedContext {
             tickCount = 0;
             Entity entity;
             //清除临时用于检测猩红雨的下界亚实体
-            if (currentNetherApollyon != null && ((entity = clientLevel.getEntities().get(currentNetherApollyon.getUUID())) == null || entity.isRemoved())) {
+            if (currentNetherApollyon != null && ((entity = Wrapped.getEntityByUUID(currentNetherApollyon.getUUID())) == null || entity.isRemoved())) {
                 currentNetherApollyon = null;
             }
         }

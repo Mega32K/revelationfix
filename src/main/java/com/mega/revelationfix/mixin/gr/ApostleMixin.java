@@ -190,7 +190,7 @@ public abstract class ApostleMixin extends SpellCastingCultist implements Apolly
     @Nullable
     @Override
     public Component getCustomName() {
-        if (!this.isAddedToWorld && allTitlesApostle_1_20_1$isApollyon())
+        if (!this.isAddedToWorld() && allTitlesApostle_1_20_1$isApollyon())
             return Component.translatable("name.goety_revelation.apollyon").withStyle(ModChatFormatting.APOLLYON);
         return super.getCustomName();
     }
@@ -811,10 +811,10 @@ public abstract class ApostleMixin extends SpellCastingCultist implements Apolly
                 i = 13;
                 this.setDoom(true);
                 if (this.isInNether()) {
-                    if (!level.isClientSide) {
-                        GameRules gameRules = level.getGameRules();
+                    if (!level().isClientSide) {
+                        GameRules gameRules = level().getGameRules();
                         if (!gameRules.getRule(GameRules.RULE_KEEPINVENTORY).get())
-                            gameRules.getRule(GameRules.RULE_KEEPINVENTORY).set(true, ((ServerLevel) level).getServer());
+                            gameRules.getRule(GameRules.RULE_KEEPINVENTORY).set(true, ((ServerLevel) level()).getServer());
                     }
                 }
             }

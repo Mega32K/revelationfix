@@ -29,7 +29,7 @@ public abstract class OwnedMixin extends PathfinderMob {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (this.getTrueOwner() instanceof Apostle apostle) {
                 ApollyonAbilityHelper abilityHelper = (ApollyonAbilityHelper) apostle;
                 if (abilityHelper.allTitlesApostle_1_20_1$isApollyon() && this.distanceToSqr(apostle) < 64D * 64D) {

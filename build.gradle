@@ -185,9 +185,7 @@ dependencies {
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
     implementation fileTree(".libs")
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
-        jarJar.ranged(it, "[0.4.1,)")
-    }
+    implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -207,7 +205,6 @@ dependencies {
     implementation fg.deobf("curse.maven:Farmer'sDelight-398521:6154802")
     implementation fg.deobf("curse.maven:playerAnimator-658587:4587214")
     implementation fg.deobf("curse.maven:ClothConfig-348521:5729105")
-    implementation fg.deobf("curse.maven:BetterCombat-639842:5625757")
     implementation fg.deobf("curse.maven:Jade-324717:6271475")
     implementation fg.deobf("curse.maven:mutil-351914:6418901")
     implementation fg.deobf("curse.maven:Tetra-289712:6418957")
@@ -220,8 +217,8 @@ dependencies {
     implementation fg.deobf("curse.maven:nether-depths-upgrade-670011:5340329")
     implementation fg.deobf("curse.maven:GeckoLib-388172:5675221")
 
-    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.2.10"))  {
-        jarJar.ranged(it, "[1.2.10,)")
+    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.2.10-all"))  {
+        jarJar.ranged(it, "[1.2.10-all,)")
     }
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

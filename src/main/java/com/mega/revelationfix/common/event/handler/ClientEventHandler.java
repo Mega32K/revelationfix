@@ -1,15 +1,13 @@
 package com.mega.revelationfix.common.event.handler;
 
 import com.Polarice3.Goety.utils.CuriosFinder;
+import com.mega.endinglib.mixin.accessor.AccessorLevelRenderer;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.api.event.render.RenderTooltipPostEvent;
-import com.mega.revelationfix.api.item.ICenterDescItem;
-import com.mega.revelationfix.client.RendererUtils;
 import com.mega.revelationfix.client.font.OdamaneFont;
 import com.mega.revelationfix.client.spell.SpellClientContext;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
-import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredient;
@@ -26,7 +24,6 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.DeathScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -47,16 +44,13 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -109,7 +103,7 @@ public class ClientEventHandler {
             }
         }
     }
-
+    /*
     @SubscribeEvent
     public static void odamaneHaloTooltip(RenderTooltipEvent.Pre event) {
         if (event.getItemStack().getItem() instanceof ICenterDescItem) {
@@ -134,6 +128,7 @@ public class ClientEventHandler {
             OdamaneFont.INSTANCE.pop();
         }
     }
+     */
 
     @SubscribeEvent
     public static void addTECraftingTooltip(ItemTooltipEvent event) {
@@ -252,6 +247,7 @@ public class ClientEventHandler {
                     float rainLevel = ecContext.getRainLevel(partialTicks);
                     GameRenderer gameRenderer = Minecraft.getInstance().gameRenderer;
                     LevelRenderer levelRenderer = Minecraft.getInstance().levelRenderer;
+                    AccessorLevelRenderer accessorLevelRenderer = (AccessorLevelRenderer) levelRenderer;
                     LightTexture lightTexture = gameRenderer.lightTexture();
                     Camera camera = gameRenderer.getMainCamera();
 
@@ -276,7 +272,7 @@ public class ClientEventHandler {
 
                     RenderSystem.depthMask(Minecraft.useShaderTransparency());
                     int i1 = -1;
-                    float f1 = (float) levelRenderer.ticks + partialTicks;
+                    float f1 = (float) accessorLevelRenderer.getTicks() + partialTicks;
                     RenderSystem.setShader(GameRenderer::getParticleShader);
                     BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
@@ -292,8 +288,8 @@ public class ClientEventHandler {
                     for (int j1 = k - l; j1 <= k + l; ++j1) {
                         for (int k1 = i - l; k1 <= i + l; ++k1) {
                             int l1 = (j1 - k + 16) * 32 + k1 - i + 16;
-                            double d0 = (double) levelRenderer.rainSizeX[l1] * 0.5D;
-                            double d1 = (double) levelRenderer.rainSizeZ[l1] * 0.5D;
+                            double d0 = (double) accessorLevelRenderer.getRainSizeX()[l1] * 0.5D;
+                            double d1 = (double) accessorLevelRenderer.getRainSizeZ()[l1] * 0.5D;
                             blockpos$mutableblockpos.set(k1, cameraY, j1);
                             int j2 = j - l;
                             int k2 = j + l;
@@ -308,7 +304,7 @@ public class ClientEventHandler {
                                     bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
                                 }
 
-                                int i3 = levelRenderer.ticks + k1 * k1 * 3121 + k1 * 45238971 + j1 * j1 * 418711 + j1 * 13761 & 31;
+                                int i3 = accessorLevelRenderer.getTicks() + k1 * k1 * 3121 + k1 * 45238971 + j1 * j1 * 418711 + j1 * 13761 & 31;
                                 float f2 = -((float) i3 + partialTicks) / 32.0F * (3.0F + randomsource.nextFloat());
                                 double d2 = (double) k1 + 0.5D - cameraX;
                                 double d4 = (double) j1 + 0.5D - cameraZ;

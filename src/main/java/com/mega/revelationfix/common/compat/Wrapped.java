@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.audio.PostBossMusic;
 import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.client.events.ClientEvents;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.mega.endinglib.mixin.accessor.AccessorClientLevel;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
@@ -80,7 +81,8 @@ public class Wrapped {
     public static Entity getEntityByUUID(UUID uuid) {
         if (uuid == null)
             return null;
-        return ((ClientLevel) clientLevel()).getEntities().get(uuid);
+        if (clientLevel() == null) return null;
+        return ((AccessorClientLevel) clientLevel()).invokeGetEntities().get(uuid);
     }
     public static void onShaderModeChange() {
         PostEffectRegistry.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());

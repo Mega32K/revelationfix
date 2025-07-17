@@ -14,6 +14,7 @@ import com.mega.revelationfix.client.screen.post.PostProcessingShaders;
 import com.mega.revelationfix.common.block.blockentity.renderer.RuneReactorBERenderer;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.client.model.entity.TeleportEntityModel;
+import com.mega.revelationfix.common.compat.mui.ModernUIWrapped;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModBlocks;
 import com.mega.revelationfix.common.init.ModEntities;
@@ -66,6 +67,9 @@ public class ClientProxy implements ModProxy {
             modBus.addListener(this::onParticleFactoryRegistration);
             ReloadableResourceManager manager = (ReloadableResourceManager) Minecraft.getInstance().getResourceManager();
             manager.registerReloadListener(PostProcessingShaders.INSTANCE);
+            if (SafeClass.isModernUILoaded()) {
+                ModernUIWrapped.registerCalls();
+            }
             //PostEffectHandler.registerEffect(new TheEndEffect());
             INSTANCE = this;
         } catch (Throwable throwable) {

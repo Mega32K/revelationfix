@@ -3,6 +3,7 @@ package com.mega.revelationfix.common.item.tool.combat.sword;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.youkai.YoukaiKiller;
 import com.mega.revelationfix.common.item.ModItemTiers;
@@ -89,7 +90,7 @@ public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon {
 
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
-        if (!entity.level.isClientSide && entity instanceof Player player) {
+        if (!entity.level().isClientSide && entity instanceof Player player) {
             if (player.isShiftKeyDown() && !player.getCooldowns().isOnCooldown(this)) {
                 float f7 = player.getYRot();
                 float f = player.getXRot();
@@ -104,7 +105,7 @@ public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon {
                 player.push(f1, f2, f3);
                 player.startAutoSpinAttack(15);
                 player.getCooldowns().addCooldown(this, 10);
-                player.level.playSound((Player)null, player, SoundEvents.TRIDENT_RIPTIDE_1, SoundSource.PLAYERS, 1.0F, 1.3F);
+                player.level().playSound((Player)null, player, SoundEvents.TRIDENT_RIPTIDE_1, SoundSource.PLAYERS, 1.0F, 1.3F);
                 player.hurtMarked = true;
             }
         }
@@ -113,14 +114,14 @@ public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon {
 
     @Override
     public void onAttack(ItemStack itemStack, LivingAttackEvent event) {
-        if (!event.getEntity().level.isClientSide) {
+        if (!event.getEntity().level().isClientSide) {
             DamageSourceInterface dsItf = (DamageSourceInterface) event.getSource();
             if (!dsItf.hasTag((byte) 2)) {
-                int rand = event.getEntity().random.nextInt(0, 3);
+                int rand = event.getEntity().getRandom().nextInt(0, 3);
                 switch (rand) {
                     case 0: {
                         if (!dsItf.hasTag((byte) 2) && event.getSource().getEntity() instanceof LivingEntity living) {
-                            event.getEntity().hurt(living.damageSources().source(DamageTypes.ON_FIRE, living), event.getAmount() * 0.5F);
+                            event.getEntity().hurt(new DamageSourceGenerator(living).source(DamageTypes.ON_FIRE, living), event.getAmount() * 0.5F);
                             event.getEntity().invulnerableTime = 0;
                             dsItf.giveSpecialTag((byte) 2);
                         }
@@ -138,11 +139,11 @@ public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon {
                                     float multi = 0F;
                                     AttributeModifier srcModifier = attributeInstance.getModifier(MAX_HEALTH_ID);
                                     if (srcModifier == null)
-                                        attributeInstance.addModifier(new AttributeModifier(MAX_HEALTH_ID, "Weapon Modifier", -perMax, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                                        attributeInstance.addTransientModifier(new AttributeModifier(MAX_HEALTH_ID, "Weapon Modifier", -perMax, AttributeModifier.Operation.MULTIPLY_TOTAL));
                                     else if (srcModifier.getAmount() > -perMax * 5F) {
                                         double value = srcModifier.getAmount();
                                         attributeInstance.removeModifier(srcModifier);
-                                        attributeInstance.addModifier(new AttributeModifier(MAX_HEALTH_ID, "Weapon Modifier", value - perMax, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                                        attributeInstance.addTransientModifier(new AttributeModifier(MAX_HEALTH_ID, "Weapon Modifier", value - perMax, AttributeModifier.Operation.MULTIPLY_TOTAL));
                                     }
                                 }
                             }

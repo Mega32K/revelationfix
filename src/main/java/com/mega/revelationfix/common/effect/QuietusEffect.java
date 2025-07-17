@@ -6,11 +6,14 @@ import com.Polarice3.Goety.common.entities.ally.undead.skeleton.WitherSkeletonSe
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.util.SummonCircle;
 import com.Polarice3.Goety.utils.CuriosFinder;
+import com.mega.endinglib.api.entity.MobEffectInstanceItf;
+import com.mega.endinglib.mixin.accessor.AccessorAttributeInstance;
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.entity.MobEffectUtils;
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
 import com.mega.revelationfix.common.init.ModEffects;
 import com.mega.revelationfix.safe.entity.AttributeInstanceInterface;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
-import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
 import com.mega.revelationfix.util.LivingEntityEC;
@@ -57,7 +60,7 @@ public class QuietusEffect extends MobEffect {
                 AttributeInstanceInterface i = (AttributeInstanceInterface) attributeInstance;
                 if (i.revelationfix$isQuietus()) {
                     i.revelationfix$setQuietus(false);
-                    attributeInstance.setDirty();
+                    ((AccessorAttributeInstance) attributeInstance).invokeSetDirty();
                     attributeInstance.getValue();
                 }
             }
@@ -68,16 +71,16 @@ public class QuietusEffect extends MobEffect {
     public static void onDeath(LivingDeathEvent event) {
         if (event.getEntity().hasEffect(ModEffects.QUIETUS.get())) {
             LivingEntity living = event.getEntity();
-            if (!living.level.isClientSide) {
+            if (!living.level().isClientSide) {
                 EntityExpandedContext expandedContext = ((LivingEntityEC) living).revelationfix$livingECData();
-                Level level = living.level;
+                Level level = living.level();
                 WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), level);
                 servant.setTrueOwner(expandedContext.getQuietusCaster() instanceof IOwned owned ? owned.getTrueOwner() : expandedContext.getQuietusCaster());
                 servant.setLimitedLife(5 * 60 * 20);
                 servant.finalizeSpawn((ServerLevel) level, level.getCurrentDifficultyAt(living.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                 SummonCircle summonCircle = new SummonCircle(level, living.blockPosition(), servant, false, true, expandedContext.getQuietusCaster());
                 level.addFreshEntity(summonCircle);
-                DamageSource source = living.lastDamageSource == null ? expandedContext.getQuietusCaster().damageSources().wither() : living.lastDamageSource;
+                DamageSource source = living.getLastDamageSource() == null ? expandedContext.getQuietusCaster().damageSources().wither() : living.getLastDamageSource();
 
             }
         }
@@ -104,7 +107,7 @@ public class QuietusEffect extends MobEffect {
                 AttributeInstanceInterface i = (AttributeInstanceInterface) attributeInstance;
                 if (i.revelationfix$isQuietus()) {
                     i.revelationfix$setQuietus(false);
-                    attributeInstance.setDirty();
+                    ((AccessorAttributeInstance) attributeInstance).invokeSetDirty();
                     attributeInstance.getValue();
                 }
             }
@@ -117,17 +120,12 @@ public class QuietusEffect extends MobEffect {
         if (living instanceof Apostle && ((ApollyonAbilityHelper) living).allTitlesApostle_1_20_1$isApollyon())
             return;
         MobEffectInstance instance = living.getEffect(this);
-        Level level = living.level;
+        Level level = living.level();
         int duration = instance.getDuration();
-        if (amplifier == 0 && !living.level.isClientSide) {
+        if (amplifier == 0 && !level.isClientSide) {
             living.addEffect(new MobEffectInstance(MobEffects.WITHER, duration, 2));
-            if (duration < 2) {
-                Entity tryGetOwner = ((MobEffectInstanceEC) instance).getOwner();
-                living.removeEffect(this);
-                if (!living.addEffect(instance = new MobEffectInstance(this, 200, 1), tryGetOwner)) {
-                    living.activeEffects.put(instance.getEffect(), instance);
-                    living.onEffectAdded(instance, tryGetOwner);
-                }
+            if (duration == 1) {
+                MobEffectUtils.forceAdd(living, new MobEffectInstance(this, 200, 1), ((MobEffectInstanceItf) instance).getOwner());
             }
         }
         if (amplifier == 1) {
@@ -136,19 +134,14 @@ public class QuietusEffect extends MobEffect {
                 AttributeInstanceInterface i = (AttributeInstanceInterface) attributeInstance;
                 if (!i.revelationfix$isQuietus()) {
                     i.revelationfix$setQuietus(true);
-                    attributeInstance.setDirty();
+                    ((AccessorAttributeInstance) attributeInstance).invokeSetDirty();
                     attributeInstance.getValue();
                     living.setHealth(living.getHealth());
                 }
             }
             EntityExpandedContext expandedContext = ((LivingEntityEC) living).revelationfix$livingECData();
-            if (duration < 2 && expandedContext.getQuietusCaster() != null && CuriosFinder.hasNetherRobe(living)) {
-                Entity tryGetOwner = ((MobEffectInstanceEC) instance).getOwner();
-                living.removeEffect(this);
-                if (!living.addEffect(instance = new MobEffectInstance(this, 200, 2), tryGetOwner)) {
-                    living.activeEffects.put(instance.getEffect(), instance);
-                    living.onEffectAdded(instance, tryGetOwner);
-                }
+            if (duration == 1 && expandedContext.getQuietusCaster() != null && CuriosFinder.hasNetherRobe(living)) {
+                MobEffectUtils.forceAdd(living, new MobEffectInstance(this, 200, 2), ((MobEffectInstanceItf) instance).getOwner());
             }
         } else {
             AttributeInstance attributeInstance = living.getAttribute(Attributes.MAX_HEALTH);
@@ -156,18 +149,18 @@ public class QuietusEffect extends MobEffect {
                 AttributeInstanceInterface i = (AttributeInstanceInterface) attributeInstance;
                 if (i.revelationfix$isQuietus()) {
                     i.revelationfix$setQuietus(false);
-                    attributeInstance.setDirty();
+                    ((AccessorAttributeInstance) attributeInstance).invokeSetDirty();
                     attributeInstance.getValue();
                 }
             }
         }
         if (amplifier == 2) {
-            if (duration < 2) {
+            if (duration == 1) {
                 if (living.level().isClientSide) {
                     living.level().addParticle(ParticleTypes.SMOKE, living.getX(), living.getY() + 0.5D, living.getZ(), 0.0D, 0.0D, 0.0D);
                 } else {
                     EntityActuallyHurt actuallyHurt = new EntityActuallyHurt(living);
-                    Entity tryGetOwner = ((MobEffectInstanceEC) instance).getOwner();
+                    Entity tryGetOwner = ((MobEffectInstanceItf) instance).getOwner();
                     LivingEntity source = tryGetOwner instanceof LivingEntity l ? l : living;
                     actuallyHurt.actuallyHurt(living.damageSources().explosion(source, source), living.getMaxHealth() * 0.2F);
                     living.level().explode(living, living.getX(), living.getY(0.0625D), living.getZ(), 4.0F, Level.ExplosionInteraction.NONE);
@@ -196,33 +189,23 @@ public class QuietusEffect extends MobEffect {
                                 if (d13 != 0.0D) {
                                     if (isHalo) {
                                         if (entity instanceof LivingEntity livingEntity) {
-                                            if (!livingEntity.hasEffect(effect) || livingEntity.getEffect(effect).getAmplifier() < 2) {
-                                                MobEffectInstance instance2 = new MobEffectInstance(effect, 200, 2);
-                                                if (!livingEntity.addEffect(instance2, tryGetOwner)) {
-                                                    livingEntity.activeEffects.put(effect, instance2);
-                                                    livingEntity.onEffectAdded(instance2, tryGetOwner);
-                                                }
-                                                ((LivingEntityEC) livingEntity).revelationfix$livingECData().setQuietusCaster(expandedContext.getQuietusCaster());
-                                                new EntityActuallyHurt(livingEntity).actuallyHurt(livingEntity.damageSources().explosion(source, source), livingEntity.getMaxHealth() * 0.2F);
-                                            }
+                                            MobEffectUtils.forceAdd(livingEntity, new MobEffectInstance(this, 200, 2), ((MobEffectInstanceItf) instance).getOwner());
+                                            ((LivingEntityEC) livingEntity).revelationfix$livingECData().setQuietusCaster(expandedContext.getQuietusCaster());
+                                            new EntityActuallyHurt(livingEntity).actuallyHurt(livingEntity.damageSources().explosion(source, source), livingEntity.getMaxHealth() * 0.2F);
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    living.removeEffect(this);
-                    if (!living.addEffect(instance = new MobEffectInstance(this, 200, 3), tryGetOwner)) {
-                        living.activeEffects.put(instance.getEffect(), instance);
-                        living.onEffectAdded(instance, tryGetOwner);
-                    }
+                    MobEffectUtils.forceAdd(living, new MobEffectInstance(this, 200, 3), tryGetOwner);
                 }
             }
         } else if (amplifier == 3) {
             if (living.isAlive()) {
                 living.invulnerableTime = 0;
-                LivingEntity source = ((MobEffectInstanceEC) instance).getOwner() instanceof LivingEntity l ? l : living;
-                living.hurt(living.damageSources().source(ExtraDamageTypes.QUIETUS, source), living.getMaxHealth() * 0.04F);
+                LivingEntity source = ((MobEffectInstanceItf) instance).getOwner() instanceof LivingEntity l ? l : living;
+                living.hurt(new DamageSourceGenerator(living).source(ExtraDamageTypes.QUIETUS, source), living.getMaxHealth() * 0.04F);
                 living.invulnerableTime = 0;
             }
         }

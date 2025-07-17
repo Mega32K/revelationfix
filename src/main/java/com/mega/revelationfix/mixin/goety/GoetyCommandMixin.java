@@ -117,7 +117,7 @@ public class GoetyCommandMixin {
             entity.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(TheNeedleItem.ATTACK_DAMAGE.getId());
             entity.getAttribute(Attributes.ATTACK_SPEED).removeModifier(TheNeedleItem.ATTACK_SPEED.getId());
             entity.getAttribute(ModAttributes.DAMAGE_RESISTANCE.get()).removeModifier(TheNeedleItem.RESISTANCE.getId());
-            entity.attributes.getDirtyAttributes().add(entity.getAttribute(Attributes.ATTACK_DAMAGE));
+            entity.getAttributes().getDirtyAttributes().add(entity.getAttribute(Attributes.ATTACK_DAMAGE));
         }
         data.setDirty();
 

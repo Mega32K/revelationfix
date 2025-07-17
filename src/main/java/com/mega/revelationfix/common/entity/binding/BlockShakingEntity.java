@@ -102,17 +102,17 @@ public class BlockShakingEntity extends Entity {
         this.setDeltaMovement(0D, 0D, 0D);
         this.durationO = this.duration;
         this.aliveTicksO = this.aliveTicks;
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             this.setAliveTicks(this.getAliveTicks() + 1);
             if (this.getDurationData() <= 0)
                 this.discard();
             else this.setDuration(this.getDurationData() - 1);
         } else {
             if (this.getBlockState().is(ModBlocks.DARK_ALTAR.get())) {
-                for (Player player : this.level.getEntitiesOfClass(Player.class, new AABB(this.blockPosition()).inflate(60.0D))) {
-                    ClientLevelExpandedContext context = ((ClientLevelInterface) player.level).revelationfix$ECData();
+                for (Player player : this.level().getEntitiesOfClass(Player.class, new AABB(this.blockPosition()).inflate(60.0D))) {
+                    ClientLevelExpandedContext context = ((ClientLevelInterface) player.level()).revelationfix$ECData();
                     context.teEndRitualRunning = true;
-                    context.teEndRitualBE = this.blockPosition.offset(0, -2, 0);
+                    context.teEndRitualBE = this.blockPosition().offset(0, -2, 0);
                 }
             }
         }
@@ -123,8 +123,8 @@ public class BlockShakingEntity extends Entity {
     @Override
     public void onClientRemoval() {
         if (this.getBlockState().is(ModBlocks.DARK_ALTAR.get())) {
-            for (Player player : this.level.getEntitiesOfClass(Player.class, new AABB(this.blockPosition()).inflate(60.0D))) {
-                ClientLevelExpandedContext context = ((ClientLevelInterface) player.level).revelationfix$ECData();
+            for (Player player : this.level().getEntitiesOfClass(Player.class, new AABB(this.blockPosition()).inflate(60.0D))) {
+                ClientLevelExpandedContext context = ((ClientLevelInterface) player.level()).revelationfix$ECData();
                 context.teEndRitualRunning = false;
                 context.teEndRitualBE = null;
             }

@@ -32,10 +32,10 @@ public class VenomousSpiderWhipItem extends BaseWhipItem implements ISoulRepair,
     public boolean hurtEnemy(@NotNull ItemStack itemStack, @NotNull LivingEntity entity, @NotNull LivingEntity player) {
         boolean set = ArmorEvents.isSpiderSet(ArmorUtils.getArmorSet(player));
         if (set) {
-            if (entity.random.nextFloat() < 0.35F)
+            if (entity.getRandom().nextFloat() < 0.35F)
                 entity.addEffect(new MobEffectInstance(GoetyEffects.ACID_VENOM.get(), 80 , 4));
         } else {
-            if (entity.random.nextFloat() < 0.25F)
+            if (entity.getRandom().nextFloat() < 0.25F)
                 entity.addEffect(new MobEffectInstance(GoetyEffects.ACID_VENOM.get(), 60 , 3));
         }
         return super.hurtEnemy(itemStack, entity, player);
@@ -43,9 +43,9 @@ public class VenomousSpiderWhipItem extends BaseWhipItem implements ISoulRepair,
 
     @Override
     public void onAttack(ItemStack itemStack, LivingAttackEvent event) {
-        if (event.getEntity() instanceof Player player && !player.level.isClientSide) {
+        if (event.getEntity() instanceof Player player && !player.level().isClientSide) {
             if (!player.getCooldowns().isOnCooldown(this)) {
-                warlockUse(player.level, player);
+                warlockUse(player.level(), player);
                 player.getCooldowns().addCooldown(this, ArmorUtils.armorSet(player, ModArmorMaterials.SPIDER_DARKMAGE) ? 20 : 40);
             }
         }
@@ -62,7 +62,7 @@ public class VenomousSpiderWhipItem extends BaseWhipItem implements ISoulRepair,
                 player.removeEffect(effect.getEffect());
             });
             wartling.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(player.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
-            player.level.addFreshEntity(wartling);
+            serverLevel.addFreshEntity(wartling);
         }
 
         if (!player.isSilent()) {

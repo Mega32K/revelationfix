@@ -1,6 +1,8 @@
 package com.mega.revelationfix.common.apollyon.common;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.mega.endinglib.mixin.accessor.AccessorSynchedEntityData;
+import com.mega.endinglib.util.java.ClassHelper;
 import com.mega.revelationfix.mixin.BypassesDataItemAccessor;
 import com.mega.revelationfix.util.java.Hack;
 import net.minecraft.CrashReport;
@@ -9,6 +11,7 @@ import net.minecraft.ReportedException;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.fml.unsafe.UnsafeHacks;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
@@ -17,10 +20,6 @@ import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-/**
- * 归元  细分  无敌
- * 暂时退役
- */
 public class ApollyonSynchedEntityData extends SynchedEntityData {
     private Apostle apostle;
     private ApollyonAbilityHelper apollyonAbilityHelper;
@@ -31,7 +30,7 @@ public class ApollyonSynchedEntityData extends SynchedEntityData {
     }
 
     public static synchronized void hackData(Apostle apostle, SynchedEntityData srcDataManager) {
-        try {
+            /*
             ApollyonSynchedEntityData entityData = new ApollyonSynchedEntityData(srcDataManager.entity);
             for (Field field : SynchedEntityData.class.getDeclaredFields()) {
                 if (!Modifier.isStatic(field.getModifiers())) {
@@ -41,14 +40,14 @@ public class ApollyonSynchedEntityData extends SynchedEntityData {
             }
             entityData.checkApostle();
             apostle.entityData = entityData;
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+             */
+        if (apostle.getEntityData().getClass().equals(SynchedEntityData.class))
+            ClassHelper.replaceKlassPtr(apostle.getEntityData(), ApollyonSynchedEntityData.class);
     }
 
     private void checkApostle() {
         if (apostle == null || apollyonAbilityHelper == null) {
-            apostle = (Apostle) entity;
+            apostle = (Apostle) ((AccessorSynchedEntityData) this).getEntity();
             apollyonAbilityHelper = ((ApollyonAbilityHelper) apostle);
         }
     }
@@ -70,14 +69,14 @@ public class ApollyonSynchedEntityData extends SynchedEntityData {
 
     public <T> void set0(EntityDataAccessor<T> p_276368_, T p_276363_, boolean p_276370_) {
         SynchedEntityData.DataItem<T> dataitem = this.getItem(p_276368_);
-        BypassesDataItemAccessor<T> accessor = (BypassesDataItemAccessor<T>) dataitem;
-        if (p_276370_ || (ObjectUtils.notEqual(p_276363_, dataitem.getValue()) || ObjectUtils.notEqual(p_276363_, accessor.getValue()))) {
+        BypassesDataItemAccessor<T> accessorEntity = (BypassesDataItemAccessor<T>) dataitem;
+        if (p_276370_ || (ObjectUtils.notEqual(p_276363_, dataitem.getValue()) || ObjectUtils.notEqual(p_276363_, accessorEntity.getValue()))) {
             dataitem.setValue(p_276363_);
-            accessor.setValue(p_276363_);
+            accessorEntity.setValue(p_276363_);
             this.entity.onSyncedDataUpdated(p_276368_);
             dataitem.setDirty(true);
             this.isDirty = true;
-            accessor.setDirty(true);
+            accessorEntity.setDirty(true);
         }
 
     }

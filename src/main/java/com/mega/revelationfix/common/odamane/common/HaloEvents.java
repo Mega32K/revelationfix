@@ -22,7 +22,7 @@ public class HaloEvents {
                 if (ATAHelper2.getOdamaneEC(player).isInvulnerable())
                     event.setAmount(0);
                 float reduce;
-                ResourceKey<Level> dimension = player.level.dimension();
+                ResourceKey<Level> dimension = player.level().dimension();
                 if (dimension == Level.NETHER)
                     reduce = 0.75F;
                 else if (dimension == Level.END)

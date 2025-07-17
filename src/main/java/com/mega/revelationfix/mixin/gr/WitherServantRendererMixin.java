@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin.gr;
 
+import com.mega.endinglib.util.annotation.DeprecatedMixin;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +13,7 @@ import z1gned.goetyrevelation.ModMain;
 import z1gned.goetyrevelation.client.render.WitherServantRenderer;
 
 @Mixin(WitherServantRenderer.class)
+@DeprecatedMixin
 public class WitherServantRendererMixin {
     @Mutable
     @Shadow(remap = false)

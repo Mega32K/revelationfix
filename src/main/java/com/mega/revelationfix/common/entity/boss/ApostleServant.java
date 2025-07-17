@@ -197,13 +197,13 @@ public class ApostleServant extends Apostle implements IMonsterServant {
     @Override
     public InteractionResult interactAt(Player player, Vec3 sub, InteractionHand hand) {
         ItemStack handItem = player.getItemInHand(hand);
-        if (handItem.is(ModItems.UNHOLY_BLOOD.get()) && !level.isClientSide && this.getHealth() < this.getMaxHealth()) {
+        if (handItem.is(ModItems.UNHOLY_BLOOD.get()) && !level().isClientSide && this.getHealth() < this.getMaxHealth()) {
             if (!player.getAbilities().instabuild)
                 handItem.shrink(1);
             this.setHealth(this.getMaxHealth());
             this.setSecondPhase(false);
             this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
-            ((ServerLevel) level).getChunkSource().broadcastAndSend(this, new ClientboundEntityEventPacket(this, (byte) 66));
+            ((ServerLevel) level()).getChunkSource().broadcastAndSend(this, new ClientboundEntityEventPacket(this, (byte) 66));
         }
         return super.interactAt(player, sub, hand);
     }
@@ -237,7 +237,7 @@ public class ApostleServant extends Apostle implements IMonsterServant {
 
     @Override
     public void setTarget(@javax.annotation.Nullable LivingEntity p_21544_) {
-        if (this.getTrueOwner() == p_21544_ || (p_21544_ != null && this.getTrueOwner() != null && this.getTrueOwner().uuid.equals(p_21544_.getUUID())) || (p_21544_ != null && isAlliedTo(p_21544_)))
+        if (this.getTrueOwner() == p_21544_ || (p_21544_ != null && this.getTrueOwner() != null && this.getTrueOwner().getUUID().equals(p_21544_.getUUID())) || (p_21544_ != null && isAlliedTo(p_21544_)))
             return;
         if (this.isPatrolling()) {
             if (p_21544_ != null) {
@@ -287,7 +287,7 @@ public class ApostleServant extends Apostle implements IMonsterServant {
     }
 
     public void die(DamageSource pCause) {
-        if (!this.level.isClientSide && this.hasCustomName() && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
+        if (!this.level().isClientSide && this.hasCustomName() && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
             this.getTrueOwner().sendSystemMessage(this.getCombatTracker().getDeathMessage());
         }
 
@@ -320,7 +320,7 @@ public class ApostleServant extends Apostle implements IMonsterServant {
         boolean flag = doHurtTarget_owned(entityIn);
         if (flag) {
             if (this.getMobType() == MobType.UNDEAD) {
-                float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+                float f = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
                 if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f * 0.3F) {
                     entityIn.setSecondsOnFire(2 * (int) f);
                 }
@@ -376,7 +376,7 @@ public class ApostleServant extends Apostle implements IMonsterServant {
             float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
             if (this.random.nextFloat() < f) {
                 player.getCooldowns().addCooldown(Items.SHIELD, 100);
-                this.level.broadcastEntityEvent(player, (byte) 30);
+                this.level().broadcastEntityEvent(player, (byte) 30);
             }
         }
 
@@ -631,8 +631,8 @@ public class ApostleServant extends Apostle implements IMonsterServant {
         if (killChance <= 0) {
             warnKill(player);
         } else {
-            if (!this.level.isClientSide)
-                for (Entity entity : this.level.getEntities(this, this.getBoundingBox().inflate(128.0F), (e) -> e instanceof Owned owned && owned.getTrueOwner() == this))
+            if (!this.level().isClientSide)
+                for (Entity entity : this.level().getEntities(this, this.getBoundingBox().inflate(128.0F), (e) -> e instanceof Owned owned && owned.getTrueOwner() == this))
                     entity.discard();
             this.kill();
         }
@@ -682,7 +682,7 @@ public class ApostleServant extends Apostle implements IMonsterServant {
 
     //Owned
     public void convertNewEquipment(Entity entity) {
-        this.populateDefaultEquipmentSlots(this.random, this.level.getCurrentDifficultyAt(this.blockPosition()));
+        this.populateDefaultEquipmentSlots(this.random, this.level().getCurrentDifficultyAt(this.blockPosition()));
     }
 
     //Owned
@@ -694,16 +694,17 @@ public class ApostleServant extends Apostle implements IMonsterServant {
     //Owned
     @javax.annotation.Nullable
     public LivingEntity getTrueOwner() {
-        if (!this.level.isClientSide) {
+        Level level = level();
+        if (!level.isClientSide) {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(this.level, uuid);
+            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(level, uuid);
         } else {
             int id = this.getOwnerClientId();
             LivingEntity var10000;
             if (id <= -1) {
                 var10000 = null;
             } else {
-                Entity var3 = this.level.getEntity(this.getOwnerClientId());
+                Entity var3 = level.getEntity(this.getOwnerClientId());
                 if (var3 instanceof LivingEntity living) {
                     if (living != this) {
                         var10000 = living;
@@ -818,7 +819,7 @@ public class ApostleServant extends Apostle implements IMonsterServant {
 
     //Owned
     public void push(Entity p_21294_) {
-        if (!this.level.isClientSide && p_21294_ != this.getTrueOwner()) {
+        if (!this.level().isClientSide && p_21294_ != this.getTrueOwner()) {
             super.push(p_21294_);
         }
 
@@ -826,7 +827,7 @@ public class ApostleServant extends Apostle implements IMonsterServant {
 
     //Owned
     public void doPush(Entity p_20971_) {
-        if (!this.level.isClientSide && p_20971_ != this.getTrueOwner()) {
+        if (!this.level().isClientSide && p_20971_ != this.getTrueOwner()) {
             super.doPush(p_20971_);
         }
 

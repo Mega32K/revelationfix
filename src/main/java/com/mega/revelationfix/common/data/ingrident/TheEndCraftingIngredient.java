@@ -20,7 +20,8 @@ public class TheEndCraftingIngredient extends Ingredient {
 
     @Override
     public boolean test(@Nullable ItemStack itemStack) {
-        return (itemStack.getItem() == TheEndRitualItemContext.THE_END_CRAFT && (itemStack.hasTag() && itemStack.getTag().getBoolean(GRItems.NBT_CRAFTING)) || itemStack.getItem() instanceof RandomDisplayItem);
+        if (itemStack == null) return false;
+        return (itemStack.getItem() == TheEndRitualItemContext.THE_END_CRAFT && (itemStack.hasTag() && itemStack.getTag().getBoolean(GRItems.NBT_CRAFTING))) || itemStack.getItem() instanceof RandomDisplayItem;
     }
 
     @Override

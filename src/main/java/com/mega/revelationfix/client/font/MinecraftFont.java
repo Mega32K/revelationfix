@@ -2,12 +2,19 @@ package com.mega.revelationfix.client.font;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.AtomicDouble;
+import com.mega.endinglib.api.client.text.TextColorInterface;
+import com.mega.endinglib.api.client.text.TextColorUtils;
+import com.mega.endinglib.mixin.accessor.AccessorFont;
+import com.mega.endinglib.mixin.accessor.AccessorFontManager;
+import com.mega.endinglib.mixin.accessor.AccessorMC;
+import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.mixin.EmptyGlyphAccessor;
-import com.mega.revelationfix.safe.TextColorInterface;
 import com.mojang.blaze3d.font.GlyphInfo;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import it.unimi.dsi.fastutil.ints.Int2CharOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.font.FontManager;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.gui.font.GlyphRenderTypes;
@@ -18,6 +25,8 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
+import net.minecraft.util.StringDecomposer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -29,34 +38,98 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class MinecraftFont extends Font {
-    public static FontManager fontManager = Minecraft.getInstance().fontManager;
+    public static FontManager fontManager = ((AccessorMC) Minecraft.getInstance()).getFontManager();
+    public static AccessorFontManager accessorFontManager = (AccessorFontManager) fontManager;
     public static MinecraftFont INSTANCE;
+    public final AccessorFont accessorFont;
 
     static {
-        INSTANCE = new MinecraftFont((p_284586_) -> fontManager.fontSets.getOrDefault(fontManager.renames.getOrDefault(p_284586_, p_284586_), fontManager.missingFontSet), false, fontManager.fontSets);
-
+        INSTANCE = new MinecraftFont((p_284586_) -> accessorFontManager.getFontSets().getOrDefault(accessorFontManager.getRenames().getOrDefault(p_284586_, p_284586_), accessorFontManager.getMissingFontSet()), false, accessorFontManager.getFontSets());
     }
 
     public MinecraftFont(Function<ResourceLocation, FontSet> p_243253_, boolean p_243245_, Map<ResourceLocation, FontSet> f) {
         super(p_243253_, p_243245_);
+        this.accessorFont = (AccessorFont) this;
+    }
+    public static boolean isEden(Int2CharOpenHashMap map) {
+        for (char c : map.values()) {
+            if (c == ModChatFormatting.EDEN.getChar())
+                return true;
+        }
+        return false;
     }
 
-    public int drawInBatch(@NotNull FormattedCharSequence p_273262_, float p_273006_, float p_273254_, int p_273375_, boolean p_273674_, @NotNull Matrix4f p_273525_, @NotNull MultiBufferSource p_272624_, @NotNull DisplayMode p_273418_, int p_273330_, int p_272981_) {
-        return this.drawInternal(p_273262_, p_273006_, p_273254_, p_273375_, p_273674_, p_273525_, p_272624_, p_273418_, p_273330_, p_272981_);
+    @Override
+    public int drawInBatch(String p_272780_, float p_272811_, float p_272610_, int p_273422_, boolean p_273016_, Matrix4f p_273443_, MultiBufferSource p_273387_, DisplayMode p_273551_, int p_272706_, int p_273114_, boolean p_273022_) {
+
+        return super.drawInBatch(p_272780_, p_272811_, p_272610_, p_273422_, p_273016_, p_273443_, p_273387_, p_273551_, p_272706_, p_273114_, p_273022_);
     }
 
-    public int drawInternal(@NotNull FormattedCharSequence p_273025_, float p_273121_, float p_272717_, int p_273653_, boolean p_273531_, @NotNull Matrix4f p_273265_, @NotNull MultiBufferSource p_273560_, @NotNull DisplayMode p_273342_, int p_273373_, int p_273266_) {
-        p_273653_ = adjustColor(p_273653_);
+    public float drawInBatchF(@NotNull FormattedCharSequence p_273262_, float p_273006_, float p_273254_, int p_273375_, boolean p_273674_, @NotNull Matrix4f p_273525_, @NotNull MultiBufferSource p_272624_, @NotNull DisplayMode p_273418_, int p_273330_, int p_272981_, Int2CharOpenHashMap foundCodes) {
+        boolean isCentered = false;
+        float returnV = 0F;
+        if (isEden(foundCodes)) {
+            String[] eden_no_eden = FontTextBuilder.formattedCharSequenceToStringEden(p_273262_);
+            returnV = this.renderEden(eden_no_eden[0], p_273006_, p_273254_, p_273375_, p_273674_, p_273525_, p_272624_, p_273418_, p_273330_, p_272981_);
+            this.drawInBatch(eden_no_eden[1], p_273006_, p_273254_, p_273375_, p_273674_, p_273525_, p_272624_, p_273418_, p_273330_, p_272981_);
+        } else {
+            returnV = this.drawInternalF(p_273262_, p_273006_, p_273254_, p_273375_, p_273674_, p_273525_, p_272624_, p_273418_, p_273330_, p_272981_);
+        }
+        return returnV;
+    }
+    public float renderEden(String text2, float startX, float startY, int iColor, boolean p_273674_, Matrix4f matrix4f, MultiBufferSource bufferSource, DisplayMode displayMode, int overlay, int light) {
+        long milliTime = OdamaneFont.milliTime();
+        float colorr = (float) milliTime * 0.0025F % 1.0F;
+        float colorrStep = (float) OdamaneFont.rangeRemap(
+                Mth.sin(((float) milliTime * 0.005F)) % 6.28318D, -0.9D, 2.5D, 0.025D, 0.15D);
+        float posX = startX;
+        float xOffset = Mth.cos((float) milliTime * 0.000833F);
+        matrix4f.translate(xOffset, 0, 0);
+        for (int i = 0; i < text2.length(); i++) {
+            float yOffset = Mth.sin((i * (0.5F) + (float) milliTime * 0.00166F));
+            matrix4f.translate(0, yOffset, 0);
+
+            int c = (int) (Mth.clamp((Mth.abs(Mth.cos(i * (0.2F) + (float) milliTime / 720F)) * 255), 70, 200)) << 24 | 8323072 | 33792 | 146;
+            posX = this.drawInternalF(String.valueOf(text2.charAt(i)), posX, startY, c, p_273674_, matrix4f, bufferSource, displayMode, overlay, light, false);
+            matrix4f.translate(0, -yOffset, 0);
+            colorr += colorrStep;
+            colorr %= 1.0F;
+        }
+        matrix4f.translate(-xOffset, 0, 0);
+        return posX;
+    }
+
+    public float drawInternalF(@NotNull FormattedCharSequence p_273025_, float p_273121_, float p_272717_, int p_273653_, boolean p_273531_, @NotNull Matrix4f p_273265_, @NotNull MultiBufferSource p_273560_, @NotNull DisplayMode p_273342_, int p_273373_, int p_273266_) {
+        p_273653_ = AccessorFont.callAdjustColor(p_273653_);
         Matrix4f matrix4f = new Matrix4f(p_273265_);
         if (p_273531_) {
             this.renderText(p_273025_, p_273121_, p_272717_, p_273653_, true, p_273265_, p_273560_, p_273342_, p_273373_, p_273266_);
-            matrix4f.translate(SHADOW_OFFSET);
+            matrix4f.translate(AccessorFont.shadowLifting());
         }
 
         p_273121_ = this.renderText(p_273025_, p_273121_, p_272717_, p_273653_, false, matrix4f, p_273560_, p_273342_, p_273373_, p_273266_);
-        return (int) p_273121_ + (p_273531_ ? 1 : 0);
+        return p_273121_ + (p_273531_ ? 1 : 0);
     }
+    private float drawInternalF(String p_273658_, float p_273086_, float p_272883_, int p_273547_, boolean p_272778_, Matrix4f p_272662_, MultiBufferSource p_273012_, Font.DisplayMode p_273381_, int p_272855_, int p_272745_, boolean p_272785_) {
+        if (p_272785_) {
+            p_273658_ = this.bidirectionalShaping(p_273658_);
+        }
 
+        p_273547_ = AccessorFont.callAdjustColor(p_273547_);
+        Matrix4f matrix4f = new Matrix4f(p_272662_);
+        if (p_272778_) {
+            this.renderText(p_273658_, p_273086_, p_272883_, p_273547_, true, p_272662_, p_273012_, p_273381_, p_272855_, p_272745_);
+            matrix4f.translate(AccessorFont.shadowLifting());
+        }
+
+        p_273086_ = this.renderText(p_273658_, p_273086_, p_272883_, p_273547_, false, matrix4f, p_273012_, p_273381_, p_272855_, p_272745_);
+        return p_273086_ ;
+    }
+    private float renderText(String p_273765_, float p_273532_, float p_272783_, int p_273217_, boolean p_273583_, Matrix4f p_272734_, MultiBufferSource p_272595_, Font.DisplayMode p_273610_, int p_273727_, int p_273199_) {
+        StringRenderOutputVanilla font$stringrenderoutput = new StringRenderOutputVanilla(p_272595_, p_273532_, p_272783_, p_273217_, p_273583_, p_272734_, p_273610_, p_273199_);
+        StringDecomposer.iterateFormatted(p_273765_, Style.EMPTY, font$stringrenderoutput);
+        return font$stringrenderoutput.finish(p_273727_, p_273532_);
+    }
     public float renderText(FormattedCharSequence p_273322_, float p_272632_, float p_273541_, int p_273200_, boolean p_273312_, @NotNull Matrix4f p_273276_, @NotNull MultiBufferSource p_273392_, @NotNull DisplayMode p_272625_, int p_273774_, int p_273371_) {
         StringRenderOutputVanilla font$stringrenderoutput = new StringRenderOutputVanilla(p_273392_, p_272632_, p_273541_, p_273200_, p_273312_, p_273276_, p_272625_, p_273371_);
         p_273322_.accept(font$stringrenderoutput);
@@ -205,8 +278,8 @@ public class MinecraftFont extends Font {
         }
 
         public boolean accept(int p_92967_, Style style, int p_92969_) {
-            FontSet fontset = MinecraftFont.this.getFontSet(style.getFont());
-            GlyphInfo glyphinfo = fontset.getGlyphInfo(p_92969_, MinecraftFont.this.filterFishyGlyphs);
+            FontSet fontset = MinecraftFont.this.accessorFont.invokeGetFontSet(style.getFont());
+            GlyphInfo glyphinfo = fontset.getGlyphInfo(p_92969_, MinecraftFont.this.accessorFont.isFilterFishyGlyphs());
             net.minecraft.client.gui.font.glyphs.BakedGlyph bakedglyph = style.isObfuscated() && p_92969_ != 32 ? fontset.getRandomGlyph(glyphinfo) : fontset.getGlyph(p_92969_);
             boolean flag = style.isBold();
             float f3 = this.a;
@@ -228,12 +301,12 @@ public class MinecraftFont extends Font {
                 float f5 = flag ? glyphinfo.getBoldOffset() : 0.0F;
                 float f4 = this.dropShadow ? glyphinfo.getShadowOffset() : 0.0F;
                 TextColorInterface codeChecker = (TextColorInterface) (Object) textcolor;
-                char code = codeChecker == null ? ' ' : codeChecker.revelationfix$getCode();
+                char code = codeChecker == null ? ' ' : codeChecker.endinglib$getCode();
                 AtomicDouble atomicX = new AtomicDouble(x);
                 VertexConsumer vertexconsumer = this.bufferSource.getBuffer(bakedglyph.renderType(this.mode));
                 {
                     if (code == 'q') {
-                        style = style.withColor(adjustColor(11141120));
+                        style = style.withColor(AccessorFont.callAdjustColor(11141120));
                         textcolor = style.getColor();
                         if (textcolor != null) {
                             int i = textcolor.getValue();
@@ -245,14 +318,14 @@ public class MinecraftFont extends Font {
                                     if (j != 0 || k != 0) {
                                         float x8x = atomicX.floatValue() + (float) j * glyphinfo.getShadowOffset();
                                         float y8x = y + (float) k * glyphinfo.getShadowOffset();
-                                        MinecraftFont.this.renderChar(bakedglyph, flag, style.isItalic(), f5, x8x + f4, y8x + f4, this.pose, vertexconsumer, r, g, b, f3, this.packedLightCoords);
+                                        MinecraftFont.this.accessorFont.callRenderChar(bakedglyph, flag, style.isItalic(), f5, x8x + f4, y8x + f4, this.pose, vertexconsumer, r, g, b, f3, this.packedLightCoords);
                                     }
                                 }
                             }
                         }
                         lastStyle = CharStyle.REVELATION;
                     } else lastStyle = CharStyle.NONE;
-                    MinecraftFont.this.renderChar(bakedglyph, flag, style.isItalic(), f5, this.x + f4, this.y + f4, this.pose, vertexconsumer, f, f1, f2, f3, this.packedLightCoords);
+                    MinecraftFont.this.accessorFont.callRenderChar(bakedglyph, flag, style.isItalic(), f5, this.x + f4, this.y + f4, this.pose, vertexconsumer, f, f1, f2, f3, this.packedLightCoords);
                 }
             }
 
@@ -280,7 +353,7 @@ public class MinecraftFont extends Font {
             }
 
             if (this.effects != null) {
-                net.minecraft.client.gui.font.glyphs.BakedGlyph bakedglyph = MinecraftFont.this.getFontSet(Style.DEFAULT_FONT).whiteGlyph();
+                net.minecraft.client.gui.font.glyphs.BakedGlyph bakedglyph = MinecraftFont.this.accessorFont.invokeGetFontSet(Style.DEFAULT_FONT).whiteGlyph();
                 VertexConsumer vertexconsumer = this.bufferSource.getBuffer(bakedglyph.renderType(this.mode));
 
                 for (net.minecraft.client.gui.font.glyphs.BakedGlyph.Effect bakedglyph$effect : this.effects) {

@@ -3,10 +3,10 @@ package com.mega.revelationfix.common.item.curios;
 import com.google.common.collect.HashMultimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
+import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.api.item.ICenterDescItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -19,14 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DimensionalWillItem extends SimpleDescriptiveCurio implements ICenterDescItem {
+public class DimensionalWillItem extends SimpleDescriptiveCurio {
     public DimensionalWillItem() {
         super(new Properties().fireResistant().stacksTo(1).rarity(Rarity.EPIC), "back", HashMultimap.create());
         this.withHead(
                 CuriosMutableComponent.create().appendFormat("%s", s -> new Object[]{I18n.get("item.goety_revelation.dimensional_will.real_desc")})
         ).withTail(
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.dimensional_will.desc0").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)),
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.dimensional_will.desc1").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY))
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.dimensional_will.desc0").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)),
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.dimensional_will.desc1").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC))
         );
     }
 

@@ -22,8 +22,8 @@ import z1gned.goetyrevelation.data.DefeatApollyonInNetherState;
 public class DarkAltarBlockEntityMixin {
     @Inject(remap = false, method = "startRitual", at = @At("HEAD"), cancellable = true)
     private void startRitual(Player player, ItemStack activationItem, RitualRecipe ritualRecipe, CallbackInfo ci) {
-        if (player.level.dimension() == Level.NETHER && ritualRecipe != null && (ritualRecipe.getId().equals(new ResourceLocation(ModMain.MODID, "summon_apollyon")) || ritualRecipe.getId().equals(new ResourceLocation(ModMain.MODID, "summon_apollyon2")))) {
-            if (player.level instanceof ServerLevel serverLevel) {
+        if (player.level().dimension() == Level.NETHER && ritualRecipe != null && (ritualRecipe.getId().equals(new ResourceLocation(ModMain.MODID, "summon_apollyon")) || ritualRecipe.getId().equals(new ResourceLocation(ModMain.MODID, "summon_apollyon2")))) {
+            if (player.level() instanceof ServerLevel serverLevel) {
                 DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(serverLevel);
                 GRSavedDataEC savedDataEC = (GRSavedDataEC) state;
                 GRSavedDataExpandedContext context = savedDataEC.revelationfix$dataEC();

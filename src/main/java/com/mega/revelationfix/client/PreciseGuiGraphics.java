@@ -1,5 +1,6 @@
 package com.mega.revelationfix.client;
 
+import com.mega.endinglib.mixin.accessor.AccessorGuiGraphics;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
@@ -57,6 +58,6 @@ public class PreciseGuiGraphics {
         vertexconsumer.vertex(matrix4f, left, bottom, (float) zOffset).color(f, f1, f2, f3).endVertex();
         vertexconsumer.vertex(matrix4f, right, bottom, (float) zOffset).color(f, f1, f2, f3).endVertex();
         vertexconsumer.vertex(matrix4f, right, top, (float) zOffset).color(f, f1, f2, f3).endVertex();
-        this.graphics.flushIfUnmanaged();
+        ((AccessorGuiGraphics) this.graphics).callFlushIfUnmanaged();
     }
 }

@@ -30,9 +30,9 @@ public abstract class AbstractArrowMixin extends Projectile {
 
     @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private boolean doomDeathArrow(Entity instance, DamageSource p_19946_, float p_19947_, Operation<Boolean> original) {
-        if (this.tags.contains(BypassInvulArrow.TAG_NAME))
+        if (this.getTags().contains(BypassInvulArrow.TAG_NAME))
             return BypassInvulArrow.doomDeathArrow((AbstractArrow) (Object) this, instance, p_19946_, p_19947_);
-        else if (this.tags.contains(BypassInvulArrow.TAG_BYPASS_NAME))
+        else if (this.getTags().contains(BypassInvulArrow.TAG_BYPASS_NAME))
             return BypassInvulArrow.phase2Arrow((AbstractArrow) (Object) this, instance, p_19946_, p_19947_);
         return original.call(instance, p_19946_, p_19947_);
     }

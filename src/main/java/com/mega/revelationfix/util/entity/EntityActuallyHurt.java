@@ -1,5 +1,7 @@
 package com.mega.revelationfix.util.entity;
 
+import com.mega.endinglib.mixin.accessor.AccessorEntity;
+import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.mixin.SyncEntityDataAccessor;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
@@ -67,11 +69,14 @@ public class EntityActuallyHurt {
                 && (Modifier.isStatic(field.getModifiers())));
     }
 
-    public LivingEntity entity;
+    public final LivingEntity entity;
     private boolean disableEffects;
-
+    public final AccessorLivingEntity accessorLivingEntity;
+    public final AccessorEntity accessorEntity;
     public EntityActuallyHurt(LivingEntity entity) {
         this.entity = entity;
+        accessorLivingEntity = (AccessorLivingEntity) entity;
+        accessorEntity = (AccessorEntity) entity;
     }
 
     public static boolean containsIgnoreCase(String str, String searchStr) {
@@ -111,14 +116,14 @@ public class EntityActuallyHurt {
                             //    EntityASMUtil.cantUseASMGetHealthAndHasSelfMethodClasses.add(klass);
                             //}
                             EntityDataAccessor<?> data = (EntityDataAccessor<?>) handle.get();
-                            if (getItem((SyncEntityDataAccessor) living.entityData, data).getValue() instanceof Float) {
+                            if (getItem((SyncEntityDataAccessor) living.getEntityData(), data).getValue() instanceof Float) {
                                 accessor.itemsById().forEach((index, dataItem0) -> {
                                     if (dataItem0.getAccessor() == data) {
                                         entityHealthDatas.put(klass.getName(), new IndexAndType(index, true));
                                     }
                                 });
                                 return;
-                            } else if (getItem((SyncEntityDataAccessor) living.entityData, data).getValue() instanceof Double) {
+                            } else if (getItem((SyncEntityDataAccessor) living.getEntityData(), data).getValue() instanceof Double) {
                                 accessor.itemsById().forEach((index, dataItem0) -> {
                                     if (dataItem0.getAccessor() == data) {
                                         entityHealthDatas.put(klass.getName(), new IndexAndType(index, false));
@@ -133,7 +138,7 @@ public class EntityActuallyHurt {
                                     float dataHealth = getValue(living, LivingEntity.DATA_HEALTH_ID);
                                     if (Objects.equals(dataHealth, living.getHealth())) {
                                         float health = dataHealth;
-                                        living.entityData.set(LivingEntity.DATA_HEALTH_ID, health - 0.1F);
+                                        living.getEntityData().set(LivingEntity.DATA_HEALTH_ID, health - 0.1F);
                                         dataHealth = getValue(living, LivingEntity.DATA_HEALTH_ID);
                                         if (Objects.equals(dataHealth, living.getHealth())) {
                                             entityHealthDatas.put(klass.getName(), new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
@@ -203,7 +208,7 @@ public class EntityActuallyHurt {
     }
 
     public static Float getValue(LivingEntity living, EntityDataAccessor<Float> data) {
-        return getItem(((SyncEntityDataAccessor) living.entityData), data).getValue();
+        return getItem(((SyncEntityDataAccessor) living.getEntityData()), data).getValue();
     }
 
     public static <T> SynchedEntityData.DataItem<T> getItem(SyncEntityDataAccessor eD, EntityDataAccessor<T> p_135380_) {
@@ -252,27 +257,27 @@ public class EntityActuallyHurt {
     }
 
     private static void dropAllDeathLoot(LivingEntity entity, DamageSource source) {
-        entity.dropAllDeathLoot(source);
+        ((AccessorLivingEntity) entity).callDropAllDeathLoot(source);
     }
 
     private static void createWitherRose(LivingEntity entity, LivingEntity living) {
-        entity.createWitherRose(living);
+        ((AccessorLivingEntity) entity).callCreateWitherRose(living);
     }
 
     private static float getSoundVolume(LivingEntity living) {
-        return living.getSoundVolume();
+        return ((AccessorLivingEntity) living).invokeGetSoundVolume();
     }
 
     private static boolean checkTotemDeathProtection(LivingEntity living, DamageSource source) {
-        return living.checkTotemDeathProtection(source);
+        return ((AccessorLivingEntity) living).callCheckTotemDeathProtection(source);
     }
 
     private static SoundEvent getDeathSound(LivingEntity living) {
-        return living.getDeathSound();
+        return ((AccessorLivingEntity) living).invokeGetDeathSound();
     }
 
     private static void playHurtSound(LivingEntity living, DamageSource source) {
-        living.playHurtSound(source);
+        ((AccessorLivingEntity) living).invokePlayHurtSound(source);
     }
 
     private static void markHurt(Entity entity) {
@@ -285,7 +290,7 @@ public class EntityActuallyHurt {
     }
 
     private static void hurtHelmet(LivingEntity entity, DamageSource source, float amount) {
-        entity.hurtHelmet(source, amount);
+        ((AccessorLivingEntity) entity).callHurtHelmet(source, amount);
     }
 
     public static <T> void setDataItemValue(SynchedEntityData.DataItem<T> dataItem, T value) {
@@ -322,7 +327,7 @@ public class EntityActuallyHurt {
     }
 
     public static boolean died(LivingEntity living) {
-        return living.tags.contains("deAddedKillsCount");
+        return living.getTags().contains("deAddedKillsCount");
     }
 
     public EntityActuallyHurt disableEffects(boolean z) {
@@ -350,13 +355,13 @@ public class EntityActuallyHurt {
             if (entity.isSleeping() && !entity.level().isClientSide) {
                 entity.stopSleeping();
             }
-            entity.noActionTime = (0);
+            accessorLivingEntity.setNoActionTime(0);
             float f = amount;
             boolean flag = false;
             if (amount > 0.0F && entity.isDamageSourceBlocked(source)) {
                 net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(entity, source, amount);
                 if (!ev.isCanceled()) {
-                    if (ev.shieldTakesDamage()) entity.hurtCurrentlyUsedShield(amount);
+                    if (ev.shieldTakesDamage()) accessorLivingEntity.callHurtCurrentlyUsedShield(amount);
                 }
             }
             if (source.is(DamageTypeTags.IS_FREEZING) && entity.getType().is(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES)) {
@@ -364,12 +369,12 @@ public class EntityActuallyHurt {
             }
 
             entity.walkAnimation.setSpeed(1.5F);
-            entity.lastHurt = (amount);
+            accessorLivingEntity.setLastHurt(amount);
             entity.invulnerableTime = 20;
             actuallyHurt0(source, amount, special);
             entity.hurtTime = entity.hurtDuration;
             if (source.is(DamageTypeTags.DAMAGES_HELMET) && !entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-                entity.hurtHelmet(source, amount);
+                accessorLivingEntity.callHurtHelmet(source, amount);
                 amount *= 0.75F;
             }
 
@@ -382,16 +387,16 @@ public class EntityActuallyHurt {
                 }
 
                 if (entity1 instanceof Player player1) {
-                    entity.lastHurtByPlayerTime = (100);
-                    entity.lastHurtByPlayer = (player1);
+                    accessorLivingEntity.setLastHurtByPlayerTime(100);
+                    entity.setLastHurtByPlayer(player1);
                 } else if (entity1 instanceof net.minecraft.world.entity.TamableAnimal tamableEntity) {
                     if (tamableEntity.isTame()) {
-                        entity.lastHurtByPlayerTime = (100);
+                        accessorLivingEntity.setLastHurtByPlayerTime(100);
                         LivingEntity livingentity2 = tamableEntity.getOwner();
                         if (livingentity2 instanceof Player player) {
-                            entity.lastHurtByPlayer = (player);
+                            entity.setLastHurtByPlayer(player);
                         } else {
-                            entity.lastHurtByPlayer = null;
+                            entity.setLastHurtByPlayer(null);
                         }
                     }
                 }
@@ -418,7 +423,7 @@ public class EntityActuallyHurt {
                 if (!checkTotemDeathProtection(entity, source)) {
                     SoundEvent soundevent = getDeathSound(entity);
                     if (soundevent != null) {
-                        if (!entity.dead && !disableEffects) {
+                        if (!accessorLivingEntity.isDead() && !disableEffects) {
                             entity.playSound(soundevent, getSoundVolume(entity), entity.getVoicePitch());
                         }
                     }
@@ -429,8 +434,8 @@ public class EntityActuallyHurt {
                 //    playHurtSound(entity, source);
             }
 
-            entity.lastDamageSource = (source);
-            entity.lastDamageStamp = (entity.level().getGameTime());
+            accessorLivingEntity.setLastDamageSource(source);
+            accessorLivingEntity.setLastDamageStamp(entity.level().getGameTime());
             if (entity instanceof ServerPlayer) {
                 CriteriaTriggers.ENTITY_HURT_PLAYER.trigger((ServerPlayer) entity, source, f, amount, flag);
             }
@@ -444,7 +449,7 @@ public class EntityActuallyHurt {
 
     //only server
     public void die(LivingEntity livingEntity, DamageSource p_21014_, boolean special) {
-        if (livingEntity.level.isClientSide) return;
+        if (livingEntity.level().isClientSide) return;
 
         try {
             livingEntity.die(p_21014_);
@@ -453,25 +458,25 @@ public class EntityActuallyHurt {
         }
 
         LivingEntity lastHurtBy = livingEntity.getKillCredit();
-        if (livingEntity.deathScore >= 0 && lastHurtBy != null) {
-            lastHurtBy.awardKillScore(livingEntity, livingEntity.deathScore, p_21014_);
+        if (accessorLivingEntity.getDeathScore() >= 0 && lastHurtBy != null) {
+            lastHurtBy.awardKillScore(livingEntity, accessorLivingEntity.getDeathScore(), p_21014_);
         }
-        if (!livingEntity.isRemoved() && !livingEntity.dead) {
+        if (!livingEntity.isRemoved() && !accessorLivingEntity.isDead()) {
             synchronized (ForgeHooks.class) {
                 MinecraftForge.EVENT_BUS.post(new LivingDeathEvent(entity, p_21014_));
             }
             if (special) catchSetTrueHealth(livingEntity, 0);
             Entity entity = p_21014_.getEntity();
             LivingEntity livingentity = livingEntity.getKillCredit();
-            if (livingEntity.deathScore >= 0 && livingentity != null) {
-                livingentity.awardKillScore(livingEntity, livingEntity.deathScore, p_21014_);
+            if (accessorLivingEntity.getDeathScore() >= 0 && livingentity != null) {
+                livingentity.awardKillScore(livingEntity, accessorLivingEntity.getDeathScore(), p_21014_);
             }
 
             if (livingEntity.isSleeping()) {
                 livingEntity.stopSleeping();
             }
 
-            livingEntity.dead = true;
+            accessorLivingEntity.setDead(true);
             livingEntity.getCombatTracker().recheckStatus();
             Level level = livingEntity.level();
             if (level instanceof ServerLevel serverlevel) {

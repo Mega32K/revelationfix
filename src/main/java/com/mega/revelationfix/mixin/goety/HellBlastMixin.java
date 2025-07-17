@@ -42,14 +42,15 @@ public abstract class HellBlastMixin extends WaterHurtingProjectile {
 
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/projectiles/WaterHurtingProjectile;onHit(Lnet/minecraft/world/phys/HitResult;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onHit(HitResult pResult, CallbackInfo ci) {
-        if (!this.level.isClientSide) {
+        Level level = this.level();
+        if (!level.isClientSide) {
             if (this.getOwner() instanceof Player player && ATAHelper2.hasOdamane(player)) {
                 ci.cancel();
                 Vec3 vec3 = Vec3.atCenterOf(this.blockPosition());
                 int i;
                 if (pResult instanceof BlockHitResult blockHitResult) {
                     BlockPos blockpos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
-                    if (BlockFinder.canBeReplaced(this.level, blockpos)) {
+                    if (BlockFinder.canBeReplaced(level, blockpos)) {
                         vec3 = Vec3.atCenterOf(blockpos);
                     }
                 } else if (pResult instanceof EntityHitResult entityHitResult) {
@@ -57,21 +58,21 @@ public abstract class HellBlastMixin extends WaterHurtingProjectile {
                     vec3 = Vec3.atCenterOf(entity1.blockPosition());
                 }
 
-                Hellfire hellfire = new TheEndHellfire(this.level, vec3, player);
-                if (this.level.addFreshEntity(hellfire)) {
+                Hellfire hellfire = new TheEndHellfire(level, vec3, player);
+                if (level.addFreshEntity(hellfire)) {
                     Direction[] var15 = Direction.values();
                     int var18 = var15.length;
 
                     for (i = 0; i < var18; ++i) {
                         Direction direction = var15[i];
                         if (direction.getAxis().isHorizontal()) {
-                            Hellfire hellfire1 = new TheEndHellfire(this.level, Vec3.atCenterOf(hellfire.blockPosition().relative(direction)), player);
-                            this.level.addFreshEntity(hellfire1);
+                            Hellfire hellfire1 = new TheEndHellfire(level, Vec3.atCenterOf(hellfire.blockPosition().relative(direction)), player);
+                            level.addFreshEntity(hellfire1);
                         }
                     }
                 }
 
-                SpellExplosion var10001 = new SpellExplosion(this.level, player, ModDamageSource.hellfire(this, this.getOwner()), vec3.x, vec3.y, vec3.z, getRadius(), 0.0F) {
+                SpellExplosion var10001 = new SpellExplosion(level, player, ModDamageSource.hellfire(this, this.getOwner()), vec3.x, vec3.y, vec3.z, getRadius(), 0.0F) {
                     public void explodeHurt(Entity target, DamageSource damageSource, double x, double y, double z, double seen, float actualDamage) {
                         super.explodeHurt(target, damageSource, x, y, z, seen, actualDamage);
                         Entity var13 = damageSource.getDirectEntity();
@@ -83,8 +84,7 @@ public abstract class HellBlastMixin extends WaterHurtingProjectile {
 
                     }
                 };
-                Level var13 = this.level;
-                if (var13 instanceof ServerLevel serverLevel) {
+                if (level instanceof ServerLevel serverLevel) {
                     ServerParticleUtil.addParticlesAroundSelf(serverLevel, ModParticleTypes.BIG_FIRE.get(), this);
                     ColorUtil colorUtil = new ColorUtil(14523414);
                     serverLevel.sendParticles(new CircleExplodeParticleOption(colorUtil.red, colorUtil.green, colorUtil.blue, 4.0F, 1), vec3.x, BlockFinder.moveDownToGround(this), vec3.z, 1, 0.0, 0.0, 0.0, 0.0);

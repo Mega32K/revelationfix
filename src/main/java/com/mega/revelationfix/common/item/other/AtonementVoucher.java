@@ -25,7 +25,7 @@ public class AtonementVoucher extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         if (!level.isClientSide) {
             player.getItemInHand(hand).shrink(1);
-            for (Apostle apostle : level.getEntitiesOfClass(Apostle.class, new AABB(player.blockPosition).inflate(72D), (e) -> ((ApollyonAbilityHelper) e).allTitlesApostle_1_20_1$isApollyon())) {
+            for (Apostle apostle : level.getEntitiesOfClass(Apostle.class, new AABB(player.blockPosition()).inflate(72D), (e) -> ((ApollyonAbilityHelper) e).allTitlesApostle_1_20_1$isApollyon())) {
                 apostle.hurt(apostle.damageSources().fellOutOfWorld(), 1F);
                 apostle.kill();
             }

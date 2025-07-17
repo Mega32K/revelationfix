@@ -1,7 +1,7 @@
 package com.mega.revelationfix.client.key;
 
 import com.mega.endinglib.api.client.ClientTaskInstance;
-import com.mega.endinglib.api.event.render.EventItf;
+import com.mega.endinglib.api.event.EventItf;
 import com.mega.revelationfix.client.screen.post.custom.BarrelDistortionCoordinatesPostEffect;
 import com.mega.revelationfix.client.task.TeleportCameraTask;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
@@ -41,7 +41,7 @@ public class CuriosSkillKeyMapping {
         if (mc.screen == null && event.getAction() == GLFW.GLFW_PRESS && event.getKey() == ACTIVE_SKILL.getKey().getValue()) {
             if (ATAHelper2.hasOdamane(mc.player) || ATAHelper2.hasEternalWatch(mc.player)) {
                 PacketHandler.sendToServer(new TryTimeStopSkill(mc.player.getId()));
-                ((EventItf) event).el_setEventUnCancelable(true);
+                ((EventItf)event).el_setEventUnCancelable(true);
             }
         }
     }

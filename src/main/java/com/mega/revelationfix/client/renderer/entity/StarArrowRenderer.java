@@ -75,7 +75,7 @@ public class StarArrowRenderer extends EntityRenderer<StarArrow> {
                 }
             } else {
                 for (int i = 0; i < StarArrow.maxTrails; i++) {
-                    trailPoints.add(new TrailPoint(starArrow.position, 0));
+                    trailPoints.add(new TrailPoint(starArrow.position(), 0));
                 }
             }
             VFRBuilders.WorldVFRTrailBuilder trailBuilder = ClientEventHandler.normalStarTrailsBuilder;

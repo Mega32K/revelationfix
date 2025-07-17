@@ -1,6 +1,7 @@
 package com.mega.revelationfix.common.apollyon.common;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.mega.endinglib.mixin.accessor.AccessorAttributeInstance;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.entity.FakeItemEntity;
@@ -76,7 +77,7 @@ public class PlayerTickrateExecutor {
             accessor.attributes().values().forEach(ins -> {
                 AttributeInstanceInterface i = (AttributeInstanceInterface) ins;
                 i.revelationfix$setAlwaysBase(!not);
-                ins.setDirty();
+                ((AccessorAttributeInstance) ins).invokeSetDirty();
                 ins.getValue();
             });
         }
@@ -86,13 +87,13 @@ public class PlayerTickrateExecutor {
             accessor.attributes().values().forEach(ins -> {
                 AttributeInstanceInterface i = (AttributeInstanceInterface) ins;
                 i.revelationfix$setAlwaysBase(false);
-                ins.setDirty();
+                ((AccessorAttributeInstance) ins).invokeSetDirty();
                 ins.getValue();
             });
         }
-        if (isInDoom(player) && !player.level.isClientSide) {
+        if (isInDoom(player) && !player.level().isClientSide) {
             ItemCooldowns itemCooldowns = player.getCooldowns();
-            ServerLevel serverLevel = (ServerLevel) player.level;
+            ServerLevel serverLevel = (ServerLevel) player.level();
             DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(serverLevel);
             List<ItemStack> bannedStorageCrystals = ((GRSavedDataEC) state).revelationfix$dataEC().getBannedCurios();
             List<ItemStack> stacks = new ArrayList<>();
@@ -108,10 +109,10 @@ public class PlayerTickrateExecutor {
                                 changed.set(true);
                                 stacks.add(stack);
                                 if (totalCount.addAndGet(1) < 6) {
-                                    FakeItemEntity itemEntity = new FakeItemEntity(player.level, player.getX(), player.getY(0.5), player.getZ(), stack);
+                                    FakeItemEntity itemEntity = new FakeItemEntity(player.level(), player.getX(), player.getY(0.5), player.getZ(), stack);
                                     itemEntity.setGlowingTag(true);
-                                    player.level.addFreshEntity(itemEntity);
-                                    itemEntity.push(player.random.triangle(0D, 0.6D), 0D, player.random.triangle(0D, 0.6D));
+                                    player.level().addFreshEntity(itemEntity);
+                                    itemEntity.push(player.getRandom().triangle(0D, 0.6D), 0D, player.getRandom().triangle(0D, 0.6D));
                                 }
                                 iCurioStacksHandler.getStacks().setStackInSlot(i, ItemStack.EMPTY);
                             }
@@ -169,7 +170,7 @@ public class PlayerTickrateExecutor {
         accessor.attributes().values().forEach(ins -> {
             AttributeInstanceInterface i = (AttributeInstanceInterface) ins;
             i.revelationfix$setAlwaysBase(false);
-            ins.setDirty();
+            ((AccessorAttributeInstance) ins).invokeSetDirty();
             ins.getValue();
         });
     }

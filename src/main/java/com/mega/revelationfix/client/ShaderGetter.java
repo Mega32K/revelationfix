@@ -1,5 +1,7 @@
 package com.mega.revelationfix.client;
 
+import com.mega.endinglib.mixin.accessor.AccessorPostChain;
+import com.mega.endinglib.mixin.accessor.AccessorUniform;
 import com.mega.revelationfix.mixin.GameRendererAccessor;
 import com.mojang.blaze3d.shaders.Uniform;
 import net.minecraft.client.Camera;
@@ -35,7 +37,7 @@ public class ShaderGetter {
     public static void updateUniform_post(String name, float value) {
         if (currentEffect() == null)
             return;
-        for (PostPass s : currentEffect().passes) {
+        for (PostPass s : ((AccessorPostChain) currentEffect()).getPasses()) {
             s.getEffect().safeGetUniform(name).set(value);
         }
     }
@@ -44,7 +46,7 @@ public class ShaderGetter {
     public static void updateUniform_post(String name, float[] value) {
         if (currentEffect() == null)
             return;
-        for (PostPass s : currentEffect().passes) {
+        for (PostPass s : ((AccessorPostChain) currentEffect()).getPasses()) {
             s.getEffect().safeGetUniform(name).set(value);
         }
     }
@@ -52,12 +54,12 @@ public class ShaderGetter {
     public static float getUniform_post(String name) {
         if (currentEffect() == null)
             return 0F;
-        for (PostPass s : currentEffect().passes) {
+        for (PostPass s : ((AccessorPostChain) currentEffect()).getPasses()) {
             Uniform uniform = s.getEffect().getUniform(name);
             if (uniform != null) {
                 FloatBuffer floatBuffer = uniform.getFloatBuffer();
                 float value = floatBuffer.get(0);
-                uniform.markDirty();
+                ((AccessorUniform) uniform).invokeMarkDirty();
                 return value;
             }
         }
@@ -67,7 +69,7 @@ public class ShaderGetter {
     public static float getFloatUniform(String name) {
         if (currentEffect() == null)
             return Float.NaN;
-        for (PostPass s : currentEffect().passes) {
+        for (PostPass s : ((AccessorPostChain) currentEffect()).getPasses()) {
             Uniform su = s.getEffect().getUniform(name);
             if (su != null) {
                 su.getFloatBuffer().get(0);
@@ -79,7 +81,7 @@ public class ShaderGetter {
     public static float[] getMatrixUniform(String name) {
         if (currentEffect() == null)
             return new float[]{Float.NaN};
-        for (PostPass s : currentEffect().passes) {
+        for (PostPass s : ((AccessorPostChain) currentEffect()).getPasses()) {
             Uniform su = s.getEffect().getUniform(name);
             if (su != null) {
                 su.getFloatBuffer().array();
@@ -91,7 +93,7 @@ public class ShaderGetter {
     public static void updateUniform_post(String name, int value) {
         if (currentEffect() == null)
             return;
-        for (PostPass s : currentEffect().passes) {
+        for (PostPass s : ((AccessorPostChain) currentEffect()).getPasses()) {
             Uniform su = s.getEffect().getUniform(name);
             if (su != null) {
                 su.set(value);

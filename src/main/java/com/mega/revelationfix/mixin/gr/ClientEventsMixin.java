@@ -34,7 +34,7 @@ public abstract class ClientEventsMixin {
             ci.cancel();
             if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon()) {
                 if (apostle.isInNether()) {
-                    ClientLevelExpandedContext context = ((ClientLevelInterface) apostle.level).revelationfix$ECData();
+                    ClientLevelExpandedContext context = ((ClientLevelInterface) apostle.level()).revelationfix$ECData();
                     if (context.isNetherApollyon()) {
                         SoundEvent soundEvent = ClientConfig.enableNewBossMusic ? com.mega.revelationfix.common.init.ModSounds.APOLLYON_NEW_NETHER_THEME.get() : ModMain.APOLLYON_NETHER_THEME.get();
                         playBossMusic(soundEvent, ModMain.APOLLYON_THEME_POST.get(), apostle);

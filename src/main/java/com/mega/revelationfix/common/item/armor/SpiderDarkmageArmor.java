@@ -111,7 +111,7 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
     @Override
     public void onSetHurtOthers(LivingHurtEvent event, LivingEntity attacker, LivingEntity beHurt) {
         //神经蚀刻套吸血
-        if (attacker.random.nextFloat() <= 0.2F) {
+        if (attacker.getRandom().nextFloat() <= 0.2F) {
             float f0 = 2F;
             float f1 = 2F;
             AttributeInstance instance = attacker.getAttribute(Attributes.ATTACK_DAMAGE);

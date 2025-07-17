@@ -15,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
@@ -50,7 +51,7 @@ public class AbilityEvents {
      */
     @SubscribeEvent
     public static void onPlayerAttackingEntity(AttackEntityEvent event) {
-        if (!event.getEntity().level.isClientSide)
+        if (!event.getEntity().level().isClientSide)
             ATAHelper2.getOdamaneEC(event.getEntity()).tryAttackBoss(event.getTarget());
     }
 
@@ -102,15 +103,15 @@ public class AbilityEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onOdamanePlayerDeath(LivingDeathEvent event) {
         Entity entity = event.getEntity();
-
-        if (entity instanceof Player player && !player.level.isClientSide) {
+        Level level = entity.level();
+        if (entity instanceof Player player && !level.isClientSide) {
             if (ATAHelper2.hasOdamane(player)) {
                 OdamanePlayerExpandedContext context = ATAHelper2.getOdamaneEC(player);
-                if (player.random.nextFloat() < 0.85F) {
+                if (player.getRandom().nextFloat() < 0.85F) {
                     player.setHealth(1F);
                     player.heal(7.0F);
                     player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 126));
-                    player.level.broadcastEntityEvent(player, OdamanePlayerExpandedContext.REVIVE_EVENT);
+                    level.broadcastEntityEvent(player, OdamanePlayerExpandedContext.REVIVE_EVENT);
                     event.setCanceled(true);
                 }
                 if (context.getNextReviveCooldowns() <= 0) {
@@ -118,18 +119,18 @@ public class AbilityEvents {
                     player.setHealth(player.getMaxHealth() * 0.75F);
                     if (player.getHealth() > 0) {
                         context.onRevive();
-                        player.level.broadcastEntityEvent(player, OdamanePlayerExpandedContext.ODAMANE_REVIVE_EVENT);
+                        level.broadcastEntityEvent(player, OdamanePlayerExpandedContext.ODAMANE_REVIVE_EVENT);
                         if (!player.getCooldowns().isOnCooldown(GRItems.HALO_OF_THE_END))
                             SafeClass.enableTimeStop(player, true, 300);
                     }
                 }
             } else if (ATAHelper2.hasDimensionalWill(player)) {
-                if (player.random.nextFloat() < ItemConfig.dwDeathEscape / 100.0F) {
+                if (player.getRandom().nextFloat() < ItemConfig.dwDeathEscape / 100.0F) {
                     event.setCanceled(true);
                     player.setHealth(1F);
                     player.heal(7.0F);
                     player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 126));
-                    player.level.broadcastEntityEvent(player, OdamanePlayerExpandedContext.REVIVE_EVENT);
+                    level.broadcastEntityEvent(player, OdamanePlayerExpandedContext.REVIVE_EVENT);
                 }
             }
         }

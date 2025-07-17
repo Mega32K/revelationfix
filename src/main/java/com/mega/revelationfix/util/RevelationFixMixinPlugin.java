@@ -59,7 +59,6 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/BarricadeSpellMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/BowItemMixin");
         //BC兼容
-        toRemovedMixins.add("net/bettercombat.mixin/client/MinecraftClientInject");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/LivingEntityRendererMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ApostleModelMixin");
         toRemovedMixins.add("com/elfmcys/yesstevemodel/mixin/client/InventoryScreenMixin");

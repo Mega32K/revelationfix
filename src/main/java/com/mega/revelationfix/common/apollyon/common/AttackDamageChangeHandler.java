@@ -74,11 +74,11 @@ public class AttackDamageChangeHandler {
     }
 
     public int getLimitTime() {
-        return apostle.entityData.get(LIMIT_TIME);
+        return apostle.getEntityData().get(LIMIT_TIME);
     }
 
     public void setLimitTime(int time) {
-        apostle.entityData.set(LIMIT_TIME, Math.max(time, 0));
+        apostle.getEntityData().set(LIMIT_TIME, Math.max(time, 0));
     }
     public static boolean isDoomOrGenesis(Apostle apostle) {
         ApollyonAbilityHelper helper = (ApollyonAbilityHelper) apostle;

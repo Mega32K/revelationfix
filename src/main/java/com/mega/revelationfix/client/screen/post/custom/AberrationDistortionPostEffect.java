@@ -66,8 +66,8 @@ public class AberrationDistortionPostEffect implements CustomScreenEffect {
     public boolean canUse() {
         LocalPlayer player = mc.player;
         if (player != null) {
-            if (player.level.dimension() != Level.END) return false;
-            ClientLevelExpandedContext context = ((ClientLevelInterface) player.level).revelationfix$ECData();
+            if (player.level().dimension() != Level.END) return false;
+            ClientLevelExpandedContext context = ((ClientLevelInterface) player.level()).revelationfix$ECData();
             return !player.isSpectator() && context.teEndRitualBE != null && context.teEndRitualRunning;
         }
         return false;

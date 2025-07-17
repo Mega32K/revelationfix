@@ -7,7 +7,6 @@ import com.Polarice3.Goety.utils.ItemHelper;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
-import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.EventUtil;
 import com.mega.revelationfix.util.LivingEntityEC;
@@ -37,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import z1gned.goetyrevelation.util.ATAHelper;
 
 import java.util.Map;
+import java.util.Set;
 
 @Mixin(value = LivingEntity.class, priority = 900)
 public abstract class LivingEntityMixin extends Entity implements LivingEntityEC {
@@ -72,16 +72,6 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEC
     @Shadow
     public abstract float getHealth();
 
-    @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"))
-    private void addEffect(MobEffectInstance p_147208_, Entity p_147209_, CallbackInfoReturnable<Boolean> cir) {
-        ((MobEffectInstanceEC) p_147208_).setOwnerEntity(p_147209_);
-    }
-
-    @Inject(method = "forceAddEffect", at = @At("HEAD"))
-    private void forceAddEffect(MobEffectInstance p_147216_, Entity p_147217_, CallbackInfo ci) {
-        ((MobEffectInstanceEC) p_147216_).setOwnerEntity(p_147217_);
-    }
-
     @Inject(method = "heal", at = @At("HEAD"), cancellable = true)
     private void heal(float p_21116_, CallbackInfo ci) {
         if ((Object) this instanceof Player player)
@@ -94,10 +84,13 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEC
             ATAHelper2.getOdamaneEC(player).handleDamageEvent(p_270229_, ci);
     }
 
+    /*
     @Inject(method = "canBeAffected", at = @At("HEAD"), cancellable = true)
     private void canBeAffected(MobEffectInstance effectInstance, CallbackInfoReturnable<Boolean> cir) {
         if ((Object) this instanceof Player player) {
             if (!ATAHelper2.hasOdamane(player) && ATAHelper.hasHalo(player)) {
+                if (CommonConfig.inBypassEffect(effectInstance.getEffect()))
+                    return;
                 boolean apo = (ItemHelper.armorSet(player, ModArmorMaterials.APOCALYPTIUM));
                 if (effectInstance.getEffect() == MobEffects.NIGHT_VISION || effectInstance.getEffect() == MobEffects.BAD_OMEN)
                     return;
@@ -106,6 +99,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEC
             }
         }
     }
+     */
     @Inject(
             method = {"canAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"},
             at = {@At("HEAD")},
@@ -113,8 +107,10 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEC
     )
     public void canAttack(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         //(this.getMobType() == MobType.UNDEAD || this.getType().is(ModTags.EntityTypes.LICH_NEUTRAL))
-        if ((this.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) && target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG))) {
-            if (this.tags.contains(EntityExpandedContext.GR_FT_CHURCH) && target.tags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
+        Set<String> tags = this.getTags();
+        Set<String> targetTags = target.getTags();
+        if ((tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) && targetTags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG))) {
+            if (tags.contains(EntityExpandedContext.GR_FT_CHURCH) && targetTags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
                 cir.setReturnValue(false);
             }
         } else if (EntityExpandedContext.isOwnerFriendlyTag(this) && EntityExpandedContext.isOwnerFriendlyTag(target)) {

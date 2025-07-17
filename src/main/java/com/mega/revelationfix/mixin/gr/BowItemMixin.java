@@ -40,7 +40,7 @@ public class BowItemMixin {
                 deathArrow.setCritArrow(abstractArrow.isCritArrow());
                 deathArrow.setKnockback(abstractArrow.getKnockback());
                 deathArrow.setSecondsOnFire(1000);
-                deathArrow.tags.addAll(entity.getTags());
+                deathArrow.getTags().addAll(entity.getTags());
                 deathArrow.setXRot(entity.getXRot());
                 deathArrow.setYRot(entity.getYRot());
                 deathArrow.xRotO = entity.xRotO;

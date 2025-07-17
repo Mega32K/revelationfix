@@ -281,7 +281,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     }
 
     public void die(DamageSource pCause) {
-        if (!this.level.isClientSide && this.hasCustomName() && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
+        if (!this.level().isClientSide && this.hasCustomName() && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
             this.getTrueOwner().sendSystemMessage(this.getCombatTracker().getDeathMessage());
         }
 
@@ -311,7 +311,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
         boolean flag = doHurtTarget_owned(entityIn);
         if (flag) {
             if (this.getMobType() == MobType.UNDEAD) {
-                float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+                float f = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
                 if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f * 0.3F) {
                     entityIn.setSecondsOnFire(2 * (int) f);
                 }
@@ -367,7 +367,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
             float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
             if (this.random.nextFloat() < f) {
                 player.getCooldowns().addCooldown(Items.SHIELD, 100);
-                this.level.broadcastEntityEvent(player, (byte) 30);
+                this.level().broadcastEntityEvent(player, (byte) 30);
             }
         }
 
@@ -696,7 +696,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
 
     //Owned
     public void convertNewEquipment(Entity entity) {
-        this.populateDefaultEquipmentSlots(this.random, this.level.getCurrentDifficultyAt(this.blockPosition()));
+        this.populateDefaultEquipmentSlots(this.random, this.level().getCurrentDifficultyAt(this.blockPosition()));
     }
 
     //Owned
@@ -708,16 +708,16 @@ public class HereticServant extends Heretic implements IMonsterServant {
     //Owned
     @javax.annotation.Nullable
     public LivingEntity getTrueOwner() {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(this.level, uuid);
+            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(this.level(), uuid);
         } else {
             int id = this.getOwnerClientId();
             LivingEntity var10000;
             if (id <= -1) {
                 var10000 = null;
             } else {
-                Entity var3 = this.level.getEntity(this.getOwnerClientId());
+                Entity var3 = this.level().getEntity(this.getOwnerClientId());
                 if (var3 instanceof LivingEntity living) {
                     if (living != this) {
                         var10000 = living;
@@ -832,7 +832,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
 
     //Owned
     public void push(Entity p_21294_) {
-        if (!this.level.isClientSide && p_21294_ != this.getTrueOwner()) {
+        if (!this.level().isClientSide && p_21294_ != this.getTrueOwner()) {
             super.push(p_21294_);
         }
 
@@ -840,7 +840,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
 
     //Owned
     public void doPush(Entity p_20971_) {
-        if (!this.level.isClientSide && p_20971_ != this.getTrueOwner()) {
+        if (!this.level().isClientSide && p_20971_ != this.getTrueOwner()) {
             super.doPush(p_20971_);
         }
 
@@ -923,7 +923,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
             this.chantTime = 0;
             this.heretic.getNavigation().stop();
             this.heretic.setChanting(true);
-            this.heretic.level.broadcastEntityEvent(this.heretic, (byte) 4);
+            this.heretic.level().broadcastEntityEvent(this.heretic, (byte) 4);
             this.heretic.setChantTimes(0);
             this.heretic.playSound(ModSounds.HERETIC_CHANT.get(), 2.0F, 0.5F);
         }
@@ -931,7 +931,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
         public void stop() {
             super.stop();
             this.heretic.setChanting(false);
-            this.heretic.level.broadcastEntityEvent(this.heretic, (byte) 5);
+            this.heretic.level().broadcastEntityEvent(this.heretic, (byte) 5);
             this.heretic.setChantCoolDown(100);
             this.heretic.setChantTimes(0);
         }
@@ -945,19 +945,19 @@ public class HereticServant extends Heretic implements IMonsterServant {
             }
 
             if (this.chantTime % 10 == 0) {
-                HellChant hellChant = (HellChant) ((EntityType) ModEntityType.HELL_CHANT.get()).create(this.heretic.level);
+                HellChant hellChant = (HellChant) ((EntityType) ModEntityType.HELL_CHANT.get()).create(this.heretic.level());
                 if (hellChant != null) {
                     hellChant.setExtraDamage(3.0F);
                     if (heretic instanceof HereticServant servant) {
                         if (servant.getTrueOwner() != null && ATAHelper.hasHalo(servant.getTrueOwner()))
                             hellChant.setExtraDamage(66F);
                     }
-                    if (this.heretic.level.getDifficulty() == Difficulty.HARD) {
+                    if (this.heretic.level().getDifficulty() == Difficulty.HARD) {
                         hellChant.setBurning(1);
                     }
 
                     hellChant.chant(this.heretic);
-                    this.heretic.level.addFreshEntity(hellChant);
+                    this.heretic.level().addFreshEntity(hellChant);
                 }
             }
 

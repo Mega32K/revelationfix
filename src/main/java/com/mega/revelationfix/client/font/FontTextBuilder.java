@@ -1,16 +1,20 @@
 package com.mega.revelationfix.client.font;
 
-import com.mega.revelationfix.safe.TextColorInterface;
+import com.mega.endinglib.api.client.text.TextColorInterface;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.FormattedCharSink;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class FontTextBuilder {
     static MyFormattedCharSink NORMAL = new MyFormattedCharSink((t) -> true);
-    static MyFormattedCharSink APOLLYON = new MyFormattedCharSink((t) -> t.getColor() != null && ((TextColorInterface) (Object) t.getColor()).revelationfix$getCode() == 'q');
-    static MyFormattedCharSink EDEN = new MyFormattedCharSink((t) -> t.getColor() != null && ((TextColorInterface) (Object) t.getColor()).revelationfix$getCode() == '-');
+    static MyFormattedCharSink APOLLYON = new MyFormattedCharSink((t) -> t.getColor() != null && ((TextColorInterface) (Object) t.getColor()).endinglib$getCode() == 'q');
+    static MyFormattedCharSink EDEN = new MyFormattedCharSink((t) -> t.getColor() != null && ((TextColorInterface) (Object) t.getColor()).endinglib$getCode() == '-');
+    static MyFormattedCharSink NO_EDEN = new MyFormattedCharSink(EDEN.stylePredicate.negate());
 
     public static String formattedCharSequenceToString(FormattedCharSequence text) {
         text.accept(NORMAL);
@@ -25,23 +29,30 @@ public class FontTextBuilder {
         APOLLYON.text = new StringBuilder();
         return s;
     }
-    public static String formattedCharSequenceToStringEden(FormattedCharSequence text) {
+    public static String[] formattedCharSequenceToStringEden(FormattedCharSequence text) {
+        String[] out = new String[2];
         text.accept(EDEN);
-        String s = EDEN.getText();
+        out[0] = EDEN.getText();
         EDEN.text = new StringBuilder();
-        return s;
+        text.accept(NO_EDEN);
+        out[1] = NO_EDEN.getText();
+        NO_EDEN.text = new StringBuilder();
+        return out;
     }
     public static class MyFormattedCharSink implements FormattedCharSink {
         public Predicate<Style> stylePredicate;
         private StringBuilder text = new StringBuilder();
-
+        Font fakeFont = Minecraft.getInstance().font;
+        int aI = 0;
         public MyFormattedCharSink(Predicate<Style> stylePredicate) {
             this.stylePredicate = stylePredicate;
+            //12
+            this.aI = fakeFont.width("            ");
+            this.aI--;
         }
-
         @Override
         public boolean accept(int p_13746_, Style p_13747_, int p_13748_) {
-            text.append(stylePredicate.test(p_13747_) ? Character.toChars(p_13748_) : new char[]{' '});
+            text.append(stylePredicate.test(p_13747_) ? Character.toChars(p_13748_) : new char[] {' ', ' '});
             return true;
         }
 

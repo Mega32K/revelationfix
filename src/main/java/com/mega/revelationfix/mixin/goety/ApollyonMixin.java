@@ -4,11 +4,14 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.cultists.SpellCastingCultist;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.Polarice3.Goety.common.entities.projectiles.FireTornado;
+import com.Polarice3.Goety.common.entities.projectiles.NetherMeteor;
 import com.Polarice3.Goety.common.entities.projectiles.SpellEntity;
 import com.Polarice3.Goety.common.entities.util.AbstractTrap;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModSounds;
+import com.mega.endinglib.mixin.accessor.AccessorEntity;
+import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
 import com.mega.revelationfix.common.apollyon.common.*;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.CommonConfig;
@@ -195,7 +198,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         this.entityData.define(DeathPerformance.FINAL_DEATH_TIME, -1);
         this.entityData.define(DeathPerformance.FLAGS, (byte) 0);
         this.entityData.define(AttackDamageChangeHandler.LIMIT_TIME, AttackDamageChangeHandler.vanillaLimitTime);
-        ApollyonSynchedEntityData.hackData(revelationfix$asApostle(), this.entityData);
+        //ApollyonSynchedEntityData.hackData(revelationfix$asApostle(), this.entityData);
     } 
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
     private void readAdditionalSaveData(CompoundTag pCompound, CallbackInfo ci) {
@@ -241,14 +244,13 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void init(EntityType<? extends SpellCastingCultist> type, Level worldIn, CallbackInfo ci) {
-        this.entityData = new ApollyonEntityData(this.entityData);
         this.clientSideIllusionOffsets = new Vec3[2][4];
 
         for (int i = 0; i < 4; ++i) {
             this.clientSideIllusionOffsets[0][i] = Vec3.ZERO;
             this.clientSideIllusionOffsets[1][i] = Vec3.ZERO;
         }
-        this.activeEffects = new ApostleNonDebuffMap(revelationfix$asApostle());
+        revelationfix$asAccessorLE().setActiveEffects(new ApostleNonDebuffMap(revelationfix$asApostle()));
     }
 
     @Override
@@ -270,16 +272,14 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                     this.spawnAtLocation(new ItemStack(GRItems.DISC_1.get()));
                 }
                 if (this.isInNether()) medalS.setCount(10);
-                ItemEntity medal = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), medalS);
-                ServerLevel world = (ServerLevel) this.level();
-                world.addFreshEntity(medal);
+                spawnAtLocation(medalS);
                 if (this.isInNether()) {
-                    DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(((ServerLevel) this.level()).server);
+                    DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(((ServerLevel) this.level()).getServer());
                     if (!state.isDropped()) {
                         state.setDropped(true);
-                        ItemEntity item = new ItemEntity(world, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.WITHER_QUIETUS.get()));
-                        world.addFreshEntity(item);
-                        state.setDirty();
+                        ItemEntity ie;
+                        if ((ie = spawnAtLocation(new ItemStack(ModItems.WITHER_QUIETUS.get()))) != null && ie.isAlive())
+                            state.setDirty();
                     }
                 }
             }
@@ -316,6 +316,8 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                 int reward = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, this.getExperienceReward());
                 ExperienceOrb.award((ServerLevel) this.level(), this.position(), reward);
             }
+            for (Entity entity : level().getEntitiesOfClass(NetherMeteor.class, new AABB(this.blockPosition()).inflate(64D)))
+                entity.discard();
         } else super.dropFromLootTable(p_21021_, p_21022_);
     }
 
@@ -341,6 +343,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         if (!(revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon() && this.isInNether()))
             return;
         ci.cancel();
+        Level level = level();
         int currentDeathTime = this.getDeathTime();
         if (currentDeathTime == 0)
             DeathPerformance.setLeftTime(revelationfix$asApostle(), DeathPerformance.MAX_TIME);
@@ -353,7 +356,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                     return;
             }
             if (currentDeathTime >= 200)
-                for (Entity entity : this.level.getEntities(this, new AABB(blockPosition()).inflate(64D), (e) -> e instanceof Player)) {
+                for (Entity entity : this.level().getEntities(this, new AABB(blockPosition()).inflate(64D), (e) -> e instanceof Player)) {
                     if (!level.isClientSide)
                         ((PlayerInterface) entity).revelationfix$setBaseAttributeMode(false);
                     ((PlayerInterface) entity).revelationfix$temp_setBaseAttributeMode(false);
@@ -367,7 +370,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         if (currentDeathTime == 1) {
             this.antiRegen = 0;
             this.antiRegenTotal = 0;
-            Iterator var1 = this.level.getEntitiesOfClass(AbstractTrap.class, this.getBoundingBox().inflate(64.0)).iterator();
+            Iterator var1 = level.getEntitiesOfClass(AbstractTrap.class, this.getBoundingBox().inflate(64.0)).iterator();
 
             while (var1.hasNext()) {
                 AbstractTrap trapEntity = (AbstractTrap) var1.next();
@@ -376,7 +379,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                 }
             }
 
-            var1 = this.level.getEntitiesOfClass(SpellEntity.class, this.getBoundingBox().inflate(64.0)).iterator();
+            var1 = level.getEntitiesOfClass(SpellEntity.class, this.getBoundingBox().inflate(64.0)).iterator();
 
             while (var1.hasNext()) {
                 SpellEntity trapEntity = (SpellEntity) var1.next();
@@ -385,7 +388,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                 }
             }
 
-            var1 = this.level.getEntitiesOfClass(FireTornado.class, this.getBoundingBox().inflate(64.0)).iterator();
+            var1 = level.getEntitiesOfClass(FireTornado.class, this.getBoundingBox().inflate(64.0)).iterator();
 
             while (var1.hasNext()) {
                 FireTornado fireTornadoEntity = (FireTornado) var1.next();
@@ -405,8 +408,8 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         if (!(Boolean) MobsConfig.FancierApostleDeath.get() && !this.isInNether()) {
             this.move(MoverType.SELF, new Vec3(0.0, 0.0, 0.0));
             if (currentDeathTime == 1) {
-                if (!this.level.isClientSide) {
-                    ServerLevel = (ServerLevel) this.level;
+                if (!level.isClientSide) {
+                    ServerLevel = (ServerLevel) level;
                     if (ServerLevel.getLevelData().isThundering()) {
                         ServerLevel.setWeatherParameters(6000, 0, false, false);
                     }
@@ -432,7 +435,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
 
             if (currentDeathTime >= 30) {
                 this.remove(RemovalReason.KILLED);
-                for (Entity entity : this.level.getEntities(this, new AABB(blockPosition()).inflate(64D), (e) -> e instanceof Player)) {
+                for (Entity entity : level.getEntities(this, new AABB(blockPosition()).inflate(64D), (e) -> e instanceof Player)) {
                     if (!level.isClientSide)
                         ((PlayerInterface) entity).revelationfix$setBaseAttributeMode(false);
                     ((PlayerInterface) entity).revelationfix$temp_setBaseAttributeMode(false);
@@ -450,18 +453,17 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                     this.move(MoverType.SELF, new Vec3(0.0, 0.1, 0.0));
                 }
 
-                this.level.explode(this, this.getRandomX(1.0), this.getRandomY(), this.getRandomZ(1.0), 0.0F, Level.ExplosionInteraction.NONE);
+                level.explode(this, this.getRandomX(1.0), this.getRandomY(), this.getRandomZ(1.0), 0.0F, Level.ExplosionInteraction.NONE);
             } else if (currentDeathTime != 200) {
                 this.move(MoverType.SELF, new Vec3(0.0, 0.0, 0.0));
             }
 
             if (currentDeathTime >= 200) {
                 this.move(MoverType.SELF, new Vec3(0.0, -4.0, 0.0));
-                if (this.onGround() || this.getY() <= (double) this.level.getMinBuildHeight()) {
-                    if (!this.level.isClientSide) {
-                        ServerLevel = (ServerLevel) this.level;
-                        if (ServerLevel.getLevelData().isThundering()) {
-                            ServerLevel.setWeatherParameters(6000, 0, false, false);
+                if (this.onGround() || this.getY() <= (double) level.getMinBuildHeight()) {
+                    if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
+                        if (serverLevel.getLevelData().isThundering()) {
+                            serverLevel.setWeatherParameters(6000, 0, false, false);
                         }
 
                         for (k = 0; k < 200; ++k) {
@@ -470,18 +472,18 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                             d1 = Mth.cos(f1) * f2;
                             d2 = 0.01 + this.random.nextDouble() * 0.5;
                             d3 = Mth.sin(f1) * f2;
-                            ServerLevel.sendParticles(ParticleTypes.LARGE_SMOKE, this.getX() + d1 * 0.1, this.getY() + 0.3, this.getZ() + d3 * 0.1, 0, d1, d2, d3, 0.5);
-                            ServerLevel.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1, this.getY() + 0.3, this.getZ() + d3 * 0.1, 0, d1, d2, d3, 0.5);
+                            serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE, this.getX() + d1 * 0.1, this.getY() + 0.3, this.getZ() + d3 * 0.1, 0, d1, d2, d3, 0.5);
+                            serverLevel.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1, this.getY() + 0.3, this.getZ() + d3 * 0.1, 0, d1, d2, d3, 0.5);
                         }
 
-                        ServerLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 0, 1.0, 0.0, 0.0, 0.5);
+                        serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 0, 1.0, 0.0, 0.0, 0.5);
                     }
 
-                    this.playSound(SoundEvents.GENERIC_EXPLODE, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
+                    this.playSound(SoundEvents.GENERIC_EXPLODE, 4.0F, (1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F) * 0.7F);
                     this.playSound(this.getTrueDeathSound(), 5.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                     this.die(this.deathBlow);
                     this.remove(RemovalReason.KILLED);
-                    for (Entity entity : this.level.getEntities(this, new AABB(blockPosition()).inflate(64D), (e) -> e instanceof Player)) {
+                    for (Entity entity : level.getEntities(this, new AABB(blockPosition()).inflate(64D), (e) -> e instanceof Player)) {
                         if (!level.isClientSide) {
                             //触发成就
                             ServerPlayer serverPlayer = (ServerPlayer) entity;
@@ -499,17 +501,18 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     @Override
     public void remove(RemovalReason p_276115_) {
         super.remove(p_276115_);
+        Level level = this.level();
         if (!level.isClientSide && isInNether() && revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
             ChestBlock chest = (ChestBlock) Blocks.CHEST;
             BlockState blockState = chest.defaultBlockState();
 
-            this.level.setBlock(this.blockPosition, blockState, 3);
+            level.setBlock(this.blockPosition(), blockState, 3);
 
             DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state((ServerLevel) level);
             List<ItemStack> stacks = ((GRSavedDataEC) state).revelationfix$dataEC().getBannedCurios();
 
             AtomicBoolean changed = new AtomicBoolean(false);
-            Container container = ChestBlock.getContainer(chest, blockState, level, this.blockPosition, true);
+            Container container = ChestBlock.getContainer(chest, blockState, level, this.blockPosition(), true);
             List<ItemStack> toAddToContainer = new ArrayList<>(stacks);
             List<ItemStack> tempToRemove = new ArrayList<>();
             for (int i = 0; i < container.getContainerSize(); i++) {
@@ -525,7 +528,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                     level.addFreshEntity(itemEntity);
                 }
             if (stacks.isEmpty())
-                this.level.setBlock(this.blockPosition, Blocks.AIR.defaultBlockState(), 3);
+                level.setBlock(this.blockPosition(), Blocks.AIR.defaultBlockState(), 3);
             stacks.clear();
             state.setDirty();
         }
@@ -684,10 +687,11 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void aiStep(CallbackInfo ci) {
         if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
+            Level level = this.level();
             //禁止亚波伦杀完玩家后消失
             this.killedPlayer = false;
             this.lastKilledPlayer = 200;
-            if (this.level.isClientSide) {
+            if (level.isClientSide) {
                 if (this.tickCount == 1 || this.tickCount % 60 == 1) {
                     AttributeInstance armorP = this.getAttribute(ModAttributes.ARMOR_PENETRATION.get());
                     if (armorP != null)
@@ -789,7 +793,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                 }
                 abstractarrowentity.shoot(d0, d1, d2, speed, accuracy);
                 this.playSound(ModSounds.APOSTLE_SHOOT.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-                this.level.addFreshEntity(abstractarrowentity);
+                this.level().addFreshEntity(abstractarrowentity);
             }
         }
     }
@@ -822,6 +826,20 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
                 return;
             }
         instance.heal(p_21116_);
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity newTarget) {
+        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
+            revelaionfix$apollyonEC().lastTarget = this.getTarget();
+            if (this.isInNether()) {
+                if (newTarget != null && revelaionfix$apollyonEC().lastTarget instanceof Player) {
+                    if (newTarget.getY() < 127F && !(newTarget instanceof Player))
+                        return;
+                }
+            }
+        }
+        super.setTarget(newTarget);
     }
 
     @Override
@@ -938,7 +956,14 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     private ApollyonAbilityHelper revelationfix$asApollyonHelper() {
         return (ApollyonAbilityHelper) this;
     }
-
+    @Unique
+    private AccessorLivingEntity revelationfix$asAccessorLE() {
+        return (AccessorLivingEntity) this;
+    }
+    @Unique
+    private AccessorEntity revelationfix$asAccessorE() {
+        return (AccessorEntity) this;
+    }
     @Unique
     private Apostle revelationfix$asApostle() {
         return (Apostle) (Object) this;

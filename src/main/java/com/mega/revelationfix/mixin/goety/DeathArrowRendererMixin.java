@@ -35,7 +35,7 @@ public abstract class DeathArrowRendererMixin extends ArrowRenderer<DeathArrow> 
             DeathArrowEC ec = (DeathArrowEC) deathArrow;
             WrappedTrailUpdate wrappedTrailUpdate = ec.revelationfix$getTrailData();
             if (wrappedTrailUpdate.shouldRenderTrail()) {
-                if (!deathArrow.onGround || ec.revelationfix$inGroundTime() < 20) {
+                if (!deathArrow.onGround() || ec.revelationfix$inGroundTime() < 20) {
                     double x = Mth.lerp(partialTicks, deathArrow.xOld, deathArrow.getX());
                     double y = Mth.lerp(partialTicks, deathArrow.yOld, deathArrow.getY());
                     double z = Mth.lerp(partialTicks, deathArrow.zOld, deathArrow.getZ());
@@ -50,7 +50,6 @@ public abstract class DeathArrowRendererMixin extends ArrowRenderer<DeathArrow> 
                     VFRBuilders.WorldVFRTrailBuilder trailBuilder = ClientEventHandler.normalStarTrailsBuilder;
                     if (trailBuilder != null)
                         trailBuilder.addTrailListRenderTask(new DeathArrowTrailTask(trailPoints));
-
 
                 } else wrappedTrailUpdate.remove();
             } else wrappedTrailUpdate.remove();

@@ -12,6 +12,7 @@ import com.Polarice3.Goety.common.magic.spells.FeastSpell;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ColorUtil;
 import com.Polarice3.Goety.utils.WandUtil;
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.config.GRSpellConfig;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.IceSpellParticlePacket;
@@ -113,7 +114,7 @@ public class IceSpell extends EverChargeSpell {
         if (rightStaff)
             frostAreaRadius += 12.0F;
         if (caster.tickCount % 40 == 0) {
-            PacketHandler.sendToAll(new IceSpellParticlePacket(caster.uuid, frostAreaRadius, IceSpellParticlePacket.CIRCLE_PARTICLES));
+            PacketHandler.sendToAll(new IceSpellParticlePacket(caster.getUUID(), frostAreaRadius, IceSpellParticlePacket.CIRCLE_PARTICLES));
         }
         Vec3 location = caster.position();
         BlockPos mutableBlockPos = new BlockPos.MutableBlockPos(location.x, location.y + 1.5, location.z);
@@ -124,9 +125,9 @@ public class IceSpell extends EverChargeSpell {
         }
 
         if (caster.tickCount % (rightStaff ? 20 : 40) == 0) {
-            DamageSource source = caster.damageSources().source(DamageTypes.FREEZE, caster);
-            PacketHandler.sendToAll(new IceSpellParticlePacket(caster.uuid, frostAreaRadius, IceSpellParticlePacket.TARGETS_PARTICLES));
-            for (Entity entity : worldIn.getEntities(caster, new AABB(caster.blockPosition).inflate(frostAreaRadius * (Math.sqrt(2) / 2) + 4), (entity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && !EntityFinder.isAlliedTo(caster, entity)))) {
+            DamageSource source = new DamageSourceGenerator(caster).source(DamageTypes.FREEZE, caster);
+            PacketHandler.sendToAll(new IceSpellParticlePacket(caster.getUUID(), frostAreaRadius, IceSpellParticlePacket.TARGETS_PARTICLES));
+            for (Entity entity : worldIn.getEntities(caster, new AABB(caster.blockPosition()).inflate(frostAreaRadius * (Math.sqrt(2) / 2) + 4), (entity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && !EntityFinder.isAlliedTo(caster, entity)))) {
 
 
                 if (entity instanceof LivingEntity living) {

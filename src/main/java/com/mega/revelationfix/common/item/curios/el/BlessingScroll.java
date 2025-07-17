@@ -157,7 +157,7 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
                     if (event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
                     int luckPoints = (int) player.getAttributeValue(Attributes.LUCK);
                     float probability = (float) Math.min(ItemConfig.bsMaxDodge / 100D, luckPoints * ItemConfig.bsDodgeBoost / 100.0F);
-                    if (player.random.nextFloat() < probability)
+                    if (player.getRandom().nextFloat() < probability)
                         event.setCanceled(true);
                 }
             }
@@ -175,10 +175,10 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
                             float amount = (float) (luckPoints * ItemConfig.bsAttackSpeedBoost / 100.0F);
                             AttributeModifier now = attributeInstance.getModifier(ATTACK_SPEED_ID);
                             if (now == null) {
-                                attributeInstance.addModifier(new AttributeModifier(ATTACK_SPEED_ID, "Curios modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                                attributeInstance.addTransientModifier(new AttributeModifier(ATTACK_SPEED_ID, "Curios modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));
                             } else if (Math.abs(now.getAmount() - amount) > 0.01F) {
                                 attributeInstance.removeModifier(ATTACK_SPEED_ID);
-                                attributeInstance.addModifier(new AttributeModifier(ATTACK_SPEED_ID, "Curios modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                                attributeInstance.addTransientModifier(new AttributeModifier(ATTACK_SPEED_ID, "Curios modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));
                             }
                         } else attributeInstance.removeModifier(ATTACK_SPEED_ID);
                     }

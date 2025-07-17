@@ -72,7 +72,7 @@ public class GungnirSpearRenderer extends EntityRenderer<GungnirSpearEntity> {
                         }
                     } else {
                         for (int i = 0; i < StarArrow.maxTrails; i++) {
-                            trailPoints.add(new TrailPoint(spearEntity.position, 0));
+                            trailPoints.add(new TrailPoint(spearEntity.position(), 0));
                         }
                     }
                     VFRBuilders.WorldVFRTrailBuilder trailBuilder = ClientEventHandler.normalStarTrailsBuilder;

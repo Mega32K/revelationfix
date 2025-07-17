@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.entity.binding;
 
+import com.mega.endinglib.mixin.accessor.AccessorEntity;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.init.ModEntities;
 import net.minecraft.core.BlockPos;
@@ -39,29 +40,34 @@ public class TeleportEntity extends Entity implements BlockBindingEntity{
     public static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     public static EntityDataAccessor<BlockPos> REACTOR_POS = SynchedEntityData.defineId(TeleportEntity.class, EntityDataSerializers.BLOCK_POS);
     public Vec3 customPos = Vec3.ZERO;
+    private final AccessorEntity accessor;
     public TeleportEntity(EntityType<?> p_19870_, Level p_19871_) {
         super(p_19870_, p_19871_);
+
+        this.accessor = (AccessorEntity) this;
     }
     public TeleportEntity(Level p_19871_, BlockPos blockPos) {
         super(ModEntities.TELEPORT_ENTITY.get(), p_19871_);
         this.setReactorPos(blockPos);
+        this.accessor = (AccessorEntity) this;
     }
     @Override
     public void tick() {
-        if (this.tags.contains("shouldRemove")) {
-            if (!this.level.isClientSide)
+        if (this.getTags().contains("shouldRemove")) {
+            if (!this.level().isClientSide)
                 this.discard();
             else {
                 this.setRemoved(RemovalReason.DISCARDED);
                 this.onClientRemoval();
             }
         }
-        if (!level.isClientSide && tickCount % 10 == 0 && tickCount > 0) {
-            if (!(level.getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity))
+        if (!level().isClientSide && tickCount % 10 == 0 && tickCount > 0) {
+            if (!(level().getBlockEntity(this.getReactorPos()) instanceof RuneReactorBlockEntity))
                 this.discard();
         }
-        this.blockPosition = this.getReactorPos();
-        this.position = this.customPos = new Vec3(this.blockPosition.getX(), this.blockPosition.getY(), this.blockPosition.getZ());
+        this.accessor.setBlockPositionField(this.getReactorPos());
+        this.customPos = new Vec3(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
+        this.accessor.setPositionField(this.customPos);
         super.tick();
     }
 
@@ -182,7 +188,8 @@ public class TeleportEntity extends Entity implements BlockBindingEntity{
     }
     public BlockPos getReactorPos() {
         BlockPos pos = this.entityData.get(REACTOR_POS);
-        this.customPos = this.position = new Vec3(pos.getX(), pos.getY(), pos.getZ());
+        this.customPos = new Vec3(pos.getX(), pos.getY(), pos.getZ());
+        this.accessor.setPositionField(this.customPos);
         return pos;
     }
     public void setReactorPos(BlockPos pos) {
@@ -237,7 +244,7 @@ public class TeleportEntity extends Entity implements BlockBindingEntity{
             if (vec31.distanceTo(vec3) > 128.0D) {
                 return false;
             } else {
-                return clip(entity.level, new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)).getType() == HitResult.Type.MISS;
+                return clip(entity.level(), new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)).getType() == HitResult.Type.MISS;
             }
         }
     }

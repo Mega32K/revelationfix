@@ -1,51 +1,46 @@
 package com.mega.revelationfix.mixin.gr;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mega.endinglib.api.client.text.TextColorUtils;
+import com.mega.endinglib.util.annotation.NoModDependsMixin;
+import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.client.font.MinecraftFont;
-import com.mega.revelationfix.common.compat.SafeClass;
+import it.unimi.dsi.fastutil.ints.Int2CharOpenHashMap;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import z1gned.goetyrevelation.util.ATAHelper;
 
 @Mixin(Font.class)
-
+@NoModDependsMixin("modernui")
 public abstract class FontMixin {
 
     @Shadow
-    private boolean filterFishyGlyphs;
+    public boolean filterFishyGlyphs;
 
     public FontMixin() {
     }
 
-    @Shadow
-    public static int adjustColor(int p_92720_) {
-        return 0;
-    }
-
-    @Shadow
-    public abstract void drawInBatch8xOutline(FormattedCharSequence var1, float var2, float var3, int var4, int var5, Matrix4f var6, MultiBufferSource var7, int var8);
-
-    @Shadow
-    public abstract FontSet getFontSet(ResourceLocation p_92864_);
-
-    @Inject(
-            at = {@At("TAIL")},
-            method = {"drawInBatch(Lnet/minecraft/util/FormattedCharSequence;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)I"},
-            cancellable = true
+    @WrapOperation(
+            at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;drawInternal(Lnet/minecraft/util/FormattedCharSequence;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)I")},
+            method = {"drawInBatch(Lnet/minecraft/util/FormattedCharSequence;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)I"}
     )
-    private void drawOutLine(FormattedCharSequence p_273262_, float p_273006_, float p_273254_, int p_273375_, boolean p_273674_, Matrix4f p_273525_, MultiBufferSource p_272624_, Font.DisplayMode p_273418_, int p_273330_, int p_272981_, CallbackInfoReturnable<Integer> cir) {
-        if (!SafeClass.isModernUILoaded())
-            if (ATAHelper.getFormattingName(p_273262_).equals("apollyon")) {
-                cir.setReturnValue(MinecraftFont.INSTANCE.drawInBatch(p_273262_, p_273006_, p_273254_, p_273375_, p_273674_, p_273525_, p_272624_, p_273418_, p_273330_, p_272981_));
-            }
-
+    private int drawOutLine(Font instance, FormattedCharSequence p_273025_, float p_273121_, float p_272717_, int p_273653_, boolean p_273531_, Matrix4f p_273265_, MultiBufferSource p_273560_, Font.DisplayMode p_273342_, int p_273373_, int p_273266_, Operation<Integer> original) {
+        Int2CharOpenHashMap map = TextColorUtils.getColorChars(p_273025_);
+        if (revelationfix$hasGR(map)) {
+            return (int)MinecraftFont.INSTANCE.drawInBatchF(p_273025_, p_273121_, p_272717_, p_273653_, p_273531_, p_273265_, p_273560_, p_273342_, p_273373_, p_273266_, map);
+        } else return original.call(instance, p_273025_, p_273121_, p_272717_, p_273653_, p_273531_, p_273265_, p_273560_, p_273342_, p_273373_, p_273266_);
+    }
+    @Unique
+    private static boolean revelationfix$hasGR(Int2CharOpenHashMap map) {
+        for (char c : map.values())
+            if (c == ModChatFormatting.APOLLYON.getChar() || c == ModChatFormatting.EDEN.getChar())
+                return true;
+        return false;
     }
 }

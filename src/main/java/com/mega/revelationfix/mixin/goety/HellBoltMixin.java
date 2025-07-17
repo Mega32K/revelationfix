@@ -41,7 +41,8 @@ public abstract class HellBoltMixin extends WaterHurtingProjectile {
 
     @Inject(method = "onHit", at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/projectiles/WaterHurtingProjectile;onHit(Lnet/minecraft/world/phys/HitResult;)V", shift = At.Shift.AFTER), cancellable = true)
     private void onHit(HitResult pResult, CallbackInfo ci) {
-        if (!this.level.isClientSide) {
+        Level level = this.level();
+        if (!level.isClientSide) {
             if (this.getOwner() instanceof Player player && ATAHelper2.hasOdamane(player)) {
                 ci.cancel();
                 if (!this.isRain()) {
@@ -49,20 +50,19 @@ public abstract class HellBoltMixin extends WaterHurtingProjectile {
                     Hellfire hellfire;
                     if (pResult instanceof BlockHitResult blockHitResult) {
                         BlockPos blockpos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
-                        if (BlockFinder.canBeReplaced(this.level, blockpos)) {
-                            hellfire = new TheEndHellfire(this.level, Vec3.atCenterOf(blockpos), player);
+                        if (BlockFinder.canBeReplaced(level, blockpos)) {
+                            hellfire = new TheEndHellfire(level, Vec3.atCenterOf(blockpos), player);
                             vec3 = Vec3.atCenterOf(blockpos);
-                            this.level.addFreshEntity(hellfire);
+                            level.addFreshEntity(hellfire);
                         }
                     } else if (pResult instanceof EntityHitResult entityHitResult) {
                         Entity entity1 = entityHitResult.getEntity();
-                        hellfire = new TheEndHellfire(this.level, Vec3.atCenterOf(entity1.blockPosition()), player);
+                        hellfire = new TheEndHellfire(level, Vec3.atCenterOf(entity1.blockPosition()), player);
                         vec3 = Vec3.atCenterOf(entity1.blockPosition());
-                        this.level.addFreshEntity(hellfire);
+                        level.addFreshEntity(hellfire);
                     }
 
-                    Level var10 = this.level;
-                    if (var10 instanceof ServerLevel serverLevel) {
+                    if (level instanceof ServerLevel serverLevel) {
                         ServerParticleUtil.addParticlesAroundSelf(serverLevel, ModParticleTypes.BIG_FIRE.get(), this);
                         ColorUtil colorUtil = new ColorUtil(14523414);
                         serverLevel.sendParticles(new CircleExplodeParticleOption(colorUtil.red, colorUtil.green, colorUtil.blue, 2.0F, 1), vec3.x, BlockFinder.moveDownToGround(this), vec3.z, 1, 0.0, 0.0, 0.0, 0.0);

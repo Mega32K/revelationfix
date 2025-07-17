@@ -1,6 +1,7 @@
 package com.mega.revelationfix.common.network.s2c;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.mega.endinglib.mixin.accessor.AccessorClientLevel;
 import com.mega.revelationfix.common.compat.Wrapped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -36,7 +37,7 @@ public class PlayApollyonPostThemePacket {
     static void handle0(PlayApollyonPostThemePacket packet, Supplier<NetworkEvent.Context> context) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null) {
-            Entity entity = mc.level.entityStorage.getEntityGetter().get(packet.uuid);
+            Entity entity = ((AccessorClientLevel) mc.level).invokeGetEntities().get(packet.uuid);
             if (entity instanceof Apostle mob)
                 Wrapped.play(mob);
         }

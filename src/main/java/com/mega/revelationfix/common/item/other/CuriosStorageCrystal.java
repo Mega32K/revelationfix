@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -99,7 +100,7 @@ public class CuriosStorageCrystal extends Item {
                     if (player.isShiftKeyDown()) {
                         if (!listtag.isEmpty())
                             if (player instanceof ServerPlayer serverPlayer)
-                                serverPlayer.playNotifySound(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 4F, 1F + (player.random.nextFloat() * 0.2F));
+                                serverPlayer.playNotifySound(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 4F, 1F + (player.getRandom().nextFloat() * 0.2F));
                         while (!listtag.isEmpty()) {
                             CompoundTag compoundTag = listtag.getCompound(listtag.size() - 1);
                             ItemStack stack = ItemStack.of(compoundTag);
@@ -119,7 +120,7 @@ public class CuriosStorageCrystal extends Item {
                             listtag.remove(compoundTag);
                             itemStack.getTag().put("BannedCurios", listtag);
                             if (player instanceof ServerPlayer serverPlayer)
-                                serverPlayer.playNotifySound(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 4F, 1F + (player.random.nextFloat() * 0.2F));
+                                serverPlayer.playNotifySound(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.PLAYERS, 4F, 1F + (player.getRandom().nextFloat() * 0.2F));
                         }
                     }
                     if (listtag.isEmpty() && !player.getAbilities().instabuild) {

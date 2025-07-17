@@ -106,6 +106,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerInterfac
 
     @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", shift = At.Shift.AFTER))
     private void apollyonIncreaseRealDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        Level level = this.level();
         if (level.isClientSide) return;
         Apostle apostle = null;
         if (source.getEntity() instanceof Apostle a) {

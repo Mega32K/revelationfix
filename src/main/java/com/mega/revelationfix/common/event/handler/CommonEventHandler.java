@@ -51,10 +51,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector3f;
 import z1gned.goetyrevelation.data.DefeatApollyonInNetherState;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber
 public class CommonEventHandler {
@@ -82,20 +79,24 @@ public class CommonEventHandler {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onMobChangeTarget(LivingChangeTargetEvent event) {
             LivingEntity target = event.getNewTarget();
-            LivingEntity entity = event.getEntity();
-            if (target != null && (target.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(target))) {
-                if (entity.tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(entity)) {
-                    if (entity.tags.contains(EntityExpandedContext.GR_FT_CHURCH) && target.tags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
-                        event.setCanceled(true);
-                    } else if (EntityExpandedContext.isOwnerFriendlyTag_Church(entity) && EntityExpandedContext.isOwnerFriendlyTag_Church(target))
-                        event.setCanceled(true);
+            if (target != null) {
+                LivingEntity entity = event.getEntity();
+                Set<String> tags = entity.getTags();
+                Set<String> targetTags = target.getTags();
+                if ((targetTags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(target))) {
+                    if (tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(entity)) {
+                        if (tags.contains(EntityExpandedContext.GR_FT_CHURCH) && targetTags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
+                            event.setCanceled(true);
+                        } else if (EntityExpandedContext.isOwnerFriendlyTag_Church(entity) && EntityExpandedContext.isOwnerFriendlyTag_Church(target))
+                            event.setCanceled(true);
+                    }
                 }
             }
         }
         @SubscribeEvent
         public static void onPlayerAttack(AttackEntityEvent event) {
             if (event.getTarget() instanceof ObsidianMonolith monolith) {
-                if (!monolith.level.isClientSide) {
+                if (!monolith.level().isClientSide) {
                     if (monolith.getMasterOwner() == event.getEntity() && monolith.getTrueOwner() instanceof ApostleServant servant && event.getEntity().isShiftKeyDown()) {
                         monolith.die(event.getEntity().damageSources().playerAttack(event.getEntity()));
                         event.setCanceled(true);
@@ -107,7 +108,7 @@ public class CommonEventHandler {
         @SubscribeEvent
         public static void resistanceAttributeHandler(LivingHurtEvent event) {
             LivingEntity living = event.getEntity();
-            if (living.level.isClientSide) return;
+            if (living.level().isClientSide) return;
             Attribute attribute = ModAttributes.DAMAGE_RESISTANCE.get();
             AttributeInstance attributeInstance = living.getAttribute(attribute);
             double value;
@@ -117,9 +118,9 @@ public class CommonEventHandler {
         }
         @SubscribeEvent
         public static void odamaneFinalDeath(EarlyLivingDeathEvent event) {
-            if (event.getEntity() instanceof ServerPlayer player && player.level.dimension() == Level.END) {
-                if (player.tags.contains("odamaneFinalDeath")) {
-                    player.tags.remove("odamaneFinalDeath");
+            if (event.getEntity() instanceof ServerPlayer player && player.level().dimension() == Level.END) {
+                if (player.getTags().contains("odamaneFinalDeath")) {
+                    player.getTags().remove("odamaneFinalDeath");
                     player.setHealth(player.getMaxHealth());
                     BlockPos blockpos = player.getRespawnPosition();
                     float f = player.getRespawnAngle();
@@ -142,7 +143,7 @@ public class CommonEventHandler {
                             Vec3 vec31 = Vec3.atBottomCenterOf(blockpos).subtract(vec3).normalize();
                         }
                         player.setPos(vec3.x, vec3.y, vec3.z);
-                        player.setRespawnPosition(player.level.dimension(), null, 0F, true, false);
+                        player.setRespawnPosition(player.level().dimension(), null, 0F, true, false);
                         PacketHandler.sendToAll(new TheEndDeathPacket(player.getId(), new Vector3f((float) vec3.x, (float) vec3.y, (float) vec3.z)));
                     }
 
@@ -267,26 +268,26 @@ public class CommonEventHandler {
             replaceAttributeModifier(event.getOriginal(), event.getEntity(), Attributes.ATTACK_DAMAGE, TheNeedleItem.ATTACK_DAMAGE.getId());
             replaceAttributeModifier(event.getOriginal(), event.getEntity(), Attributes.ATTACK_SPEED, TheNeedleItem.ATTACK_SPEED.getId());
             replaceAttributeModifier(event.getOriginal(), event.getEntity(), ModAttributes.DAMAGE_RESISTANCE.get(), TheNeedleItem.RESISTANCE.getId());
-            event.getEntity().attributes.getDirtyAttributes().add(event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE));
-            if (!event.getEntity().level.isClientSide)
+            event.getEntity().getAttributes().getDirtyAttributes().add(event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE));
+            if (!event.getEntity().level().isClientSide)
                 ((PlayerInterface) event.getEntity()).revelationfix$odamaneHaloExpandedContext().setBlasphemous(TimeStopSavedData.isPlayerBlasphemous(event.getEntity()));
         }
 
         @SubscribeEvent
         public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-            if (event.getEntity().level.isClientSide) return;
+            if (event.getEntity().level().isClientSide) return;
             AttributeInstance attributeInstance = event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE);
             if (attributeInstance != null && attributeInstance.hasModifier(TheNeedleItem.ATTACK_DAMAGE)) {
-                event.getEntity().attributes.getDirtyAttributes().add(event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE));
+                event.getEntity().getAttributes().getDirtyAttributes().add(event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE));
             }
         }
 
         @SubscribeEvent
         public static void onPlayerLoad(PlayerEvent.LoadFromFile event) {
-            if (event.getEntity().level.isClientSide) return;
+            if (event.getEntity().level().isClientSide) return;
             AttributeInstance attributeInstance = event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE);
             if (attributeInstance != null && attributeInstance.hasModifier(TheNeedleItem.ATTACK_DAMAGE)) {
-                event.getEntity().attributes.getDirtyAttributes().add(event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE));
+                event.getEntity().getAttributes().getDirtyAttributes().add(event.getEntity().getAttribute(Attributes.ATTACK_DAMAGE));
             }
         }
 

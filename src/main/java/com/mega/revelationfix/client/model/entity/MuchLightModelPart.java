@@ -1,6 +1,7 @@
 package com.mega.revelationfix.client.model.entity;
 
 import com.github.alexthe666.citadel.repack.jcodec.codecs.mjpeg.tools.AssertionException;
+import com.mega.endinglib.mixin.accessor.AccessorModelPart;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 public class MuchLightModelPart extends ModelPart {
     public MuchLightModelPart(ModelPart modelPart) {
-        super(new ObjectArrayList<>(modelPart.cubes), new Object2ObjectOpenHashMap<>(modelPart.children));
+        super(new ObjectArrayList<>(((AccessorModelPart) modelPart).getCubes()), new Object2ObjectOpenHashMap<>(((AccessorModelPart) modelPart).getChildren()));
         this.x = modelPart.x;
         this.y = modelPart.y;
         this.z = modelPart.z;
@@ -28,7 +29,7 @@ public class MuchLightModelPart extends ModelPart {
         this.zScale = modelPart.zScale;
         this.visible = modelPart.visible;
         this.skipDraw = modelPart.skipDraw;
-        this.initialPose = modelPart.initialPose;
+        this.setInitialPose(modelPart.getInitialPose());
     }
 
     @Override

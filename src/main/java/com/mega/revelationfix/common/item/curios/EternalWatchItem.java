@@ -3,10 +3,10 @@ package com.mega.revelationfix.common.item.curios;
 import com.google.common.collect.HashMultimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
+import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.api.item.ICenterDescItem;
 import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class EternalWatchItem extends SimpleDescriptiveCurio implements IJEIInvisibleRitualResult, ICenterDescItem {
+public class EternalWatchItem extends SimpleDescriptiveCurio implements IJEIInvisibleRitualResult {
     public EternalWatchItem() {
         super(new Properties().fireResistant().stacksTo(1).rarity(Rarity.UNCOMMON), "necklace", HashMultimap.create());
         this.withHead(
@@ -30,10 +30,10 @@ public class EternalWatchItem extends SimpleDescriptiveCurio implements IJEIInvi
         ).withTail(
                 CuriosMutableComponent.create().appendFormat("%s", (s) -> new Object[]{I18n.get("tooltip.goety_revelation.currentKeybind", KeyMapping.createNameSupplier("key.revelationfix.curios_skill").get().getString().toUpperCase())}),
                 CuriosMutableComponent.EMPTY,
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc0").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)),
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc1").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)),
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc2").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY)),
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc3").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY))
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc0").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)),
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc1").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)),
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc2").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)),
+                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc3").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC))
         );
     }
 

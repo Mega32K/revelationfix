@@ -1,9 +1,12 @@
 package com.mega.revelationfix.safe.mixinpart.mc;
 
+import com.mega.endinglib.mixin.accessor.AccessorItemInHandLayer;
+import com.mega.endinglib.mixin.accessor.AccessorItemInHandRenderer;
 import com.mega.revelationfix.client.enums.ModUseAnim;
 import com.mega.revelationfix.common.item.tool.combat.trident.GungnirItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -21,12 +24,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ItemInHandRendererData {
     public static void customAnim(ItemInHandRenderer itemInHandRenderer, AbstractClientPlayer p_109372_, float p_109373_, float p_109374_, InteractionHand p_109375_, float p_109376_, ItemStack p_109377_, float p_109378_, PoseStack p_109379_, MultiBufferSource p_109380_, int p_109381_, CallbackInfo ci, boolean flag, HumanoidArm humanoidarm, boolean flag3, int k) {
         if (p_109377_.getUseAnimation() == ModUseAnim.GUNGNIR_SPEAR) {
-            itemInHandRenderer.applyItemArmTransform(p_109379_, humanoidarm, p_109378_);
+            ((AccessorItemInHandRenderer) itemInHandRenderer).invokeApplyItemArmTransform(p_109379_, humanoidarm, p_109378_);
             p_109379_.translate((float) k * -0.5F, 0.7F, 0.1F);
             p_109379_.mulPose(Axis.XP.rotationDegrees(-55.0F));
             p_109379_.mulPose(Axis.YP.rotationDegrees((float) k * 35.3F));
             p_109379_.mulPose(Axis.ZP.rotationDegrees((float) k * -9.785F));
-            float f7 = (float) p_109377_.getUseDuration() - ((float) itemInHandRenderer.minecraft.player.getUseItemRemainingTicks() - p_109373_ + 1.0F);
+            float f7 = (float) p_109377_.getUseDuration() - ((float) Minecraft.getInstance().player.getUseItemRemainingTicks() - p_109373_ + 1.0F);
             float f11 = f7 / 10.0F;
             if (f11 > 1.0F) {
                 f11 = 1.0F;
@@ -59,7 +62,7 @@ public class ItemInHandRendererData {
             if (p_117185_.getUseItem() == p_117186_) {
                 p_117189_.mulPose(Axis.ZP.rotationDegrees(180.0F));
             }
-            layer.itemInHandRenderer.renderItem(p_117185_, p_117186_, p_270970_, flag, p_117189_, p_117190_, p_117191_);
+            ((AccessorItemInHandLayer) layer).getItemInHandRenderer().renderItem(p_117185_, p_117186_, p_270970_, flag, p_117189_, p_117190_, p_117191_);
             p_117189_.popPose();
             p_117189_.popPose();
             ci.cancel();

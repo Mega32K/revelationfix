@@ -1,6 +1,7 @@
 package com.mega.revelationfix.common.compat.tetra.effect;
 
 import com.Polarice3.Goety.api.entities.IOwned;
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.damagesource.DamageSource;
@@ -58,12 +59,12 @@ public class MysteriousBladeEffect {
                     float magicBonusDamage = getDecimalPercentage(level, baseAmount);
                     if (level > 0.0F) {
                         if (level > Math.random() * 100) {
-                            for (LivingEntity living : attacker.level.getEntitiesOfClass(LivingEntity.class, attacker.getBoundingBox().inflate(8, 8, 8), (e) -> e instanceof IOwned owned && owned.getTrueOwner() == attacker)) {
+                            for (LivingEntity living : attacker.level().getEntitiesOfClass(LivingEntity.class, attacker.getBoundingBox().inflate(8, 8, 8), (e) -> e instanceof IOwned owned && owned.getTrueOwner() == attacker)) {
                                 living.heal(2F);
                             }
                         }
                         try {
-                            DamageSource source = target.damageSources().source(DamageTypes.MAGIC, attacker);
+                            DamageSource source = new DamageSourceGenerator(target).source(DamageTypes.MAGIC, attacker);
                             ((DamageSourceInterface) source).giveSpecialTag((byte) 3);
                             target.hurt(source, magicBonusDamage);
                         } catch (Throwable var13) {

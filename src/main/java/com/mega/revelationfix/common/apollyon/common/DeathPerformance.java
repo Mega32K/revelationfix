@@ -3,6 +3,8 @@ package com.mega.revelationfix.common.apollyon.common;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.utils.ParticleUtil;
+import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.apollyon.client.SafePlayPostMusic;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
@@ -36,6 +38,7 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.phys.AABB;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
+@SuppressWarnings("JavadocReference")
 public class DeathPerformance {
     public static final int MAX_TIME = 560;
     //in ticks
@@ -47,24 +50,24 @@ public class DeathPerformance {
     public static EntityDataAccessor<Byte> FLAGS;
 
     private static boolean getFlag(Apostle apostle, int mask) {
-        int i = apostle.entityData.get(FLAGS);
+        int i = apostle.getEntityData().get(FLAGS);
         return (i & mask) != 0;
     }
 
     private static void setFlags(Apostle apostle, int mask, boolean value) {
-        int i = apostle.entityData.get(FLAGS);
+        int i = apostle.getEntityData().get(FLAGS);
         if (value) {
             i |= mask;
         } else {
             i &= ~mask;
         }
 
-        apostle.entityData.set(FLAGS, (byte) (i & 255));
+        apostle.getEntityData().set(FLAGS, (byte) (i & 255));
     }
 
     public static int getLeftTime(Apostle apostle) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
-            return apostle.entityData.get(LEFTTIME);
+            return apostle.getEntityData().get(LEFTTIME);
         else return 0;
 
     }
@@ -108,26 +111,26 @@ public class DeathPerformance {
 
     public static void setLeftTime(Apostle apostle, int time) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
-            apostle.entityData.set(LEFTTIME, Mth.clamp(time, -1, MAX_TIME));
+            apostle.getEntityData().set(LEFTTIME, Mth.clamp(time, -1, MAX_TIME));
 
     }
 
     public static int getDeathGrowingTime(Apostle apostle) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
-            return apostle.entityData.get(DEATH_GROWING_TIME);
+            return apostle.getEntityData().get(DEATH_GROWING_TIME);
         else return 0;
 
     }
 
     public static void setDeathGrowingTime(Apostle apostle, int time) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
-            apostle.entityData.set(DEATH_GROWING_TIME, time);
+            apostle.getEntityData().set(DEATH_GROWING_TIME, time);
 
     }
 
     public static int getFinalDeathTime(Apostle apostle) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
-            return apostle.entityData.get(FINAL_DEATH_TIME);
+            return apostle.getEntityData().get(FINAL_DEATH_TIME);
         else return 0;
 
     }
@@ -135,7 +138,7 @@ public class DeathPerformance {
     public static void setFinalDeathTime(Apostle apostle, int time) {
 
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
-            apostle.entityData.set(FINAL_DEATH_TIME, time);
+            apostle.getEntityData().set(FINAL_DEATH_TIME, time);
 
     }
 
@@ -149,6 +152,7 @@ public class DeathPerformance {
      */
     public static boolean perform(Apostle apostle, ApollyonAbilityHelper helper, int leftTime) {
         CHANGE_TIME = CommonConfig.apollyonBarrierPreparation * 20;
+        Level level = apostle.level();
         synchronized (random) {
             //存储旧growingTime
             EntityExpandedContext entityEC = ((LivingEntityEC) apostle).revelationfix$livingECData();
@@ -156,7 +160,7 @@ public class DeathPerformance {
             ApollyonExpandedContext apollyonEC = apollyon2Interface.revelaionfix$apollyonEC();
             entityEC.apollyonLastGrowingTime = getDeathGrowingTime(apostle);
             //刚开始死亡，初始化
-            if (!apostle.level.isClientSide) {
+            if (!level.isClientSide) {
                 if (leftTime == -1) {
                     setLeftTime(apostle, MAX_TIME);
                     leftTime = MAX_TIME;
@@ -188,7 +192,6 @@ public class DeathPerformance {
             //尾砂剩余时间>0
 
             if (MAX_TIME - leftTime > CHANGE_TIME && leftTime > CHANGE_TIME / 2F) {
-                Level level = apostle.level;
                 if (!level.isClientSide) {
                     GameRules gameRules = level.getGameRules();
                     if (!gameRules.getRule(GameRules.RULE_KEEPINVENTORY).get())
@@ -230,7 +233,7 @@ public class DeathPerformance {
                                     {
                                         if (ATAHelper2.hasOdamane(living))
                                             break label0;
-                                        if (living.isAlive() && living.level.isClientSide) {
+                                        if (living.isAlive() && living.level().isClientSide) {
                                             ParticleUtil.addParticleInternal(ModParticleTypes.BIG_FIRE.get(), false, living.getRandomX(0.3D * fireScale), living.getY() + randomSource.nextFloat(), living.getRandomZ(0.3D * fireScale), randomSource.triangle(0D, 0.25D * fireScale), randomSource.nextFloat() * 0.1F + 0.25F * fireScale, randomSource.triangle(0D, 0.25D * fireScale));
                                         }
                                         new EntityActuallyHurt(living).actuallyHurt(source, percentAmount, true);
@@ -250,7 +253,7 @@ public class DeathPerformance {
                             }
                             flag = false;
                             //结界杀敌回复模式
-                            if (!apostle.level.isClientSide) {
+                            if (!level.isClientSide) {
                                 if (CommonConfig.barrierKillingMobsHealingMode)
                                     if (living.isDeadOrDying()) {
                                         setBarrierKilled(apostle, true);
@@ -262,28 +265,28 @@ public class DeathPerformance {
                 }
             }
             if (flag && leftTime > 0) {
-                if (!apostle.level.isClientSide)
+                if (!level.isClientSide)
                     setLeftTime(apostle, leftTime - 1);
                 if (getLeftTime(apostle) == 0) {
-                    AABB aabb = new AABB(apostle.blockPosition).inflate(128D);
-                    for (Player player : apostle.level.players()) {
+                    AABB aabb = new AABB(apostle.blockPosition()).inflate(128D);
+                    for (Player player : level.players()) {
                         if (aabb.contains(player.getX(), player.getY(), player.getZ())) {
                             if (player instanceof ServerPlayer serverPlayer)
                                 PacketHandler.sendToPlayer(serverPlayer, new PlayApollyonPostThemePacket(apostle.getUUID()));
                         }
                     }                    //判断周围有生存玩家
-                    if ((long) apostle.level.getEntitiesOfClass(Player.class, apostle.getBoundingBox().inflate(512.0D), EntitySelector.NO_CREATIVE_OR_SPECTATOR).size() > 0 && isBarrierKilled(apostle)) {
+                    if ((long) level.getEntitiesOfClass(Player.class, apostle.getBoundingBox().inflate(512.0D), EntitySelector.NO_CREATIVE_OR_SPECTATOR).size() > 0 && isBarrierKilled(apostle)) {
 
                         //数据设为初始
                         apostle.deathTime = 0;
                         apollyon2Interface.setDeathTime(0);
                         apostle.hurtTime = 0;
-                        apostle.dead = false;
-                        if (!apostle.level.isClientSide)
+                        ((AccessorLivingEntity) apostle).setDead(false);
+                        if (!level.isClientSide)
                             setBarrierKilled(apostle, false);
                         boolean revived = isRevived(apostle);
                         //数据设为初始
-                        if (!apostle.level.isClientSide) {
+                        if (!level.isClientSide) {
                             setLeftTime(apostle, -1);
                             setDeathGrowingTime(apostle, 0);
                             setFinalDeathTime(apostle, -1);
@@ -297,7 +300,7 @@ public class DeathPerformance {
                         }
                         apostle.setNoGravity(false);
                         //图腾事件
-                        if (!apostle.level.isClientSide)
+                        if (!level.isClientSide)
                             apostle.level().broadcastEntityEvent(apostle, (byte) 35);
                         //回血到末日终焉
                         apollyon2Interface.revelaionfix$setApollyonHealth(apollyon2Interface.revelaionfix$getApollyonHealth() + additionPercent * apostle.getMaxHealth());
@@ -311,41 +314,42 @@ public class DeathPerformance {
     }
 
     public static DamageSource[] damageSourcesFromForge(LivingEntity source) {
+        DamageSourceGenerator generator = new DamageSourceGenerator(source);
         return new DamageSource[]{
                 (source.damageSources().anvil(source)),
-                (source.damageSources().source(DamageTypes.CACTUS, source)),
-                (source.damageSources().source(DamageTypes.CRAMMING, source)),
-                (source.damageSources().source(DamageTypes.DRAGON_BREATH, source)),
-                (source.damageSources().source(DamageTypes.DROWN, source)),
-                (source.damageSources().source(DamageTypes.DRY_OUT, source)),
+                (generator.source(DamageTypes.CACTUS, source)),
+                (generator.source(DamageTypes.CRAMMING, source)),
+                (generator.source(DamageTypes.DRAGON_BREATH, source)),
+                (generator.source(DamageTypes.DROWN, source)),
+                (generator.source(DamageTypes.DRY_OUT, source)),
                 (source.damageSources().explosion(source, source)),
-                (source.damageSources().source(DamageTypes.FREEZE, source)),
-                (source.damageSources().source(DamageTypes.FALL, source)),
+                (generator.source(DamageTypes.FREEZE, source)),
+                (generator.source(DamageTypes.FALL, source)),
                 (source.damageSources().fallingStalactite(source)),
-                (source.damageSources().source(DamageTypes.FELL_OUT_OF_WORLD, source)),
-                (source.damageSources().source(DamageTypes.FLY_INTO_WALL, source)),
-                (source.damageSources().source(DamageTypes.GENERIC, source)),
-                (source.damageSources().source(DamageTypes.GENERIC_KILL, source)),
-                (source.damageSources().source(DamageTypes.HOT_FLOOR, source)),
-                (source.damageSources().source(DamageTypes.IN_FIRE, source)),
-                (source.damageSources().source(DamageTypes.IN_WALL, source)),
+                (generator.source(DamageTypes.FELL_OUT_OF_WORLD, source)),
+                (generator.source(DamageTypes.FLY_INTO_WALL, source)),
+                (generator.source(DamageTypes.GENERIC, source)),
+                (generator.source(DamageTypes.GENERIC_KILL, source)),
+                (generator.source(DamageTypes.HOT_FLOOR, source)),
+                (generator.source(DamageTypes.IN_FIRE, source)),
+                (generator.source(DamageTypes.IN_WALL, source)),
                 (source.damageSources().indirectMagic(source, source)),
-                (source.damageSources().source(DamageTypes.LAVA, source)),
-                (source.damageSources().source(DamageTypes.LIGHTNING_BOLT, source)),
+                (generator.source(DamageTypes.LAVA, source)),
+                (generator.source(DamageTypes.LIGHTNING_BOLT, source)),
                 (source.damageSources().mobProjectile(source, source)),
-                (source.damageSources().source(DamageTypes.MAGIC, source)),
+                (generator.source(DamageTypes.MAGIC, source)),
                 (source.damageSources().mobAttack(source)),
                 (source.damageSources().noAggroMobAttack(source)),
-                (source.damageSources().source(DamageTypes.ON_FIRE, source)),
-                (source.damageSources().source(DamageTypes.OUTSIDE_BORDER, source)),
-                (source.damageSources().source(DamageTypes.STALAGMITE, source)),
-                (source.damageSources().source(DamageTypes.STARVE, source)),
+                (generator.source(DamageTypes.ON_FIRE, source)),
+                (generator.source(DamageTypes.OUTSIDE_BORDER, source)),
+                (generator.source(DamageTypes.STALAGMITE, source)),
+                (generator.source(DamageTypes.STARVE, source)),
                 (source.damageSources().sonicBoom(source)),
                 (source.damageSources().sting(source)),
-                (source.damageSources().source(DamageTypes.SWEET_BERRY_BUSH, source)),
+                (generator.source(DamageTypes.SWEET_BERRY_BUSH, source)),
                 (source.damageSources().thorns(source)),
                 (source.damageSources().trident(source, source)),
-                (source.damageSources().source(DamageTypes.WITHER, source))
+                (generator.source(DamageTypes.WITHER, source))
         };
     }
 }

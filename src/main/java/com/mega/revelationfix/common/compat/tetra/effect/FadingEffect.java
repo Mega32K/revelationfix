@@ -88,16 +88,16 @@ public class FadingEffect {
                             double amount = modifier.getAmount();
                             amount = Math.max(-0.9F, amount - level / 100D);
                             instance.removeModifier(modifier);
-                            instance.addModifier(new AttributeModifier(uuid, "Tetra Modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                            instance.addTransientModifier(new AttributeModifier(uuid, "Tetra Modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));
                             if (!attribute.isClientSyncable()) {
-                                beHurt.attributes.getDirtyAttributes().add(instance);
+                                beHurt.getAttributes().getDirtyAttributes().add(instance);
                             }
                         }
                         if (modifier == null) {
                             modifier = new AttributeModifier(uuid, "Tetra Modifier", -level / 100D, AttributeModifier.Operation.MULTIPLY_TOTAL);
-                            instance.addModifier(modifier);
+                            instance.addTransientModifier(modifier);
                             if (!attribute.isClientSyncable()) {
-                                beHurt.attributes.getDirtyAttributes().add(instance);
+                                beHurt.getAttributes().getDirtyAttributes().add(instance);
                             }
                         }
                     }

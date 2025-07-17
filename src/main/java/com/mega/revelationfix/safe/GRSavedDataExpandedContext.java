@@ -30,7 +30,7 @@ public class GRSavedDataExpandedContext {
     }
 
     public static DefeatApollyonInNetherState state(ServerLevel serverLevel) {
-        return state(serverLevel.server);
+        return state(serverLevel.getServer());
     }
 
     public static DefeatApollyonInNetherState state(MinecraftServer server) {

@@ -6,16 +6,18 @@ import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.google.common.collect.HashMultimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
+import com.mega.endinglib.api.client.cmc.LoreStyle;
+import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.api.item.ICenterDescItem;
 import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import com.mega.revelationfix.common.odamane.common.HaloEvents;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.commands.CommandSourceStack;
@@ -106,7 +108,7 @@ import java.util.function.Consumer;
  * {@link OdamanePlayerExpandedContext#baseTick(Level)}<br><br>
  */
 @SuppressWarnings("JavadocReference")
-public class OdamaneHalo extends SimpleDescriptiveCurio implements IJEIInvisibleRitualResult, ICenterDescItem {
+public class OdamaneHalo extends SimpleDescriptiveCurio implements IJEIInvisibleRitualResult {
     //c&s
     public static final int ABILITY_DESC_COUNT = 26;
     static final char nextLineChar = '`';
@@ -133,8 +135,8 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IJEIInvisible
             tailDesc.add(CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.desc" + i)));
         }
         this.withHead(
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.default_1").withStyle(ModChatFormatting.EDEN)),
-                CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.halo_of_the_end.default_2").withStyle(ModChatFormatting.EDEN))
+                CuriosMutableComponent.create(Component.translatable("item.goety_revelation.halo_of_the_end.default_1").withStyle(TextColorUtils.MIDDLE, ModChatFormatting.EDEN), LoreStyle.NONE),
+                CuriosMutableComponent.create(Component.translatable("item.goety_revelation.halo_of_the_end.default_2").withStyle(TextColorUtils.MIDDLE, ModChatFormatting.EDEN), LoreStyle.NONE)
         ).withTail(
                 tailDesc.toArray(new CuriosMutableComponent[]{})
         );
@@ -228,8 +230,12 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IJEIInvisible
             return srcList;
         else {
             StringBuilder stringBuilder = new StringBuilder();
+            /*
             for (MutableComponent component : head.stream().map(cmc -> cmc.build(stack)).toList())
                 stringBuilder.append(stringBuilder.isEmpty() ? COLOR_EDEN : nextLineChar + COLOR_EDEN).append(component.getString());
+             */
+            for (MutableComponent component : head.stream().map(cmc -> cmc.build(stack)).toList())
+                stringBuilder.append(stringBuilder.isEmpty() ? "" : nextLineChar).append(component.getString());
             apollyonTypeTickCount2 = apollyonTypeTickCount;
             String baked;
             try {
@@ -239,7 +245,7 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IJEIInvisible
 
                 List<String> spitLines = new ArrayList<>();
                 Collections.addAll(spitLines, (baked.substring(0, (int) Math.min((partialTickCount / (float) maxTickCount * 4F * length), length))).split(String.valueOf(nextLineChar)));
-                return spitLines.stream().map(Component::literal).toList();
+                return spitLines.stream().map(s -> Component.literal(s).withStyle(TextColorUtils.MIDDLE, ModChatFormatting.EDEN)).toList();
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
                 return List.of();

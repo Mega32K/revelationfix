@@ -37,7 +37,7 @@
   "info.revelationfix.ritual.structure.fail" : "Inefficient Block Requirements! The structural integrity:%s / %s",
   "info.goety_revelation.no_spells" : "Your magic has malfunctioned under the influence of the current domain!",
 
-  "item.goety_revelation.halo_of_the_end" : "Halo of The-End",
+  "item.goety_revelation.halo_of_the_end" : "§|Halo of The-End",
   "item.goety_revelation.halo_of_the_end.default_1" : "If this is indeed the end of everything———",
   "item.goety_revelation.halo_of_the_end.default_2" : "This fate shall meet its conclusion by my hand.",
 

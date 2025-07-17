@@ -5,8 +5,12 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.CuriosFinder;
+import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.entity.MobEffectUtils;
 import com.mega.revelationfix.common.apollyon.common.CooldownsManager;
 import com.mega.revelationfix.common.compat.SafeClass;
+import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModBlocks;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
@@ -85,6 +89,7 @@ public class OdamanePlayerExpandedContext {
     });
     public static Predicate<LivingEntity> NONE_C_OR_S_OR_APOSTLE = (living -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(living) && !(living instanceof Apostle apostle));
     public final Player player;
+    public final AccessorLivingEntity accessorLivingEntity;
     /**
      * 攻击过的boss
      */
@@ -95,7 +100,7 @@ public class OdamanePlayerExpandedContext {
      */
     private final SynchedFixedLengthList<ObsidianMonolith> ownedMonoliths = new SynchedFixedLengthList<>(5, (o) -> {
     }, (o) -> {
-        if (!o.level.isClientSide && o.getTrueOwner() instanceof Player player1 && !o.isRemoved()) {
+        if (!o.level().isClientSide && o.getTrueOwner() instanceof Player player1 && !o.isRemoved()) {
             o.silentDie(player1.damageSources().starve());
         }
     });
@@ -129,6 +134,7 @@ public class OdamanePlayerExpandedContext {
         this.player = player;
         playerInterface = (PlayerInterface) player;
         abilityHelper = (PlayerAbilityHelper) player;
+        accessorLivingEntity = (AccessorLivingEntity) player;
     }
 
     public static float damageScale(float amount, Player odamanePlayer) {
@@ -139,18 +145,8 @@ public class OdamanePlayerExpandedContext {
         return Math.min(20.0F, odamanePlayer.getMaxHealth() * 0.25F);
     }
 
-    private static boolean selfEffectGive(LivingEntity living, MobEffectInstance effectInstance) {
-        MobEffectInstance mobeffectinstance = living.activeEffects.get(effectInstance.getEffect());
-        if (mobeffectinstance == null) {
-            living.activeEffects.put(effectInstance.getEffect(), effectInstance);
-            living.onEffectAdded(effectInstance, living);
-            return true;
-        } else if (mobeffectinstance.update(effectInstance)) {
-            living.onEffectUpdated(mobeffectinstance, true, living);
-            return true;
-        } else {
-            return false;
-        }
+    private static void selfEffectGive(LivingEntity living, MobEffectInstance effectInstance) {
+        MobEffectUtils.forceAdd(living, effectInstance, living);
     }
 
     public static boolean isInvulnerableTo(DamageSource damageSource) {
@@ -170,27 +166,27 @@ public class OdamanePlayerExpandedContext {
     }
 
     private boolean getFlag(int mask) {
-        int i = player.entityData.get(EXPANDED_FLAGS);
+        int i = player.getEntityData().get(EXPANDED_FLAGS);
         return (i & mask) != 0;
     }
 
     private void setAllFlags(int flags) {
-        player.entityData.set(EXPANDED_FLAGS, flags);
+        player.getEntityData().set(EXPANDED_FLAGS, flags);
     }
 
     private int readAllFlags() {
-        return player.entityData.get(EXPANDED_FLAGS);
+        return player.getEntityData().get(EXPANDED_FLAGS);
     }
 
     private void setFlags(int mask, boolean value) {
-        int i = player.entityData.get(EXPANDED_FLAGS);
+        int i = player.getEntityData().get(EXPANDED_FLAGS);
         if (value) {
             i |= mask;
         } else {
             i &= ~mask;
         }
 
-        player.entityData.set(EXPANDED_FLAGS, i & 255);
+        player.getEntityData().set(EXPANDED_FLAGS, i & 255);
     }
 
     /**
@@ -218,11 +214,12 @@ public class OdamanePlayerExpandedContext {
     }
 
     public void tick() {
-        if (player.level.isClientSide) {
+        Level level = player.level();
+        if (level.isClientSide) {
             this.teleportStayingTimeOld = this.teleportStayingTime;
             if (player.isShiftKeyDown()) {
-                BlockPos pos = player.blockPosition.above(-1);
-                if (player.level.getBlockState(pos).is(ModBlocks.RUNE_REACTOR.get())) {
+                BlockPos pos = player.blockPosition().above(-1);
+                if (level.getBlockState(pos).is(ModBlocks.RUNE_REACTOR.get())) {
                     if (teleportStayingTime < 20)
                         teleportStayingTime++;
                 } else if (teleportStayingTime > 0)
@@ -240,7 +237,7 @@ public class OdamanePlayerExpandedContext {
         tryCleanDeBuffs();
         odamaneDecreaseCooldowns();
         if (!player.isSpectator())
-            baseTick(player.level);
+            baseTick(level);
         tryCleanDeBuffs();
     }
 
@@ -248,12 +245,13 @@ public class OdamanePlayerExpandedContext {
      * 若事件复活没能成功,在此处再次尝试复生
      */
     public void reviveCheck() {
-        if (!this.player.level.isClientSide) {
+        Level level = player.level();
+        if (!level.isClientSide) {
             this.setReviveInvulnerableFlag(this.reviveInvulnerableTime > MAX_REVIVE_INVULNERABLE_TIME - 60 * 20);
             if (player.isDeadOrDying() && this.nextReviveCooldowns <= 0) {
                 this.player.setHealth(this.player.getMaxHealth() * 0.75F);
                 if (this.player.getHealth() > 0) {
-                    this.player.level.broadcastEntityEvent(player, ODAMANE_REVIVE_EVENT);
+                    level.broadcastEntityEvent(player, ODAMANE_REVIVE_EVENT);
                     this.onRevive();
                     if (!player.getCooldowns().isOnCooldown(GRItems.HALO_OF_THE_END)) {
                         SafeClass.enableTimeStop(player, true, 300);
@@ -293,13 +291,13 @@ public class OdamanePlayerExpandedContext {
      * 在主世界的晚上时，终末之环会给予玩家夜视，迅捷，急迫，发光效果。（全效果III级）<br>
      */
     private void baseTick(Level level) {
-        ResourceKey<Level> dimension = player.level.dimension();
+        ResourceKey<Level> dimension = level.dimension();
         if (this.invulnerableTime > 0) {
             this.invulnerableTime--;
         }
         if (this.reviveInvulnerableTime > 0) {
             //复活后的无敌时间持续对周围实体造成伤害（排除使徒和自己的仆从,宠物）
-            for (LivingEntity living : this.player.level.getEntitiesOfClass(LivingEntity.class, new AABB(player.blockPosition).inflate(3.0F), NONE_C_OR_S_OR_APOSTLE)) {
+            for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, new AABB(player.blockPosition()).inflate(3.0F), NONE_C_OR_S_OR_APOSTLE)) {
                 if (living == player) continue;
                 if (living instanceof Owned owned && owned.getMasterOwner() == player)
                     continue;
@@ -309,21 +307,21 @@ public class OdamanePlayerExpandedContext {
                 if (living.invulnerableTime > 0)
                     living.invulnerableTime--;
                 living.setLastHurtByPlayer(player);
-                DamageSource damageSource = living.damageSources().source(DamageTypes.FELL_OUT_OF_WORLD, player);
+                DamageSource damageSource = new DamageSourceGenerator(living).source(DamageTypes.FELL_OUT_OF_WORLD, player);
                 living.hurt(damageSource, 10.0F);
             }
         }
         //服务端
         if (!level.isClientSide) {
             if (this.reviveInvulnerableTime > MAX_REVIVE_INVULNERABLE_TIME - 60 * 20) {
-                if (player.lastDamageSource == null || !((DamageSourceInterface) player.lastDamageSource).revelationfix$trueKill())
+                if (accessorLivingEntity.getLastDamageSource() == null || !((DamageSourceInterface) accessorLivingEntity.getLastDamageSource()).revelationfix$trueKill())
                     player.setHealth(Math.max(player.getHealth(), player.getMaxHealth() * 0.45F));
                 abilityHelper.setInvulTick(10);
             }
             if (dimension == Level.END) {
                 //在末地时，终末之环会给予周围6格实体诅咒，痉挛，缓慢，虚弱效果。（全效果IV级）
                 if (player.tickCount % 5 == 0) {
-                    for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, new AABB(player.blockPosition).inflate(6), EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
+                    for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, new AABB(player.blockPosition()).inflate(6), EntitySelector.NO_CREATIVE_OR_SPECTATOR)) {
                         selfEffectGive(living, new MobEffectInstance(GoetyEffects.CURSED.get(), 200, 3));
                         selfEffectGive(living, new MobEffectInstance(GoetyEffects.SPASMS.get(), 200, 3));
                         selfEffectGive(living, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 3));
@@ -359,10 +357,13 @@ public class OdamanePlayerExpandedContext {
         else {
             if (!player.getAbilities().mayfly)
                 player.getAbilities().mayfly = true;
-            if (player.random.nextInt(8) == 0) {
+            /*
+
+            if (player.getRandom().nextInt(8) == 0) {
                 //float time = (float) (Blaze3D.getTime() * 90F);
                 //this.player.level.addParticle(ModParticleTypes.SUMMON.get(), player.getX() + Mth.cos(time) / 1.5F, player.random.triangle(player.getY(0.4F), 0.3F), player.getZ() + Mth.sin(time) / 1.5F, 0D, player.random.nextFloat() * 0.1F, 0D);
             }
+             */
         }
     }
 
@@ -371,9 +372,11 @@ public class OdamanePlayerExpandedContext {
      */
     @SuppressWarnings("DataFlowIssue")
     public void tryCleanDeBuffs() {
-        if (!this.player.level.isClientSide) {
+        if (!this.player.level().isClientSide) {
             List<MobEffect> toRemovedDeBuffs = new ArrayList<>();
-            for (MobEffect effect : player.activeEffects.keySet()) {
+            for (MobEffect effect : player.getActiveEffectsMap().keySet()) {
+                if (CommonConfig.inBypassEffect(effect))
+                    continue;
                 if (effect.getCategory() == MobEffectCategory.HARMFUL)
                     toRemovedDeBuffs.add(effect);
                 else if (effect.getCategory() == MobEffectCategory.NEUTRAL && !BuiltInRegistries.MOB_EFFECT.getKey(effect).getNamespace().equals("minecraft"))
@@ -382,7 +385,7 @@ public class OdamanePlayerExpandedContext {
             toRemovedDeBuffs.forEach(effect -> {
                 MobEffectInstance mobeffectinstance = player.removeEffectNoUpdate(effect);
                 if (mobeffectinstance != null) {
-                    player.onEffectRemoved(mobeffectinstance);
+                    accessorLivingEntity.callOnEffectRemoved(mobeffectinstance);
                 }
             });
         }
@@ -392,7 +395,7 @@ public class OdamanePlayerExpandedContext {
      * 终末玩家所有冷却时间缩短到0.1s
      */
     public void odamaneDecreaseCooldowns() {
-        if (!this.player.level.isClientSide) {
+        if (!this.player.level().isClientSide) {
             Inventory inventory = player.getInventory();
             inventory.items.forEach(stack -> CooldownsManager.odamaneDecreaseCooldowns(player, stack.getItem()));
             inventory.armor.forEach(stack -> CooldownsManager.odamaneDecreaseCooldowns(player, stack.getItem()));

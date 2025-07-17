@@ -25,7 +25,7 @@ public abstract class ObsidianMonolithMixin extends AbstractMonolith {
 
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void aiStep(CallbackInfo ci) {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (this.getTrueOwner() instanceof Player player) {
                 OdamanePlayerExpandedContext expandedContext = ATAHelper2.getOdamaneEC(player);
                 if (!expandedContext.getOwnedMonoliths().contains((ObsidianMonolith) (Object) this)) {

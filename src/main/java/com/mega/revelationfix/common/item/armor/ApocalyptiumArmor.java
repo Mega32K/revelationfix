@@ -135,7 +135,7 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
         DamageSource damageSource = event.getSource();
         //神金护腿提供50％的弹射物反射
         if (this.type == Type.LEGGINGS) {
-            if (entity.random.nextBoolean()) {
+            if (entity.getRandom().nextBoolean()) {
                 if (damageSource.is(DamageTypes.MOB_PROJECTILE) || damageSource.getDirectEntity() instanceof Projectile) {
                     event.setCanceled(true);
                     if (damageSource.getDirectEntity() instanceof Projectile projectile) {
@@ -163,12 +163,12 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
     public void onLivingDeath(LivingDeathEvent event, ItemStack armorStack) {
         if (type == Type.CHESTPLATE) {
             LivingEntity entity = event.getEntity();
-            if (entity.random.nextFloat() < 0.15F) {
+            if (entity.getRandom().nextFloat() < 0.15F) {
                 event.setCanceled(true);
                 entity.setHealth(1F);
                 entity.heal(7.0F);
                 entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 126));
-                entity.level.broadcastEntityEvent(entity, OdamanePlayerExpandedContext.REVIVE_EVENT);
+                entity.level().broadcastEntityEvent(entity, OdamanePlayerExpandedContext.REVIVE_EVENT);
             }
         }
     }

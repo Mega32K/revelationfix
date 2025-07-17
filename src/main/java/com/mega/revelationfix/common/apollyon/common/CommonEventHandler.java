@@ -32,6 +32,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.checkerframework.checker.units.qual.C;
 import z1gned.goetyrevelation.util.ATAHelper;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
@@ -39,7 +40,7 @@ import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 public class CommonEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void livingHealEvent(LivingHealEvent event) {
-        if (event.getEntity().level.isClientSide) return;
+        if (event.getEntity().level().isClientSide) return;
         EntityExpandedContext livingEC = ((LivingEntityEC) event.getEntity()).revelationfix$livingECData();
         if (livingEC.banHealingTime > 0) {
             event.setAmount(0F);
@@ -50,7 +51,7 @@ public class CommonEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void tickingEC(LivingEvent.LivingTickEvent event) {
         LivingEntity living = event.getEntity();
-        if (living.level.isClientSide) return;
+        if (living.level().isClientSide) return;
         EntityExpandedContext livingEC = ((LivingEntityEC) living).revelationfix$livingECData();
         if (livingEC.banHealingTime > 0) {
             livingEC.banHealingTime--;
@@ -77,18 +78,22 @@ public class CommonEventHandler {
         //终末环无视负面
         if (ATAHelper2.hasOdamane(event.getEntity())) {
             if (event.getEffectInstance().getEffect().getCategory() == MobEffectCategory.HARMFUL)
-                event.setResult(Event.Result.DENY);
+                if (!CommonConfig.inBypassEffect(event.getEffectInstance().getEffect()))
+                    event.setResult(Event.Result.DENY);
             FeModSafe.removeBanHealing(event);
-            return;
         }//晋升环免疫效果
-        if (ATAHelper.hasHalo(event.getEntity())) {
+        else if (ATAHelper.hasHalo(event.getEntity())) {
             boolean apo = (ItemHelper.armorSet(event.getEntity(), ModArmorMaterials.APOCALYPTIUM));
             MobEffect mobEffect = event.getEffectInstance().getEffect();
             if (mobEffect != MobEffects.NIGHT_VISION && mobEffect != MobEffects.BAD_OMEN) {
-                if (apo && mobEffect.getCategory() == MobEffectCategory.HARMFUL)
-                    event.setResult(Event.Result.DENY);
-                if (!apo)
-                    event.setResult(Event.Result.DENY);
+                Event.Result result = Event.Result.DENY;
+                if (!CommonConfig.inBypassEffect(mobEffect)) {
+                    if (!apo)
+                        event.setResult(result);
+                    else if (mobEffect.getCategory() == MobEffectCategory.HARMFUL) {
+                        event.setResult(result);
+                    }
+                }
             }
         }
     }
@@ -116,7 +121,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void deathArrowEffect(EntityJoinLevelEvent event) {
-        if (event.getEntity().level.isClientSide) {
+        if (event.getEntity().level().isClientSide) {
             if (event.getEntity() instanceof DeathArrow deathArrow) {
                 ((DeathArrowEC) deathArrow).revelationfix$getTrailData().join(5);
             }

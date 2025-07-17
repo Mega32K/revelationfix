@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.network;
 
+import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.init.ModParticleTypes;
 import com.mega.revelationfix.common.network.s2c.IceSpellParticlePacket;
 import com.mega.revelationfix.util.entity.EntityFinder;
@@ -62,8 +63,8 @@ public class PacketClientProxy {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null) {
             if (packet.id == IceSpellParticlePacket.CIRCLE_PARTICLES) {
-                if (mc.level.getEntities().get(packet.casterID) instanceof LivingEntity living) {
-                    RandomSource random = living.random;
+                if (Wrapped.getEntityByUUID(packet.casterID) instanceof LivingEntity living) {
+                    RandomSource random = living.getRandom();
                     for (int i = 0; i< Mth.TWO_PI * packet.radius; i++) {
                         for (int j=1;j<5;j++) {
                             double x = Mth.cos(i/(Mth.TWO_PI ))* packet.radius + living.getX();
@@ -74,9 +75,9 @@ public class PacketClientProxy {
                     }
                 }
             } else if (packet.id == IceSpellParticlePacket.TARGETS_PARTICLES) {
-                if (mc.level.getEntities().get(packet.casterID) instanceof LivingEntity living) {
-                    RandomSource random = living.random;
-                    for (Entity entity : mc.level.getEntities(living, new AABB(living.blockPosition).inflate(packet.radius * (Math.sqrt(2) / 2) + 4), (entity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && !EntityFinder.isAlliedTo(living, entity)))) {
+                if (Wrapped.getEntityByUUID(packet.casterID) instanceof LivingEntity living) {
+                    RandomSource random = living.getRandom();
+                    for (Entity entity : mc.level.getEntities(living, new AABB(living.blockPosition()).inflate(packet.radius * (Math.sqrt(2) / 2) + 4), (entity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && !EntityFinder.isAlliedTo(living, entity)))) {
                         if (entity instanceof LivingEntity target) {
                             double posX = target.getX();
                             double posY = target.getY();

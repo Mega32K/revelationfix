@@ -19,6 +19,7 @@ public abstract class IngredientMixin {
 
     @Shadow @Final private Ingredient.Value[] values;
 
+    /*
     @Inject(method = {"test(Lnet/minecraft/world/item/ItemStack;)Z"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/Ingredient;getItems()[Lnet/minecraft/world/item/ItemStack;")}, cancellable = true)
     private void goety_revelation$fasterTagIngredientTest(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (isVanilla() && this.values.length == 1) {
@@ -30,4 +31,5 @@ public abstract class IngredientMixin {
             }
         }
     }
+     */
 }

@@ -177,9 +177,9 @@ public class StarArrow extends WitherSkull {
             this.onHitEntity((EntityHitResult) p_37628_);
             this.level().gameEvent(GameEvent.PROJECTILE_LAND, p_37628_.getLocation(), GameEvent.Context.of(this, null));
         }
-        if (!tags.contains("exploded")) {
+        if (!getTags().contains("exploded")) {
             if (!this.level().isClientSide) {
-                for (LivingEntity entity : level().getEntitiesOfClass(LivingEntity.class, new AABB(blockPosition).inflate(Mth.clamp(5F + getPower() / 10F, 5, 15)), (e) -> shouldHurt(owner, e))) {
+                for (LivingEntity entity : level().getEntitiesOfClass(LivingEntity.class, new AABB(blockPosition()).inflate(Mth.clamp(5F + getPower() / 10F, 5, 15)), (e) -> shouldHurt(owner, e))) {
                     if (p.is(entity))
                         continue;
                     if (Math.random() < 0.5D)
@@ -202,9 +202,9 @@ public class StarArrow extends WitherSkull {
                 }
             }
         }
-        tags.add("exploded");
+        this.addTag("exploded");
         this.playSound(ModSounds.STAR_EXPLODE.get(), 3.0f, 1f + random.nextFloat() - random.nextFloat());
-        if (!level.isClientSide)
+        if (!level().isClientSide)
             this.setInvisibleStar(true);
     }
 
@@ -285,7 +285,7 @@ public class StarArrow extends WitherSkull {
     }
 
     protected Entity updateTarget(double distance, double angel) {
-        Entity target = level.getEntity(getTargetId());
+        Entity target = level().getEntity(getTargetId());
 
         if (target != null && !target.isAlive()) {
             target = null;
@@ -455,7 +455,7 @@ public class StarArrow extends WitherSkull {
     }
 
     private boolean isThisArrowFlying() {
-        return !this.onGround && getDeltaMovement().lengthSqr() > 1.0;
+        return !this.onGround() && getDeltaMovement().lengthSqr() > 1.0;
     }
 
     public Vector3f getRGB() {
@@ -520,7 +520,7 @@ public class StarArrow extends WitherSkull {
     public Entity checkSaveTarget() {
         if (getTargetId() > -1) {
             if (targetEntity == null)
-                targetEntity = level.getEntity(getTargetId());
+                targetEntity = level().getEntity(getTargetId());
         }
         return targetEntity;
     }

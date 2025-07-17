@@ -3,11 +3,13 @@ package com.mega.revelationfix.common.entity.projectile;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.projectiles.Hellfire;
+import com.mega.endinglib.mixin.accessor.AccessorAbstractArrow;
+import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.entity.MobEffectUtils;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.safe.DamageSourceInterface;
-import com.mega.revelationfix.safe.entity.MobEffectInstanceEC;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -21,6 +23,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -64,7 +67,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     protected @Nullable Entity targetEntity;
     private ItemStack spearItem = new ItemStack(GRItems.GUNGNIR.get());
     private boolean dealtDamage;
-
+    private final AccessorAbstractArrow accessorAbstractArrow = (AccessorAbstractArrow) this;
     public GungnirSpearEntity(EntityType<? extends GungnirSpearEntity> p_37561_, Level p_37562_) {
         super(p_37561_, p_37562_);
     }
@@ -188,12 +191,12 @@ public class GungnirSpearEntity extends AbstractArrow {
             }
         }
 
-        if ((tickCount > 400 || this.getY() < this.level.getMinBuildHeight())) {
+        if ((tickCount > 400 || this.getY() < this.level().getMinBuildHeight())) {
             this.dealtDamage = true;
             setNoPhysics(true);
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 if (this.getOwner() != null && isAcceptibleReturnOwner()) {
-                    this.setPos(this.getOwner().position.add(new Vec3(0, 1F, 0F)));
+                    this.setPos(this.getOwner().position().add(new Vec3(0, 1F, 0F)));
                 } else if (isNoPhysics()) {
                     if (!this.level().isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
                         this.spawnAtLocation(this.getPickupItem(), 0.1F);
@@ -207,7 +210,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     }
 
     protected Entity updateTarget(double distance, double angel) {
-        Entity target = level.getEntity(getTargetId());
+        Entity target = level().getEntity(getTargetId());
 
         if (target != null && !target.isAlive()) {
             target = null;
@@ -337,53 +340,22 @@ public class GungnirSpearEntity extends AbstractArrow {
                     EnchantmentHelper.doPostHurtEffects(beHit, owner);
                     EnchantmentHelper.doPostDamageEffects(owner, beHit);
                     if (this.isNoGravity()) {
-                        {
-                            MobEffectInstance instance = new MobEffectInstance(GoetyEffects.STUNNED.get(), 200, 0);
-                            if (!beHit.addEffect(new MobEffectInstance(instance.getEffect(), 200, 4), owner)) {
-                                instance = new MobEffectInstance(instance.getEffect(), 200, 4);
-                                ((MobEffectInstanceEC) instance).setOwnerEntity(owner);
-                                beHit.activeEffects.put(instance.getEffect(), instance);
-                                beHit.onEffectAdded(instance, owner);
-                            }
-                        }
-                        {
-                            MobEffectInstance instance = new MobEffectInstance(GoetyEffects.BURN_HEX.get(), 200, 0);
-                            if (!beHit.addEffect(new MobEffectInstance(instance.getEffect(), 200, 4), owner)) {
-                                instance = new MobEffectInstance(instance.getEffect(), 200, 4);
-                                ((MobEffectInstanceEC) instance).setOwnerEntity(owner);
-                                beHit.activeEffects.put(instance.getEffect(), instance);
-                                beHit.onEffectAdded(instance, owner);
-                            }
-                        }
-                        Hellfire hellfire = new Hellfire(level, beHit.getX(), beHit.getY(), beHit.getZ(), owner);
-                        level.addFreshEntity(hellfire);
+                        MobEffectUtils.forceAdd(beHit, new MobEffectInstance(GoetyEffects.STUNNED.get(), 200, 4), owner);
+                        MobEffectUtils.forceAdd(beHit, new MobEffectInstance(GoetyEffects.BURN_HEX.get(), 200, 4), owner);
+                        Hellfire hellfire = new Hellfire(level(), beHit.getX(), beHit.getY(), beHit.getZ(), owner);
+                        level().addFreshEntity(hellfire);
                     } else {
-                        for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, beHit.getBoundingBox().inflate(6D), (e) -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(e) && e != owner)) {
-                            {
-                                MobEffectInstance instance = new MobEffectInstance(GoetyEffects.STUNNED.get(), 300, 0);
-                                if (!living.addEffect(new MobEffectInstance(instance.getEffect(), 300, 4), owner)) {
-                                    instance = new MobEffectInstance(instance.getEffect(), 300, 4);
-                                    ((MobEffectInstanceEC) instance).setOwnerEntity(owner);
-                                    living.activeEffects.put(instance.getEffect(), instance);
-                                    living.onEffectAdded(instance, owner);
-                                }
-                            }
-                            {
-                                MobEffectInstance instance = new MobEffectInstance(GoetyEffects.BURN_HEX.get(), 300, 0);
-                                if (!living.addEffect(new MobEffectInstance(instance.getEffect(), 300, 4), owner)) {
-                                    instance = new MobEffectInstance(instance.getEffect(), 300, 4);
-                                    ((MobEffectInstanceEC) instance).setOwnerEntity(owner);
-                                    living.activeEffects.put(instance.getEffect(), instance);
-                                    living.onEffectAdded(instance, owner);
-                                }
-                            }
-                            Hellfire hellfire = new Hellfire(level, living.getX(), living.getY(), living.getZ(), owner);
-                            level.addFreshEntity(hellfire);
+                        for (LivingEntity living : level().getEntitiesOfClass(LivingEntity.class, beHit.getBoundingBox().inflate(6D), (e) -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(e) && e != owner)) {
+                            MobEffectUtils.forceAdd(living, new MobEffectInstance(GoetyEffects.STUNNED.get(), 300, 4), owner);
+                            MobEffectUtils.forceAdd(living, new MobEffectInstance(GoetyEffects.BURN_HEX.get(), 300, 4), owner);
+                            Hellfire hellfire = new Hellfire(level(), living.getX(), living.getY(), living.getZ(), owner);
+                            level().addFreshEntity(hellfire);
                         }
                     }
-                    DamageSource source = beHit.damageSources().source(DamageTypes.MAGIC, owner);
+                    DamageSourceGenerator generator = new DamageSourceGenerator(beHit);
+                    DamageSource source = generator.source(DamageTypes.MAGIC, owner);
                     ((DamageSourceInterface) source).giveSpecialTag((byte) 1);
-                    for (LivingEntity beOwned : level.getEntitiesOfClass(LivingEntity.class, beHit.getBoundingBox().inflate(128D), (e) -> ((e instanceof IOwned owned && owned.getTrueOwner() == beHit) || (e instanceof OwnableEntity ownable && ownable.getOwner() == beHit)) && e != beHit && e != owner)) {
+                    for (LivingEntity beOwned : level().getEntitiesOfClass(LivingEntity.class, beHit.getBoundingBox().inflate(128D), (e) -> ((e instanceof IOwned owned && owned.getTrueOwner() == beHit) || (e instanceof OwnableEntity ownable && ownable.getOwner() == beHit)) && e != beHit && e != owner)) {
                         beOwned.hurt(source, f);
                         EnchantmentHelper.doPostHurtEffects(beOwned, owner);
                         EnchantmentHelper.doPostDamageEffects(owner, beOwned);
@@ -488,7 +460,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     }
 
     private boolean isThisArrowFlying() {
-        return !this.onGround && getDeltaMovement().lengthSqr() > 1.0;
+        return !this.onGround() && getDeltaMovement().lengthSqr() > 1.0;
     }
 
     public boolean isSeek() {
@@ -502,7 +474,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     public Entity checkSaveTarget() {
         if (getTargetId() > -1) {
             if (targetEntity == null)
-                targetEntity = level.getEntity(getTargetId());
+                targetEntity = level().getEntity(getTargetId());
         }
         return targetEntity;
     }
@@ -534,25 +506,25 @@ public class GungnirSpearEntity extends AbstractArrow {
         if (!this.level().isClientSide) {
             return this.noPhysics;
         } else {
-            return (this.entityData.get(ID_FLAGS) & FLAG_NO_PHYSICS) != 0;
+            return (this.entityData.get(AccessorAbstractArrow.getID_FLAGS()) & FLAG_NO_PHYSICS) != 0;
         }
     }
 
     public void setNoPhysics(boolean p_36791_) {
         this.noPhysics = p_36791_;
-        this.setFlag(FLAG_NO_PHYSICS, p_36791_);
+        accessorAbstractArrow.callSetFlag(FLAG_NO_PHYSICS, p_36791_);
     }
 
     public boolean isShouldBack() {
         if (!this.level().isClientSide) {
             return this.shouldBack;
         } else {
-            return (this.entityData.get(ID_FLAGS) & FLAG_SHOULD_BACK) != 0;
+            return (this.entityData.get(AccessorAbstractArrow.getID_FLAGS()) & FLAG_SHOULD_BACK) != 0;
         }
     }
 
     public void setShouldBack(boolean p_36791_) {
         this.shouldBack = p_36791_;
-        this.setFlag(FLAG_SHOULD_BACK, p_36791_);
+        accessorAbstractArrow.callSetFlag(FLAG_SHOULD_BACK, p_36791_);
     }
 }

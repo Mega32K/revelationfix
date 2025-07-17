@@ -3,6 +3,7 @@ package com.mega.revelationfix.mixin.gr;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;

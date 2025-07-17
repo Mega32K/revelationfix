@@ -3,9 +3,9 @@ package com.mega.revelationfix.common.item.tool.combat.bow;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.Polarice3.Goety.init.ModSounds;
+import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
 import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.api.item.ICenterDescItem;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.MUtils;
 import net.minecraft.ChatFormatting;
@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class BowOfRevelationItem extends BowItem implements ICenterDescItem {
+public class BowOfRevelationItem extends BowItem {
     public static final String FORCE_ADD_EFFECT = "forceAddEffect";
     public static final List<MobEffect> BAD_EFFECTS = new ArrayList<>();
 
@@ -54,19 +54,6 @@ public class BowOfRevelationItem extends BowItem implements ICenterDescItem {
         }
 
         return f;
-    }
-
-    public static void forceAddEffect(LivingEntity living, MobEffectInstance effectInstance, Entity source) {
-        if (!living.addEffect(effectInstance)) {
-            MobEffectInstance mobeffectinstance = living.activeEffects.get(effectInstance.getEffect());
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.living.MobEffectEvent.Added(living, mobeffectinstance, effectInstance, source));
-            if (mobeffectinstance == null) {
-                living.activeEffects.put(effectInstance.getEffect(), effectInstance);
-                living.onEffectAdded(effectInstance, living);
-            } else if (mobeffectinstance.update(effectInstance)) {
-                living.onEffectUpdated(mobeffectinstance, true, source);
-            }
-        }
     }
 
     private static MobEffect selectBadEffect() {
@@ -133,7 +120,7 @@ public class BowOfRevelationItem extends BowItem implements ICenterDescItem {
                             if (isAscension) {
                                 if (i / 20F >= 3.5) {
                                     DeathArrow deathArrow1 = (DeathArrow) deathArrow;
-                                    int duration = player.random.nextInt(200, 600);
+                                    int duration = player.getRandom().nextInt(200, 600);
                                     for (RegistryObject<MobEffect> ro : GoetyEffects.EFFECTS.getEntries()) {
                                         MobEffect effect = ro.get();
                                         if (effect.getCategory() == MobEffectCategory.HARMFUL && ro != GoetyEffects.DOOM && ro != GoetyEffects.EVIL_EYE && ro != GoetyEffects.WILD_RAGE && ro != GoetyEffects.STORMS_WRATH) {
@@ -145,7 +132,7 @@ public class BowOfRevelationItem extends BowItem implements ICenterDescItem {
 
                             }
 
-                            ((DeathArrow) deathArrow).addEffect(new MobEffectInstance(selectBadEffect(), player.random.nextInt(60, 80 + 1), player.random.nextInt(4)));
+                            ((DeathArrow) deathArrow).addEffect(new MobEffectInstance(selectBadEffect(), player.getRandom().nextInt(60, 80 + 1), player.getRandom().nextInt(4)));
 
                             if (f >= 1.0F) {
                                 deathArrow.setCritArrow(true);
@@ -173,7 +160,7 @@ public class BowOfRevelationItem extends BowItem implements ICenterDescItem {
                         }
                     }
                     if (player.isShiftKeyDown()) {
-                        int id = player.random.nextInt(1, 4);
+                        int id = player.getRandom().nextInt(1, 4);
                         player.playSound(com.mega.revelationfix.common.init.ModSounds.STAR_CAST.get(), 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                         if (id == 1)
                             player.playSound(SoundEvents.TRIDENT_RIPTIDE_1, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
@@ -217,9 +204,9 @@ public class BowOfRevelationItem extends BowItem implements ICenterDescItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack p_41421_, @Nullable Level p_41422_, @NotNull List<Component> p_41423_, @NotNull TooltipFlag p_41424_) {
-        p_41423_.add(Component.translatable("item.goety_revelation.bow_of_revelation.desc0").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
-        p_41423_.add(Component.translatable("item.goety_revelation.bow_of_revelation.desc1").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
-        p_41423_.add(Component.translatable("item.goety_revelation.bow_of_revelation.desc2").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        p_41423_.add(Component.translatable("item.goety_revelation.bow_of_revelation.desc0").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        p_41423_.add(Component.translatable("item.goety_revelation.bow_of_revelation.desc1").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        p_41423_.add(Component.translatable("item.goety_revelation.bow_of_revelation.desc2").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
         super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
     }
 }
