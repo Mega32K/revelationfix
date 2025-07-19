@@ -1,4 +1,8 @@
 package com.mega.revelationfix.proxy;
 
-public class ServerProxy implements ModProxy{
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+public class ServerProxy implements ModProxy {
+    public ServerProxy(FMLJavaModLoadingContext context) {
+    }
 }

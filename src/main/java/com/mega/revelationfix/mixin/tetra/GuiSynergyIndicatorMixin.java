@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin.tetra;
 
+import com.mega.endinglib.util.annotation.DeprecatedMixin;
 import com.mega.endinglib.util.annotation.ModDependsMixin;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mixin(value = GuiSynergyIndicator.class, remap = false)
+@DeprecatedMixin
 @ModDependsMixin("tetra")
 public class GuiSynergyIndicatorMixin {
     @Inject(method = "getHeaderLine", at = @At("HEAD"), cancellable = true)

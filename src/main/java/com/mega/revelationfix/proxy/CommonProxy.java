@@ -24,8 +24,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
 public class CommonProxy implements ModProxy {
-    public CommonProxy() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public CommonProxy(FMLJavaModLoadingContext context) {
+        IEventBus modBus = context.getModEventBus();
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::enqueueIMC);
         modBus.addListener(this::setupEntityAttributeCreation);

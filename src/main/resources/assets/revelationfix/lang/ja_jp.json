@@ -32,8 +32,8 @@
   "info.goety_revelation.puzzle.desc": "§7The-End パズル: %s",
 
   "item.goety_revelation.halo_of_the_end" : "終末ノ光輪",
-  "item.goety_revelation.halo_of_the_end.default_1" : "§|§-もしこれが本当にすべての終わりならば——",
-  "item.goety_revelation.halo_of_the_end.default_2" : "§|§-この運命は私の手によって終焉を迎えるでしょう。",
+  "item.goety_revelation.halo_of_the_end.default_1" : "もしこれが本当にすべての終わりならば——",
+  "item.goety_revelation.halo_of_the_end.default_2" : "この運命は私の手によって終焉を迎えるでしょう。",
 
   "item.goety_revelation.halo_of_the_end.desc0": "§7§l アクティブ効果: §r",
   "item.goety_revelation.halo_of_the_end.desc1" : "§8§o 火球/溶岩爆弾フォーカスは、最終的な力を持つようになりました。",

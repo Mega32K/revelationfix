@@ -1,9 +1,16 @@
 package com.mega.revelationfix.mixin.gr;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import z1gned.goetyrevelation.config.ModConfig;
+
+import java.io.File;
 
 @Mixin(ModConfig.class)
 public class ModConfigMixin {
@@ -20,5 +27,13 @@ public class ModConfigMixin {
     @ModifyConstant(method = "<clinit>", constant = @Constant(doubleValue = 560.0))
     private static double d1(double constant) {
         return 666.0D;
+    }
+
+    /**
+     * @author MegaDarkness
+     * @reason 全部重置
+     */
+    @Overwrite(remap = false)
+    public static void loadConfig(ForgeConfigSpec config, String path) {
     }
 }

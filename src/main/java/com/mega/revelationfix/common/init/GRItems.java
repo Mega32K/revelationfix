@@ -2,6 +2,7 @@ package com.mega.revelationfix.common.init;
 
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
+import com.mega.endinglib.api.item.NameCenteredItem;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.compat.SafeClass;
@@ -220,7 +221,7 @@ public class GRItems {
         APOCALYPTIUM_BOOTS = ITEMS.register("apocalyptium_boots", () -> new ApocalyptiumArmor(ArmorItem.Type.BOOTS));
         APOCALYPTIUM_TEMPLATE_ITEM = ITEMS.register("apocalyptium_upgrade_smithing_template", ApocalyptiumTemplateItem::new);
         MYSTERY_FRAGMENT = ITEMS.register("mystery_fragment", () -> new MysteryFragment(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
-        TIP_OF_THE_SPEAR_OF_AEGLOS = ITEMS.register("the_tip_of_the_aeglos", () -> new Item(new Item.Properties().stacksTo(1).rarity(RevelationRarity.AEGLOS).fireResistant()));
+        TIP_OF_THE_SPEAR_OF_AEGLOS = ITEMS.register("the_tip_of_the_aeglos", () -> new NameCenteredItem(new Item.Properties().stacksTo(1).rarity(RevelationRarity.EDEN_NAME).fireResistant()));
         VALETTEIN = ITEMS.register("valettein", ValetteinItem::new);
         GUNGNIR = ITEMS.register("gungnir", GungnirItem::new);
         DISC_1 = ITEMS.register("disc_arch_illager", ArchIllagerDisc::new);
@@ -281,6 +282,7 @@ public class GRItems {
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.FROST_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.WILD_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.ABYSS_STAFF.get()),
+                        new ItemStack(com.Polarice3.Goety.common.items.ModItems.VOID_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.NETHER_STAFF.get()),
                         new ItemStack(com.Polarice3.Goety.common.items.ModItems.NAMELESS_STAFF.get())
                 ));

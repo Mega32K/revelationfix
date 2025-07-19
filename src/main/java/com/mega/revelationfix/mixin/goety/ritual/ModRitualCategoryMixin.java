@@ -22,6 +22,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -64,5 +65,9 @@ public class ModRitualCategoryMixin {
             if (craftType.equals(entry.getKey()))
                 cir.setReturnValue(entry.getValue().getIconItem());
         }
+    }
+    @Redirect(method = "getTypeIcon", at = @At(value = "INVOKE", target = "Ljava/lang/String;contains(Ljava/lang/CharSequence;)Z"))
+    private boolean replaceToEquals(String instance, CharSequence s) {
+        return instance.contentEquals(s);
     }
 }

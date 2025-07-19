@@ -1,0 +1,7 @@
+{
+  "type": "goety_revelation:church",
+  "biomes": "#minecraft:is_nether",
+  "spawn_overrides": {},
+  "step": "underground_structures",
+  "terrain_adaptation": "bury"
+}

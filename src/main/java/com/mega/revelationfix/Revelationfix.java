@@ -41,10 +41,11 @@ import java.util.List;
 public class Revelationfix {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "revelationfix";
-    private static final ModProxy PROXY = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+    private final ModProxy PROXY;
 
-    public Revelationfix() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public Revelationfix(FMLJavaModLoadingContext context) {
+        PROXY = DistExecutor.unsafeRunForDist(() -> ()-> new ClientProxy(context), () -> ()-> new ServerProxy(context));
+        IEventBus modBus = context.getModEventBus();
         ModBlocks.BLOCKS.register(modBus);
         ModBlocks.BLOCK_ENTITIES.register(modBus);
         ModAttributes.ATTRIBUTES.register(modBus);
@@ -58,7 +59,7 @@ public class Revelationfix {
         ModParticleTypes.PARTICLE_TYPES.register(modBus);
         modBus.addListener(this::registerRecipeSerializers);
         ModPotions.register(modBus);
-        new CommonProxy();
+        new CommonProxy(context);
         if (SafeClass.isTetraLoaded()) {
             SafeClass.registerTetraEvents();
         }
@@ -71,11 +72,11 @@ public class Revelationfix {
         tagKeys.add(DamageTypeTags.IS_EXPLOSION); //爆炸
         tagKeys.add(DamageTypeTags.IS_FREEZING); //冰冻
         OdamanePlayerExpandedContext.INVULNERABLE_TO_TAGS = ImmutableList.copyOf(tagKeys);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModpackCommonConfig.SPEC, MODID + "/" + MODID + "-modpack-common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, MODID + "/" + MODID + "-common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ItemConfig.SPEC, MODID + "/" + MODID + "-item.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, MODID + "/" + MODID + "-client.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
+        context.registerConfig(ModConfig.Type.COMMON, ModpackCommonConfig.SPEC, MODID + "/" + MODID + "-modpack-common.toml");
+        context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, MODID + "/" + MODID + "-common.toml");
+        context.registerConfig(ModConfig.Type.COMMON, ItemConfig.SPEC, MODID + "/" + MODID + "-item.toml");
+        context.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, MODID + "/" + MODID + "-client.toml");
+        context.registerConfig(ModConfig.Type.COMMON, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
 
     }
 

@@ -360,7 +360,7 @@ public abstract class ApostleMixin extends SpellCastingCultist implements Apolly
                                 blockPos.move(Direction.UP);
                             }
 
-                            if ((double) blockPos.getY() > this.getY() + 32.0) {
+                            if ((double) blockPos.getY() > this.getY() + 32.0 && !SafeClass.isDoom((Apostle) (Object) this)) {
                                 NetherMeteor fireball = this.getNetherMeteor();
                                 fireball.setDangerous(ForgeEventFactory.getMobGriefingEvent(this.level(), this) && MobsConfig.ApocalypseMode.get());
                                 fireball.setPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
@@ -369,7 +369,7 @@ public abstract class ApostleMixin extends SpellCastingCultist implements Apolly
                         }
                     }
 
-                    if (this.tickCount % tickLift == 0) {
+                    if (this.tickCount % tickLift == 0 && !SafeClass.isDoom((Apostle) (Object) this)) {
                         double offsetX = (this.random.nextDouble() * 2 - 1) * 24;
                         double offsetZ = (this.random.nextDouble() * 2 - 1) * 24;
                         double posX = this.getX() + offsetX;

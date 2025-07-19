@@ -1,10 +1,12 @@
 package com.mega.revelationfix.common.compat.mui;
 
+import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.client.text.mui.IModernTextRendererCall;
 import com.mega.endinglib.api.client.text.mui.ModernTextRendererCall;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.client.font.FontTextBuilder;
 import com.mega.revelationfix.client.font.OdamaneFont;
+import com.mega.revelationfix.common.config.ClientConfig;
 import icyllis.modernui.mc.text.ModernTextRenderer;
 import icyllis.modernui.mc.text.TextLayout;
 import icyllis.modernui.mc.text.TextLayoutEngine;
@@ -42,7 +44,8 @@ public class ModernUIWrapped {
 
         @Override
         public float drawTextInstead(ModernTextRenderer modernTextRenderer, TextLayoutEngine mEngine, @NotNull FormattedCharSequence text, float x, float y, int color, boolean dropShadow, @NotNull Matrix4f matrix, @NotNull MultiBufferSource source, Font.DisplayMode displayMode, int colorBackground, int packedLight, ModernTextRendererCall call) {
-            IModernTextRendererCall.super.drawTextInstead(modernTextRenderer, mEngine, text, x, y, color, dropShadow, matrix, source, displayMode, colorBackground, packedLight, call);
+            if (TextColorUtils.getCenteredTooltipWidth() < 0)
+                IModernTextRendererCall.super.drawTextInstead(modernTextRenderer, mEngine, text, x, y, color, dropShadow, matrix, source, displayMode, colorBackground, packedLight, call);
             long millisTime = OdamaneFont.milliTime();
             float colorr = (float) millisTime * 0.0025F % 1.0F;
             float colorrStep = (float) OdamaneFont.rangeRemap(

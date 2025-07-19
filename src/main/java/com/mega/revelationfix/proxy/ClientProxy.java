@@ -54,11 +54,11 @@ public class ClientProxy implements ModProxy {
     private static ClientProxy INSTANCE;
     private PlayerRendererContext playerRendererContext;
 
-    public ClientProxy() {
+    public ClientProxy(FMLJavaModLoadingContext context) {
         try {
             PostEffectRegistry.registerEffect(HOLOGRAM_SHADER);
             PostEffectRegistry.registerEffect(ODAMANE_SHADER);
-            IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+            IEventBus modBus = context.getModEventBus();
             modBus.addListener(this::registerShaders);
             modBus.addListener(this::clientSetup);
             modBus.addListener(this::registerKeys);

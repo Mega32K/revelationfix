@@ -2,6 +2,7 @@ package com.mega.revelationfix.mixin.gr;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.cultists.SpellCastingCultist;
+import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,7 @@ public abstract class ApollyonDeathArrowGoalMixin extends CastingGoal {
 
     @Inject(method = "getCastingInterval", at = @At("HEAD"), cancellable = true, remap = false)
     private void getCastingInterval(CallbackInfoReturnable<Integer> cir) {
-        boolean isDoom = ((ApollyonAbilityHelper) this.apostle).getDoom();
+        boolean isDoom = SafeClass.isDoom(apostle);
         cir.setReturnValue(isDoom ? (int)(CommonConfig.apollyonShootingCooldown * 0.5) : CommonConfig.apollyonShootingCooldown);
     }
 

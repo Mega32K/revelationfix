@@ -1,0 +1,12 @@
+{
+  "placement": {
+    "type": "goety_revelation:church_placement",
+    "salt": 232424314
+  },
+  "structures": [
+    {
+      "structure": "goety_revelation:church",
+      "weight": 1
+    }
+  ]
+}

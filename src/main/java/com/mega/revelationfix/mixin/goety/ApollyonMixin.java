@@ -7,9 +7,11 @@ import com.Polarice3.Goety.common.entities.projectiles.FireTornado;
 import com.Polarice3.Goety.common.entities.projectiles.NetherMeteor;
 import com.Polarice3.Goety.common.entities.projectiles.SpellEntity;
 import com.Polarice3.Goety.common.entities.util.AbstractTrap;
+import com.Polarice3.Goety.common.entities.util.FireBlastTrap;
 import com.Polarice3.Goety.config.AttributesConfig;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModSounds;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.mega.endinglib.mixin.accessor.AccessorEntity;
 import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
 import com.mega.revelationfix.common.apollyon.common.*;
@@ -140,7 +142,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     public boolean randomTeleport(double p_20985_, double p_20986_, double p_20987_, boolean p_20988_) {
         ApollyonAbilityHelper helper = revelationfix$asApollyonHelper();
         if (helper.allTitlesApostle_1_20_1$isApollyon() && this.isInNether()) {
-            if (helper.getDoom())
+            if (this.isDoomNow())
                 helper.allTitlesApostle_1_20_1$setShooting(false);
             if (this.getY() >= 99.5F)
                 return super.randomTeleport(p_20985_, Math.max(this.getX(), 129.0F), p_20987_, p_20988_);
@@ -683,7 +685,15 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         }
         return instance.isCreative() || ATAHelper2.hasOdamane(instance);
     }
-
+    @WrapWithCondition(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
+    private boolean doomDisableNetherMeteor(Level level, Entity toSummon) {
+        if (toSummon instanceof NetherMeteor || toSummon instanceof FireBlastTrap) {
+            if (this.isInNether() && this.revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
+                return !this.isDoomNow();
+            }
+        }
+        return true;
+    }
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void aiStep(CallbackInfo ci) {
         if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {

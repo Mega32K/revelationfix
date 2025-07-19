@@ -75,7 +75,7 @@ public class CuriosStorageCrystal extends Item {
             if (tag.contains("BannedCurios", 9)) {
                 ListTag listtag = itemStack.getTag().getList("BannedCurios", 10);
                 for (int i = 0; i < listtag.size(); ++i) {
-                    if (i < 4) {
+                    if (i < 6) {
                         ItemStack stack = ItemStack.of(listtag.getCompound(i));
                         list.add(Component.literal(stack.getDisplayName().getString() + " x").withStyle(ChatFormatting.DARK_GRAY).append(Integer.toString(stack.getCount())).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_PURPLE));
                     } else {

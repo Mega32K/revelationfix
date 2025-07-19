@@ -1,6 +1,7 @@
 package com.mega.revelationfix.mixin.gr;
 
 
+import com.mega.endinglib.util.annotation.DeprecatedMixin;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mojang.blaze3d.font.GlyphInfo;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin({Font.StringRenderOutput.class})
+@DeprecatedMixin
 public abstract class StringRenderOutputMixin {
     @Shadow
     public float x;

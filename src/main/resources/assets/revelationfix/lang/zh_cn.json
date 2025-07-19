@@ -37,7 +37,7 @@
   "info.revelationfix.ritual.structure.fail" : "无效的仪式!仪式完整度:%s / %s",
   "info.goety_revelation.no_spells" : "你的魔法在当前领域的影响下失灵了!",
 
-  "item.goety_revelation.halo_of_the_end" : "§|终末之环",
+  "item.goety_revelation.halo_of_the_end" : "终末之环",
   "item.goety_revelation.halo_of_the_end.default_1" : "如果这就是一切的尽头，那么...",
   "item.goety_revelation.halo_of_the_end.default_2" : "这一宿命由我来划上休止符。",
 
