@@ -12,8 +12,8 @@ public class ItemConfig {
     public static final ForgeConfigSpec SPEC;
     static final ForgeConfigSpec.ConfigValue<Double> NEEDLE_ARMOR_PENETRATION;
     static final ForgeConfigSpec.ConfigValue<Double> NEEDLE_ENCHANTMENT_PIERCING;
-    static final ForgeConfigSpec.ConfigValue<Double> NEEDLE_ATTRIBUTE_INCREASEMENT_MIN;
-    static final ForgeConfigSpec.ConfigValue<Double> NEEDLE_ATTRIBUTE_INCREASEMENT_MAX;
+    static final ForgeConfigSpec.ConfigValue<Double> NEEDLE_ATTRIBUTE_INCREASE_MIN;
+    static final ForgeConfigSpec.ConfigValue<Double> NEEDLE_ATTRIBUTE_INCREASE_MAX;
     static final ForgeConfigSpec.ConfigValue<List<? extends Float>> NEEDLE_ATTRIBUTE_WEIGHT;
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     private static final ForgeConfigSpec.ConfigValue<Double> BLESSING_SCROLL_DAMAGE_BOOST;
@@ -26,21 +26,31 @@ public class ItemConfig {
     private static final ForgeConfigSpec.ConfigValue<Integer> ETERNAL_WATCH_COOLDOWN;
     private static final ForgeConfigSpec.ConfigValue<Boolean> ETERNAL_WATCH_COOLDOWN_CAN_BE_REDUCED;
     private static final ForgeConfigSpec.ConfigValue<Boolean> APOCALYPTIUM_CHESTPLATE_TITLE_DISPLAY;
+    private static final ForgeConfigSpec.ConfigValue<Double> AMULET_OF_SLIME_COOLDOWN;
+    private static final ForgeConfigSpec.ConfigValue<Double> GOLD_FEATHER_SPEED_MULTIPLIER;
+    private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_ATTRIBUTE_0;
+    private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_ATTRIBUTE_1;
+    private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_PERCENT_INCREASE;
     public static double needleArmorPenetration;
     public static double needleEnchantmentPiercing;
     public static double needleAVMin;
     public static double needleAVMax;
     public static List<? extends Float> needleAttributeWeight;
-    public static double bsDamageBoost;
-    public static double bsAttackSpeedBoost;
-    public static double bsDodgeBoost;
-    public static double bsMaxDodge;
-    public static int dwResistance;
-    public static int dwDeathEscape;
-    public static int ewFreezingTime;
-    public static int ewCooldown;
-    public static boolean ewCooldownsCanBeReduced;
+    public static double blessingScrollDamageBoost;
+    public static double blessingScrollAttackSpeedBoost;
+    public static double blessingScrollDodgeBoost;
+    public static double blessingScrollMaxDodge;
+    public static int dimensionalWillResistance;
+    public static int dimensionalWillDeathEscape;
+    public static int eternalWatchFreezingTime;
+    public static int eternalWatchCooldown;
+    public static boolean eternalWatchCooldownsCanBeReduced;
     public static boolean apocalyptiumChestplateTitle;
+    public static float amuletOfSlimeCooldown;
+    public static float goldFeatherSpeedMultiplier;
+    public static float soulOfObsidianSoulDecreaseEfficiency;
+    public static float soulOfObsidianSoulStealing;
+    public static float soulOfObsidianSpecialLootIncrease;
     static {
         BUILDER.push("Blessing Scroll");
         BLESSING_SCROLL_DAMAGE_BOOST = BUILDER.worldRestart().
@@ -63,10 +73,10 @@ public class ItemConfig {
         NEEDLE_ENCHANTMENT_PIERCING = BUILDER.worldRestart()
                 .comment("The enchantment piercing attribute value provided by The Needle, default:0.5")
                 .defineInRange("needleEnchantmentPiercing", 0.5D, 0D, 1.0D);
-        NEEDLE_ATTRIBUTE_INCREASEMENT_MIN = BUILDER.worldRestart()
+        NEEDLE_ATTRIBUTE_INCREASE_MIN = BUILDER.worldRestart()
                 .comment("The minimum attribute value that the player will increase after using The Needle, default:0.0666")
                 .defineInRange("needleMinimumAttributeEnhancement", 0.0666D, 0D, 1.0D);
-        NEEDLE_ATTRIBUTE_INCREASEMENT_MAX = BUILDER.worldRestart()
+        NEEDLE_ATTRIBUTE_INCREASE_MAX = BUILDER.worldRestart()
                 .comment("The maximum attribute value that the player will increase after using The Needle, default:0.0666")
                 .defineInRange("needleMaximumAttributeEnhancement", 0.176D, 0D, 1.0D);
         NEEDLE_ATTRIBUTE_WEIGHT = BUILDER.worldRestart()
@@ -99,27 +109,53 @@ public class ItemConfig {
                 .define("displayTitle", false);
         BUILDER.pop();
         BUILDER.pop();
+        BUILDER.push("Amulet of Slime");
+        AMULET_OF_SLIME_COOLDOWN = BUILDER.worldRestart()
+                .comment("The skill cooldown of the amulet of slime, default 2.5(in seconds).")
+                .defineInRange("cooldown", 2.5D, 0D, 32D);
+        BUILDER.pop();
+        BUILDER.push("Gold Feather");
+        GOLD_FEATHER_SPEED_MULTIPLIER = BUILDER.worldRestart()
+                .comment("Speed multiplier when using items (relative to original state), default 4.0.")
+                .defineInRange("speedMultiplier", 4D, 1D, 32D);
+        BUILDER.pop();
+        BUILDER.push("Soul of Obsidian");
+        SOUL_OF_OBSIDIAN_ATTRIBUTE_0 = BUILDER.worldRestart()
+                .comment("The added value of Soul Stealing Attribute, default 5(in percent).")
+                .defineInRange("soulStealing", 10D, 0D, 32767D);
+        SOUL_OF_OBSIDIAN_ATTRIBUTE_1 = BUILDER.worldRestart()
+                .comment("The added value of Soul Decrease Efficiency Attribute, default 5(in percent).")
+                .defineInRange("soulDecreaseEfficiency", 5D, 0D, 32767D);
+        SOUL_OF_OBSIDIAN_PERCENT_INCREASE = BUILDER.worldRestart()
+                .comment("Defined the increase in probability of special death loot from some creatures for this charm, default 25(in percent).")
+                .defineInRange("specialLootPercentIncrease", 25D, 0D, 100D);
+        BUILDER.pop();
         SPEC = BUILDER.build();
     }
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         if (SPEC.isLoaded()) {
-            bsDamageBoost = BLESSING_SCROLL_DAMAGE_BOOST.get();
-            bsAttackSpeedBoost = BLESSING_SCROLL_ATTACK_SPEED_BOOST.get();
-            bsDodgeBoost = BLESSING_SCROLL_DODGE_BOOST.get();
-            bsMaxDodge = BLESSING_SCROLL_MAX_DODGE.get();
+            blessingScrollDamageBoost = BLESSING_SCROLL_DAMAGE_BOOST.get();
+            blessingScrollAttackSpeedBoost = BLESSING_SCROLL_ATTACK_SPEED_BOOST.get();
+            blessingScrollDodgeBoost = BLESSING_SCROLL_DODGE_BOOST.get();
+            blessingScrollMaxDodge = BLESSING_SCROLL_MAX_DODGE.get();
             needleArmorPenetration = NEEDLE_ARMOR_PENETRATION.get();
             needleEnchantmentPiercing = NEEDLE_ENCHANTMENT_PIERCING.get();
-            needleAVMin = NEEDLE_ATTRIBUTE_INCREASEMENT_MIN.get();
-            needleAVMax = NEEDLE_ATTRIBUTE_INCREASEMENT_MAX.get();
+            needleAVMin = NEEDLE_ATTRIBUTE_INCREASE_MIN.get();
+            needleAVMax = NEEDLE_ATTRIBUTE_INCREASE_MAX.get();
             needleAttributeWeight = NEEDLE_ATTRIBUTE_WEIGHT.get();
-            dwResistance = DIMENSIONAL_WILL_RESISTANCE.get();
-            dwDeathEscape = DIMENSIONAL_WILL_DEATH_ESCAPE.get();
-            ewFreezingTime = ETERNAL_WATCH_FREEZING_TIME.get();
-            ewCooldown = ETERNAL_WATCH_COOLDOWN.get();
+            dimensionalWillResistance = DIMENSIONAL_WILL_RESISTANCE.get();
+            dimensionalWillDeathEscape = DIMENSIONAL_WILL_DEATH_ESCAPE.get();
+            eternalWatchFreezingTime = ETERNAL_WATCH_FREEZING_TIME.get();
+            eternalWatchCooldown = ETERNAL_WATCH_COOLDOWN.get();
             apocalyptiumChestplateTitle = APOCALYPTIUM_CHESTPLATE_TITLE_DISPLAY.get();
-            ewCooldownsCanBeReduced = ETERNAL_WATCH_COOLDOWN_CAN_BE_REDUCED.get();
+            eternalWatchCooldownsCanBeReduced = ETERNAL_WATCH_COOLDOWN_CAN_BE_REDUCED.get();
+            amuletOfSlimeCooldown = AMULET_OF_SLIME_COOLDOWN.get().floatValue();
+            goldFeatherSpeedMultiplier = GOLD_FEATHER_SPEED_MULTIPLIER.get().floatValue();
+            soulOfObsidianSoulStealing = SOUL_OF_OBSIDIAN_ATTRIBUTE_0.get().floatValue();
+            soulOfObsidianSoulDecreaseEfficiency = SOUL_OF_OBSIDIAN_ATTRIBUTE_1.get().floatValue();
+            soulOfObsidianSpecialLootIncrease = SOUL_OF_OBSIDIAN_PERCENT_INCREASE.get().floatValue();
         }
     }
 }

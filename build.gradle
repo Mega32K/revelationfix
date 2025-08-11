@@ -175,7 +175,6 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
 
@@ -214,11 +213,11 @@ dependencies {
     implementation fg.deobf("curse.maven:ArtofForging-596955:6510711")
     implementation fg.deobf("curse.maven:SoulFire-662413:6248077")
     implementation fg.deobf("curse.maven:Cobweb-968456:6089406")
-    implementation fg.deobf("curse.maven:nether-depths-upgrade-670011:5340329")
+    implementation fg.deobf("curse.maven:Spark-361579:4738952")
     implementation fg.deobf("curse.maven:GeckoLib-388172:5675221")
 
-    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.3-all"))  {
-        jarJar.ranged(it, "[1.3-all,)")
+    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.3.1-all"))  {
+        jarJar.ranged(it, "[1.3.1-all,)")
     }
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

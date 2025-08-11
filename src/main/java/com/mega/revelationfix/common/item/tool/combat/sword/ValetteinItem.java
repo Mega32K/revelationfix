@@ -1,6 +1,7 @@
 package com.mega.revelationfix.common.item.tool.combat.sword;
 
 import com.Polarice3.Goety.api.entities.IOwned;
+import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.mega.endinglib.util.entity.DamageSourceGenerator;
@@ -36,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon {
+public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon, ISoulRepair {
     private static final UUID MAX_HEALTH_ID = UUID.fromString("ae3f67b9-08e3-4866-8644-53770179117a");
 
     public ValetteinItem() {

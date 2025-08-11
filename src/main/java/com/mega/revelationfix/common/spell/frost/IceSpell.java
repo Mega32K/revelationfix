@@ -113,6 +113,7 @@ public class IceSpell extends EverChargeSpell {
         float frostAreaRadius = 12 + range * 2.5F;
         if (rightStaff)
             frostAreaRadius += 12.0F;
+        frostAreaRadius = Math.min(128, frostAreaRadius);
         if (caster.tickCount % 40 == 0) {
             PacketHandler.sendToAll(new IceSpellParticlePacket(caster.getUUID(), frostAreaRadius, IceSpellParticlePacket.CIRCLE_PARTICLES));
         }
@@ -128,8 +129,6 @@ public class IceSpell extends EverChargeSpell {
             DamageSource source = new DamageSourceGenerator(caster).source(DamageTypes.FREEZE, caster);
             PacketHandler.sendToAll(new IceSpellParticlePacket(caster.getUUID(), frostAreaRadius, IceSpellParticlePacket.TARGETS_PARTICLES));
             for (Entity entity : worldIn.getEntities(caster, new AABB(caster.blockPosition()).inflate(frostAreaRadius * (Math.sqrt(2) / 2) + 4), (entity -> EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && !EntityFinder.isAlliedTo(caster, entity)))) {
-
-
                 if (entity instanceof LivingEntity living) {
                     living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2), caster);
                     if (living.hurt(source, 3 + potency)) {

@@ -227,7 +227,7 @@ public class OdamanePlayerExpandedContext {
             } else if (teleportStayingTime > 0)
                 teleportStayingTime--;
         }
-        this.playerHasOdamane = CuriosFinder.hasCurio(player, (stack) -> stack.getItem() instanceof OdamaneHalo);
+        this.playerHasOdamane = CuriosFinder.hasCurio(player, GRItems.ODAMANE_HALO.get());
         if (ownedMonoliths.size() > 0)
             ownedMonoliths.removeIf(obsidianMonolith -> !this.playerHasOdamane || obsidianMonolith.isRemoved());
         if (!ATAHelper2.hasOdamane(player)) return;

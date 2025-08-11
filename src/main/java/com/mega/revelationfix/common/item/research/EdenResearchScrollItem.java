@@ -36,9 +36,4 @@ public class EdenResearchScrollItem extends Scroll implements IInvulnerableItem,
     public int dragonRendererEndColor(ItemStack stack) {
         return 0x00b6b6b6;
     }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new FontItemExtensions());
-    }
 }

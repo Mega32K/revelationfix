@@ -22,6 +22,7 @@ public class ModLootInject {
     private static final Lock LOCK = new ReentrantLock();
     private static final Set<ResourceLocation> ENTITY_LOOTS = Util.make(() -> {ObjectOpenHashSet<ResourceLocation> set = new ObjectOpenHashSet<>();
         set.add(new ResourceLocation("goety", "brood_mother"));
+        set.add(new ResourceLocation("goety", "obsidian_monolith"));
         return set;
     });
     private static final Set<ResourceLocation> CHEST_LOOTS = Util.make(() -> {ObjectOpenHashSet<ResourceLocation> set = new ObjectOpenHashSet<>();

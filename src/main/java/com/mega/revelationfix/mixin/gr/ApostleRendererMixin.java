@@ -14,42 +14,51 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import z1gned.goetyrevelation.ModMain;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
 @Mixin(ApostleRenderer.class)
 public abstract class ApostleRendererMixin extends CultistRenderer<Apostle> {
+    @Shadow(remap = false) @Final protected static ResourceLocation TEXTURE;
+    @Shadow(remap = false) @Final protected static ResourceLocation TEXTURE_2;
     @Unique
-    private static final ResourceLocation revelationfix$TEXTURE = new ResourceLocation("goety_revelation", "textures/entity/apollyon/apollyon.png");
+    private static final ResourceLocation APOLLYON_TEXTURE = new ResourceLocation(ModMain.MODID, "textures/entity/apollyon/apollyon.png");
     @Unique
-    private static final ResourceLocation TEXTURE_2 = new ResourceLocation("goety_revelation", "textures/entity/apollyon/apollyon_second.png");
+    private static final ResourceLocation APOLLYON_TEXTURE_2 = new ResourceLocation(ModMain.MODID, "textures/entity/apollyon/apollyon_second.png");
     @Unique
-    private static final ResourceLocation NETHER_TEXTURE = new ResourceLocation(Revelationfix.MODID, "textures/entity/apollyon/apollyon.png");
+    private static final ResourceLocation APOLLYON_NETHER_TEXTURE = new ResourceLocation(Revelationfix.MODID, "textures/entity/apollyon/apollyon.png");
     @Unique
-    private static final ResourceLocation NETHER_TEXTURE_2 = new ResourceLocation(Revelationfix.MODID, "textures/entity/apollyon/apollyon2.png");
-
+    private static final ResourceLocation APOLLYON_NETHER_TEXTURE_2 = new ResourceLocation(Revelationfix.MODID, "textures/entity/apollyon/apollyon2.png");
+    @Unique
+    private static final ResourceLocation MANBA_TEXTURE = new ResourceLocation(ModMain.MODID, "textures/entity/apollyon/manba_apollyon.png");
+    @Unique
+    private static final ResourceLocation MANBA_TEXTURE_2 = new ResourceLocation(ModMain.MODID, "textures/entity/apollyon/manba_apollyon_second.png");
     protected ApostleRendererMixin(EntityRendererProvider.Context p_i50966_1_, CultistModel<Apostle> p_i50966_2_, float p_i50966_3_) {
         super(p_i50966_1_, p_i50966_2_, p_i50966_3_);
     }
-
-    @Inject(
-            at = {@At("HEAD")},
-            method = {"getTextureLocation(Lcom/Polarice3/Goety/common/entities/boss/Apostle;)Lnet/minecraft/resources/ResourceLocation;"},
-            cancellable = true,
-            remap = false
-    )
-    private void setTexture(Apostle entity, CallbackInfoReturnable<ResourceLocation> cir) {
-        if (((ApollyonAbilityHelper) entity).allTitlesApostle_1_20_1$isApollyon()) {
-            if (entity.isInNether() && ClientConfig.enableNewNetherApollyonTexture)
-                cir.setReturnValue(entity.isSecondPhase() ? NETHER_TEXTURE_2 : NETHER_TEXTURE);
-            else cir.setReturnValue(entity.isSecondPhase() ? TEXTURE_2 : revelationfix$TEXTURE);
+    @Inject(remap = false, method = "getTextureLocation(Lcom/Polarice3/Goety/common/entities/boss/Apostle;)Lnet/minecraft/resources/ResourceLocation;", at = @At("HEAD"), cancellable = true)
+    private void overwriteGetTexture(Apostle entity, CallbackInfoReturnable<ResourceLocation> cir) {
+        cir.setReturnValue(this.getTextureLocation0(entity));
+    }
+    @Unique
+    public @NotNull ResourceLocation getTextureLocation0(@NotNull Apostle entity) {
+        ApollyonAbilityHelper abilityHelper = (ApollyonAbilityHelper) entity;
+        if (abilityHelper.allTitlesApostle_1_20_1$isApollyon()) {
+            if (SafeClass.yearDay() == 824)
+                return entity.isSecondPhase() ? MANBA_TEXTURE_2 : MANBA_TEXTURE;
+            if (entity.isInNether() && ClientConfig.enableNewNetherApollyonTexture) {
+               return entity.isSecondPhase() ? APOLLYON_NETHER_TEXTURE_2 : APOLLYON_NETHER_TEXTURE;
+            } else {
+                return entity.isSecondPhase() ? APOLLYON_TEXTURE_2 : APOLLYON_TEXTURE;
+            }
         }
-
+        return entity.isSecondPhase() ? TEXTURE_2 : TEXTURE;
     }
 
     @Inject(
@@ -90,7 +99,7 @@ public abstract class ApostleRendererMixin extends CultistRenderer<Apostle> {
     }
 
     @Override
-    protected boolean isBodyVisible(Apostle pEntity) {
+    protected boolean isBodyVisible(@NotNull Apostle pEntity) {
         ApollyonAbilityHelper helper = (ApollyonAbilityHelper) pEntity;
         if (helper.allTitlesApostle_1_20_1$isApollyon() &&
                 pEntity.isSecondPhase() &&

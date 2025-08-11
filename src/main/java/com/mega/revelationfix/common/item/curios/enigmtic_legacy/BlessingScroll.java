@@ -1,8 +1,8 @@
-package com.mega.revelationfix.common.item.curios.el;
+package com.mega.revelationfix.common.item.curios.enigmtic_legacy;
 
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.aizistral.enigmaticlegacy.handlers.SuperpositionHandler;
-import com.aizistral.enigmaticlegacy.items.CursedScroll;
+import com.aizistral.enigmaticlegacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -47,17 +47,17 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
             return multimap.build();
         });
         this.withHead(
-                CuriosMutableComponent.create().appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> ItemConfig.bsDamageBoost)),
-                CuriosMutableComponent.create().appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_speed", (s) -> ItemConfig.bsAttackSpeedBoost)),
-                CuriosMutableComponent.create().appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("item.goety_revelation.blessing_scroll.attribute0", (s) -> ItemConfig.bsDodgeBoost)),
+                CuriosMutableComponent.create().appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> ItemConfig.blessingScrollDamageBoost)),
+                CuriosMutableComponent.create().appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_speed", (s) -> ItemConfig.blessingScrollAttackSpeedBoost)),
+                CuriosMutableComponent.create().appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("item.goety_revelation.blessing_scroll.attribute0", (s) -> ItemConfig.blessingScrollDodgeBoost)),
                 CuriosMutableComponent.EMPTY,
                 CuriosMutableComponent.create(Component.translatable("item.goety_revelation.blessing_scroll.desc0"), LoreStyle.NONE),
                 CuriosMutableComponent.create(Component.translatable("item.goety_revelation.blessing_scroll.desc1"), LoreStyle.NONE)
         ).withTail(
                 CuriosMutableComponent.create(LoreStyle.NONE).appendFormat("%s", (o) -> SuperpositionHandler.getCurioStack(Wrapped.clientPlayer(), this) != o ? CuriosMutableComponent.NULL_ARRAY : new Object[]{I18n.get("item.goety_revelation.blessing_scroll.desc2")}),
-                CuriosMutableComponent.create().appendAttributeFormat(1, (o) -> SuperpositionHandler.getCurioStack(Wrapped.clientPlayer(), this) != o ? CuriosMutableComponent.NULL_ARRAY : new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> ItemConfig.bsDamageBoost * getLuckPoints()).apply(o), true),
-                CuriosMutableComponent.create().appendAttributeFormat(1, (o) -> SuperpositionHandler.getCurioStack(Wrapped.clientPlayer(), this) != o ? CuriosMutableComponent.NULL_ARRAY : new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_speed", (s) -> ItemConfig.bsAttackSpeedBoost * getLuckPoints()).apply(o), true),
-                CuriosMutableComponent.create().appendAttributeFormat(1, (o) -> SuperpositionHandler.getCurioStack(Wrapped.clientPlayer(), this) != o ? CuriosMutableComponent.NULL_ARRAY : new CuriosMutableComponent.AttributeDescFunction2("item.goety_revelation.blessing_scroll.attribute0", (s) -> Math.min(ItemConfig.bsMaxDodge, ItemConfig.bsDodgeBoost * getLuckPoints())).apply(o), true)
+                CuriosMutableComponent.create().appendAttributeFormat(1, (o) -> SuperpositionHandler.getCurioStack(Wrapped.clientPlayer(), this) != o ? CuriosMutableComponent.NULL_ARRAY : new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> ItemConfig.blessingScrollDamageBoost * getLuckPoints()).apply(o), true),
+                CuriosMutableComponent.create().appendAttributeFormat(1, (o) -> SuperpositionHandler.getCurioStack(Wrapped.clientPlayer(), this) != o ? CuriosMutableComponent.NULL_ARRAY : new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_speed", (s) -> ItemConfig.blessingScrollAttackSpeedBoost * getLuckPoints()).apply(o), true),
+                CuriosMutableComponent.create().appendAttributeFormat(1, (o) -> SuperpositionHandler.getCurioStack(Wrapped.clientPlayer(), this) != o ? CuriosMutableComponent.NULL_ARRAY : new CuriosMutableComponent.AttributeDescFunction2("item.goety_revelation.blessing_scroll.attribute0", (s) -> Math.min(ItemConfig.blessingScrollMaxDodge, ItemConfig.blessingScrollDodgeBoost * getLuckPoints())).apply(o), true)
         );
         MinecraftForge.EVENT_BUS.register(BlessingScroll.CuriosHandler.class);
     }
@@ -113,7 +113,7 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
             try {
                 if (slotContext.entity() != null) {
                     int luckPoints = (int) slotContext.entity().getAttributeValue(Attributes.LUCK);
-                    multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(UUID.fromString("6cc37aff-6609-46d1-a1b0-a4895b6655fd"), "Curios modifier", luckPoints * ItemConfig.bsAttackSpeedBoost / 100.0F, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                    multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(UUID.fromString("6cc37aff-6609-46d1-a1b0-a4895b6655fd"), "Curios modifier", luckPoints * ItemConfig.blessingScrollAttackSpeedBoost / 100.0F, AttributeModifier.Operation.MULTIPLY_TOTAL));
                 }
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
@@ -125,7 +125,7 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
     public boolean canEquip(SlotContext context, ItemStack stack) {
         LivingEntity livingEntity = context.entity();
         if (livingEntity instanceof Player player && super.canEquip(context, stack)) {
-            return !CuriosFinder.hasCurio(player, (s) -> s.getItem() instanceof CursedScroll);
+            return !CuriosFinder.hasCurio(player, EnigmaticItems.CURSED_SCROLL);
         }
         return false;
     }
@@ -144,7 +144,7 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
                 if (ATAHelper2.hasBlessingScroll(player)) {
                     float scale = 1F;
                     int luckPoints = (int) player.getAttributeValue(Attributes.LUCK);
-                    scale += luckPoints * ItemConfig.bsDamageBoost / 100.0F;
+                    scale += luckPoints * ItemConfig.blessingScrollDamageBoost / 100.0F;
                     event.setAmount(event.getAmount() * scale);
                 }
             }
@@ -156,7 +156,7 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
                 if (ATAHelper2.hasBlessingScroll(player)) {
                     if (event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
                     int luckPoints = (int) player.getAttributeValue(Attributes.LUCK);
-                    float probability = (float) Math.min(ItemConfig.bsMaxDodge / 100D, luckPoints * ItemConfig.bsDodgeBoost / 100.0F);
+                    float probability = (float) Math.min(ItemConfig.blessingScrollMaxDodge / 100D, luckPoints * ItemConfig.blessingScrollDodgeBoost / 100.0F);
                     if (player.getRandom().nextFloat() < probability)
                         event.setCanceled(true);
                 }
@@ -172,7 +172,7 @@ public class BlessingScroll extends SimpleDescriptiveCurio {
                     if (attributeInstance != null) {
                         int luckPoints = (int) player.getAttributeValue(Attributes.LUCK);
                         if (ATAHelper2.hasBlessingScroll(player)) {
-                            float amount = (float) (luckPoints * ItemConfig.bsAttackSpeedBoost / 100.0F);
+                            float amount = (float) (luckPoints * ItemConfig.blessingScrollAttackSpeedBoost / 100.0F);
                             AttributeModifier now = attributeInstance.getModifier(ATTACK_SPEED_ID);
                             if (now == null) {
                                 attributeInstance.addTransientModifier(new AttributeModifier(ATTACK_SPEED_ID, "Curios modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));

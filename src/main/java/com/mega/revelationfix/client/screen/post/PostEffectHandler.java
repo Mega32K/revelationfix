@@ -3,10 +3,7 @@ package com.mega.revelationfix.client.screen.post;
 import com.mega.endinglib.mixin.accessor.AccessorPostChain;
 import com.mega.endinglib.mixin.accessor.AccessorUniform;
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
-import com.mega.revelationfix.client.screen.post.custom.AberrationDistortionPostEffect;
-import com.mega.revelationfix.client.screen.post.custom.BarrelDistortionCoordinatesPostEffect;
-import com.mega.revelationfix.client.screen.post.custom.PuzzleEffect;
-import com.mega.revelationfix.client.screen.post.custom.TimeStoppingGrayPostEffect;
+import com.mega.revelationfix.client.screen.post.custom.*;
 import com.mojang.blaze3d.shaders.Uniform;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.client.renderer.PostChain;
@@ -108,5 +105,6 @@ public class PostEffectHandler {
         PostEffectHandler.registerEffect(new AberrationDistortionPostEffect());
         PostEffectHandler.registerEffect(new TimeStoppingGrayPostEffect());
         PostEffectHandler.registerEffect(new BarrelDistortionCoordinatesPostEffect());
+        PostEffectHandler.registerEffect(new TheEndEffect());
     }
 }

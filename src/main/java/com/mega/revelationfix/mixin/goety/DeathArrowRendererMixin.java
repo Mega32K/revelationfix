@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -36,9 +37,11 @@ public abstract class DeathArrowRendererMixin extends ArrowRenderer<DeathArrow> 
             WrappedTrailUpdate wrappedTrailUpdate = ec.revelationfix$getTrailData();
             if (wrappedTrailUpdate.shouldRenderTrail()) {
                 if (!deathArrow.onGround() || ec.revelationfix$inGroundTime() < 20) {
-                    double x = Mth.lerp(partialTicks, deathArrow.xOld, deathArrow.getX());
-                    double y = Mth.lerp(partialTicks, deathArrow.yOld, deathArrow.getY());
-                    double z = Mth.lerp(partialTicks, deathArrow.zOld, deathArrow.getZ());
+                    Vec3 position = deathArrow.position();
+                    Vec3 delta = deathArrow.position().subtract(deathArrow.xOld, deathArrow.yOld, deathArrow.zOld);
+                    double x = Mth.lerp(partialTicks, deathArrow.xOld + delta.x * -0.4F, position.x + delta.x * -0.4F);
+                    double y = Mth.lerp(partialTicks, deathArrow.yOld + delta.y * -0.4F, position.y + delta.y * -0.4F);
+                    double z = Mth.lerp(partialTicks, deathArrow.zOld + delta.z * -0.4F, position.z + delta.z * -0.4F);
                     final List<TrailPoint> trailPoints = wrappedTrailUpdate.trailPoints;
                     if (!trailPoints.isEmpty()) {
                         label0:

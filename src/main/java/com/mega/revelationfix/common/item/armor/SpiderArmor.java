@@ -8,6 +8,7 @@ import com.Polarice3.Goety.utils.MathHelper;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.armor.OptionArmorMaterial;
+import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
@@ -25,11 +26,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import z1gned.goetyrevelation.ModMain;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDiscount {
@@ -52,15 +56,18 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
     }
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new FontItemExtensions() {
+        consumer.accept(new IClientItemExtensions() {
+            private SpiderArmorModel model;
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 EntityModelSet modelSet = Minecraft.getInstance().getEntityModels();
                 ModelPart root = modelSet.bakeLayer(SpiderArmorModel.OUTER);
+                if (this.model == null)
+                    this.model = (new SpiderArmorModel(root));
                 boolean leggings = ArmorUtils.findLeggings(livingEntity, ModArmorMaterials.SPIDER);
                 boolean boots = ArmorUtils.findBoots(livingEntity, ModArmorMaterials.SPIDER);
                 boolean chestplate = ArmorUtils.findChestplate(livingEntity, ModArmorMaterials.SPIDER);
-                SpiderArmorModel model = (new SpiderArmorModel(root));
+
                 model.body_1.copyFrom(original.body);
                 model.body_1.visible = chestplate;
                 model.body_2.copyFrom(original.body);
@@ -145,5 +152,12 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
             }
         }
         super.addSimpleDescription(itemStack, level, components, tooltipFlag);
+    }
+
+    @Override
+    public void injectExtraArmorAttributes(ArmorModifiersBuilder builder) {
+        UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);
+        if (this.type == Type.BOOTS)
+            builder.addModifier(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor Modifier", .5D, AttributeModifier.Operation.ADDITION));
     }
 }

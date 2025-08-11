@@ -87,7 +87,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     //Summoned
     public LivingEntity commandPosEntity;
     public BlockPos commandPos;
-    public BlockPos boundPos;
+    public BlockPos boundPos = new BlockPos(3000000, 30000000, 30000000);
     public int commandTick;
     public int killChance;
     public int noHealTime;

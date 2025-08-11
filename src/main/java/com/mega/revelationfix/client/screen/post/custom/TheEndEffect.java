@@ -1,5 +1,6 @@
 package com.mega.revelationfix.client.screen.post.custom;
 
+import com.mega.endinglib.api.client.Easing;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;
@@ -47,7 +48,7 @@ public class TheEndEffect implements CustomScreenEffect {
             return;
         tickCountO = tickCount;
         if (AberrationDistortionPostEffect.INSTANCE.canUse()) {
-            if (tickCount < 45)
+            if (tickCount < 25)
                 tickCount++;
         } else if (tickCount > 0) tickCount--;
     }
@@ -67,11 +68,15 @@ public class TheEndEffect implements CustomScreenEffect {
 
     @Override
     public ResourceLocation getShaderLocation() {
-        return new ResourceLocation(Revelationfix.MODID, "shaders/post/te_color_convolve.json");
+        return new ResourceLocation(Revelationfix.MODID, "shaders/post/movie.json");
     }
 
     @Override
     public void onRenderTick(float partialTicks) {
+
+        float percent = Mth.lerp(partialTicks, TheEndEffect.tickCountO, TheEndEffect.tickCount) / 25F;
+        PostEffectHandler.updateUniform_post(this, "Percent", Easing.OUT_CUBIC.calculate(percent));
+        /*
         float ticks = Mth.lerp(partialTicks, tickCountO, tickCount) - 1.0F;
         if (mc.player != null) {
             ClientLevelExpandedContext context = ((ClientLevelInterface) mc.level).revelationfix$ECData();
@@ -99,10 +104,11 @@ public class TheEndEffect implements CustomScreenEffect {
             RenderSystem.applyModelViewMatrix();
         }
         PostEffectHandler.updateUniform_post(this, "Saturation", Math.max(0.05F, saturation - ticks * 0.02F));
+         */
     }
 
     @Override
     public boolean canUse() {
-        return false;
+        return tickCount > 0 || tickCountO > 0;
     }
 }

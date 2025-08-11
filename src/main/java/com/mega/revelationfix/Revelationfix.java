@@ -7,6 +7,7 @@ import com.mega.revelationfix.common.data.ingrident.EnchantmentBookIngredientSer
 import com.mega.revelationfix.common.data.ingrident.MysteryFragmentIngredientSerializer;
 import com.mega.revelationfix.common.data.ingrident.PuzzleIngredientSerializer;
 import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredientSerializer;
+import com.mega.revelationfix.common.data.loot.modifier.ModLootModifiersInit;
 import com.mega.revelationfix.common.init.*;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.proxy.ClientProxy;
@@ -24,7 +25,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -57,6 +57,7 @@ public class Revelationfix {
         ModStructureTypes.STRUCTURE_TYPES.register(modBus);
         ModStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(modBus);
         ModParticleTypes.PARTICLE_TYPES.register(modBus);
+        ModLootModifiersInit.GLOBAL_LOOT_MODIFIER.register(modBus);
         modBus.addListener(this::registerRecipeSerializers);
         ModPotions.register(modBus);
         new CommonProxy(context);
@@ -79,7 +80,6 @@ public class Revelationfix {
         context.registerConfig(ModConfig.Type.COMMON, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
 
     }
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void addAttributes(EntityAttributeModificationEvent event) {
         ModAttributes.addAttributes(event);

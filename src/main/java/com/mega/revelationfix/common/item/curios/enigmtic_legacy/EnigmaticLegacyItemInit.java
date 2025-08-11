@@ -1,4 +1,4 @@
-package com.mega.revelationfix.common.item.curios.el;
+package com.mega.revelationfix.common.item.curios.enigmtic_legacy;
 
 import com.mega.revelationfix.common.init.GRItems;
 import net.minecraft.world.item.CreativeModeTab;

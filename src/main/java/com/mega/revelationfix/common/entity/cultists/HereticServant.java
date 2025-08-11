@@ -86,16 +86,22 @@ public class HereticServant extends Heretic implements IMonsterServant {
     //Summoned
     public LivingEntity commandPosEntity;
     public BlockPos commandPos;
-    public BlockPos boundPos;
+    public BlockPos boundPos = new BlockPos(3000000, 30000000, 30000000);;
     public int commandTick;
     public int killChance;
     public int noHealTime;
     //Owned
     public boolean limitedLifespan;
     public int limitedLifeTicks;
-
     public HereticServant(EntityType<? extends Cultist> type, Level worldIn) {
         super(type, worldIn);
+    }
+
+    @Override
+    public float getMaxHealth() {
+        if (this.isApollyonSummoned())
+            return super.getMaxHealth() * 0.5F;
+        return super.getMaxHealth();
     }
 
     //Owned
@@ -517,6 +523,14 @@ public class HereticServant extends Heretic implements IMonsterServant {
 
     public void setNetherStaffSummoned(boolean z) {
         this.setFlags(4, z);
+    }
+
+    public boolean isApollyonSummoned() {
+        return this.getFlag(8);
+    }
+
+    public void setApollyonSummoned(boolean z) {
+        this.setFlags(8, z);
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {

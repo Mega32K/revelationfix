@@ -686,7 +686,16 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         return instance.isCreative() || ATAHelper2.hasOdamane(instance);
     }
     @WrapWithCondition(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
-    private boolean doomDisableNetherMeteor(Level level, Entity toSummon) {
+    private boolean doomDisableSpell(Level level, Entity toSummon) {
+        if (toSummon instanceof NetherMeteor || toSummon instanceof FireBlastTrap) {
+            if (this.isInNether() && this.revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
+                return !this.isDoomNow();
+            }
+        }
+        return true;
+    }
+    @WrapWithCondition(method = "teleportHits", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
+    private boolean doomDisableSpell2(Level level, Entity toSummon) {
         if (toSummon instanceof NetherMeteor || toSummon instanceof FireBlastTrap) {
             if (this.isInNether() && this.revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
                 return !this.isDoomNow();

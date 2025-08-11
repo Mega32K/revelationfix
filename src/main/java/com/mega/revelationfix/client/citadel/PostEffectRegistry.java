@@ -72,7 +72,6 @@ public class PostEffectRegistry {
     }
 
     public static void renderEffectForNextTick(ResourceLocation resourceLocation) {
-        if (SafeClass.usingShaderPack()) return;
         PostEffect effect = postEffects.get(resourceLocation);
         if (effect != null) {
             effect.setEnabled(true);
@@ -80,35 +79,32 @@ public class PostEffectRegistry {
     }
 
     public static void blitEffects() {
-        if (SafeClass.usingShaderPack()) return;
+        Minecraft mc = Minecraft.getInstance();
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         for (PostEffect postEffect : postEffects.values()) {
             if (postEffect.getPostChain() != null && postEffect.isEnabled()) {
-
-                postEffect.getRenderTarget().blitToScreen(Minecraft.getInstance().getWindow().getWidth(), Minecraft.getInstance().getWindow().getHeight(), false);
-                postEffect.setEnabled(false);
+                postEffect.getRenderTarget().blitToScreen(mc.getWindow().getWidth(), mc.getWindow().getHeight(), false);
                 postEffect.getRenderTarget().clear(Minecraft.ON_OSX);
-                Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
+                mc.getMainRenderTarget().bindWrite(false);
+                postEffect.setEnabled(false);
             }
         }
         RenderSystem.disableBlend();
         RenderSystem.defaultBlendFunc();
     }
 
-    public static void copyDepth(RenderTarget mainTarget) {
-        if (SafeClass.usingShaderPack()) return;
+    public static void clearAndBindWrite(RenderTarget mainTarget) {
         for (PostEffect postEffect : postEffects.values()) {
             if (postEffect.getPostChain() != null && postEffect.isEnabled()) {
                 postEffect.getRenderTarget().clear(Minecraft.ON_OSX);
-                postEffect.getRenderTarget().copyDepthFrom(mainTarget);
+                mainTarget.bindWrite(false);
             }
         }
     }
 
     public static void processEffects(RenderTarget mainTarget, float f) {
-        if (SafeClass.usingShaderPack()) return;
         for (PostEffect postEffect : postEffects.values()) {
             if (postEffect.isEnabled() && postEffect.postChain != null) {
                 postEffect.postChain.process(Minecraft.getInstance().getFrameTime());
@@ -138,7 +134,6 @@ public class PostEffectRegistry {
         }
 
         public boolean isEnabled() {
-            if (SafeClass.usingShaderPack()) return false;
             return enabled;
         }
 

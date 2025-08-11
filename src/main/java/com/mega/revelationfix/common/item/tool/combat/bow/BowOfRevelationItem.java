@@ -1,11 +1,13 @@
 package com.mega.revelationfix.common.item.tool.combat.bow;
 
+import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.Polarice3.Goety.init.ModSounds;
 import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
 import com.mega.revelationfix.common.item.FontItemExtensions;
+import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.MUtils;
 import net.minecraft.ChatFormatting;
@@ -38,7 +40,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class BowOfRevelationItem extends BowItem {
+public class BowOfRevelationItem extends BowItem implements ISoulRepair {
     public static final String FORCE_ADD_EFFECT = "forceAddEffect";
     public static final List<MobEffect> BAD_EFFECTS = new ArrayList<>();
 
@@ -104,8 +106,10 @@ public class BowOfRevelationItem extends BowItem {
                         for (int i2 = 0; i2 < repeatTimes; i2++) {
                             ArrowItem arrowitem = (ArrowItem) (itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
                             AbstractArrow deathArrow = new DeathArrow(level, player);
-                            if (player.isShiftKeyDown())
+                            if (player.isShiftKeyDown()) {
+                                ((DeathArrowEC) deathArrow).revelationfix$getTrailData().setShouldRenderTrail(true);
                                 deathArrow.addTag(BypassInvulArrow.TAG_BYPASS_NAME);
+                            }
                             deathArrow.addTag(FORCE_ADD_EFFECT);
                             ((DeathArrow) (deathArrow)).setEffectsFromItem(itemStack);
                             deathArrow = customArrow(deathArrow);
@@ -159,18 +163,7 @@ public class BowOfRevelationItem extends BowItem {
                             level.addFreshEntity(deathArrow);
                         }
                     }
-                    if (player.isShiftKeyDown()) {
-                        int id = player.getRandom().nextInt(1, 4);
-                        player.playSound(com.mega.revelationfix.common.init.ModSounds.STAR_CAST.get(), 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                        if (id == 1)
-                            player.playSound(SoundEvents.TRIDENT_RIPTIDE_1, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                        if (id == 2)
-                            player.playSound(SoundEvents.TRIDENT_RIPTIDE_2, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                        if (id == 3)
-                            player.playSound(SoundEvents.TRIDENT_RIPTIDE_3, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-
-                    } else
-                        level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.APOSTLE_SHOOT.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.APOSTLE_SHOOT.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !player.getAbilities().instabuild) {
                         itemstack.shrink(1);
                         if (itemstack.isEmpty()) {
@@ -194,12 +187,6 @@ public class BowOfRevelationItem extends BowItem {
     @Override
     public int getDamage(ItemStack stack) {
         return 0;
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new FontItemExtensions());
-        super.initializeClient(consumer);
     }
 
     @Override

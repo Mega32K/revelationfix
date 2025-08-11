@@ -168,20 +168,12 @@ public class EventUtil {
         SpellStatEC statItf = (SpellStatEC) src;
         if (player != null && !statItf.isModifiedByAttributes()) {
             try {
-                {
-                    double attributeValue = player.getAttributeValue(ModAttributes.spellAttribute(spell.getSpellType()));
-                    if (attributeValue > 0.0001D) {
-                        src.setPotency((int) (src.getPotency() + Math.round(attributeValue)));
-                    }
-                }
-                {
-                    double attributeValue = player.getAttributeValue(ModAttributes.SPELL_POWER.get());
-                    src.setPotency((int) (src.getPotency() + Math.round(attributeValue)));
-                }
-                {
-                    double attributeValue = player.getAttributeValue(ModAttributes.SPELL_POWER_MULTIPLIER.get());
-                    src.setPotency(Math.round(src.getPotency() * (float) attributeValue));
-                }
+                double addition = 0D;
+                addition += player.getAttributeValue(ModAttributes.spellAttribute(spell.getSpellType()));
+                addition += player.getAttributeValue(ModAttributes.SPELL_POWER.get());
+                addition += src.getPotency();
+                addition *= player.getAttributeValue(ModAttributes.SPELL_POWER_MULTIPLIER.get());
+                src.setPotency((int) Math.round(addition));
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }

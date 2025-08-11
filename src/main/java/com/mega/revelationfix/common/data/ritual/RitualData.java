@@ -2,6 +2,7 @@ package com.mega.revelationfix.common.data.ritual;
 
 import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

@@ -72,13 +72,17 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        if (this.onGround())
+        if (this.inGround)
             revelationfix$inGroundTime++;
         if (!level().isClientSide) {
-            if (revelationfix$inGroundTime > 20 && revelationfix$getTrailData().shouldRenderTrail())
+
+            if (revelationfix$inGroundTime > 20 && revelationfix$getTrailData().shouldRenderTrail()) {
                 revelationfix$wrappedTrailUpdate.setShouldRenderTrail(false);
-        } else if (revelationfix$inGroundTime > 30)
-            this.discard();
+                this.discard();
+
+            }
+
+        }
     }
 
     @Redirect(method = "doPostHurtEffects", at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/entities/boss/Apostle;heal(F)V"))

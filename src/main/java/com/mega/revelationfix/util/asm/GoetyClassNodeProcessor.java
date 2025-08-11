@@ -129,7 +129,6 @@ public class GoetyClassNodeProcessor implements IClassProcessor, Opcodes {
 
     @Override
     public void processClass(ILaunchPluginService.Phase phase, ClassNode classNode, Type type, AtomicBoolean modified) {
-
         String name = classNode.name;
         if (phase == ILaunchPluginService.Phase.AFTER) {
             if (!RevelationFixMixinPlugin.isUnsupportModifyingClass(name)) {

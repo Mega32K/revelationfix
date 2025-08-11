@@ -91,7 +91,7 @@ public class AbilityEvents {
                 //维度意志玩家减伤
             }
             if (ATAHelper2.hasDimensionalWill(player)) {
-                event.setAmount(event.getAmount() * (100 - ItemConfig.dwResistance) / 100.0F);
+                event.setAmount(event.getAmount() * (100 - ItemConfig.dimensionalWillResistance) / 100.0F);
             }
         }
     }
@@ -125,7 +125,7 @@ public class AbilityEvents {
                     }
                 }
             } else if (ATAHelper2.hasDimensionalWill(player)) {
-                if (player.getRandom().nextFloat() < ItemConfig.dwDeathEscape / 100.0F) {
+                if (player.getRandom().nextFloat() < ItemConfig.dimensionalWillDeathEscape / 100.0F) {
                     event.setCanceled(true);
                     player.setHealth(1F);
                     player.heal(7.0F);

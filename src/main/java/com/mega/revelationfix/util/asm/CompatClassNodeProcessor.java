@@ -20,7 +20,6 @@ public class CompatClassNodeProcessor implements IClassProcessor {
     public static Logger LOGGER = RevelationFixMixinPlugin.LOGGER;
     @Override
     public void processClass(ILaunchPluginService.Phase phase, ClassNode classNode, Type type, AtomicBoolean modified) {
-        //类名都是处理完的MCP名
         if (phase == ILaunchPluginService.Phase.BEFORE) {
             String name = classNode.name;
             if (LIVING_ENTITY_CLASS.equals(name)) {

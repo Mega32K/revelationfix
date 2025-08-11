@@ -5,6 +5,7 @@ import com.mega.endinglib.util.asm.injection.InjectionFinder;
 import com.mega.endinglib.util.mixin.ApplyCheckMixinConfigPlugin;
 import com.mega.revelationfix.util.asm.CompatClassNodeProcessor;
 import com.mega.revelationfix.util.asm.GoetyClassNodeProcessor;
+import com.mega.revelationfix.util.asm.NormalClassNodeProcessor;
 import cpw.mods.modlauncher.LaunchPluginHandler;
 import cpw.mods.modlauncher.Launcher;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
@@ -34,6 +35,7 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
     public static Logger LOGGER = LogManager.getLogger("RevelationFix");
     public static IClassProcessor GOETY_PROCESSOR = GoetyClassNodeProcessor.INSTANCE;
     public static IClassProcessor COMPAT_PROCESSOR = CompatClassNodeProcessor.INSTANCE;
+    public static IClassProcessor NORMAL_PROCESSOR = NormalClassNodeProcessor.INSTANCE;
     static {
         EVENT_UTIL_CLASS = EventUtil.class.getName().replace(".", "/");
         handCheckMixins.add(ABSTRACT_SPELL_MIXIN);
@@ -58,6 +60,7 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/HellfireMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/BarricadeSpellMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/BowItemMixin");
+        toRemovedMixins.add("z1gned/goetyrevelation/mixin/FireBlastTrapMixin");
         //BC兼容
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/LivingEntityRendererMixin");
         toRemovedMixins.add("z1gned/goetyrevelation/mixin/ApostleModelMixin");
@@ -90,6 +93,7 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
                         AtomicBoolean shouldWrite = new AtomicBoolean(false);
                         COMPAT_PROCESSOR.processClass(phase, classNode, classType, shouldWrite);
                         GOETY_PROCESSOR.processClass(phase, classNode, classType, shouldWrite);
+                        NORMAL_PROCESSOR.processClass(phase, classNode, classType, shouldWrite);
                         if (phase == Phase.BEFORE) {
                             if (name.equals(MOB_EFFECT_EVENT$EXPIRED)) {
                                 classNode.visitAnnotation("Lnet/minecraftforge/eventbus/api/Cancelable;", true);

@@ -45,7 +45,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     public static EntityDataAccessor<ItemStack> INSERT_WAND = SynchedEntityData.defineId(FakeSpellerEntity.class, EntityDataSerializers.ITEM_STACK);
     public static EntityDataAccessor<BlockPos> REACTOR_POS = SynchedEntityData.defineId(FakeSpellerEntity.class, EntityDataSerializers.BLOCK_POS);
-    private AccessorEntity accessorEntity;
+    private final AccessorEntity accessorEntity;
     public FakeSpellerEntity(Level worldIn, ItemStack wand, BlockPos reactorPos) {
         super(ModEntities.FAKE_SPELLER.get(), worldIn);
         this.setWand(wand);
@@ -54,6 +54,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     }
     public FakeSpellerEntity(EntityType<? extends Owned> type, Level worldIn) {
         super(type, worldIn);
+        this.accessorEntity = (AccessorEntity) this;
     }
     public ItemStack getWand() {
         return this.entityData.get(INSERT_WAND);

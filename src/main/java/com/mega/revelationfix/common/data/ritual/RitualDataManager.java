@@ -13,6 +13,7 @@ import com.mega.revelationfix.safe.mixinpart.goety.BrewEffectsInvoker;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,10 +25,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class RitualDataManager {
-    private static final Map<String, RitualData> REGISTRIES = new HashMap<>();
-
+    public static final Lock LOCK = new ReentrantLock();
+    public static final FriendlyByteBuf.Writer<String> PLUGIN_NAME_WRITER = FriendlyByteBuf::writeUtf;
+    public static final FriendlyByteBuf.Reader<String> PLUGIN_NAME_READER = FriendlyByteBuf::readUtf;
+    public static final FriendlyByteBuf.Writer<RitualData> SIMPLE_RITUAL_DATA_WRITER = RitualDataWriter.getInstance();
+    public static final FriendlyByteBuf.Reader<RitualData> SIMPLE_RITUAL_DATA_READER = RitualDataReader.getInstance();
+    public static final Map<String, RitualData> REGISTRIES = new HashMap<>();
     public static Map<String, RitualData> getRegistries() {
         return REGISTRIES;
     }

@@ -92,7 +92,7 @@ public class PlayerTickrateExecutor {
                 ins.getValue();
             });
         }
-        if (isInDoom(player) && !player.level().isClientSide) {
+        if (isInDoom(player) && !player.level().isClientSide && player.tickCount % 5 == 0) {
             Inventory inventory = player.getInventory();
             ItemCooldowns itemCooldowns = player.getCooldowns();
             ServerLevel serverLevel = (ServerLevel) player.level();
@@ -102,6 +102,23 @@ public class PlayerTickrateExecutor {
             AtomicBoolean changed = new AtomicBoolean(false);
             synchronized (stacks) {
                 AtomicInteger totalCount = new AtomicInteger(0);
+                List<ItemStack> toStealArmors = new ObjectArrayList<>();
+                for (ItemStack stack : inventory.armor) {
+                    if (!CommonConfig.inWhitelist(stack.getItem()) && !stack.isEmpty()) {
+                        CooldownsManager.setItemCooldowns(player, stack.getItem(), 70);
+                        changed.set(true);
+                        stacks.add(stack);
+                        toStealArmors.add(stack);
+                        if (totalCount.addAndGet(1) < 6) {
+                            FakeItemEntity itemEntity = new FakeItemEntity(player.level(), player.getX(), player.getY(0.5), player.getZ(), stack);
+                            itemEntity.setGlowingTag(true);
+                            player.level().addFreshEntity(itemEntity);
+                            itemEntity.push(player.getRandom().triangle(0D, 0.6D), 0D, player.getRandom().triangle(0D, 0.6D));
+                        }
+                    }
+                }
+                for (ItemStack toClear : toStealArmors)
+                    inventory.removeItem(toClear);
                 CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> iCuriosItemHandler.getCurios().values().forEach(iCurioStacksHandler -> {
                     for (int i = iCurioStacksHandler.getSlots() - 1; i >= 0; i--) {
                         ItemStack stack = iCurioStacksHandler.getStacks().getStackInSlot(i);
@@ -121,23 +138,7 @@ public class PlayerTickrateExecutor {
                         }
                     }
                 }));
-                List<ItemStack> toStealArmors = new ObjectArrayList<>();
-                for (ItemStack stack : inventory.armor) {
-                    if (!CommonConfig.inWhitelist(stack.getItem()) && !stack.isEmpty()) {
-                        CooldownsManager.setItemCooldowns(player, stack.getItem(), 70);
-                        changed.set(true);
-                        stacks.add(stack);
-                        toStealArmors.add(stack);
-                        if (totalCount.addAndGet(1) < 6) {
-                            FakeItemEntity itemEntity = new FakeItemEntity(player.level(), player.getX(), player.getY(0.5), player.getZ(), stack);
-                            itemEntity.setGlowingTag(true);
-                            player.level().addFreshEntity(itemEntity);
-                            itemEntity.push(player.getRandom().triangle(0D, 0.6D), 0D, player.getRandom().triangle(0D, 0.6D));
-                        }
-                    }
-                }
-                for (ItemStack toClear : toStealArmors)
-                    inventory.removeItem(toClear);
+
             }
             ItemStack findCrystal;
             if (!(findCrystal = findExistStorageCrystal(bannedStorageCrystals, player)).isEmpty()) {

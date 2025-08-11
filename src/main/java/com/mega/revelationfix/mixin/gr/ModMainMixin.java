@@ -2,7 +2,9 @@ package com.mega.revelationfix.mixin.gr;
 
 import com.Polarice3.Goety.compat.patchouli.PatchouliIntegration;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
+import com.google.common.collect.ImmutableList;
 import com.mega.revelationfix.common.init.GRItems;
+import com.mega.revelationfix.util.DynamicUtil;
 import com.mega.revelationfix.util.java.Self;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -46,23 +48,13 @@ public class ModMainMixin {
                     //output.accept(GRItems.HALO_OF_THE_END);
                     output.accept(ModItems.ASCENSION_HALO.get());
                     output.accept(ModItems.BROKEN_HALO.get());
-                    for (Field field : GRItems.class.getDeclaredFields()) {
-                        if (!field.isAnnotationPresent(Self.class) && Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(RegistryObject.class)) {
-                            try {
-                                RegistryObject<Item> ro = ((RegistryObject<Item>) field.get(null));
-                                if (ro != null) {
-                                    output.accept(ro.get());
-                                    if (GRItems.insertAfterTabMap.containsKey(ro)) {
-                                        for (ItemStack stack : GRItems.insertAfterTabMap.get(ro).get())
-                                            output.accept(stack);
-                                    }
-                                }
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-
+                    ImmutableList.copyOf(DynamicUtil.getDynamicCreativeTabItems()).forEach(ro -> {
+                        output.accept(ro.get());
+                        if (GRItems.insertAfterTabMap.containsKey(ro)) {
+                            for (ItemStack stack : GRItems.insertAfterTabMap.get(ro).get())
+                                output.accept(stack);
                         }
-                    }
+                    });
                 })
                 .build()
         );

@@ -1,5 +1,6 @@
 package com.mega.revelationfix.mixin.mousetweaks;
 
+import com.mega.endinglib.util.annotation.DevEnvMixin;
 import com.mega.endinglib.util.annotation.ModDependsMixin;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,6 +11,7 @@ import yalter.mousetweaks.forge.MouseTweaksForge;
 
 @Mixin(MouseTweaksForge.class)
 @ModDependsMixin("mousetweaks")
+@DevEnvMixin
 public class MouseTweaksForgeFixMixin {
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lyalter/mousetweaks/Main;initialize()V", remap = false))
     private void init() {

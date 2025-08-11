@@ -10,6 +10,7 @@ import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.config.CommonConfig;
+import com.mega.revelationfix.common.data.ingrident.PuzzleIngredient;
 import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredient;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.item.curios.OdamaneHalo;
@@ -138,16 +139,16 @@ public class ClientEventHandler {
         } else if (itemStack.hasTag()) {
             Item item = null;
             boolean add = false;
-            if (itemStack.is(GRItems.THE_END_PUZZLES)) {
+            if (PuzzleIngredient.puzzle(0).testPuzzleItem(itemStack)) {
                 add = true;
                 item = TheEndRitualItemContext.PUZZLE1;
-            } else if (itemStack.is(GRItems.THE_END_PUZZLES2)) {
+            } else if (PuzzleIngredient.puzzle(1).testPuzzleItem(itemStack)) {
                 add = true;
                 item = TheEndRitualItemContext.PUZZLE2;
-            } else if (itemStack.is(GRItems.THE_END_PUZZLES3)) {
+            } else if (PuzzleIngredient.puzzle(2).testPuzzleItem(itemStack)) {
                 add = true;
                 item = TheEndRitualItemContext.PUZZLE3;
-            } else if (itemStack.is(GRItems.THE_END_PUZZLES4)) {
+            } else if (PuzzleIngredient.puzzle(3).testPuzzleItem(itemStack)) {
                 add = true;
                 item = TheEndRitualItemContext.PUZZLE4;
             }

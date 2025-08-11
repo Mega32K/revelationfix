@@ -3,6 +3,7 @@ package com.mega.revelationfix.mixin.gr;
 import com.Polarice3.Goety.client.render.model.ApostleModel;
 import com.Polarice3.Goety.client.render.model.CultistModel;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.mega.revelationfix.common.compat.SafeClass;
 import net.minecraft.client.model.geom.ModelPart;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +29,10 @@ public class ApostleModelMixin<T extends Apostle> extends CultistModel<T> {
             remap = false
     )
     private void hatVisible(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
-        if (((ApollyonAbilityHelper) entity).allTitlesApostle_1_20_1$isApollyon())
+        if (((ApollyonAbilityHelper) entity).allTitlesApostle_1_20_1$isApollyon()) {
             this.hat2.visible = true;
+            if (SafeClass.yearDay() == 824)
+                this.nose.visible = false;
+        }
     }
 }

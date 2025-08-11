@@ -98,12 +98,12 @@ public class TheNeedleItem extends SimpleDescriptiveCurio {
 
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack) {
-        if (defaultModifiers.isEmpty()) {
+        if (defaultModifiers.get().isEmpty()) {
             ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
             multimap.put(SlotAttribute.getOrCreate("hands"), new AttributeModifier(UUID.fromString("807bd36c-c1a2-4d95-8f9e-511de9e7355d"), "Curios modifier", 1.0D, AttributeModifier.Operation.ADDITION));
             multimap.put(ModAttributes.ARMOR_PENETRATION.get(), new AttributeModifier(UUID.fromString("d1041913-ddb7-4dba-b90a-19a605fd32c0"), "Curios modifier", ItemConfig.needleArmorPenetration, AttributeModifier.Operation.MULTIPLY_BASE));
             multimap.put(ModAttributes.ENCHANTMENT_PIERCING.get(), new AttributeModifier(UUID.fromString("938f8fdb-7091-4853-9999-880bb30c45ae"), "Curios modifier", ItemConfig.needleEnchantmentPiercing, AttributeModifier.Operation.MULTIPLY_BASE));
-            defaultModifiers = multimap.build();
+            defaultModifiers = multimap::build;
         }
         return super.getAttributeModifiers(slotContext, uuid, stack);
     }
@@ -141,7 +141,7 @@ public class TheNeedleItem extends SimpleDescriptiveCurio {
                 {
                     float random = player.getRandom().nextFloat();
                     int index;
-                    //                           health  damage  attackSpd resistance
+                    //                      health  damage  attackSpd resistance
                     float[] base = new float[]{0.25F, 0.25F, 0.25F, 0.25F};
                     float luck = Mth.clamp(player.getLuck(), 0F, 20.0F) / 20.0F;
                     float[] weight;

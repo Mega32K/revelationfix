@@ -44,4 +44,8 @@ public class MysteryFragmentIngredient extends Ingredient {
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
         return MysteryFragmentIngredientSerializer.INSTANCE;
     }
+
+    public static MysteryFragmentIngredient puzzle(int index) {
+        return new MysteryFragmentIngredient(index);
+    }
 }

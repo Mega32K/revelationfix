@@ -1,8 +1,12 @@
 package com.mega.revelationfix.common.event.handler;
 
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
+import com.Polarice3.Goety.common.items.curios.WindyRobeItem;
+import com.Polarice3.Goety.utils.ColorUtil;
+import com.Polarice3.Goety.utils.ServerParticleUtil;
 import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
 import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
+import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.data.TimeStopSavedData;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
@@ -20,19 +24,25 @@ import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.safe.entity.LivingEventEC;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -76,6 +86,38 @@ public class CommonEventHandler {
      */
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class EntityEvents {
+        @SubscribeEvent(priority = EventPriority.HIGH)
+        public static void onEntityDeath(LivingDeathEvent event) {
+            LivingEntity entity = event.getEntity();
+            Level level = entity.level();
+            if (!level.isClientSide) {
+                if (ATAHelper2.hasAmuletOfSlime(entity) && event.getSource().is(DamageTypeTags.IS_FALL)) {
+                    Item curio = GRItems.AMULET_OF_SLIME.get();
+                    if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(curio)) {
+                        event.setCanceled(true);
+                        entity.setHealth(1F);
+                        entity.heal(1F);
+                        int size = entity.getRandom().nextInt(1, 3);
+                        {
+                            Slime slime = new Slime(EntityType.SLIME, level);
+                            slime.setSize(size, true);
+                            slime.setPos(entity.getRandomX(2D), entity.getY() + 0.5D, entity.getRandomZ(2D));
+                            level.addFreshEntity(slime);
+                        }
+                        if (level instanceof ServerLevel serverLevel) {
+                            ColorUtil color = new ColorUtil(0x71a7af);
+                            ServerParticleUtil.windParticle(serverLevel, color, 1.0F + serverLevel.random.nextFloat() * 0.5F, 0.0F, entity.getId(), entity.position());
+                            ServerParticleUtil.circularParticles(serverLevel, ParticleTypes.CLOUD, entity, 1.0F);
+                            ServerParticleUtil.windShockwaveParticle(serverLevel, color, 0.75F, 0.01F, 0.1F, 25, entity.getId(), entity.position());
+                        }
+                        if (entity instanceof Player player) {
+                            player.playSound(SoundEvents.SLIME_SQUISH);
+                            player.getCooldowns().addCooldown(curio, (int) (ItemConfig.amuletOfSlimeCooldown * 20));
+                        }
+                    }
+                }
+            }
+        }
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void onMobChangeTarget(LivingChangeTargetEvent event) {
             LivingEntity target = event.getNewTarget();

@@ -42,22 +42,20 @@ public class BlockShakingEntityRenderer extends EntityRenderer<BlockShakingEntit
 
     @Override
     public void render(BlockShakingEntity entity, float p_114635_, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
-        if (SafeClass.usingShaderPack()) return;
-        BlockState state = entity.getBlockState();
-
-        bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         PostEffectRegistry.renderEffectForNextTick(ClientProxy.HOLOGRAM_SHADER);
+        BlockState state = entity.getBlockState();
+        bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         PostEffectHandler.updateUniform_post(PostEffectRegistry.getPostChainFor(ClientProxy.HOLOGRAM_SHADER), "Alpha", entity.getProgress(partialTick) * 2.0F);
         BlockState blockstate = entity.getBlockState();
         RenderSystem.enablePolygonOffset();
         RenderSystem.polygonOffset(-1.0F, -10.0F);
-        RenderType renderType = GRRenderTypes.SOLID();
+        RenderType renderType = SafeClass.usingShaderPack() ? GRRenderTypes.getHologramLights() : GRRenderTypes.SOLID();
         if (blockstate.getRenderShape() == RenderShape.MODEL) {
             Level level = entity.level();
             if (blockstate != level.getBlockState(entity.blockPosition()) && blockstate.getRenderShape() != RenderShape.INVISIBLE) {
                 poseStack.pushPose();
                 BlockPos blockpos = new BlockPos((int) entity.getX(), (int) entity.getBoundingBox().maxY, (int) entity.getZ());
-                float scale = 1.002F;
+                float scale = 1.1F;
                 float offset = (scale - 1F) / 2f;
                 poseStack.translate(-offset, -2.0F - offset,  - offset);
                 poseStack.scale(scale, scale, scale);

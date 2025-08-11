@@ -80,6 +80,10 @@ public class ModAttributes {
      * 巫法弹射物速度
      */
     public static final RegistryObject<Attribute> SPELL_VELOCITY = ATTRIBUTES.register("spell_velocity", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".spell_velocity", 1D, -1000000, 32767D).setSyncable(true));
+    /**
+     * 灵魂豪夺
+     */
+    public static final RegistryObject<Attribute> SOUL_STEALING = ATTRIBUTES.register("soul_stealing", () -> new RangedAttribute("attribute.name." + ModMain.MODID + ".soul_stealing", 1D, 0D, 1000000));
     public static Object2ObjectOpenHashMap<SpellType, RegistryObject<Attribute>> spellAttributes = new Object2ObjectOpenHashMap<>();
 
     static {
@@ -109,6 +113,7 @@ public class ModAttributes {
         e.add(EntityType.PLAYER, SPELL_BURNING.get());
         e.add(EntityType.PLAYER, SPELL_DURATION.get());
         e.add(EntityType.PLAYER, SPELL_VELOCITY.get());
+        e.add(EntityType.PLAYER, SOUL_STEALING.get());
 
         e.add(ModEntities.FAKE_SPELLER.get(), SPELL_POWER_MULTIPLIER.get());
         e.add(ModEntities.FAKE_SPELLER.get(), SPELL_POWER.get());

@@ -50,15 +50,17 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
     }
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new FontItemExtensions() {
+        consumer.accept(new IClientItemExtensions() {
+            private SpiderDarkmageArmorModel model;
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 EntityModelSet modelSet = Minecraft.getInstance().getEntityModels();
                 ModelPart root = modelSet.bakeLayer(SpiderDarkmageArmorModel.OUTER);
+                if (this.model == null)
+                    this.model = new SpiderDarkmageArmorModel(root);
                 boolean leggings = ArmorUtils.findLeggings(livingEntity, ModArmorMaterials.SPIDER_DARKMAGE);
                 boolean boots = ArmorUtils.findBoots(livingEntity, ModArmorMaterials.SPIDER_DARKMAGE);
                 boolean chestplate = ArmorUtils.findChestplate(livingEntity, ModArmorMaterials.SPIDER_DARKMAGE);
-                SpiderDarkmageArmorModel model = (new SpiderDarkmageArmorModel(root));
                 model.setupAnim(livingEntity, 0, 0, livingEntity.tickCount, 0, 0);
                 model.body_1.copyFrom(original.body);
                 model.body_1.visible = chestplate;
@@ -95,9 +97,11 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
     @Override
     public void injectExtraArmorAttributes(ArmorModifiersBuilder builder) {
         UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);
-        builder.addModifier(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor Modifier", 0.5D, AttributeModifier.Operation.ADDITION));
+        if (this.type == Type.BOOTS)
+            builder.addModifier(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor Modifier", 1D, AttributeModifier.Operation.ADDITION));
         builder.addModifier(ModAttributes.SPELL_POWER.get(), new AttributeModifier(uuid, "Armor modifier", 0.35, AttributeModifier.Operation.ADDITION));
-        builder.addModifier(ModAttributes.SPELL_POWER_MULTIPLIER.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.ADDITION));
+        builder.addModifier(ModAttributes.SPELL_POWER.get(), new AttributeModifier(UUID.fromString("02a1113b-07b4-4e15-a23f-7485c054a3c3"), "Armor modifier", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        builder.addModifier(ModAttributes.SPELL_POWER_MULTIPLIER.get(), new AttributeModifier(uuid, "Armor modifier", .15, AttributeModifier.Operation.ADDITION));
         builder.addModifier(ModAttributes.CAST_DURATION.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.ADDITION));
         builder.addModifier(ModAttributes.SPELL_COOLDOWN.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.ADDITION));
     }

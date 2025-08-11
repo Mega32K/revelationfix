@@ -93,4 +93,8 @@ public class SpectreArmor extends BaseArmorItem implements ISoulRepair, ISoulDis
         }
         super.addSimpleDescription(itemStack, level, components, tooltipFlag);
     }
+
+    @Override
+    public void injectExtraArmorAttributes(ArmorModifiersBuilder builder) {
+    }
 }

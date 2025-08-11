@@ -1,5 +1,6 @@
 package com.mega.revelationfix.common.item.tool.combat.trident;
 
+import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.ImmutableMultimap;
@@ -47,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon {
+public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon, ISoulRepair {
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 8.0F;
     public static final float SHOOT_POWER = 2.5F;
@@ -193,7 +194,7 @@ public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon {
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new FontItemExtensions() {
+        consumer.accept(new IClientItemExtensions() {
             public static final HumanoidModel.ArmPose GUNGNIR = HumanoidModel.ArmPose.create("GUNGNIR", false, ((model, entity, arm) -> {
                 if (arm == HumanoidArm.LEFT) {
                     model.leftArm.xRot = model.leftArm.xRot * 0.5F - (float) Math.PI;
@@ -209,7 +210,7 @@ public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon {
                 if (!itemStack.isEmpty() && entityLiving.getUsedItemHand() == hand && entityLiving.getUseItemRemainingTicks() > 0) {
                     return GUNGNIR;
                 }
-                return super.getArmPose(entityLiving, hand, itemStack);
+                return IClientItemExtensions.super.getArmPose(entityLiving, hand, itemStack);
             }
         });
     }

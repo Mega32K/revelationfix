@@ -5,6 +5,7 @@ import com.mega.revelationfix.common.network.c2s.TeleportEntityTryEvent;
 import com.mega.revelationfix.common.network.c2s.TheEndDeathPacket;
 import com.mega.revelationfix.common.network.c2s.TryTimeStopSkill;
 import com.mega.revelationfix.common.network.s2c.*;
+import com.mega.revelationfix.common.network.s2c.data.RitualDataSyncPacket;
 import net.minecraft.core.Holder;
 import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +37,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(id(), SpellCircleStatePacket.class, SpellCircleStatePacket::encode, SpellCircleStatePacket::decode, SpellCircleStatePacket::handle);
         INSTANCE.registerMessage(id(), IceSpellParticlePacket.class, IceSpellParticlePacket::encode, IceSpellParticlePacket::decode, IceSpellParticlePacket::handle);
         INSTANCE.registerMessage(id(), TeleportEntityTryEvent.class, TeleportEntityTryEvent::encode, TeleportEntityTryEvent::decode, TeleportEntityTryEvent::handle);
+        INSTANCE.registerMessage(id(), RitualDataSyncPacket.class, RitualDataSyncPacket::encode, RitualDataSyncPacket::decode, RitualDataSyncPacket::handle);
     }
 
     public static int id() {

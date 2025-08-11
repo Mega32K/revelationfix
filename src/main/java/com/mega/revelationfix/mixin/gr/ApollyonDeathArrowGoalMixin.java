@@ -53,7 +53,7 @@ public abstract class ApollyonDeathArrowGoalMixin extends CastingGoal {
     }
     @Inject(method = "getCastWarmupTime", at = @At("HEAD"), cancellable = true, remap = false)
     private void getCastWarmupTime(CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(50);
+        cir.setReturnValue(20);
     }
     @Inject(method = "castSpell", at = @At("HEAD"), remap = false)
     private void castSpell(CallbackInfo ci) {

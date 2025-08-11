@@ -5,23 +5,31 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.Maverick;
 import com.mega.revelationfix.common.advancement.ModCriteriaTriggers;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.ironspell.IronSpellbooksEvents;
+import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.common.init.ModPotions;
+import com.mega.revelationfix.common.network.PacketHandler;
+import com.mega.revelationfix.common.network.s2c.data.RitualDataSyncPacket;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.curios.api.SlotTypePreset;
+
+import java.util.List;
 
 public class CommonProxy implements ModProxy {
     public CommonProxy(FMLJavaModLoadingContext context) {
@@ -30,6 +38,7 @@ public class CommonProxy implements ModProxy {
         modBus.addListener(this::enqueueIMC);
         modBus.addListener(this::setupEntityAttributeCreation);
         modBus.addListener(this::buildCreativeTab);
+        MinecraftForge.EVENT_BUS.register(this);
     }
     public void buildCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if (SafeClass.isTetraLoaded()) {
@@ -57,20 +66,19 @@ public class CommonProxy implements ModProxy {
     }
 
     private void enqueueIMC(InterModEnqueueEvent event) {
-        InterModComms.sendTo("curios", "register_type", () -> {
-            return SlotTypePreset.HEAD.getMessageBuilder().build();
-        });
-        InterModComms.sendTo("curios", "register_type", () -> {
-            return SlotTypePreset.HANDS.getMessageBuilder().build();
-        });
-        InterModComms.sendTo("curios", "register_type", () -> {
-            return SlotTypePreset.CURIO.getMessageBuilder().size(0).build();
-        });
-        InterModComms.sendTo("curios", "register_type", () -> {
-            return SlotTypePreset.NECKLACE.getMessageBuilder().build();
-        });
-        InterModComms.sendTo("curios", "register_type", () -> {
-            return SlotTypePreset.BACK.getMessageBuilder().build();
-        });
+        InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.HEAD.getMessageBuilder().build());
+        InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.HANDS.getMessageBuilder().build());
+        InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.CURIO.getMessageBuilder().size(0).build());
+        InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
+        InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.BACK.getMessageBuilder().build());
+        InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.CHARM.getMessageBuilder().size(2).build());
+    }
+    @SubscribeEvent
+    public void onDataSync(OnDatapackSyncEvent event) {
+        List<ServerPlayer> players = event.getPlayers();
+        if (!players.isEmpty()) {
+            for (ServerPlayer sp : players)
+                PacketHandler.sendToPlayer(sp, new RitualDataSyncPacket(RitualDataManager.getRegistries()));
+        }
     }
 }

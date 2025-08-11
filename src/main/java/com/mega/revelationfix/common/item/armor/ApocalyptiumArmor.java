@@ -8,9 +8,11 @@ import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.IDamageLimitItem;
 import com.mega.endinglib.api.item.IInvulnerableItem;
 import com.mega.endinglib.api.item.armor.ModifiableArmorItem;
+import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.item.armor.IGoetyDamageResistanceArmor;
 import com.mega.revelationfix.common.init.GRItems;
+import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -24,6 +26,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -37,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDamageResistanceArmor, ISoulRepair, ISoulDiscount, IDamageLimitItem, IInvulnerableItem {
@@ -220,5 +224,12 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.apocalyptium_set.desc1"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.apocalyptium_set.desc2"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         super.addSetDescription(itemStack, level, components, tooltipFlag);
+    }
+
+    @Override
+    public void injectExtraArmorAttributesBefore(ArmorModifiersBuilder builder) {
+        UUID uuid = BaseArmorItem.EXTRA_MODIFIER_UUID_PER_TYPE.get(type);
+        builder.addModifier(ModAttributes.SOUL_INCREASE_EFFICIENCY.get(), new AttributeModifier(uuid, "Armor Modifier", 0.0825D, AttributeModifier.Operation.MULTIPLY_BASE));
+        builder.addModifier(ModAttributes.SOUL_DECREASE_EFFICIENCY.get(), new AttributeModifier(uuid, "Armor Modifier", 0.0825D, AttributeModifier.Operation.MULTIPLY_BASE));
     }
 }

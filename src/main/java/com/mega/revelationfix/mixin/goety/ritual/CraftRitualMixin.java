@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
 import com.Polarice3.Goety.common.blocks.entities.PedestalBlockEntity;
 import com.Polarice3.Goety.common.crafting.RitualRecipe;
+import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.common.ritual.CraftItemRitual;
 import com.Polarice3.Goety.common.ritual.Ritual;
 import com.Polarice3.Goety.utils.ItemHelper;
@@ -24,10 +25,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -135,6 +133,12 @@ public abstract class CraftRitualMixin extends Ritual implements RitualRecipeInt
 
         }
         return false;
+    }
+    @ModifyArg(method = "finish", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/items/IItemHandler;insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", remap = false), remap = false)
+    private ItemStack result(ItemStack stack) {
+        if (stack.is(ModItems.JEI_DUMMY_NONE.get()))
+            return ItemStack.EMPTY;
+        return stack;
     }
 
 }

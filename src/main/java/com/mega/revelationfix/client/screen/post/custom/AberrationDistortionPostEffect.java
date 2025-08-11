@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -58,6 +59,7 @@ public class AberrationDistortionPostEffect implements CustomScreenEffect {
             {
                 float f = (maxSize - distance) * .1F / (maxSize / 20.0F);
                 PostEffectHandler.updateUniform_post(this, "Multiplier", Easing.IN_SINE.interpolate(f, 0F, 2F) * 0.01F + (float) (Math.random() - 0.5F) * (1.0F - distance / maxSize) * 0.08F * 0.2F);
+
             }
         }
     }

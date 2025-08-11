@@ -2,6 +2,7 @@ package com.mega.revelationfix.mixin.goety.ritual;
 
 import com.Polarice3.Goety.common.blocks.entities.RitualBlockEntity;
 import com.Polarice3.Goety.common.ritual.RitualRequirements;
+import com.mega.revelationfix.common.data.ingrident.PuzzleIngredient;
 import com.mega.revelationfix.common.data.ritual.RitualData;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.init.GRItems;
@@ -102,19 +103,19 @@ public class RitualRequirementsMixin {
         }
         if (craftType.equals(ModRitualTypes.THE_END)) {
             for (ItemFrame frame : pLevel.getEntitiesOfClass(ItemFrame.class, new AABB(pPos).inflate(RANGE))) {
-                if (!puzzle1.get() && frame.getItem().is(GRItems.THE_END_PUZZLES)) {
+                if (!puzzle1.get() && PuzzleIngredient.puzzle(0).test(frame.getItem())) {
                     fourthCount++;
                     puzzle1.set(true);
                 }
-                if (!puzzle2.get() && frame.getItem().is(GRItems.THE_END_PUZZLES2)) {
+                if (!puzzle2.get() && PuzzleIngredient.puzzle(1).test(frame.getItem())) {
                     fourthCount++;
                     puzzle2.set(true);
                 }
-                if (!puzzle3.get() && frame.getItem().is(GRItems.THE_END_PUZZLES3)) {
+                if (!puzzle3.get() && PuzzleIngredient.puzzle(2).test(frame.getItem())) {
                     fourthCount++;
                     puzzle3.set(true);
                 }
-                if (!puzzle4.get() && frame.getItem().is(GRItems.THE_END_PUZZLES4)) {
+                if (!puzzle4.get() && PuzzleIngredient.puzzle(3).test(frame.getItem())) {
                     fourthCount++;
                     puzzle4.set(true);
                 }

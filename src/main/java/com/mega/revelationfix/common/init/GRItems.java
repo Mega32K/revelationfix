@@ -8,6 +8,8 @@ import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.item.AllRightsServantEgg;
 import com.mega.revelationfix.common.item.armor.*;
+import com.mega.revelationfix.common.item.curios.*;
+import com.mega.revelationfix.common.item.curios.robe.ApollyonRobeItem;
 import com.mega.revelationfix.common.item.research.EdenResearchScrollItem;
 import com.mega.revelationfix.common.item.research.GodForgingResearchScrollItem;
 import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
@@ -15,11 +17,7 @@ import com.mega.revelationfix.common.item.tool.combat.trident.GungnirItem;
 import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
 import com.mega.revelationfix.common.item.tool.combat.whip.SpectreWhipItem;
 import com.mega.revelationfix.common.item.tool.combat.whip.VenomousSpiderWhipItem;
-import com.mega.revelationfix.common.item.curios.DimensionalWillItem;
-import com.mega.revelationfix.common.item.curios.EternalWatchItem;
-import com.mega.revelationfix.common.item.curios.OdamaneHalo;
-import com.mega.revelationfix.common.item.curios.TheNeedleItem;
-import com.mega.revelationfix.common.item.curios.el.EnigmaticLegacyItemInit;
+import com.mega.revelationfix.common.item.curios.enigmtic_legacy.EnigmaticLegacyItemInit;
 import com.mega.revelationfix.common.item.disc.ArchIllagerDisc;
 import com.mega.revelationfix.common.item.disc.ArchIllagerRemixDisc;
 import com.mega.revelationfix.common.item.disc.DecisiveMomentDisc;
@@ -33,25 +31,27 @@ import com.mega.revelationfix.common.spell.nether.HereticSpell;
 import com.mega.revelationfix.common.spell.nether.RevelationSpell;
 import com.mega.revelationfix.common.spell.nether.WitherQuietusSpell;
 import com.mega.revelationfix.util.java.Self;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.entity.SculkShriekerBlockEntity;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryObject;
 import z1gned.goetyrevelation.ModMain;
 import z1gned.goetyrevelation.item.ModItems;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class GRItems {
+    public static final List<RegistryObject<Item>> CREATIVE_TAB_ITEMS = Collections.synchronizedList(new ObjectArrayList<>());
     @ObjectHolder(value = "goety_revelation:atonement_voucher", registryName = "item")
     public static final Item ATONEMENT_VOUCHER_ITEM = null;
     @ObjectHolder(value = "goety_revelation:curios_storage_crystal", registryName = "item")
@@ -111,6 +111,10 @@ public class GRItems {
     public static RegistryObject<Item> THE_NEEDLE;
     public static RegistryObject<Item> DIMENSIONAL_WILL;
     public static RegistryObject<Item> ETERNAL_WATCH;
+    public static RegistryObject<Item> APOLLYON_ROBE;
+    public static RegistryObject<Item> SOUL_OF_OBSIDIAN;
+    public static RegistryObject<Item> AMULET_OF_SLIME;
+    public static RegistryObject<Item> GOLD_FEATHER;
     public static RegistryObject<Item> APOCALYPTIUM_INGOT;
     public static RegistryObject<Item> APOCALYPTIUM_TEMPLATE_ITEM;
     public static RegistryObject<Item> APOCALYPTIUM_HELMET;
@@ -252,6 +256,10 @@ public class GRItems {
         SPECTRE_DARKMAGE_BOOTS = ITEMS.register("spectre_darkmage_boots", ()-> new SpectreDarkmageArmor(ArmorItem.Type.BOOTS));
         GOD_FORGING_SCROLL = ITEMS.register("god_forging_scroll", GodForgingResearchScrollItem::new);
         EDEN_SCROLL = ITEMS.register("eden_scroll", EdenResearchScrollItem::new);
+        APOLLYON_ROBE = ITEMS.register("apollyon_robe", ApollyonRobeItem::new);
+        SOUL_OF_OBSIDIAN = ITEMS.register("soul_of_obsidian", SoulOfObsidianItem::new);
+        AMULET_OF_SLIME = ITEMS.register("amulet_of_slime", AmuletOfSlimeItem::new);
+        GOLD_FEATHER = ITEMS.register("gold_feather", GoldFeatherItem::new);
         if (SafeClass.isEnigmaticLegacyLoaded())
             EnigmaticLegacyItemInit.init();
 

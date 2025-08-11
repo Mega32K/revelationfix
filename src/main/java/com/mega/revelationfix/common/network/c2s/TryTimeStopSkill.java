@@ -49,8 +49,8 @@ public class TryTimeStopSkill {
                     return;
                 if (SafeClass.isTimeStop(serverLevel)) {
                     SafeClass.enableTimeStop(serverPlayer, false);
-                    CooldownsManager.setItemCooldowns(serverPlayer, GRItems.HALO_OF_THE_END, (int) (ItemConfig.ewCooldown * 20 * 1.666F));
-                    CooldownsManager.setItemCooldowns(serverPlayer, GRItems.ETERNAL_WATCH.get(), ItemConfig.ewCooldown * 20);
+                    CooldownsManager.setItemCooldowns(serverPlayer, GRItems.HALO_OF_THE_END, (int) (ItemConfig.eternalWatchCooldown * 20 * 1.666F));
+                    CooldownsManager.setItemCooldowns(serverPlayer, GRItems.ETERNAL_WATCH.get(), ItemConfig.eternalWatchCooldown * 20);
                 } else {
                     if (serverPlayer.isCreative()) {
                         SafeClass.enableTimeStop(serverPlayer, true, 300);
@@ -58,8 +58,8 @@ public class TryTimeStopSkill {
                         SafeClass.enableTimeStop(serverPlayer, true, 300);
                         CooldownsManager.setItemCooldowns(serverPlayer, GRItems.HALO_OF_THE_END, 1400);
                     } else if (ATAHelper2.hasEternalWatch(serverPlayer) && !serverPlayer.getCooldowns().isOnCooldown(GRItems.ETERNAL_WATCH.get())) {
-                        SafeClass.enableTimeStop(serverPlayer, true, ItemConfig.ewFreezingTime * 20);
-                        CooldownsManager.setItemCooldowns(serverPlayer, GRItems.ETERNAL_WATCH.get(), ItemConfig.ewCooldown * 20);
+                        SafeClass.enableTimeStop(serverPlayer, true, ItemConfig.eternalWatchFreezingTime * 20);
+                        CooldownsManager.setItemCooldowns(serverPlayer, GRItems.ETERNAL_WATCH.get(), ItemConfig.eternalWatchCooldown * 20);
                     }
                 }
             }

@@ -25,6 +25,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -170,7 +171,7 @@ public abstract class ObsidianMonolithMixin extends AbstractMonolith implements 
                     }
                 } else if (s == 1) {
                     summoned = new ZPiglinServant(ModEntityType.ZPIGLIN_BRUTE_SERVANT.get(), level);
-                } else if (s == 6) {
+                } else if (s == 6 && this.random.nextBoolean()) {
                     //MODIFIED
                     HereticServant servant = new HereticServant(ModEntities.HERETIC_SERVANT.get(), level);
                     BlockPos blockPos = BlockFinder.SummonRadius(this.blockPosition(), servant, level);
@@ -179,6 +180,7 @@ public abstract class ObsidianMonolithMixin extends AbstractMonolith implements 
                     servant.setLimitedLife(MobUtil.getSummonLifespan(level));
                     servant.finalizeSpawn((ServerLevel) level, level.getCurrentDifficultyAt(blockPos), MobSpawnType.MOB_SUMMONED, null, null);
                     servant.setTarget(apostle.getTarget());
+                    servant.setApollyonSummoned(true);
                     SummonCircle summonCircle = new SummonCircle(level, blockPos, servant, false, true, apostle);
                     return summonCircle;
                 }

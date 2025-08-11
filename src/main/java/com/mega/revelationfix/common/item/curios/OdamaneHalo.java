@@ -9,15 +9,13 @@ import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
-import com.mega.revelationfix.client.font.effect.LoreHelper;
-import com.mega.revelationfix.client.enums.ModChatFormatting;
-import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
-import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
+import com.mega.revelationfix.client.enums.ModChatFormatting;
+import com.mega.revelationfix.client.font.effect.LoreHelper;
+import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.odamane.common.HaloEvents;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.commands.CommandSourceStack;
@@ -39,7 +37,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
@@ -51,7 +48,6 @@ import top.theillusivec4.curios.api.SlotContext;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * @author MegaDarkness<br>
@@ -276,12 +272,6 @@ public class OdamaneHalo extends SimpleDescriptiveCurio implements IJEIInvisible
     @Override
     public boolean canEquip(SlotContext slotContext, ItemStack stack) {
         return super.canEquip(slotContext, stack) && !CuriosFinder.hasCurio(slotContext.entity(), this) && slotContext.identifier().equals("head");
-    }
-
-    @Override
-    public void initializeClient(@NotNull Consumer<IClientItemExtensions> consumer) {
-        super.initializeClient(consumer);
-        consumer.accept(new FontItemExtensions());
     }
 
     @Override
