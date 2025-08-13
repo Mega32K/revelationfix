@@ -58,6 +58,7 @@ public abstract class BlockRequirement implements Requirement {
     protected abstract void compileSelfData(JsonObject jsonObject);
     public abstract boolean canUse(Level level, BlockPos blockPos, BlockState state);
     public static BlockRequirement createFromJson(JsonElement element) {
+
         BlockRequirement requirement = null;
         if (element instanceof JsonObject jsonObject) {
             String type = GsonHelper.getAsString(jsonObject, "type", TYPE_NORMAL);

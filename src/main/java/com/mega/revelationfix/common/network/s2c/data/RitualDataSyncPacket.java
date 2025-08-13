@@ -35,8 +35,18 @@ public class RitualDataSyncPacket {
         RitualDataManager.LOCK.lock();
         try {
             synchronized (RitualDataManager.REGISTRIES) {
-                RitualDataManager.REGISTRIES.clear();
-                RitualDataManager.REGISTRIES.putAll(packet.copiedData);
+                Map<String, RitualData> data = packet.copiedData;
+                for (var entry : data.entrySet()) {
+                    RitualData packetRitualData = entry.getValue();
+                    RitualData ritualData = RitualDataManager.getRitualByPlugin(entry.getKey());
+                    if (ritualData == null)
+                        ritualData = packetRitualData;
+                    else {
+                        ritualData.setIconItemKey(packetRitualData.getIconItemKey());
+                        ritualData.setIconItem(packetRitualData.getIconItem());
+                    }
+                    RitualDataManager.REGISTRIES.put(entry.getKey(), ritualData);
+                }
             }
         } finally {
             RitualDataManager.LOCK.unlock();

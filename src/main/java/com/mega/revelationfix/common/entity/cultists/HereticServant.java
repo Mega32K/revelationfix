@@ -86,7 +86,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     //Summoned
     public LivingEntity commandPosEntity;
     public BlockPos commandPos;
-    public BlockPos boundPos = new BlockPos(3000000, 30000000, 30000000);;
+    public BlockPos boundPos = null;
     public int commandTick;
     public int killChance;
     public int noHealTime;

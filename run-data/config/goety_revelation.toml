@@ -1,0 +1,16 @@
+#Sets the apollyon's health，Default: 666
+apollyon_health = 666.0
+#Limit the amount of damage Apollyon takes each time. Default: 20.0
+apollyon_hurt_limit = 20.0
+#Sets the damage percentage Hellfire deals each time，Default: 0.0444
+hellfire_damage_amount = 0.0444
+#Enable player ambient sound, Default: true
+player_ambient_sound = true
+#Sets the damage percentage Hellcloud deals each time，Default: 0.001
+hellcloud_damage_amount = 0.001
+#Determines whether the player will be invincible when there is an Obsidian monolith, Default: true
+player_invincible = true
+#The probability of summoning Apollyon during the ritual of summoning an apostle (Chance: 1 / value),
+#Range: > 1
+summon_apollyon_random_value = 100
+

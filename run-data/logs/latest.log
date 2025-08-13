@@ -1,0 +1,125 @@
+[197月2025 10:44:20.609] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, E:\CollapsingWorld\System-e\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.27, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, revelationfix, --all, --output, E:\CollapsingWorld\System-e\RevelationFix\src\generated\resources, --existing, E:\CollapsingWorld\System-e\RevelationFix\src\main\resources, --mixin.config, revelationfix.mixins.json]
+[197月2025 10:44:20.612] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by JetBrains s.r.o.; OS Windows 10 arch amd64 version 10.0
+[197月2025 10:44:20.684] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[197月2025 10:44:20.715] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/E:/CollapsingWorld/System-e/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[197月2025 10:44:20.915] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file E:\CollapsingWorld\System-e\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.27\8001575a8be1ded39093805ca80ef976b5149b3f\javafmllanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[197月2025 10:44:20.919] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file E:\CollapsingWorld\System-e\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.27\17ff592420fbc1f933420f0a473783943ac176ce\lowcodelanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[197月2025 10:44:20.922] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file E:\CollapsingWorld\System-e\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.27\48269e2cdbd3c44641fb99a6b05f205b63efa37b\mclanguage-1.20.1-47.3.27.jar is missing mods.toml file
+[197月2025 10:44:20.926] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file E:\CollapsingWorld\System-e\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.27\8e7f3f29ab42d8116b9ee3f9f06fc8e8fa0fd12f\fmlcore-1.20.1-47.3.27.jar is missing mods.toml file
+[197月2025 10:44:21.304] [main/WARN] [net.minecraftforge.jarjar.selection.JarSelector/]: Attempted to select a dependency jar for JarJar which was passed in as source: mixinextras. Using Mod File: E:\CollapsingWorld\System-e\.gradle\caches\modules-2\files-2.1\io.github.llamalad7\mixinextras-forge\0.4.1\5c35573a7b76103724799ca1174a69699b8a9aec\mixinextras-forge-0.4.1.jar
+[197月2025 10:44:21.305] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 3 dependencies adding them to mods collection
+[197月2025 10:44:24.340] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[197月2025 10:44:24.449] [main/INFO] [mixin/]: Successfully loaded Mixin Connector [com.aizistral.enigmaticlegacy.MixinConnector]
+[197月2025 10:44:24.450] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, E:\CollapsingWorld\System-e\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, revelationfix, --all, --output, E:\CollapsingWorld\System-e\RevelationFix\src\generated\resources, --existing, E:\CollapsingWorld\System-e\RevelationFix\src\main\resources]
+[197月2025 10:44:24.463] [main/WARN] [mixin/]: Reference map 'revelationfix.refmap.json' for revelationfix.mixins.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.653] [main/INFO] [mixin/]: Remapping refMap tetra.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.654] [main/INFO] [mixin/]: Remapping refMap farmersdelight.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.658] [main/WARN] [mixin/]: Reference map 'moonlight-common-refmap.json' for moonlight-common.mixins.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.659] [main/WARN] [mixin/]: Reference map 'moonlight-forge-refmap.json' for moonlight.mixins.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.660] [main/INFO] [mixin/]: Remapping refMap mousetweaks.mixins.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.661] [main/INFO] [mixin/]: Remapping refMap mobbattle-common-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.662] [main/INFO] [mixin/]: Remapping refMap jade.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.663] [main/INFO] [mixin/]: Remapping refMap geckolib.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.669] [main/INFO] [Xenon/]: Loaded configuration file for Xenon: 91 options available, 3 override(s) found
+[197月2025 10:44:24.671] [main/INFO] [Xenon-GraphicsAdapterProbe/]: Searching for graphics cards...
+[197月2025 10:44:24.820] [main/INFO] [Xenon-GraphicsAdapterProbe/]: Found graphics card: GraphicsAdapterInfo[vendor=NVIDIA, name=NVIDIA GeForce RTX 3060, version=DriverVersion=31.0.15.3623]
+[197月2025 10:44:24.822] [main/WARN] [Xenon-Workarounds/]: Embeddium has applied one or more workarounds to prevent crashes or other issues on your system: [NVIDIA_THREADED_OPTIMIZATIONS]
+[197月2025 10:44:24.822] [main/WARN] [Xenon-Workarounds/]: This is not necessarily an issue, but it may result in certain features or optimizations being disabled. You can sometimes fix these issues by upgrading your graphics driver.
+[197月2025 10:44:24.824] [main/INFO] [mixin/]: Remapping refMap xenon-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.826] [main/INFO] [mixin/]: Remapping refMap player-animation-lib-minecraft_common-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.827] [main/INFO] [mixin/]: Remapping refMap caelus.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.827] [main/INFO] [mixin/]: Remapping refMap curios.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.828] [main/INFO] [mixin/]: Remapping refMap patchouli.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.831] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.832] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.834] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.835] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.837] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.839] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.841] [main/INFO] [mixin/]: Remapping refMap sodiumCompatibility-oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.844] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.847] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.849] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.852] [main/INFO] [mixin/]: Remapping refMap oculus-mixins-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.854] [main/INFO] [mixin/]: Remapping refMap tetraclip.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.856] [main/INFO] [mixin/]: Remapping refMap goety.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.857] [main/INFO] [mixin/]: Remapping refMap citadel.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.902] [main/WARN] [mixin/]: Reference map 'cobweb.refmap.json' for cobweb.mixins.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.903] [main/WARN] [mixin/]: Reference map 'cobweb.refmap.json' for cobweb.forge.mixins.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.904] [main/INFO] [mixin/]: Remapping refMap enigmaticaddons.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.908] [main/INFO] [mixin/]: Remapping refMap ending_library.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.909] [main/INFO] [mixin/]: Remapping refMap iceandfire.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.910] [main/WARN] [mixin/]: Reference map 'netherdepthsupgrade.refmap.json' for netherdepthsupgrade.mixins.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.911] [main/INFO] [mixin/]: Remapping refMap soul_fire_d.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.912] [main/INFO] [mixin/]: Remapping refMap soul_fire_d.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.913] [main/INFO] [mixin/]: Remapping refMap art_of_forging.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.915] [main/WARN] [mixin/]: Reference map 'dummmmmmy-common-refmap.json' for dummmmmmy-common.mixins.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.918] [main/WARN] [mixin/]: Reference map 'mixins.goety_revelation.refmap.json' for mixins.goety_revelation.json could not be read. If this is a development environment you can ignore this message
+[197月2025 10:44:24.919] [main/INFO] [mixin/]: Remapping refMap IBEEditor-1.20-common-refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:24.920] [main/INFO] [mixin/]: Remapping refMap enigmaticlegacy.refmap.json using E:\CollapsingWorld\System-e\RevelationFix\build\createSrgToMcp\output.srg
+[197月2025 10:44:25.976] [main/WARN] [mixin/]: Error loading class: net/darkhax/darkutils/features/charms/CharmEffects (java.lang.ClassNotFoundException: net.darkhax.darkutils.features.charms.CharmEffects)
+[197月2025 10:44:25.977] [main/WARN] [mixin/]: Error loading class: com/brandon3055/csg/ModEventHandler (java.lang.ClassNotFoundException: com.brandon3055.csg.ModEventHandler)
+[197月2025 10:44:25.980] [main/WARN] [mixin/]: Error loading class: vazkii/quark/content/tweaks/module/AutomaticRecipeUnlockModule (java.lang.ClassNotFoundException: vazkii.quark.content.tweaks.module.AutomaticRecipeUnlockModule)
+[197月2025 10:44:25.991] [main/WARN] [mixin/]: Error loading class: vazkii/quark/content/management/client/screen/widgets/MiniInventoryButton (java.lang.ClassNotFoundException: vazkii.quark.content.management.client.screen.widgets.MiniInventoryButton)
+[197月2025 10:44:26.042] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.world.sky.WorldRendererMixin' as rule 'mixin.features.render.world.sky' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.043] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.world.sky.ClientWorldMixin' as rule 'mixin.features.render.world.sky' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.043] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.world.sky.BackgroundRendererMixin' as rule 'mixin.features.render.world.sky' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.046] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.gui.font.GlyphRendererMixin' as rule 'mixin.features.render.gui.font' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.046] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.gui.font.FontSetMixin' as rule 'mixin.features.render.gui.font' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.047] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.entity.shadows.EntityRenderDispatcherMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.047] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.entity.remove_streams.ModelPartMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.047] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.entity.remove_streams.HierarchicalModelMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.047] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.entity.fast_render.ModelPartMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.047] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.entity.fast_render.CuboidMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.047] [main/WARN] [Xenon/]: Force-disabling mixin 'features.render.entity.cull.EntityRendererMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
+[197月2025 10:44:26.245] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[197月2025 10:44:26.443] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [revelationfix]
+[197月2025 10:44:26.764] [main/INFO] [mixin/]: Mixing MixinLivingEntity from enigmaticlegacy.mixins.json into net.minecraft.world.entity.LivingEntity
+[197月2025 10:44:26.995] [main/INFO] [mixin/]: Mixing MixinPlayer from enigmaticlegacy.mixins.json into net.minecraft.world.entity.player.Player
+[197月2025 10:44:27.070] [main/INFO] [mixin/]: Mixing MixinMobEffect from enigmaticlegacy.mixins.json into net.minecraft.world.effect.MobEffect
+[197月2025 10:44:27.639] [main/INFO] [mixin/]: Mixing AccessorAbstractArrowEntity from enigmaticlegacy.mixins.json into net.minecraft.world.entity.projectile.AbstractArrow
+[197月2025 10:44:27.708] [main/INFO] [mixin/]: Mixing MixinEnchantmentContainer from enigmaticlegacy.mixins.json into net.minecraft.world.inventory.EnchantmentMenu
+[197月2025 10:44:27.709] [main/INFO] [mixin/]: Renaming synthetic method lambda$onEnchantedItem$0(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/inventory/EnchantmentMenu;ILnet/minecraft/world/entity/player/Player;ILnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V to md4a357c$lambda$onEnchantedItem$0$0 in enigmaticlegacy.mixins.json:MixinEnchantmentContainer
+[197月2025 10:44:27.739] [main/INFO] [mixin/]: Mixing MixinItemStack from enigmaticlegacy.mixins.json into net.minecraft.world.item.ItemStack
+[197月2025 10:44:28.128] [main/INFO] [mixin/]: Mixing MixinEnderEyeItem from enigmaticlegacy.mixins.json into net.minecraft.world.item.EnderEyeItem
+[197月2025 10:44:28.150] [main/INFO] [mixin/]: Mixing MixinCrossbowItem from enigmaticlegacy.mixins.json into net.minecraft.world.item.CrossbowItem
+[197月2025 10:44:28.656] [main/INFO] [mixin/]: Mixing MixinEnderDragon from enigmaticlegacy.mixins.json into net.minecraft.world.entity.boss.enderdragon.EnderDragon
+[197月2025 10:44:28.656] [main/INFO] [mixin/]: Renaming synthetic method lambda$onTickDeath$0(Lnet/minecraft/server/level/ServerPlayer;)V to md4a357c$lambda$onTickDeath$0$0 in enigmaticlegacy.mixins.json:MixinEnderDragon
+[197月2025 10:44:28.795] [main/INFO] [mixin/]: Mixing MixinShulker from enigmaticlegacy.mixins.json into net.minecraft.world.entity.monster.Shulker
+[197月2025 10:44:28.913] [main/INFO] [mixin/]: Mixing MixinVillagerEntity from enigmaticlegacy.mixins.json into net.minecraft.world.entity.npc.Villager
+[197月2025 10:44:28.914] [main/INFO] [mixin/]: Mixing MixinVillager from enigmaticlegacy.mixins.json into net.minecraft.world.entity.npc.Villager
+[197月2025 10:44:29.036] [main/INFO] [mixin/]: Mixing MixinBindingCurseEnchantment from enigmaticlegacy.mixins.json into net.minecraft.world.item.enchantment.BindingCurseEnchantment
+[197月2025 10:44:29.909] [modloading-worker-0/INFO] [mixin/]: Mixing MixinEntityRenderer from enigmaticlegacy.mixins.json into net.minecraft.client.renderer.entity.EntityRenderer
+[197月2025 10:44:30.092] [modloading-worker-0/INFO] [mixin/]: Mixing MixinEnterBlockTrigger from enigmaticlegacy.mixins.json into net.minecraft.advancements.critereon.EnterBlockTrigger
+[197月2025 10:44:30.136] [modloading-worker-0/INFO] [mixin/]: Mixing MixinInventoryChangeTrigger from enigmaticlegacy.mixins.json into net.minecraft.advancements.critereon.InventoryChangeTrigger
+[197月2025 10:44:30.198] [modloading-worker-0/WARN] [mixin/]: Static binding violation: PRIVATE @Overwrite method setSectionDirty in xenon.mixins.json:core.render.world.WorldRendererMixin cannot reduce visibiliy of PUBLIC target method, visibility will be upgraded.
+[197月2025 10:44:30.422] [modloading-worker-0/INFO] [mixin/]: Mixing MixinSummonedEntityTrigger from enigmaticlegacy.mixins.json into net.minecraft.advancements.critereon.SummonedEntityTrigger
+[197月2025 10:44:30.488] [modloading-worker-0/WARN] [software.bernie.geckolib.GeckoLib/]: Minecraft.getInstance() was null, could not register reload listeners
+[197月2025 10:44:30.497] [modloading-worker-0/INFO] [Enigmatic Legacy/INFO]: Constructing mod instance...
+[197月2025 10:44:30.669] [modloading-worker-0/INFO] [Enigmatic Addons/INFO]: Constructing mod instance...
+[197月2025 10:44:30.779] [modloading-worker-0/INFO] [com.scouter.netherdepthsupgrade.modcompat.FarmersDelightCompat/]: Setting up compat for Farmers Delight
+[197月2025 10:44:31.025] [modloading-worker-0/INFO] [mixin/]: Mixing MixinPlayerList from enigmaticlegacy.mixins.json into net.minecraft.server.players.PlayerList
+[197月2025 10:44:31.066] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.27, for MC 1.20.1 with MCP 20230612.114412
+[197月2025 10:44:31.066] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.27 Initialized
+[197月2025 10:44:31.124] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[197月2025 10:44:31.129] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 2.562 ms
+[197月2025 10:44:31.134] [modloading-worker-0/WARN] [mixin/]: Method overwrite conflict for tetraClip$parent in tetraclip.mixins.json:tetra.GuiElementMixin, previously written by com.mega.revelationfix.mixin.tetra.GuiElementMixin. Skipping method.
+[197月2025 10:44:31.135] [modloading-worker-0/WARN] [mixin/]: Method overwrite conflict for tetraClip$setParent in tetraclip.mixins.json:tetra.GuiElementMixin, previously written by com.mega.revelationfix.mixin.tetra.GuiElementMixin. Skipping method.
+[197月2025 10:44:31.138] [modloading-worker-0/INFO] [com.github.franckyi.ibeeditor.common.CommonInit/]: Initializing IBE Editor - common
+[197月2025 10:44:31.175] [modloading-worker-0/INFO] [com.github.franckyi.ibeeditor.client.ClientInit/]: Initializing IBE Editor - client
+[197月2025 10:44:31.237] [modloading-worker-0/INFO] [Enigmatic Addons/INFO]: Mod instance constructed successfully.
+[197月2025 10:44:31.265] [modloading-worker-0/INFO] [mixin/]: Mixing MixinForgeHooksClient from enigmaticlegacy.mixins.json into net.minecraftforge.client.ForgeHooksClient
+[197月2025 10:44:31.265] [modloading-worker-0/INFO] [mixin/]: Renaming synthetic method lambda$onGatherTooltipComponents$4(Lcom/mojang/datafixers/util/Either;)Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent; to md4a357c$lambda$onGatherTooltipComponents$4$0 in enigmaticlegacy.mixins.json:MixinForgeHooksClient
+[197月2025 10:44:31.265] [modloading-worker-0/INFO] [mixin/]: Renaming synthetic method lambda$onGatherTooltipComponents$3(Lnet/minecraft/network/chat/FormattedText;)Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent; to md4a357c$lambda$onGatherTooltipComponents$3$1 in enigmaticlegacy.mixins.json:MixinForgeHooksClient
+[197月2025 10:44:31.265] [modloading-worker-0/INFO] [mixin/]: Renaming synthetic method lambda$onGatherTooltipComponents$2(Lnet/minecraft/client/gui/Font;Lcom/mojang/datafixers/util/Either;)I to md4a357c$lambda$onGatherTooltipComponents$2$2 in enigmaticlegacy.mixins.json:MixinForgeHooksClient
+[197月2025 10:44:31.265] [modloading-worker-0/INFO] [mixin/]: Renaming synthetic method lambda$onGatherTooltipComponents$1(Lnet/minecraft/world/inventory/tooltip/TooltipComponent;)Ljava/lang/Integer; to md4a357c$lambda$onGatherTooltipComponents$1$3 in enigmaticlegacy.mixins.json:MixinForgeHooksClient
+[197月2025 10:44:31.265] [modloading-worker-0/INFO] [mixin/]: Renaming synthetic method lambda$onGatherTooltipComponents$0(Ljava/util/List;Lnet/minecraft/world/inventory/tooltip/TooltipComponent;)V to md4a357c$lambda$onGatherTooltipComponents$0$4 in enigmaticlegacy.mixins.json:MixinForgeHooksClient
+[197月2025 10:44:31.378] [modloading-worker-0/INFO] [Enigmatic Legacy/INFO]: Mod instance constructed successfully.
+[197月2025 10:44:32.432] [main/INFO] [Moonlight/]: Initialized block sets in 7ms
+[197月2025 10:44:32.886] [main/INFO] [mixin/]: Mixing MixinForgeHooks from enigmaticlegacy.mixins.json into net.minecraftforge.common.ForgeHooks
+[197月2025 10:44:33.004] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/CollapsingWorld/System-e/RevelationFix/build/fg_cache/net/minecraftforge/forge/1.20.1-47.3.27_mapped_official_1.20.1/forge-1.20.1-47.3.27_mapped_official_1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[197月2025 10:44:33.005] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/CollapsingWorld/System-e/RevelationFix/build/fg_cache/net/minecraftforge/forge/1.20.1-47.3.27_mapped_official_1.20.1/forge-1.20.1-47.3.27_mapped_official_1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[197月2025 10:44:33.111] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
+[197月2025 10:44:33.178] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 67 ms
+[197月2025 10:44:33.178] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 67 ms
+[197月2025 10:44:33.180] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 2, old count: 2, new count: 3, removed stale: 0, written: 0

@@ -1,5 +1,6 @@
 package com.mega.revelationfix.client.renderer.entity;
 
+import com.Polarice3.Goety.init.ModTags;
 import com.mega.revelationfix.client.citadel.GRRenderTypes;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;
@@ -42,8 +43,10 @@ public class BlockShakingEntityRenderer extends EntityRenderer<BlockShakingEntit
 
     @Override
     public void render(BlockShakingEntity entity, float p_114635_, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
-        PostEffectRegistry.renderEffectForNextTick(ClientProxy.HOLOGRAM_SHADER);
         BlockState state = entity.getBlockState();
+        if (SafeClass.usingShaderPack())
+            if (!state.is(ModTags.Blocks.SHADE_STONE)) return;
+        PostEffectRegistry.renderEffectForNextTick(ClientProxy.HOLOGRAM_SHADER);
         bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         PostEffectHandler.updateUniform_post(PostEffectRegistry.getPostChainFor(ClientProxy.HOLOGRAM_SHADER), "Alpha", entity.getProgress(partialTick) * 2.0F);
         BlockState blockstate = entity.getBlockState();

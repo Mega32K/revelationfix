@@ -1,0 +1,560 @@
+# Configuration File
+
+@CONFIG_VERSION: 1.2.3.1
+
+##########################################################################################################
+# Accessibility Options
+#--------------------------------------------------------------------------------------------------------#
+# You may disable certain items or features from being obtainable/usable here.
+# Check more details in Enigmatic Legacy's Config Files.
+##########################################################################################################
+
+"Accessibility Options" {
+    # Whether or not Antique Book Bag should be enabled. [default: true, synchronized: yes]
+    B:AntiqueBookBagEnabled=true
+
+    # Whether or not Astral Spear should be enabled. [default: true, synchronized: yes]
+    B:AstralSpearEnabled=true
+
+    # Whether or not Charm of Hell Blade should be enabled. [default: true, synchronized: yes]
+    B:CharmofHellBladeEnabled=true
+
+    # Whether or not Charm of Scorched Sun should be enabled. [default: true, synchronized: yes]
+    B:CharmofScorchedSunEnabled=true
+
+    # Whether or not Common Potions should be enabled. [default: true, synchronized: yes]
+    B:CommonPotionsEnabled=true
+
+    # Whether or not Curse of Redemption Enchantment should be enabled. [default: true, synchronized: yes]
+    B:CurseofRedemptionEnchantmentEnabled=true
+
+    # Whether or not Disaster Broadsword should be enabled. [default: true, synchronized: yes]
+    B:DisasterBroadswordEnabled=true
+
+    # Whether or not Dragon Breath Bow should be enabled. [default: true, synchronized: yes]
+    B:DragonBreathBowEnabled=true
+
+    # Whether or not Emblem of Adventurer should be enabled. [default: true, synchronized: yes]
+    B:EmblemofAdventurerEnabled=true
+
+    # Whether or not Etherium Core should be enabled. [default: true, synchronized: yes]
+    B:EtheriumCoreEnabled=true
+
+    # Whether or not False Justice should be enabled. [default: true, synchronized: yes]
+    B:FalseJusticeEnabled=true
+
+    # Whether or not Forgers Gem should be enabled. [default: true, synchronized: yes]
+    B:ForgersGemEnabled=true
+
+    # Whether or not Forgotten Ice Crystal should be enabled. [default: true, synchronized: yes]
+    B:ForgottenIceCrystalEnabled=true
+
+    # Whether or not Fragment of the Earth should be enabled. [default: true, synchronized: yes]
+    B:FragmentoftheEarthEnabled=true
+
+    # Whether or not Frost Aspect Enchantment should be enabled. [default: true, synchronized: yes]
+    B:FrostAspectEnchantmentEnabled=true
+
+    # Whether or not Frost Protection Enchantment should be enabled. [default: true, synchronized: yes]
+    B:FrostProtectionEnchantmentEnabled=true
+
+    # Whether or not Frost Shattering Enchantment should be enabled. [default: true, synchronized: yes]
+    B:FrostShatteringEnchantmentEnabled=true
+
+    # Whether or not Holy Stone should be enabled. [default: true, synchronized: yes]
+    B:HolyStoneEnabled=true
+
+    # Whether or not Ichor Droplet should be enabled. [default: true, synchronized: yes]
+    B:IchorDropletEnabled=true
+
+    # Whether or not Ichor Spear should be enabled. [default: true, synchronized: yes]
+    B:IchorSpearEnabled=true
+
+    # Whether or not Ichoroot should be enabled. [default: true, synchronized: yes]
+    B:IchorootEnabled=true
+
+    # Whether or not Insignia of Despair should be enabled. [default: true, synchronized: yes]
+    B:InsigniaofDespairEnabled=true
+
+    # Whether or not Lost Engine should be enabled. [default: true, synchronized: yes]
+    B:LostEngineEnabled=true
+
+    # Whether or not Magic Quartz Ring should be enabled. [default: true, synchronized: yes]
+    B:MagicQuartzRingEnabled=true
+
+    # Whether or not Ode to Living Beings should be enabled. [default: true, synchronized: yes]
+    B:OdetoLivingBeingsEnabled=true
+
+    # Whether or not Pact of Dark Night should be enabled. [default: true, synchronized: yes]
+    B:PactofDarkNightEnabled=true
+
+    # Whether or not Potion of Cosmic should be enabled. [default: true, synchronized: yes]
+    B:PotionofCosmicEnabled=true
+
+    # Whether or not Primeval Cube should be enabled. [default: true, synchronized: yes]
+    B:PrimevalCubeEnabled=true
+
+    # Whether or not Promise of the Earth should be enabled. [default: true, synchronized: yes]
+    B:PromiseoftheEarthEnabled=true
+
+    # Whether or not Pure Heart should be enabled. [default: true, synchronized: yes]
+    B:PureHeartEnabled=true
+
+    # Whether or not Revival Leaf should be enabled. [default: true, synchronized: yes]
+    B:RevivalLeafEnabled=true
+
+    # Whether or not Ring of Redemption should be enabled. [default: true, synchronized: yes]
+    B:RingofRedemptionEnabled=true
+
+    # Whether or not Sanguinary Hunting Handbook should be enabled. [default: true, synchronized: yes]
+    B:SanguinaryHuntingHandbookEnabled=true
+
+    # Whether or not Scepter of Extradimensional should be enabled. [default: true, synchronized: yes]
+    B:ScepterofExtradimensionalEnabled=true
+
+    # Whether or not Scroll of Ignorance Curse should be enabled. [default: true, synchronized: yes]
+    B:ScrollofIgnoranceCurseEnabled=true
+
+    # Whether or not Scroll of Thunder Embrace should be enabled. [default: true, synchronized: yes]
+    B:ScrollofThunderEmbraceEnabled=true
+
+    # Whether or not The Arrogance of Chaos should be enabled. [default: true, synchronized: yes]
+    B:TheArroganceofChaosEnabled=true
+
+    # Whether or not The Bless should be enabled. [default: true, synchronized: yes]
+    B:TheBlessEnabled=true
+
+    # Whether or not The Curse Carver should be enabled. [default: true, synchronized: yes]
+    B:TheCurseCarverEnabled=true
+
+    # Whether or not Tome of Divination should be enabled. [default: true, synchronized: yes]
+    B:TomeofDivinationEnabled=true
+
+    # Whether or not Tome of Void should be enabled. [default: true, synchronized: yes]
+    B:TomeofVoidEnabled=true
+
+    # Whether or not Totem of Malice should be enabled. [default: true, synchronized: yes]
+    B:TotemofMaliceEnabled=true
+
+    # Whether or not Ultimate Potions should be enabled. [default: true, synchronized: yes]
+    B:UltimatePotionsEnabled=true
+}
+
+
+##########################################################################################################
+# Balance Options
+#--------------------------------------------------------------------------------------------------------#
+# Various options that mostly affect individual items
+##########################################################################################################
+
+"Balance Options" {
+    # List of items that can be stored in the Antique Book Bag. Examples: enigmaticaddons:false_justice. Changing this option required game restart to take effect. [default: , synchronized: no]
+    S:AntiqueBookBagList <
+     >
+
+    # List of Attributes that will never appear in Magic Quartz Flower. Changing this option required game restart to take effect. [default: [caelus:fall_flying], [goety_revelation:resistance], synchronized: no]
+    S:ArtificialFlowerAttributeBlackList <
+        caelus:fall_flying
+        goety_revelation:resistance
+     >
+
+    # List of Effects that will never appear in Magic Quartz Flower. Changing this option required game restart to take effect. [default: [alexscaves:darkness_incarnate], [alexsmobs:oiled], [aquamirae:crystallization], [cataclysm:ghost_form], [enigmaticdelicacy:fading], [enigmaticlegacy:blazing_strength], [goety:shadow_walk], [irons_spellbooks:abyssal_shroud], [irons_spellbooks:evasion], [irons_spellbooks:heartstop], [irons_spellbooks:true_invisibility], [ltc2:undying_benediction], [more_potion_effects:extension], [more_potion_effects:immortal], [more_potion_effects:static_life], [supernatural:supernatural], [unusual_delight:crystal_aspect], [unusual_delight:ember_aspect], [unusual_delight:vitality], synchronized: no]
+    S:ArtificialFlowerEffectBlackList <
+        alexscaves:darkness_incarnate
+        alexsmobs:oiled
+        aquamirae:crystallization
+        cataclysm:ghost_form
+        enigmaticdelicacy:fading
+        enigmaticlegacy:blazing_strength
+        goety:shadow_walk
+        irons_spellbooks:abyssal_shroud
+        irons_spellbooks:evasion
+        irons_spellbooks:heartstop
+        irons_spellbooks:true_invisibility
+        ltc2:undying_benediction
+        more_potion_effects:extension
+        more_potion_effects:immortal
+        more_potion_effects:static_life
+        supernatural:supernatural
+        unusual_delight:crystal_aspect
+        unusual_delight:ember_aspect
+        unusual_delight:vitality
+     >
+
+    # The max modifier of the Magic Quartz Flower. Measures in percentage. [range: 0 ~ 100, default: 16, synchronized: yes]
+    I:ArtificialFlowerRandomAttributeMaxModifier=16
+
+    # The modifier of the instantaneous effect provided by Magic Quartz Flower. Measures in percentage. [range: 0 ~ 100, default: 80, synchronized: yes]
+    I:ArtificialFlowerRandomInstantaneousEffectModifier=80
+
+    # The damage modifier when spear is powered. [range: 0.0 ~ 100.0, default: 2.5, synchronized: yes]
+    D:AstralSpearPoweredModifier=2.5
+
+    # How much less effective armor will be for those who bear the charm. Measured as percentage. [range: 50 ~ 100, default: 100, synchronized: yes]
+    I:CharmofHellBladeArmorDebuff=100
+
+    # The damage boost for who bear the charm. Measured as percentage. [range: 10 ~ 200, default: 100, synchronized: yes]
+    I:CharmofHellBladeDamageModifier=100
+
+    # The Cooldown to unequip this Charm. Defined as tick. [range: 0 ~ 32768, default: 1200, synchronized: yes]
+    I:CharmofHellBladeEquipCooldown=1200
+
+    # The Multiplier of healing when active the skill of Hell Blade Charm. [range: 0.0 ~ 100.0, default: 0.8, synchronized: yes]
+    D:CharmofHellBladeHealMultiplier=0.8
+
+    # The kill threshold of Hell Blade Charm to active the skill with Ring of Seven Curses. [range: 0 ~ 100, default: 50, synchronized: yes]
+    I:CharmofHellBladeKillCursedThreshold=50
+
+    # The kill threshold of Hell Blade Charm to active the skill. [range: 0 ~ 100, default: 75, synchronized: yes]
+    I:CharmofHellBladeKillThreshold=75
+
+    # The heal amount per second when you're in lava with this Charm. [range: 0.0 ~ 100.0, default: 2.0, synchronized: yes]
+    D:CharmofScorchedSunLavaHealAmount=2.0
+
+    # The lifesteal modifier provided by this charm when you attack a target on fire. Measured in percentage. [range: 0 ~ 100, default: 20, synchronized: yes]
+    I:CharmofScorchedSunLifestealModifier=20
+
+    # The probability to resist damage when you are attacked with this charm. Measured in percentage. [range: 0 ~ 100, default: 10, synchronized: yes]
+    I:CharmofScorchedSunResistanceProbability=10
+
+    # The damage modifier per every this curse. [range: 0 ~ 40, default: 4, synchronized: yes]
+    I:CurseofRedemptionEnchantmentResistanceModifier=4
+
+    # The damage modifier when you has the Bad Omen effect. [range: 0.0 ~ 100.0, default: 0.15, synchronized: yes]
+    D:DisasterBroadswordBadOmenDamageBoost=0.15
+
+    # The damage modifier after you parried with Disaster Broadsword successfully. [range: 0.0 ~ 100.0, default: 0.5, synchronized: yes]
+    D:DisasterBroadswordCounterattackBoost=0.5
+
+    # The crit damage modifier after you parried with Disaster Broadsword successfully. [range: 0.0 ~ 100.0, default: 1.5, synchronized: yes]
+    D:DisasterBroadswordCritBoost=1.5
+
+    # The damage of range attack after you parried the projectiles with Disaster Broadsword successfully. [range: 0.0 ~ 100.0, default: 10.0, synchronized: yes]
+    D:DisasterBroadswordRangeAttackDamage=10.0
+
+    # The max amount of potion effect you can apply on the arrow. [range: 1 ~ 10, default: 4, synchronized: yes]
+    I:DragonBreathBowMaxPotionAmount=4
+
+    # The Damage Resistance to your own dragon breath damage. Defined as percentage. [range: 0 ~ 100, default: 60, synchronized: yes]
+    I:DragonBreathBowOwnerResistance=60
+
+    # The attack damage boost of Emblem of Adventurer [range: 0.0 ~ 32768.0, default: 2.0, synchronized: yes]
+    D:EmblemofAdventurerAttackDamageModifier=2.0
+
+    # The attack speed multiplier of Emblem of Adventurer. Measures in percentage. [range: 0 ~ 100, default: 10, synchronized: yes]
+    I:EmblemofAdventurerAttackSpeedMultiplier=10
+
+    # Whether to enable Shift effect. [default: true, synchronized: yes]
+    B:EmblemofAdventurerShiftEnable=true
+
+    # Default amount of armor points provided by Etherium Core. [range: 0.0 ~ 256.0, default: 12.0, synchronized: yes]
+    D:EtheriumCoreArmor=12.0
+
+    # The multiplier of armor points of Etherium Core. [range: 0 ~ 100, default: 20, synchronized: yes]
+    I:EtheriumCoreArmorMultiplier=20
+
+    # The amount of armor toughness provided by Etherium Core when it's bearer has no armor equipped. [range: 0.0 ~ 256.0, default: 10.0, synchronized: yes]
+    D:EtheriumCoreArmorToughness=10.0
+
+    # The multiplier of armor toughness of Etherium Core. [range: 0 ~ 100, default: 40, synchronized: yes]
+    I:EtheriumCoreArmorToughnessMultiplier=40
+
+    # Active ability cooldown for Etherium Core. Measured in ticks. 20 ticks equal to 1 second. [range: 0 ~ 32768, default: 1800, synchronized: yes]
+    I:EtheriumCoreCooldown=1800
+
+    # The damage amplification conversion ratio of Etherium Core. Defined as percentage. [range: 0 ~ 100, default: 40, synchronized: yes]
+    I:EtheriumCoreDamageConversion=40
+
+    # The max damage amplification of Etherium Core. [range: 0.0 ~ 100.0, default: 25.0, synchronized: yes]
+    D:EtheriumCoreDamageConversionMax=25.0
+
+    # Resistance to knockback provided by Etherium Core. Defined as percentage. [range: 0 ~ 100, default: 50, synchronized: yes]
+    I:EtheriumCoreKnockbackResistance=50
+
+    # The max count to transporting enemies of Combat Mode. [range: 0 ~ 32768, default: 5, synchronized: yes]
+    I:EtheriumCoreMaxCombatCount=5
+
+    # The cooldown of Combat Mode when using continuously to long. Measured in ticks. [range: 100 ~ 32768, default: 150, synchronized: yes]
+    I:EtheriumCoreOverheatCooldown=150
+
+    # The cooldown of Transporting Mode. Measured in ticks. [range: 200 ~ 32768, default: 280, synchronized: yes]
+    I:EtheriumCoreTransportingCooldown=280
+
+    # Whether the halving experience by level or value. True for level. [default: false, synchronized: yes]
+    B:ForgerGemEXPLevelNotValue=false
+
+    # Whether to enable stricter detection for unbreakable forging when equipped the Forger's Gem. True for enable. [default: true, synchronized: yes]
+    B:ForgerGemStrictUnbreakableForge=true
+
+    # List of items that will never be unbreakable. Examples: minecraft:iron_sword. Changing this option required game restart to take effect. [default: [enigmaticaddons:totem_of_malice], [twilightforest:glass_sword], synchronized: no]
+    S:ForgerGemUnbreakableBlackList <
+        enigmaticaddons:totem_of_malice
+        twilightforest:glass_sword
+     >
+
+    # The extra repair cost after unbreakable forging when equipped the Forger's Gem. [range: 2 ~ 32768, default: 10, synchronized: yes]
+    I:ForgerGemUnbreakableRepairCost=10
+
+    # Active ability cooldown for Forgotten Ice Crystal. Measured in ticks. 20 ticks equal to 1 second. [range: 0 ~ 32768, default: 300, synchronized: yes]
+    I:ForgottenIceCrystalCooldown=300
+
+    # The damage of ability of Forgotten Ice Crystal. [range: 0.0 ~ 32768.0, default: 2.0, synchronized: yes]
+    D:ForgottenIceCrystalDamage=2.0
+
+    # The damage boost on target which has been fully frozen. Defined as percentage. [range: 0 ~ 256, default: 25, synchronized: yes]
+    I:ForgottenIceCrystalFrostBoost=25
+
+    # Resistance to projectile and sonic attacks provided by Forgotten Ice Crysta. Defined as percentage. [range: 0 ~ 100, default: 30, synchronized: yes]
+    I:ForgottenIceCrystalResistance=30
+
+    # The damage of thrown ichor spear [range: 0 ~ 32768, default: 4, synchronized: yes]
+    I:IchorSpearBaseDamage=4
+
+    # The amplifier of the ichor corrosion effect. [range: 1 ~ 32768, default: 1, synchronized: yes]
+    I:IchorSpearEffectAmplifier=1
+
+    # The duration of the ichor corrosion effect. Measures in ticks. [range: 0 ~ 32768, default: 600, synchronized: yes]
+    I:IchorSpearEffectDuration=600
+
+    # The attack damage boost of Insignia of Despair [range: 0.0 ~ 32768.0, default: 4.0, synchronized: yes]
+    D:InsigniaofDespairAttackDamageModifier=4.0
+
+    # The attack speed multiplier of Insignia of Despair. Measures in percentage. [range: 0 ~ 100, default: 16, synchronized: yes]
+    I:InsigniaofDespairAttackSpeedMultiplier=16
+
+    # The movement speed multiplier of Insignia of Despair. Measures in percentage. [range: 0 ~ 100, default: 5, synchronized: yes]
+    I:InsigniaofDespairMovementSpeedMultiplier=5
+
+    # Active ability cooldown for Lost Engine. Measured in ticks. 20 ticks equal to 1 second. [range: 0 ~ 32768, default: 0, synchronized: yes]
+    I:LostEngineCooldown=0
+
+    # The crit damage modifier of the Lost Engine. [range: 0 ~ 256, default: 60, synchronized: yes]
+    I:LostEngineCritDamageModifier=60
+
+    # List of entities that will be affected as Golem by the Lost Engine. Examples: minecraft:iron_golem. Changing this option required game restart to take effect. [default: , synchronized: no]
+    S:LostEngineExtraGolemList <
+     >
+
+    # The gravity multiplier of the Lost Engine. [range: 0.0 ~ 1.0, default: 0.4, synchronized: yes]
+    D:LostEngineGravityModifier=0.4
+
+    # The Knockback resistance modifier of the Lost Engine. [range: 0.0 ~ 256.0, default: 0.2, synchronized: yes]
+    D:LostEngineKnockbackResistanceModifier=0.2
+
+    # The speed multiplier of the Lost Engine. [range: 0.0 ~ 1.0, default: 0.1, synchronized: yes]
+    D:LostEngineSpeedModifier=0.1
+
+    # The Armor Toughness modifier of the Lost Engine. [range: 0.0 ~ 256.0, default: 4.0, synchronized: yes]
+    D:LostEngineToughnessModifier=4.0
+
+    # Modifier for Magic Damage vulnerability applied by Lost Engine. Default value of 2.0 means that player will receive twice as much damage from magic. [range: 1.0 ~ 256.0, default: 2.5, synchronized: yes]
+    D:LostEngineVulnerabilityModifier=2.5
+
+    # Default amount of armor provided by Magic Quartz Ring. [range: 0.0 ~ 256.0, default: 2.0, synchronized: yes]
+    D:MagicQuartzRingDefaultArmor=2.0
+
+    # Resistance to magic damage provided by Magic Quartz Ring. Defined as percentage. [range: 0 ~ 100, default: 30, synchronized: yes]
+    I:MagicQuartzRingMagicResistance=30
+
+    # Active ability cooldown for Ode to Living Beings. Measured in ticks. 20 ticks equal to 1 second. [range: 0 ~ 32768, default: 1200, synchronized: yes]
+    I:OdetoLivingBeingsCooldown=1200
+
+    # The percentage subtracted from damage redirected by Guide to Feral Hunt, if this is also possessed. [range: 0 ~ 100, default: 75, synchronized: yes]
+    I:OdetoLivingBeingsSynergyDamageReduction=75
+
+    # The boost modifier provided by Pact of Dark Night. [range: 0 ~ 100, default: 10, synchronized: yes]
+    I:PactofDarkNightAbilityBoost=10
+
+    # The dark condition for Pact of Dark Night to trigger the ability. [range: 0 ~ 14, default: 5, synchronized: yes]
+    I:PactofDarkNightDarkCondition=5
+
+    # The cooldown of Potion of Cosmic. Measured in ticks. [range: 0 ~ 32000, default: 2400, synchronized: yes]
+    I:PotionofCosmicCooldown=2400
+
+    # The Duration Multiplier of Potion of Cosmic. [range: 0.0 ~ 32.0, default: 1.6, synchronized: yes]
+    D:PotionofCosmicDurationMultiplier=1.6
+
+    # The percentage which trigger the Passive ability, damage / current health. Defined as percentage. [range: 0 ~ 100, default: 80, synchronized: yes]
+    I:PromiseoftheEarthAbilityTriggerPercent=80
+
+    # Amount of armor provided by Promise of the Earth. [range: 0.0 ~ 256.0, default: 5.0, synchronized: yes]
+    D:PromiseoftheEarthArmor=5.0
+
+    # Mining speed boost granted by Promise of the Earth. Defined as percentage. [range: 0 ~ 1000, default: 20, synchronized: yes]
+    I:PromiseoftheEarthBreakSpeed=20
+
+    # Passive ability cooldown for Promise of the Earth. Measured in ticks. 20 ticks equal to 1 second. [range: 0 ~ 32768, default: 1000, synchronized: yes]
+    I:PromiseoftheEarthCooldown=1000
+
+    # Correction coefficient for the First Curse. Defined as percentage. [range: 0 ~ 100, default: 25, synchronized: yes]
+    I:PromiseoftheEarthTotalResistance=25
+
+    # Amount of armor toughness provided by Promise of the Earth. [range: 0.0 ~ 256.0, default: 2.0, synchronized: yes]
+    D:PromiseoftheEarthToughness=2.0
+
+    # The effect radius of Revival Leaf' ability. [range: 0.0 ~ 32768.0, default: 5.0, synchronized: yes]
+    D:RevivalLeafAbilityRadius=5.0
+
+    # Active ability cooldown for Revival Leaf. Measured in ticks. 20 ticks equal to 1 second. [range: 0 ~ 32768, default: 320, synchronized: yes]
+    I:RevivalLeafCooldown=320
+
+    # The time required for each 0.5HP treatment from the natural regeneration of the Revival Leaf. Measured in ticks. [range: 5 ~ 32768, default: 40, synchronized: yes]
+    I:RevivalLeafNaturalRegenerationTick=40
+
+    # Level of Poison that bearer of the leaf will apply to entities they attack. [range: 0 ~ 3, default: 1, synchronized: yes]
+    I:RevivalLeafPoisonLevel=1
+
+    # Amount of ticks for which bearer of the leaf will apply Poison effect to entities they attack. 20 ticks equals to 1 second. [range: 0 ~ 32768, default: 160, synchronized: yes]
+    I:RevivalLeafPoisonTime=160
+
+    # Level of Regeneration that bearer of the leaf will apply to entities nearby when ability activated. [range: 0 ~ 3, default: 1, synchronized: yes]
+    I:RevivalLeafRegenerationLevel=1
+
+    # Amount of ticks for which bearer of the leaf will apply Regeneration effect to entities nearby when ability activated. [range: 0 ~ 32768, default: 180, synchronized: yes]
+    I:RevivalLeafRegenerationTime=180
+
+    # The damage boost of the Ring of Redemption. Measured in percentage. [range: 0 ~ 500, default: 20, synchronized: yes]
+    I:RingofRedemptionDamageBoost=20
+
+    # The damage resistance of the Ring of Redemption. Measured in percentage. [range: 0 ~ 100, default: 25, synchronized: yes]
+    I:RingofRedemptionDamageResistance=25
+
+    # The time required for each regeneration of Ring of Redemption. Measured in ticks. [range: 5 ~ 32768, default: 20, synchronized: yes]
+    I:RingofRedemptionRegenerationTick=20
+
+    # The damage boost on pet of Sanguinary Hunting Handbook. [range: 0.0 ~ 32768.0, default: 0.25, synchronized: yes]
+    D:SanguinaryHuntingHandbookDamageMultiplier=0.25
+
+    # Damage Amplification Limit of Scroll of Ignorance Curse. Defined as percentage. [range: 0.0 ~ 1000.0, default: 100.0, synchronized: yes]
+    D:ScrollofIgnoranceCurseDamageBoostLimit=100.0
+
+    # Heal Amplification Limit of Scroll of Ignorance Curse. Defined as percentage. [range: 0.0 ~ 1000.0, default: 50.0, synchronized: yes]
+    D:ScrollofIgnoranceCurseHealBoostLimit=50.0
+
+    # Knockback Resistance Limit Modifier of Scroll of Ignorance Curse. Defined as percentage. [range: 0.0 ~ 1000.0, default: 160.0, synchronized: yes]
+    D:ScrollofIgnoranceCurseKnockbackResistanceBoostLimit=160.0
+
+    # The Max Level of stored experience of Scroll of Ignorance Curse, which provides attribute amplification. [range: 0 ~ 1000, default: 1000, synchronized: yes]
+    I:ScrollofIgnoranceCurseXPLevelUpperLimit=1000
+
+    # The special damage resistance of The Arrogance of Chaos. Measured in percentage. [range: 0 ~ 100, default: 80, synchronized: yes]
+    I:TheArroganceofChaosDamageResistance=80
+
+    # The cooldown of special descending skill of The Arrogance of Chaos. [range: 200 ~ 2400, default: 500, synchronized: yes]
+    I:TheArroganceofChaosDescendingCooldown=500
+
+    # The damage modifier when hit the ground with elytra boost. [range: 1.0 ~ 10.0, default: 1.6, synchronized: yes]
+    D:TheArroganceofChaosDescendingPowerModifier=1.6
+
+    # The flying speed modifier when elytra boost. [range: 1.0 ~ 10.0, default: 1.6, synchronized: yes]
+    D:TheArroganceofChaosFlyingSpeedModifier=1.6
+
+    # Attack damage of The Bless, actual damage shown in tooltip will be ( 1 + this value ). [range: 0.0 ~ 32768.0, default: 6.0, synchronized: yes]
+    D:TheBlessAttackDamage=6.0
+
+    # Attack speed of The Bless. [range: -32768.0 ~ 32768.0, default: -1.6, synchronized: yes]
+    D:TheBlessAttackSpeed=-1.6
+
+    # The invulnerable time after hit while The Bless in inventory. [range: 40 ~ 200, default: 40, synchronized: yes]
+    I:TheBlessInvulnerableTime=40
+
+    # The cooldown of usage. Measured as tick. [range: 20 ~ 32768, default: 240, synchronized: yes]
+    I:TheCurseCarverCooldown=240
+
+    # The hurt damage amount of cursed target. [range: 10 ~ 100, default: 20, synchronized: yes]
+    I:TheCurseCarverCurseDamageRatio=20
+
+    # The hurt damage amount of cursed target. [range: 0.0 ~ 32768.0, default: 2.0, synchronized: yes]
+    D:TheCurseCarverCurseHurtAmount=2.0
+
+    # The hurt interval time of cursed target. Measured as ticks. [range: 1 ~ 40, default: 4, synchronized: yes]
+    I:TheCurseCarverCurseHurtInterval=4
+
+    # The hurt damage amount of cursed target. [range: 10 ~ 100, default: 20, synchronized: yes]
+    I:TheCurseCarverCurseModifierRatio=20
+
+    # List of entities that will be affected as Raider by the Totem of Malice. Examples: minecraft:witch. Changing this option required game restart to take effect. [default: , synchronized: no]
+    S:TotemofMaliceExtraRaiderList <
+     >
+
+    # The damage modifier to the Raiders. [range: 0.0 ~ 400.0, default: 1.5, synchronized: yes]
+    D:TotemofMaliceRaiderDamageBoost=1.5
+
+    # The damage resistance to the Raiders. [range: 0.0 ~ 400.0, default: 0.5, synchronized: yes]
+    D:TotemofMaliceRaiderDamageResistance=0.5
+}
+
+
+##########################################################################################################
+# Else Options
+#--------------------------------------------------------------------------------------------------------#
+# Various options that relates to secondary contents.
+##########################################################################################################
+
+"Else Options" {
+    # If true, the main creative tab of Enigmatic Legacy will display some uncompleted item. [default: false, synchronized: no]
+    B:FutureItemDisplay=false
+
+    # If true, the Hidden Recipe will display in JEI. [default: false, synchronized: no]
+    B:HiddenRecipeJEIDisplay=false
+
+    # If true, the main creative tab of Enigmatic Legacy will be resorted. [default: true, synchronized: no]
+    B:TabResorted=true
+}
+
+
+##########################################################################################################
+# Legacy Balance Options
+#--------------------------------------------------------------------------------------------------------#
+# Various options that mostly affect Enigmatic Legacy's items
+##########################################################################################################
+
+"Legacy Balance Options" {
+    # The Damage Limit of the Cube. [range: 50 ~ 32768, default: 100, synchronized: yes]
+    I:CubeDamageLimit=100
+
+    # List of effects that will appear in The Cube's random buffs. Examples: minecraft:absorption, minecraft:strength. Changing this option required game restart to take effect. [default: [minecraft:absorption], [minecraft:haste], [minecraft:jump_boost], [minecraft:regeneration], [minecraft:resistance], [minecraft:speed], [minecraft:strength], [minecraft:slow_falling], synchronized: no]
+    S:TheCubeRandomBuffs <
+        minecraft:absorption
+        minecraft:haste
+        minecraft:jump_boost
+        minecraft:regeneration
+        minecraft:resistance
+        minecraft:speed
+        minecraft:strength
+        minecraft:slow_falling
+     >
+
+    # List of effects that will appear in The Cube's random debuffs. Examples: minecraft:blindness, minecraft:nausea. Changing this option required game restart to take effect. [default: [minecraft:blindness], [minecraft:nausea], [minecraft:mining_fatigue], [minecraft:hunger], [minecraft:levitation], [minecraft:slowness], [minecraft:weakness], [minecraft:poison], [minecraft:wither], synchronized: no]
+    S:TheCubeRandomDebuffs <
+        minecraft:blindness
+        minecraft:nausea
+        minecraft:mining_fatigue
+        minecraft:hunger
+        minecraft:levitation
+        minecraft:slowness
+        minecraft:weakness
+        minecraft:poison
+        minecraft:wither
+     >
+}
+
+
+##########################################################################################################
+# The Worthy One Options
+#--------------------------------------------------------------------------------------------------------#
+# Various options that about the Events related to The Worthy One.
+##########################################################################################################
+
+"The Worthy One Options" {
+    # If true, When the proportion of curse time is long enough, there will be some changes in creatures' AI. [default: true, synchronized: yes]
+    B:EnableCurseBoost=true
+
+    # If true, when a creature spawned, it will immediately gain Curse Boost. [default: false, synchronized: yes]
+    B:ImmediatelyCurseBoost=false
+
+    # If true, when a creature dies, it will anger its surrounding peers. [default: true, synchronized: yes]
+    B:PartnerAnger=true
+}
+
+
