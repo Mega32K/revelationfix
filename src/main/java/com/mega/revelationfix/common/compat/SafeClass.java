@@ -7,7 +7,6 @@ import com.Polarice3.Goety.common.entities.neutral.AbstractNecromancer;
 import com.mega.endinglib.client.RendererUtils;
 import com.mega.endinglib.util.time.TimeStopEntityData;
 import com.mega.endinglib.util.time.TimeStopUtils;
-import com.mega.revelationfix.common.compat.fantasy_ending.FeSafeClass;
 import com.mega.revelationfix.common.compat.ironspell.IronSpellbooksSafeClass;
 import com.mega.revelationfix.common.compat.tetra.TetraWrapped;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
@@ -31,9 +30,9 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public class SafeClass {
+    private static final Date date = new Date();
     private static boolean lastUsingShader;
     private static boolean usingShader;
-    private static final Date date = new Date();
     private static int yearDate;
     private static int fantasyEndingLoaded = -1;
     private static int iafLoaded = -1;
@@ -46,24 +45,28 @@ public class SafeClass {
     private static int youkaishomecoming_Loaded = -1;
     private static int kubejs_loaded = -1;
     private static int irons_spellbooks_loaded = -1;
+
     public static int yearDay() {
         if (yearDate == 0) {
             yearDate = Integer.parseInt(String.format("%s%s", date.getMonth() + 1, date.getDate()));
         }
         return yearDate;
     }
+
     public static boolean isIronSpellbookslLoaded() {
         if (irons_spellbooks_loaded == -1) {
             irons_spellbooks_loaded = (EarlyConfig.modIds.contains("irons_spellbooks") || ModList.get().isLoaded("irons_spellbooks")) ? 1 : 2;
         }
         return irons_spellbooks_loaded == 1;
     }
+
     public static boolean isKJSLoaded() {
         if (kubejs_loaded == -1) {
             kubejs_loaded = (EarlyConfig.modIds.contains("kubejs") || ModList.get().isLoaded("kubejs")) ? 1 : 2;
         }
         return kubejs_loaded == 1;
     }
+
     public static boolean isYoukaiLoaded() {
         if (youkaishomecoming_Loaded == -1) {
             youkaishomecoming_Loaded = (EarlyConfig.modIds.contains("youkaishomecoming") || ModList.get().isLoaded("youkaishomecoming")) ? 1 : 2;
@@ -135,8 +138,7 @@ public class SafeClass {
             }
             lastUsingShader = usingShader;
             return usingShader;
-        }
-        else return false;
+        } else return false;
     }
 
     public static boolean isDoom(Apostle apostle) {
@@ -170,9 +172,11 @@ public class SafeClass {
     public static boolean isClientTimeStop() {
         return TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension;
     }
+
     public static boolean isTimeStop(ServerLevel serverLevel) {
         return TimeStopUtils.isTimeStop && TimeStopUtils.andSameDimension(serverLevel);
     }
+
     public static boolean isFieldTimeStop() {
         return TimeStopUtils.isTimeStop;
     }
@@ -201,6 +205,7 @@ public class SafeClass {
     public static Map<Attribute, UUID> getAttributes() {
         return TetraWrapped.getAttributes();
     }
+
     public static boolean isSpellGoal(Goal goal) {
         if (goal instanceof UseSpellGoal || goal instanceof SpellCastingCultist.UseSpellGoal || goal instanceof SpellCastingCultist.CastingASpellGoal || goal instanceof AbstractNecromancer.NecromancerRangedGoal || goal instanceof Heretic.CastingGoal) {
             return true;

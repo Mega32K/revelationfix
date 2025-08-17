@@ -4,12 +4,9 @@ import com.Polarice3.Goety.client.particles.WindParticleOption;
 import com.Polarice3.Goety.utils.ColorUtil;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Random;
 
 public class ClientParticleUtil {
     public static void windParticle(Level cleintLevel, ColorUtil color, float width, float height, int id, Vec3 vec3) {
@@ -17,8 +14,9 @@ public class ClientParticleUtil {
     }
 
     public static void windParticle(Level cleintLevel, ColorUtil color, float width, float height, int life, int id, Vec3 vec3) {
-        cleintLevel.addParticle(new WindParticleOption(color, width, height, life, id), vec3.x(), vec3.y(), vec3.z(), 0, 0,0);
+        cleintLevel.addParticle(new WindParticleOption(color, width, height, life, id), vec3.x(), vec3.y(), vec3.z(), 0, 0, 0);
     }
+
     public static <T extends ParticleOptions> void handleSendParticlesOnClient(Level level, T particle, double x, double y, double z, int count, double xDist, double yDist, double zDist, double maxSpeed) {
         boolean overrideLimiter = false;
         if (count == 0) {
@@ -33,7 +31,7 @@ public class ClientParticleUtil {
             }
         } else {
             RandomSource random = level.random;
-            for(int i = 0; i < count; ++i) {
+            for (int i = 0; i < count; ++i) {
                 double d1 = random.nextGaussian() * xDist;
                 double d3 = random.nextGaussian() * yDist;
                 double d5 = random.nextGaussian() * zDist;

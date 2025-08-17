@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class RitualRecipeMixin implements RitualRecipeInterface {
     @Unique
     private boolean revelationfix$keepingNBT = false;
+
     @Override
     public boolean revelationfix$isKeepingNbt() {
         return revelationfix$keepingNBT;

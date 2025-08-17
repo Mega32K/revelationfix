@@ -4,8 +4,6 @@ import com.google.gson.*;
 import com.mega.revelationfix.api.event.register.CustomBrewRegisterEvent;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.kjs.KjsSafeClass;
-import com.mega.revelationfix.common.compat.kjs.events.KjsEvents;
-import com.mega.revelationfix.common.compat.kjs.events.WitchBrewRegisterKjsEvent;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -24,6 +22,7 @@ import java.util.Map;
 public class BrewReloadListener extends SimpleJsonResourceReloadListener {
 
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
+
     public BrewReloadListener() {
         super(GSON, "goety_brew/brew");
     }
@@ -41,7 +40,8 @@ public class BrewReloadListener extends SimpleJsonResourceReloadListener {
                     JsonObject jsonObject = element.getAsJsonObject();
                     data.pluginName = jsonObject.get("plugin").getAsString();
                     JsonObject expanded_jo = jsonObject.get("expanded").getAsJsonObject();
-                    label_capacity: {
+                    label_capacity:
+                    {
                         if (!expanded_jo.has("capacity") || !expanded_jo.get("capacity").isJsonArray())
                             break label_capacity;
                         for (JsonElement jsonElement : expanded_jo.get("capacity").getAsJsonArray().asList()) {
@@ -54,7 +54,8 @@ public class BrewReloadListener extends SimpleJsonResourceReloadListener {
                             }
                         }
                     }
-                    label_catalysts: {
+                    label_catalysts:
+                    {
                         if (!expanded_jo.has("catalysts") || !expanded_jo.get("catalysts").isJsonArray())
                             break label_catalysts;
                         for (JsonElement jsonElement : expanded_jo.get("catalysts").getAsJsonArray().asList()) {
@@ -72,7 +73,8 @@ public class BrewReloadListener extends SimpleJsonResourceReloadListener {
                             }
                         }
                     }
-                    label_augmentation: {
+                    label_augmentation:
+                    {
                         if (!expanded_jo.has("augmentation") || !expanded_jo.get("augmentation").isJsonArray()) {
                             break label_augmentation;
                         }
@@ -100,6 +102,7 @@ public class BrewReloadListener extends SimpleJsonResourceReloadListener {
             KjsSafeClass.postBrewEvent_0();
         }
     }
+
     protected boolean shouldLoad(JsonElement json) {
         if (json.isJsonArray()) {
             JsonArray arr = json.getAsJsonArray();

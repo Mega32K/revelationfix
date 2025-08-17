@@ -23,6 +23,7 @@ public abstract class SpectreArmorMixin extends BaseArmorItem {
     public SpectreArmorMixin(OptionArmorMaterial optionArmorMaterial, Type armorType, Properties itemProperties) {
         super(optionArmorMaterial, armorType, itemProperties);
     }
+
     @Inject(method = "injectExtraArmorAttributes", at = @At("TAIL"), remap = false)
     private void injectExtraArmorAttributes(ArmorModifiersBuilder builder, CallbackInfo ci) {
         UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);

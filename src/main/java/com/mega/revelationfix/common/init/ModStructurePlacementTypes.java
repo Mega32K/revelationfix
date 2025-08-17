@@ -9,5 +9,5 @@ import z1gned.goetyrevelation.ModMain;
 
 public class ModStructurePlacementTypes {
     public static final DeferredRegister<StructurePlacementType<?>> STRUCTURE_PLACEMENT_TYPES = DeferredRegister.create(Registries.STRUCTURE_PLACEMENT, ModMain.MODID);
-    public static final RegistryObject<StructurePlacementType<ChurchPlacement>> CHURCH = STRUCTURE_PLACEMENT_TYPES.register("church_placement", ()-> ()-> ChurchPlacement.CODEC);
+    public static final RegistryObject<StructurePlacementType<ChurchPlacement>> CHURCH = STRUCTURE_PLACEMENT_TYPES.register("church_placement", () -> () -> ChurchPlacement.CODEC);
 }

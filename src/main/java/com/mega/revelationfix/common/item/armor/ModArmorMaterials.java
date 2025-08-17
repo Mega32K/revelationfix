@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
@@ -85,7 +84,8 @@ public enum ModArmorMaterials implements OptionArmorMaterial {
     private final SoundEvent sound;
     private final float knockbackResistance;
     private final LazyLoadedValue<Ingredient> repairIngredient;
-    private ArmorOption option;
+    private final ArmorOption option;
+
     ModArmorMaterials(String name,
                       EnumMap<ArmorItem.Type, Integer> durabilityFunctionForType,
                       EnumMap<ArmorItem.Type, Integer> protectionFunctionForType,

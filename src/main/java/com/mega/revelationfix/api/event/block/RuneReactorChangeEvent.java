@@ -9,6 +9,7 @@ import net.minecraftforge.eventbus.api.Cancelable;
 
 public abstract class RuneReactorChangeEvent extends BlockEvent {
     private final RuneReactorBlockEntity blockEntity;
+
     public RuneReactorChangeEvent(LevelAccessor level, BlockPos pos, BlockState state, RuneReactorBlockEntity blockEntity) {
         super(level, pos, state);
         this.blockEntity = blockEntity;
@@ -20,6 +21,7 @@ public abstract class RuneReactorChangeEvent extends BlockEvent {
 
     public static class CheckStructureEvent extends RuneReactorChangeEvent {
         public final Phase phase;
+
         public CheckStructureEvent(LevelAccessor level, BlockPos pos, BlockState state, RuneReactorBlockEntity blockEntity, Phase phase) {
             super(level, pos, state, blockEntity);
             this.phase = phase;
@@ -29,10 +31,12 @@ public abstract class RuneReactorChangeEvent extends BlockEvent {
             BEFORE_MODIFY, AFTER_MODIFY, COUNT_4
         }
     }
+
     @Cancelable
     public static class ChangeSimpleCodeEvent extends RuneReactorChangeEvent {
         private final int originCode;
         private int currentCode;
+
         public ChangeSimpleCodeEvent(LevelAccessor level, BlockPos pos, BlockState state, RuneReactorBlockEntity blockEntity, int originCode, int currentCode) {
             super(level, pos, state, blockEntity);
             this.originCode = originCode;

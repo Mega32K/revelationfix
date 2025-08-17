@@ -2,12 +2,12 @@ package com.mega.revelationfix.mixin.goety;
 
 import com.Polarice3.Goety.client.render.DeathArrowRenderer;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
-import com.mega.revelationfix.common.apollyon.client.WrappedTrailUpdate;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
+import com.mega.revelationfix.client.renderer.entity.DeathArrowTrailTask;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
+import com.mega.revelationfix.common.apollyon.client.WrappedTrailUpdate;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.ClientConfig;
-import com.mega.revelationfix.client.renderer.entity.DeathArrowTrailTask;
 import com.mega.revelationfix.common.event.handler.ClientEventHandler;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import com.mojang.blaze3d.vertex.PoseStack;

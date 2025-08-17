@@ -41,10 +41,11 @@ public class CuriosSkillKeyMapping {
         if (mc.screen == null && event.getAction() == GLFW.GLFW_PRESS && event.getKey() == ACTIVE_SKILL.getKey().getValue()) {
             if (ATAHelper2.hasOdamane(mc.player) || ATAHelper2.hasEternalWatch(mc.player)) {
                 PacketHandler.sendToServer(new TryTimeStopSkill(mc.player.getId()));
-                ((EventItf)event).el_setEventUnCancelable(true);
+                ((EventItf) event).el_setEventUnCancelable(true);
             }
         }
     }
+
     @SubscribeEvent
     public static void onMouseClick(InputEvent.MouseButton event) {
         if (event instanceof InputEvent.MouseButton.Post) {
@@ -55,7 +56,8 @@ public class CuriosSkillKeyMapping {
                     player.swingTime = -1;
                     player.swinging = true;
                     player.swingingArm = InteractionHand.MAIN_HAND;
-                    label0:{
+                    label0:
+                    {
                         Level level = mc.level;
                         if (level == null) break label0;
                         BlockPos blockPos = player.blockPosition().above(-1);

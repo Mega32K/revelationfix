@@ -33,6 +33,7 @@ public class SpiderDarkmageArmorMixin extends SpiderArmor implements IPresetSpel
         builder.addModifier(AttributeRegistry.SPELL_POWER.get(), new AttributeModifier(BaseArmorItem.EXTRA_MODIFIER_UUID_PER_TYPE.get(type), "Base Power", 0.05, AttributeModifier.Operation.MULTIPLY_BASE));
         builder.addModifier(AttributeRegistry.ELDRITCH_SPELL_POWER.get(), new AttributeModifier(BaseArmorItem.EXTRA_MODIFIER_UUID_PER_TYPE.get(type), "Base Power", 0.05, AttributeModifier.Operation.MULTIPLY_BASE));
     }
+
     @Override
     public void initializeSpellContainer(ItemStack itemStack) {
         if (itemStack != null) {

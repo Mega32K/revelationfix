@@ -1,11 +1,9 @@
 package com.mega.revelationfix.common.data.ritual;
 
 import com.google.gson.*;
-import com.mega.revelationfix.api.event.register.CustomBrewRegisterEvent;
 import com.mega.revelationfix.api.event.register.CustomRitualRegisterEvent;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.kjs.KjsSafeClass;
-import com.mega.revelationfix.common.data.brew.BrewData;
 import com.mega.revelationfix.common.data.ritual.requirement.DimensionTypeRequirement;
 import com.mega.revelationfix.common.data.ritual.requirement.PositionRequirement;
 import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
@@ -15,7 +13,6 @@ import com.mega.revelationfix.common.data.ritual.requirement.entity.EntityRequir
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -28,14 +25,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public class RitualReloadListener extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
+
     public RitualReloadListener() {
         super(GSON, "goety_ritual/ritual");
     }
+
     @Override
     protected void apply(@NotNull Map<ResourceLocation, JsonElement> object, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profiler) {
         RitualDataManager.clearData();
@@ -46,7 +44,7 @@ public class RitualReloadListener extends SimpleJsonResourceReloadListener {
                 try {
                     String pluginName = main.get("ritual").getAsString();
                     String iconItem = GsonHelper.getAsString(main, "iconItem", "minecraft:air");
-                    int[] range = new int[] {-1, -1, -1};
+                    int[] range = new int[]{-1, -1, -1};
                     if (main.get("range") instanceof JsonArray array) {
                         if (array.size() >= 3) {
                             range[0] = array.get(0).getAsInt();
@@ -102,6 +100,7 @@ public class RitualReloadListener extends SimpleJsonResourceReloadListener {
             KjsSafeClass.postRitualEvent_0();
         }
     }
+
     protected boolean shouldLoad(JsonElement json) {
         if (json.isJsonArray()) {
             JsonArray arr = json.getAsJsonArray();

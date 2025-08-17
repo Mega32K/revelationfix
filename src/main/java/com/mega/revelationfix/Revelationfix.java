@@ -44,7 +44,7 @@ public class Revelationfix {
     private final ModProxy PROXY;
 
     public Revelationfix(FMLJavaModLoadingContext context) {
-        PROXY = DistExecutor.unsafeRunForDist(() -> ()-> new ClientProxy(context), () -> ()-> new ServerProxy(context));
+        PROXY = DistExecutor.unsafeRunForDist(() -> () -> new ClientProxy(context), () -> () -> new ServerProxy(context));
         IEventBus modBus = context.getModEventBus();
         ModBlocks.BLOCKS.register(modBus);
         ModBlocks.BLOCK_ENTITIES.register(modBus);
@@ -80,10 +80,12 @@ public class Revelationfix {
         context.registerConfig(ModConfig.Type.COMMON, BlockConfig.SPEC, MODID + "/" + MODID + "-block.toml");
 
     }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void addAttributes(EntityAttributeModificationEvent event) {
         ModAttributes.addAttributes(event);
     }
+
     public void registerRecipeSerializers(RegisterEvent event) {
         if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
             CraftingHelper.register(new ResourceLocation(ModMain.MODID, "puzzle"), PuzzleIngredientSerializer.INSTANCE);

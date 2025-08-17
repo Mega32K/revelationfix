@@ -3,7 +3,6 @@ package com.mega.revelationfix.client.font;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.mega.endinglib.api.client.text.TextColorInterface;
-import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.mixin.accessor.AccessorFont;
 import com.mega.endinglib.mixin.accessor.AccessorFontManager;
 import com.mega.endinglib.mixin.accessor.AccessorMC;
@@ -14,7 +13,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import it.unimi.dsi.fastutil.ints.Int2CharOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.font.FontManager;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.gui.font.GlyphRenderTypes;
@@ -41,16 +39,18 @@ public class MinecraftFont extends Font {
     public static FontManager fontManager = ((AccessorMC) Minecraft.getInstance()).getFontManager();
     public static AccessorFontManager accessorFontManager = (AccessorFontManager) fontManager;
     public static MinecraftFont INSTANCE;
-    public final AccessorFont accessorFont;
 
     static {
         INSTANCE = new MinecraftFont((p_284586_) -> accessorFontManager.getFontSets().getOrDefault(accessorFontManager.getRenames().getOrDefault(p_284586_, p_284586_), accessorFontManager.getMissingFontSet()), false, accessorFontManager.getFontSets());
     }
 
+    public final AccessorFont accessorFont;
+
     public MinecraftFont(Function<ResourceLocation, FontSet> p_243253_, boolean p_243245_, Map<ResourceLocation, FontSet> f) {
         super(p_243253_, p_243245_);
         this.accessorFont = (AccessorFont) this;
     }
+
     public static boolean isEden(Int2CharOpenHashMap map) {
         for (char c : map.values()) {
             if (c == ModChatFormatting.EDEN.getChar())
@@ -77,6 +77,7 @@ public class MinecraftFont extends Font {
         }
         return returnV;
     }
+
     public float renderEden(String text2, float startX, float startY, int iColor, boolean p_273674_, Matrix4f matrix4f, MultiBufferSource bufferSource, DisplayMode displayMode, int overlay, int light) {
         long milliTime = OdamaneFont.milliTime();
         float colorr = (float) milliTime * 0.0025F % 1.0F;
@@ -110,6 +111,7 @@ public class MinecraftFont extends Font {
         p_273121_ = this.renderText(p_273025_, p_273121_, p_272717_, p_273653_, false, matrix4f, p_273560_, p_273342_, p_273373_, p_273266_);
         return p_273121_ + (p_273531_ ? 1 : 0);
     }
+
     private float drawInternalF(String p_273658_, float p_273086_, float p_272883_, int p_273547_, boolean p_272778_, Matrix4f p_272662_, MultiBufferSource p_273012_, Font.DisplayMode p_273381_, int p_272855_, int p_272745_, boolean p_272785_) {
         if (p_272785_) {
             p_273658_ = this.bidirectionalShaping(p_273658_);
@@ -123,13 +125,15 @@ public class MinecraftFont extends Font {
         }
 
         p_273086_ = this.renderText(p_273658_, p_273086_, p_272883_, p_273547_, false, matrix4f, p_273012_, p_273381_, p_272855_, p_272745_);
-        return p_273086_ ;
+        return p_273086_;
     }
+
     private float renderText(String p_273765_, float p_273532_, float p_272783_, int p_273217_, boolean p_273583_, Matrix4f p_272734_, MultiBufferSource p_272595_, Font.DisplayMode p_273610_, int p_273727_, int p_273199_) {
         StringRenderOutputVanilla font$stringrenderoutput = new StringRenderOutputVanilla(p_272595_, p_273532_, p_272783_, p_273217_, p_273583_, p_272734_, p_273610_, p_273199_);
         StringDecomposer.iterateFormatted(p_273765_, Style.EMPTY, font$stringrenderoutput);
         return font$stringrenderoutput.finish(p_273727_, p_273532_);
     }
+
     public float renderText(FormattedCharSequence p_273322_, float p_272632_, float p_273541_, int p_273200_, boolean p_273312_, @NotNull Matrix4f p_273276_, @NotNull MultiBufferSource p_273392_, @NotNull DisplayMode p_272625_, int p_273774_, int p_273371_) {
         StringRenderOutputVanilla font$stringrenderoutput = new StringRenderOutputVanilla(p_273392_, p_272632_, p_273541_, p_273200_, p_273312_, p_273276_, p_272625_, p_273371_);
         p_273322_.accept(font$stringrenderoutput);

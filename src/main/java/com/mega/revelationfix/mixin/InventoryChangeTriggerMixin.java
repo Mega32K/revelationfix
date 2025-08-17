@@ -2,7 +2,6 @@ package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.common.advancement.ModCriteriaTriggers;
 import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredient;
-import com.mega.revelationfix.common.init.GRItems;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;

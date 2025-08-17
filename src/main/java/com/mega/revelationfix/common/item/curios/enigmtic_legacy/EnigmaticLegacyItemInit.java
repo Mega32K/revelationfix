@@ -20,7 +20,7 @@ public class EnigmaticLegacyItemInit {
         DeferredRegister<Item> deferredRegister = ModItems.ITEMS;
         BLESSING_SCROLL = deferredRegister.register("blessing_scroll", BlessingScroll::new);
 
-        GRItems.insertAfterTabMap.put(GRItems.ETERNAL_WATCH, () ->List.of(new ItemStack(BLESSING_SCROLL_ITEM)));
+        GRItems.insertAfterTabMap.put(GRItems.ETERNAL_WATCH, () -> List.of(new ItemStack(BLESSING_SCROLL_ITEM)));
     }
 
     public static void tryAddToTab(CreativeModeTab.Output output) {

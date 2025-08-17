@@ -9,21 +9,22 @@ import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.item.AllRightsServantEgg;
 import com.mega.revelationfix.common.item.armor.*;
 import com.mega.revelationfix.common.item.curios.*;
-import com.mega.revelationfix.common.item.curios.robe.ApollyonRobeItem;
-import com.mega.revelationfix.common.item.research.EdenResearchScrollItem;
-import com.mega.revelationfix.common.item.research.GodForgingResearchScrollItem;
-import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
-import com.mega.revelationfix.common.item.tool.combat.trident.GungnirItem;
-import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
-import com.mega.revelationfix.common.item.tool.combat.whip.SpectreWhipItem;
-import com.mega.revelationfix.common.item.tool.combat.whip.VenomousSpiderWhipItem;
 import com.mega.revelationfix.common.item.curios.enigmtic_legacy.EnigmaticLegacyItemInit;
+import com.mega.revelationfix.common.item.curios.robe.ApollyonRobeItem;
 import com.mega.revelationfix.common.item.disc.ArchIllagerDisc;
 import com.mega.revelationfix.common.item.disc.ArchIllagerRemixDisc;
 import com.mega.revelationfix.common.item.disc.DecisiveMomentDisc;
 import com.mega.revelationfix.common.item.food.AscensionHardCandy;
 import com.mega.revelationfix.common.item.other.*;
+import com.mega.revelationfix.common.item.research.EdenResearchScrollItem;
+import com.mega.revelationfix.common.item.research.GodForgingResearchScrollItem;
 import com.mega.revelationfix.common.item.template.ApocalyptiumTemplateItem;
+import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
+import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
+import com.mega.revelationfix.common.item.tool.combat.trident.GungnirItem;
+import com.mega.revelationfix.common.item.tool.combat.whip.SpectreWhipItem;
+import com.mega.revelationfix.common.item.tool.combat.whip.VenomousSpiderWhipItem;
+import com.mega.revelationfix.common.item.tool.eerie.EerieAxeItem;
 import com.mega.revelationfix.common.item.tool.wand.FrostbloomStaff;
 import com.mega.revelationfix.common.spell.EmptySpell;
 import com.mega.revelationfix.common.spell.frost.IceSpell;
@@ -147,6 +148,8 @@ public class GRItems {
     public static RegistryObject<Item> SPECTRE_CHESTPLATE;
     public static RegistryObject<Item> SPECTRE_LEGGINGS;
     public static RegistryObject<Item> SPECTRE_BOOTS;
+
+    public static RegistryObject<Item> EERIE_AXE;
     @Self
     public static RegistryObject<Item> SPIDER_DARKMAGE_HELMET;
     @Self
@@ -234,36 +237,37 @@ public class GRItems {
         STAFF_FROSTBLOOM = ITEMS.register("frostbloom_staff", FrostbloomStaff::new);
         BI_RUNE_REACTOR = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNE_REACTOR);
         BI_RUNESTONE_ENGRAVED_TABLE = ModBlocks.asBLockItem(ITEMS, ModBlocks.RUNESTONE_ENGRAVED_TABLE);
-        SPIDER_FANG = ITEMS.register("spider_fang", ()-> new Item(new Item.Properties().stacksTo(64).food(new FoodProperties.Builder().fast().nutrition(3).saturationMod(0.6F).effect(()-> new MobEffectInstance(GoetyEffects.ACID_VENOM.get(), 40, 2), 1F).build())));
-        VENOMOUS_SPIDER_WHIP = ITEMS.register("venomous_spider_whip", ()-> new VenomousSpiderWhipItem(1F, -2.2F));
-        SPECTRE_WHIP = ITEMS.register("spectre_whip", ()-> new SpectreWhipItem(1F, -2.2F));
-        HAUNTED_WHIP_HILT = ITEMS.register("haunted_whip_hilt", ()-> new Item(new Item.Properties().stacksTo(1)));
-        SPIDER_HELMET = ITEMS.register("spider_helmet", ()-> new SpiderArmor(ArmorItem.Type.HELMET));
-        SPIDER_CHESTPLATE = ITEMS.register("spider_chestplate", ()-> new SpiderArmor(ArmorItem.Type.CHESTPLATE));
-        SPIDER_LEGGINGS = ITEMS.register("spider_leggings", ()-> new SpiderArmor(ArmorItem.Type.LEGGINGS));
-        SPIDER_BOOTS = ITEMS.register("spider_boots", ()-> new SpiderArmor(ArmorItem.Type.BOOTS));
-        SPECTRE_HELMET = ITEMS.register("spectre_helmet", ()-> new SpectreArmor(ArmorItem.Type.HELMET));
-        SPECTRE_CHESTPLATE = ITEMS.register("spectre_chestplate", ()-> new SpectreArmor(ArmorItem.Type.CHESTPLATE));
-        SPECTRE_LEGGINGS = ITEMS.register("spectre_leggings", ()-> new SpectreArmor(ArmorItem.Type.LEGGINGS));
-        SPECTRE_BOOTS = ITEMS.register("spectre_boots", ()-> new SpectreArmor(ArmorItem.Type.BOOTS));
-        SPIDER_DARKMAGE_HELMET = ITEMS.register("spider_darkmage_helmet", ()-> new SpiderDarkmageArmor(ArmorItem.Type.HELMET));
-        SPIDER_DARKMAGE_CHESTPLATE = ITEMS.register("spider_darkmage_chestplate", ()-> new SpiderDarkmageArmor(ArmorItem.Type.CHESTPLATE));
-        SPIDER_DARKMAGE_LEGGINGS = ITEMS.register("spider_darkmage_leggings", ()-> new SpiderDarkmageArmor(ArmorItem.Type.LEGGINGS));
-        SPIDER_DARKMAGE_BOOTS = ITEMS.register("spider_darkmage_boots", ()-> new SpiderDarkmageArmor(ArmorItem.Type.BOOTS));
-        SPECTRE_DARKMAGE_HELMET = ITEMS.register("spectre_darkmage_helmet", ()-> new SpectreDarkmageArmor(ArmorItem.Type.HELMET));
-        SPECTRE_DARKMAGE_CHESTPLATE = ITEMS.register("spectre_darkmage_chestplate", ()-> new SpectreDarkmageArmor(ArmorItem.Type.CHESTPLATE));
-        SPECTRE_DARKMAGE_LEGGINGS = ITEMS.register("spectre_darkmage_leggings", ()-> new SpectreDarkmageArmor(ArmorItem.Type.LEGGINGS));
-        SPECTRE_DARKMAGE_BOOTS = ITEMS.register("spectre_darkmage_boots", ()-> new SpectreDarkmageArmor(ArmorItem.Type.BOOTS));
+        SPIDER_FANG = ITEMS.register("spider_fang", () -> new Item(new Item.Properties().stacksTo(64).food(new FoodProperties.Builder().fast().nutrition(3).saturationMod(0.6F).effect(() -> new MobEffectInstance(GoetyEffects.ACID_VENOM.get(), 40, 2), 1F).build())));
+        VENOMOUS_SPIDER_WHIP = ITEMS.register("venomous_spider_whip", () -> new VenomousSpiderWhipItem(1F, -2.2F));
+        SPECTRE_WHIP = ITEMS.register("spectre_whip", () -> new SpectreWhipItem(1F, -2.2F));
+        HAUNTED_WHIP_HILT = ITEMS.register("haunted_whip_hilt", () -> new Item(new Item.Properties().stacksTo(1)));
+        SPIDER_HELMET = ITEMS.register("spider_helmet", () -> new SpiderArmor(ArmorItem.Type.HELMET));
+        SPIDER_CHESTPLATE = ITEMS.register("spider_chestplate", () -> new SpiderArmor(ArmorItem.Type.CHESTPLATE));
+        SPIDER_LEGGINGS = ITEMS.register("spider_leggings", () -> new SpiderArmor(ArmorItem.Type.LEGGINGS));
+        SPIDER_BOOTS = ITEMS.register("spider_boots", () -> new SpiderArmor(ArmorItem.Type.BOOTS));
+        SPECTRE_HELMET = ITEMS.register("spectre_helmet", () -> new SpectreArmor(ArmorItem.Type.HELMET));
+        SPECTRE_CHESTPLATE = ITEMS.register("spectre_chestplate", () -> new SpectreArmor(ArmorItem.Type.CHESTPLATE));
+        SPECTRE_LEGGINGS = ITEMS.register("spectre_leggings", () -> new SpectreArmor(ArmorItem.Type.LEGGINGS));
+        SPECTRE_BOOTS = ITEMS.register("spectre_boots", () -> new SpectreArmor(ArmorItem.Type.BOOTS));
+        SPIDER_DARKMAGE_HELMET = ITEMS.register("spider_darkmage_helmet", () -> new SpiderDarkmageArmor(ArmorItem.Type.HELMET));
+        SPIDER_DARKMAGE_CHESTPLATE = ITEMS.register("spider_darkmage_chestplate", () -> new SpiderDarkmageArmor(ArmorItem.Type.CHESTPLATE));
+        SPIDER_DARKMAGE_LEGGINGS = ITEMS.register("spider_darkmage_leggings", () -> new SpiderDarkmageArmor(ArmorItem.Type.LEGGINGS));
+        SPIDER_DARKMAGE_BOOTS = ITEMS.register("spider_darkmage_boots", () -> new SpiderDarkmageArmor(ArmorItem.Type.BOOTS));
+        SPECTRE_DARKMAGE_HELMET = ITEMS.register("spectre_darkmage_helmet", () -> new SpectreDarkmageArmor(ArmorItem.Type.HELMET));
+        SPECTRE_DARKMAGE_CHESTPLATE = ITEMS.register("spectre_darkmage_chestplate", () -> new SpectreDarkmageArmor(ArmorItem.Type.CHESTPLATE));
+        SPECTRE_DARKMAGE_LEGGINGS = ITEMS.register("spectre_darkmage_leggings", () -> new SpectreDarkmageArmor(ArmorItem.Type.LEGGINGS));
+        SPECTRE_DARKMAGE_BOOTS = ITEMS.register("spectre_darkmage_boots", () -> new SpectreDarkmageArmor(ArmorItem.Type.BOOTS));
         GOD_FORGING_SCROLL = ITEMS.register("god_forging_scroll", GodForgingResearchScrollItem::new);
         EDEN_SCROLL = ITEMS.register("eden_scroll", EdenResearchScrollItem::new);
         APOLLYON_ROBE = ITEMS.register("apollyon_robe", ApollyonRobeItem::new);
         SOUL_OF_OBSIDIAN = ITEMS.register("soul_of_obsidian", SoulOfObsidianItem::new);
         AMULET_OF_SLIME = ITEMS.register("amulet_of_slime", AmuletOfSlimeItem::new);
         GOLD_FEATHER = ITEMS.register("gold_feather", GoldFeatherItem::new);
+        EERIE_AXE = ITEMS.register("eerie_axe", EerieAxeItem::new);
         if (SafeClass.isEnigmaticLegacyLoaded())
             EnigmaticLegacyItemInit.init();
 
-        GRItems.insertAfterTabMap.put(ASCENSION_HARD_CANDY, () ->List.of(DISC_1.get().getDefaultInstance(), DISC_2.get().getDefaultInstance(), DISC_3.get().getDefaultInstance()));
+        GRItems.insertAfterTabMap.put(ASCENSION_HARD_CANDY, () -> List.of(DISC_1.get().getDefaultInstance(), DISC_2.get().getDefaultInstance(), DISC_3.get().getDefaultInstance()));
 
         GRItems.insertAfterTabMap.put(BOW_OF_REVELATION, () -> {
             ItemStack stack = GRItems.THE_NEEDLE.get().getDefaultInstance();
@@ -272,7 +276,7 @@ public class GRItems {
         });
 
         if (SafeClass.isTetraLoaded())
-            GRItems.insertAfterTabMap.put(APOCALYPTIUM_BOOTS, () ->List.of(new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM), new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_AEGLOS.get())));
+            GRItems.insertAfterTabMap.put(APOCALYPTIUM_BOOTS, () -> List.of(new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_LONGINUS_ITEM), new ItemStack(GRItems.TIP_OF_THE_SPEAR_OF_AEGLOS.get())));
         //GRItems.insertAfterTabMap.put(11, List.of(createFragment(0), createFragment(1), createFragment(2), createFragment(3)));
 
         GRItems.insertAfterTabMap.put(QUIETUS_STAR, () ->

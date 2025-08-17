@@ -8,10 +8,12 @@ import org.jetbrains.annotations.Nullable;
 
 public interface BlockBindingEntity {
     BlockPos getOwnerBlock();
+
     /**
      * @param flag <br>0 : BEFORE <br>1 : AFTER <br>2 : COUNT_4
      */
     void blockOwnerCheckEvent(Level level, BlockPos pos, BlockState blockState, @Nullable BlockEntity blockEntity, int flag);
+
     /**
      * @param flag <br>0 : NORMAL_REMOVE
      */

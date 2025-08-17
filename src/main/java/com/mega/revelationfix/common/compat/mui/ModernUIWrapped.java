@@ -6,7 +6,6 @@ import com.mega.endinglib.api.client.text.mui.ModernTextRendererCall;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.client.font.FontTextBuilder;
 import com.mega.revelationfix.client.font.OdamaneFont;
-import com.mega.revelationfix.common.config.ClientConfig;
 import icyllis.modernui.mc.text.ModernTextRenderer;
 import icyllis.modernui.mc.text.TextLayout;
 import icyllis.modernui.mc.text.TextLayoutEngine;
@@ -23,6 +22,7 @@ public class ModernUIWrapped {
         ModernTextRendererCall.registerCall(ModChatFormatting.APOLLYON, new Apollyon());
         ModernTextRendererCall.registerCall(ModChatFormatting.EDEN, new Eden());
     }
+
     public static class Apollyon implements IModernTextRendererCall {
         @Override
         public void drawText(TextLayoutEngine mEngine, FormattedCharSequence text, float x, float y, int color, boolean dropShadow, Matrix4f matrix, MultiBufferSource source, Font.DisplayMode displayMode, int colorBackground, int packedLight, CallbackInfoReturnable<Float> cir) {
@@ -36,6 +36,7 @@ public class ModernUIWrapped {
             layout.drawTextOutline(m4, source, x, y, 255, 0, 0, 255, packedLight);
         }
     }
+
     public static class Eden implements IModernTextRendererCall {
         @Override
         public boolean completelyReplaceRender() {

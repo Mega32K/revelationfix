@@ -1,6 +1,5 @@
 package com.mega.revelationfix.common.compat.tetra.effect;
 
-import com.mega.revelationfix.common.compat.tetra.TetraVersionCompat;
 import com.mega.revelationfix.common.init.ModAttributes;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -11,7 +10,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import se.mickelus.tetra.blocks.workbench.gui.WorkbenchStatsGui;
 import se.mickelus.tetra.gui.stats.bar.GuiStatBar;
-import se.mickelus.tetra.gui.stats.getter.*;
+import se.mickelus.tetra.gui.stats.getter.ITooltipGetter;
+import se.mickelus.tetra.gui.stats.getter.LabelGetterBasic;
+import se.mickelus.tetra.gui.stats.getter.StatGetterAttribute;
 import se.mickelus.tetra.items.modular.impl.holo.gui.craft.HoloStatsGui;
 
 public class MiscSpellAttributeEffect {
@@ -21,13 +22,14 @@ public class MiscSpellAttributeEffect {
         createPercentAttributeBar(ModAttributes.SPELL_POWER.get(), "spell_power");
         createPercentAttributeBar(ModAttributes.CAST_DURATION.get(), "cast_duration");
     }
+
     @OnlyIn(Dist.CLIENT)
     private static void createPercentAttributeBar(Attribute attribute, String languageKey) {
         try {
             StatGetterAttribute statGetterPercentAttribute = new HundredMultiStatGetterAttribute(attribute, true);
             GuiStatBar statBar = new GuiStatBar(0, 0, 59, attribute.getDescriptionId(),
                     0.0D, 100D, false, statGetterPercentAttribute, LabelGetterBasic.decimalLabel,
-                   new TooltipGetterSimpleAttribute(attribute, languageKey));
+                    new TooltipGetterSimpleAttribute(attribute, languageKey));
             WorkbenchStatsGui.addBar(statBar);
             HoloStatsGui.addBar(statBar);
         } catch (Throwable throwable) {
@@ -45,13 +47,14 @@ public class MiscSpellAttributeEffect {
 
         public String getTooltipBase(Player player, ItemStack itemStack) {
             String level = String.format("%.0f%%", levelGetter.getValue(player, itemStack));
-            return I18n.get("goety_revelation.effect." + languageKey +".tooltip", level);
+            return I18n.get("goety_revelation.effect." + languageKey + ".tooltip", level);
         }
 
         public boolean hasExtendedTooltip(Player player, ItemStack itemStack) {
             return false;
         }
     }
+
     public static class HundredMultiStatGetterAttribute extends StatGetterAttribute {
 
         public HundredMultiStatGetterAttribute(Attribute attribute) {

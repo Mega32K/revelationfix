@@ -122,7 +122,7 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
         return super.displayFireAnimation();
     }
 
-    @Inject(method = "doPostHurtEffects", at = @At("TAIL") )
+    @Inject(method = "doPostHurtEffects", at = @At("TAIL"))
     private void doPostHurtEffects(LivingEntity livingEntity, CallbackInfo ci) {
         if (this.getTags().contains(BowOfRevelationItem.FORCE_ADD_EFFECT)) {
             Entity entity = this.getEffectSource();

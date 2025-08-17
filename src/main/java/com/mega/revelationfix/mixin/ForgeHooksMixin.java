@@ -30,6 +30,7 @@ public class ForgeHooksMixin {
         if (flag)
             cir.setReturnValue(true);
     }
+
     @Inject(remap = false, method = "isLivingOnLadder", at = @At("HEAD"), cancellable = true)
     private static void isLivingOnLadder(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull LivingEntity entity, CallbackInfoReturnable<Optional<BlockPos>> cir) {
         if (entity.horizontalCollision)
@@ -37,22 +38,16 @@ public class ForgeHooksMixin {
             if (ArmorEvents.isSpiderSet(ArmorUtils.getArmorSet(entity))) {
                 boolean isSpectator = (entity instanceof Player && entity.isSpectator());
                 if (isSpectator) cir.setReturnValue(Optional.empty());
-                if (!ForgeConfig.SERVER.fullBoundingBoxLadders.get())
-                {
+                if (!ForgeConfig.SERVER.fullBoundingBoxLadders.get()) {
                     cir.setReturnValue(Optional.of(pos));
-                }
-                else
-                {
+                } else {
                     AABB bb = entity.getBoundingBox();
                     int mX = Mth.floor(bb.minX);
                     int mY = Mth.floor(bb.minY);
                     int mZ = Mth.floor(bb.minZ);
-                    for (int y2 = mY; y2 < bb.maxY; y2++)
-                    {
-                        for (int x2 = mX; x2 < bb.maxX; x2++)
-                        {
-                            for (int z2 = mZ; z2 < bb.maxZ; z2++)
-                            {
+                    for (int y2 = mY; y2 < bb.maxY; y2++) {
+                        for (int x2 = mX; x2 < bb.maxX; x2++) {
+                            for (int z2 = mZ; z2 < bb.maxZ; z2++) {
                                 BlockPos tmp = new BlockPos(x2, y2, z2);
                                 cir.setReturnValue(Optional.of(tmp));
                             }

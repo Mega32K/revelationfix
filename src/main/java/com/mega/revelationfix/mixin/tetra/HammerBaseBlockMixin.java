@@ -21,9 +21,11 @@ import net.minecraftforge.common.ToolAction;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import se.mickelus.mutil.util.CastOptional;
 import se.mickelus.mutil.util.TileEntityOptional;
 import se.mickelus.tetra.TetraToolActions;
 import se.mickelus.tetra.blocks.TetraBlock;
@@ -31,6 +33,7 @@ import se.mickelus.tetra.blocks.forged.hammer.HammerBaseBlock;
 import se.mickelus.tetra.blocks.forged.hammer.HammerBaseBlockEntity;
 import se.mickelus.tetra.blocks.forged.hammer.HammerEffect;
 import se.mickelus.tetra.blocks.salvage.InteractiveBlockOverlay;
+import se.mickelus.tetra.items.modular.IModularItem;
 import se.mickelus.tetra.items.modular.impl.ModularDoubleHeadedItem;
 import se.mickelus.tetra.module.ItemModuleMajor;
 import se.mickelus.tetra.properties.PropertyHelper;
@@ -43,6 +46,17 @@ public abstract class HammerBaseBlockMixin extends TetraBlock {
 
     public HammerBaseBlockMixin(Properties properties) {
         super(properties);
+    }
+
+    @Unique
+    private static void addDarkForging(ItemStack itemStack, String slot) {
+        IModularItem item = (IModularItem) itemStack.getItem();
+        CastOptional.cast(item.getModuleFromSlot(itemStack, slot), ItemModuleMajor.class).filter((module) -> {
+            return module.acceptsImprovementLevel("dark_forging", 1);
+        }).ifPresent((module) -> {
+            module.removeCollidingImprovements(itemStack, "dark_forging", 1);
+            itemStack.getOrCreateTag().putInt("dark_forging", 1);
+        });
     }
 
     @Shadow(remap = false)
@@ -123,6 +137,7 @@ public abstract class HammerBaseBlockMixin extends TetraBlock {
                 ItemStack upgradedStack = targetStack.copy();
                 ItemModuleMajor.addImprovement(upgradedStack, slot, "quality", 2);
                 ItemModuleMajor.addImprovement(upgradedStack, slot, "settled", 2);
+                addDarkForging(upgradedStack, slot);
                 cir.setReturnValue(upgradedStack);
                 return;
             }

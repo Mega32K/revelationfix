@@ -98,6 +98,7 @@ public class DamageSourceMixin implements DamageSourceInterface {
         if (p_276108_ == ExtraDamageTypes.FE_POWER)
             if (this.revelationfix$fePower()) cir.setReturnValue(true);
     }
+
     @Inject(method = "getEntity", at = @At("RETURN"), cancellable = true)
     private void modifyToTrueOwner(CallbackInfoReturnable<Entity> cir) {
         if (cir.getReturnValue() instanceof FakeSpellerEntity fakeSpellerEntity) {

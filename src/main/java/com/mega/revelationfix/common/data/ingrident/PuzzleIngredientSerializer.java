@@ -6,9 +6,9 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
-public class PuzzleIngredientSerializer implements IIngredientSerializer<PuzzleIngredient>
-{
-    public static final PuzzleIngredientSerializer INSTANCE  = new PuzzleIngredientSerializer();
+public class PuzzleIngredientSerializer implements IIngredientSerializer<PuzzleIngredient> {
+    public static final PuzzleIngredientSerializer INSTANCE = new PuzzleIngredientSerializer();
+
     public static PuzzleIngredient valueFromJson(JsonObject p_289797_) {
         if (p_289797_.get("puzzle") instanceof JsonPrimitive jp) {
             return new PuzzleIngredient(jp.getAsInt());
@@ -17,18 +17,15 @@ public class PuzzleIngredientSerializer implements IIngredientSerializer<PuzzleI
         }
     }
 
-    public PuzzleIngredient parse(FriendlyByteBuf buffer)
-    {
+    public PuzzleIngredient parse(FriendlyByteBuf buffer) {
         return new PuzzleIngredient(buffer.readInt());
     }
 
-    public PuzzleIngredient parse(JsonObject json)
-    {
+    public PuzzleIngredient parse(JsonObject json) {
         return valueFromJson(json);
     }
 
-    public void write(FriendlyByteBuf buffer, PuzzleIngredient ingredient)
-    {
+    public void write(FriendlyByteBuf buffer, PuzzleIngredient ingredient) {
         buffer.writeInt(ingredient.getPuzzleIndex());
     }
 }

@@ -1,18 +1,13 @@
 package com.mega.revelationfix.common.compat.jade;
 
-import com.mega.revelationfix.common.block.ICoreInlaidBlock;
 import com.mega.revelationfix.common.block.RuneReactorBlock;
-import com.mega.revelationfix.common.block.RunestoneEngravedTableBlock;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
-import org.checkerframework.checker.units.qual.C;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -24,6 +19,20 @@ import java.util.UUID;
 
 public enum RuneReactorCoreProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;
+
+    public static Component getOwnerName(BlockAccessor blockAccessor, UUID uuid) {
+        Player player;
+        if (uuid == null)
+            return Component.literal("<null>").withStyle(ChatFormatting.RED);
+        else if ((player = blockAccessor.getLevel().getPlayerByUUID(uuid)) != null)
+            return Component.literal(player.getDisplayName().getString());
+        else return Component.literal("<empty>").withStyle(ChatFormatting.RED);
+    }
+
+    public static Component getOwnerName(BlockAccessor blockAccessor, RuneReactorBlockEntity blockEntity) {
+        return getOwnerName(blockAccessor, blockEntity.getOwnerID());
+    }
+
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         CompoundTag compoundTag = blockAccessor.getServerData();
@@ -49,17 +58,7 @@ public enum RuneReactorCoreProvider implements IBlockComponentProvider, IServerD
             iTooltip.add(Component.translatable("tooltip.goety_revelation.jade.rune_reactor_structure", RuneReactorBlock.structuralIntegrity(blockAccessor.getLevel(), blockAccessor.getPosition(), blockAccessor.getBlockState()), 4));
         }
     }
-    public static Component getOwnerName(BlockAccessor blockAccessor, UUID uuid) {
-        Player player;
-        if (uuid == null)
-            return Component.literal("<null>").withStyle(ChatFormatting.RED);
-        else if ((player = blockAccessor.getLevel().getPlayerByUUID(uuid)) != null)
-            return Component.literal(player.getDisplayName().getString());
-        else return Component.literal("<empty>").withStyle(ChatFormatting.RED);
-    }
-    public static Component getOwnerName(BlockAccessor blockAccessor, RuneReactorBlockEntity blockEntity) {
-        return getOwnerName(blockAccessor, blockEntity.getOwnerID());
-    }
+
     @Override
     public void appendServerData(CompoundTag compoundTag, BlockAccessor blockAccessor) {
         if (blockAccessor != null && blockAccessor.getBlockState() != null && blockAccessor.getLevel().getBlockEntity(blockAccessor.getPosition()) instanceof RuneReactorBlockEntity blockEntity) {

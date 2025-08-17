@@ -1,10 +1,8 @@
 package com.mega.revelationfix.common.apollyon.client;
 
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
-import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;

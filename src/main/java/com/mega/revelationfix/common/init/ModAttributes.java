@@ -1,8 +1,6 @@
 package com.mega.revelationfix.common.init;
 
 import com.Polarice3.Goety.api.magic.SpellType;
-import com.Polarice3.Goety.common.entities.ModEntityType;
-import com.mega.revelationfix.common.entity.cultists.HereticServant;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;

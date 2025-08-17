@@ -1,19 +1,13 @@
 package com.mega.revelationfix.client.model.entity;
 
-import com.github.alexthe666.citadel.repack.jcodec.codecs.mjpeg.tools.AssertionException;
 import com.mega.endinglib.mixin.accessor.AccessorModelPart;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.netty.util.internal.shaded.org.jctools.util.UnsafeAccess;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.model.geom.ModelPart;
 import org.jetbrains.annotations.NotNull;
-import sun.misc.Unsafe;
-
-import java.util.List;
-import java.util.Map;
 
 public class MuchLightModelPart extends ModelPart {
     public MuchLightModelPart(ModelPart modelPart) {

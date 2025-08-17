@@ -1,7 +1,6 @@
 package com.mega.revelationfix.common.data.ingrident;
 
 import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.mixin.ItemStackMixin;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -13,12 +12,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.stream.Stream;
 
 public class PuzzleIngredient extends Ingredient {
+    public static TagKey<Item>[] TAGS = new TagKey[]{GRItems.THE_END_PUZZLES, GRItems.THE_END_PUZZLES2, GRItems.THE_END_PUZZLES3, GRItems.THE_END_PUZZLES4};
     private final int puzzleIndex;
-    public static TagKey<Item>[] TAGS = new TagKey[] {GRItems.THE_END_PUZZLES, GRItems.THE_END_PUZZLES2, GRItems.THE_END_PUZZLES3, GRItems.THE_END_PUZZLES4};
+
     public PuzzleIngredient(int puzzleIndex) {
         super(Stream.of(new TagValue(TAGS[puzzleIndex])));
         this.puzzleIndex = puzzleIndex;
     }
+
+    public static PuzzleIngredient puzzle(int index) {
+        return new PuzzleIngredient(index);
+    }
+
     @Override
     public boolean test(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.isEmpty())
@@ -33,6 +38,7 @@ public class PuzzleIngredient extends Ingredient {
             return itemStack.getItem() == TheEndRitualItemContext.PUZZLE4;
         } else return false;
     }
+
     public boolean testPuzzleItem(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.isEmpty())
             return false;
@@ -46,6 +52,7 @@ public class PuzzleIngredient extends Ingredient {
             return itemStack.hasTag() && itemStack.getTag().getBoolean(GRItems.NBT_PUZZLES4);
         } else return false;
     }
+
     public int getPuzzleIndex() {
         return puzzleIndex;
     }
@@ -53,8 +60,5 @@ public class PuzzleIngredient extends Ingredient {
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
         return PuzzleIngredientSerializer.INSTANCE;
-    }
-    public static PuzzleIngredient puzzle(int index) {
-        return new PuzzleIngredient(index);
     }
 }

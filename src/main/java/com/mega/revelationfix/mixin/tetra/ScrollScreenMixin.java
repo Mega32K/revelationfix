@@ -18,6 +18,8 @@ import se.mickelus.tetra.blocks.scroll.gui.ScrollScreen;
 public abstract class ScrollScreenMixin extends Screen implements ScrollScreenEC {
     @Shadow(remap = false)
     private static int currentPage;
+    @Unique
+    private final ScrollScreenData data = new ScrollScreenData((ScrollScreen) (Object) this);
     @Shadow(remap = false)
     @Final
     @Mutable
@@ -30,8 +32,7 @@ public abstract class ScrollScreenMixin extends Screen implements ScrollScreenEC
     @Final
     @Mutable
     private GuiText text;
-    @Unique
-    private final ScrollScreenData data = new ScrollScreenData((ScrollScreen) (Object) this);
+
     protected ScrollScreenMixin(Component p_96550_) {
         super(p_96550_);
     }

@@ -2,13 +2,11 @@ package com.mega.revelationfix.mixin.goety.ritual;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.crafting.RitualRecipe;
-import com.Polarice3.Goety.common.items.equipment.HammerItem;
 import com.Polarice3.Goety.compat.jei.ModRitualCategory;
+import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredient;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
-import com.mega.revelationfix.common.init.GRItems;
-import com.mega.revelationfix.api.item.IJEIInvisibleRitualResult;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -58,6 +56,7 @@ public class ModRitualCategoryMixin {
                 ci.cancel();
         }
     }
+
     @Inject(method = "getTypeIcon", at = @At("HEAD"), cancellable = true)
     private void getTypeIcon(RitualRecipe recipe, CallbackInfoReturnable<ItemStack> cir) {
         String craftType = recipe.getCraftType();
@@ -66,6 +65,7 @@ public class ModRitualCategoryMixin {
                 cir.setReturnValue(entry.getValue().getIconItem());
         }
     }
+
     @Redirect(method = "getTypeIcon", at = @At(value = "INVOKE", target = "Ljava/lang/String;contains(Ljava/lang/CharSequence;)Z"))
     private boolean replaceToEquals(String instance, CharSequence s) {
         return instance.contentEquals(s);

@@ -14,11 +14,8 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -68,6 +65,7 @@ public class GoetyClassNodeProcessor implements IClassProcessor, Opcodes {
         insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "modifySpellStatsWithoutEnchantment", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
         InjectionFinder.injectHead(methodNode, insnList);
     }
+
     public static Optional<VarInsnNode> getTheFirstSpellStatFieldXStoreNodeWhichCalledAfterGetEnchantmentLevelsOfVariable(InsnList instructions, SpellStatField statField) {
         AbstractInsnNode getLevelsNode = null;
         VarInsnNode x_store = null;
@@ -76,7 +74,7 @@ public class GoetyClassNodeProcessor implements IClassProcessor, Opcodes {
         int storeIndex = -1;
         for (AbstractInsnNode asn : instructions) {
             if (asn instanceof MethodInsnNode mNode) {
-                if (mNode.owner.equals("com/Polarice3/Goety/utils/WandUtil") && mNode.name.equals("enchantedFocus") && mNode.desc.equals("(Lnet/minecraft/world/entity/LivingEntity;)Z")){
+                if (mNode.owner.equals("com/Polarice3/Goety/utils/WandUtil") && mNode.name.equals("enchantedFocus") && mNode.desc.equals("(Lnet/minecraft/world/entity/LivingEntity;)Z")) {
                     visitedEnchantedFocusMethod = true;
                     break;
                 }

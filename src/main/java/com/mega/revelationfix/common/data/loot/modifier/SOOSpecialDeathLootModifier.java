@@ -18,20 +18,26 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class SOOSpecialDeathLootModifier implements IGlobalLootModifier {
+    public static final Supplier<Codec<SOOSpecialDeathLootModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.create(
+                    inst -> inst.group(Codec.intRange(0, 8).fieldOf("flag").forGetter((lm) -> lm.flag))
+                            .apply(inst, SOOSpecialDeathLootModifier::new)
+            ));
     private final int flag;
 
     public SOOSpecialDeathLootModifier(int flag) {
         this.flag = flag;
     }
+
     public static SpecialEntityType isSpecialDeathLootEntity(Entity entity) {
         if (entity == null) return SpecialEntityType.NONE;
         EntityType<?> entityType = entity.getType();
-        if (entityType == ModEntityType.HERETIC.get())
+        if (entityType == EntityType.WITHER_SKELETON)
+            return SpecialEntityType.WITHER_SKELETON;
+        else if (entityType == ModEntityType.HERETIC.get())
             return SpecialEntityType.HERETIC;
         else if (entityType == ModEntityType.WARLOCK.get())
             return SpecialEntityType.WARLOCK;
@@ -39,11 +45,7 @@ public class SOOSpecialDeathLootModifier implements IGlobalLootModifier {
             return SpecialEntityType.WITCH;
         else return SpecialEntityType.NONE;
     }
-    public static final Supplier<Codec<SOOSpecialDeathLootModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(
-                    inst -> inst.group(Codec.intRange(0, 8).fieldOf("flag").forGetter((lm) -> lm.flag))
-                            .apply(inst, SOOSpecialDeathLootModifier::new)
-            ));
+
     @Override
     public @NotNull ObjectArrayList<ItemStack> apply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
@@ -72,14 +74,17 @@ public class SOOSpecialDeathLootModifier implements IGlobalLootModifier {
     public Codec<? extends IGlobalLootModifier> codec() {
         return CODEC.get();
     }
+
     public enum SpecialEntityType {
-        NONE(() -> new ItemStack(Items.AIR)),
-        HERETIC(()-> ModItems.INFERNAL_TOME.get().getDefaultInstance()),
-        WARLOCK(()-> ModItems.WARLOCK_SASH.get().getDefaultInstance()),
-        WITCH(()-> ModItems.WITCH_HAT.get().getDefaultInstance());
-        private final com.google.common.base.Supplier<ItemStack> specialLootItem;
+        NONE(Items.AIR::getDefaultInstance),
+        WITHER_SKELETON(() -> new ItemStack(Items.WITHER_SKELETON_SKULL)),
+        HERETIC(() -> ModItems.INFERNAL_TOME.get().getDefaultInstance()),
+        WARLOCK(() -> ModItems.WARLOCK_SASH.get().getDefaultInstance()),
+        WITCH(() -> ModItems.WITCH_HAT.get().getDefaultInstance());
+        private final Supplier<ItemStack> specialLootItem;
+
         SpecialEntityType(Supplier<ItemStack> specialLootItem) {
-            this.specialLootItem = Suppliers.memoize(specialLootItem::get);
+            this.specialLootItem = specialLootItem;
         }
 
         public ItemStack getSpecialLootItem() {

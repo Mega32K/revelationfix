@@ -4,9 +4,9 @@ import com.Polarice3.Goety.api.entities.IOwned;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
+import com.mega.revelationfix.util.LivingEntityEC;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
-import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +29,7 @@ public class EntityExpandedContext {
     public static final String GR_MAY_FRIENDLY_TAG = "grFriendlyToTeam";
     public static final String GR_FT_CHURCH = "grFT_church";
     public final LivingEntity entity;
+    private final Lock LOCK = new ReentrantLock();
     public String className;
     public EntityActuallyHurt.IndexAndType indexAndType;
     public int apollyonLastGrowingTime;
@@ -36,12 +37,12 @@ public class EntityExpandedContext {
     @Nullable
     public UUID quietusCasterID;
     public int tetraFadingTime;
-    @Nullable
-    private LivingEntity quietusCaster;
     public int banAnySpelling;
     public CompoundTag tempTagForServer;
-    private final Lock LOCK = new ReentrantLock();
     public WalkAnimationState customArmorWalkAnimState = new WalkAnimationState();
+    @Nullable
+    private LivingEntity quietusCaster;
+
     public EntityExpandedContext(LivingEntity entity) {
         this.entity = entity;
         this.className = entity.getClass().getName();
@@ -50,12 +51,15 @@ public class EntityExpandedContext {
             this.indexAndType = EntityActuallyHurt.entityHealthDatas.get(className);
         }
     }
+
     public static boolean isOwnerFriendlyTag(Entity owned) {
         return owned instanceof IOwned iOwned && iOwned.getTrueOwner() != null && iOwned.getTrueOwner().getTags().contains(GR_MAY_FRIENDLY_TAG);
     }
+
     public static boolean isOwnerFriendlyTag_Church(Entity owned) {
         return owned instanceof IOwned iOwned && iOwned.getTrueOwner() != null && iOwned.getTrueOwner().getTags().contains(GR_FT_CHURCH);
     }
+
     public static EntityActuallyHurt.IndexAndType getIndexAndType(LivingEntity living) {
         if (living == null) return null;
         else return ((LivingEntityEC) living).revelationfix$livingECData().indexAndType;
@@ -123,7 +127,7 @@ public class EntityExpandedContext {
             tempTagForServer = null;
         if (ArmorUtils.findChestplate(entity, ModArmorMaterials.SPIDER_DARKMAGE)) {
             if (entity.onClimbable())
-                customArmorWalkAnimState.update(customArmorWalkAnimState.speed()+0.2F, 0.4F);
+                customArmorWalkAnimState.update(customArmorWalkAnimState.speed() + 0.2F, 0.4F);
             else {
                 if (customArmorWalkAnimState.speed() > 0F)
                     customArmorWalkAnimState.update(customArmorWalkAnimState.speed() - 0.2F, 0.4F);

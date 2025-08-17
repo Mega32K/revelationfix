@@ -8,6 +8,16 @@ import net.minecraft.world.level.Level;
 
 public class TimeRequirement implements Requirement {
     private long[] timeRange = new long[2];
+
+    public static TimeRequirement createFromJson(JsonElement element) {
+        TimeRequirement requirement = null;
+        if (element instanceof JsonObject jsonObject) {
+            requirement = new TimeRequirement();
+            requirement.compileData(jsonObject);
+        }
+        return requirement;
+    }
+
     @Override
     public String getType() {
         return RitualData.TIME;
@@ -21,16 +31,9 @@ public class TimeRequirement implements Requirement {
             timeRange[1] = GsonHelper.getAsLong(jsonObject, "max", timeRange[1]);
         }
     }
+
     public boolean canUse(Level level) {
         long time = level.getDayTime();
         return time >= this.timeRange[0] && time <= this.timeRange[1];
-    }
-    public static TimeRequirement createFromJson(JsonElement element) {
-        TimeRequirement requirement = null;
-        if (element instanceof JsonObject jsonObject) {
-            requirement = new TimeRequirement();
-            requirement.compileData(jsonObject);
-        }
-        return requirement;
     }
 }

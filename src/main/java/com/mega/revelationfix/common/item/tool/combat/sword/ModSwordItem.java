@@ -14,9 +14,10 @@ import org.jetbrains.annotations.NotNull;
 public class ModSwordItem extends SwordItem implements IWeaponExtraAttributesInjector {
     private final float attackDamage;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
+
     public ModSwordItem(Tier p_43269_, int p_43270_, float p_43271_, Properties p_43272_) {
         super(p_43269_, p_43270_, p_43271_, p_43272_);
-        this.attackDamage = (float)p_43270_ + p_43269_.getAttackDamageBonus();
+        this.attackDamage = (float) p_43270_ + p_43269_.getAttackDamageBonus();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", p_43271_, AttributeModifier.Operation.ADDITION));

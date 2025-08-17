@@ -4,9 +4,7 @@ import com.Polarice3.Goety.api.magic.SpellType;
 import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.common.magic.Spell;
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap; ;
-import com.mega.endinglib.api.item.IDragonLightRendererItem;
-import com.mega.endinglib.client.renderer.item.Dragon2DLightRenderer;
+import com.google.common.collect.Multimap;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.safe.mixinpart.goety.ILevelWand;
@@ -24,6 +22,7 @@ public class SecondPhaseStaff extends DarkWand implements ILevelWand {
     protected static final UUID BASE_SPELL_COOLDOWN_UUID = UUID.fromString("cd09f208-2208-4dc3-8dd5-55f287777162");
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
     private final Multimap<Attribute, AttributeModifier> offHandModifiers;
+
     public SecondPhaseStaff(UUID customSpellAttributeUUID) {
         super(new Properties().fireResistant().rarity(RevelationRarity.SPECTRE).setNoRepair().stacksTo(1), SpellType.FROST);
         {
@@ -43,6 +42,7 @@ public class SecondPhaseStaff extends DarkWand implements ILevelWand {
             this.offHandModifiers = builder.build();
         }
     }
+
     @Override
     public int getStaffLevel() {
         return 2;
@@ -52,10 +52,12 @@ public class SecondPhaseStaff extends DarkWand implements ILevelWand {
     public boolean expandedRightStaffLogic(Spell spell, ItemStack stack) {
         return spell.getSpellType() == spellType;
     }
+
     @Override
     public boolean expandedTypeStaffLogic(SpellType spellType, ItemStack stack) {
         return spellType == this.spellType;
     }
+
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot pEquipmentSlot, ItemStack stack) {
         if (pEquipmentSlot == EquipmentSlot.MAINHAND) {
             return defaultModifiers;

@@ -20,9 +20,13 @@ import javax.annotation.Nullable;
 @Mixin(NearestAttackableTargetGoal.class)
 public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> extends TargetGoal {
 
-    @Shadow @Final protected Class<T> targetType;
+    @Shadow
+    @Final
+    protected Class<T> targetType;
 
-    @Shadow @Nullable protected LivingEntity target;
+    @Shadow
+    @Nullable
+    protected LivingEntity target;
 
     public NearestAttackableTargetGoalMixin(Mob p_26140_, boolean p_26141_) {
         super(p_26140_, p_26141_);

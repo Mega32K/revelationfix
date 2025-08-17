@@ -1,6 +1,5 @@
 package com.mega.revelationfix.common.item.curios;
 
-import com.google.common.collect.HashMultimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.client.text.TextColorUtils;

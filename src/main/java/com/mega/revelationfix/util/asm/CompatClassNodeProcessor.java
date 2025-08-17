@@ -1,9 +1,7 @@
 package com.mega.revelationfix.util.asm;
 
-import com.Polarice3.Goety.common.magic.spells.VexSpell;
 import com.mega.endinglib.coremod.forge.IClassProcessor;
 import com.mega.endinglib.util.asm.injection.InjectionFinder;
-import com.mega.revelationfix.util.EventUtil;
 import com.mega.revelationfix.util.MCMapping;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
@@ -15,9 +13,10 @@ import org.objectweb.asm.tree.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CompatClassNodeProcessor implements IClassProcessor {
-    public static IClassProcessor INSTANCE = new CompatClassNodeProcessor();
     private static final String LIVING_ENTITY_CLASS = "net/minecraft/world/entity/LivingEntity";
+    public static IClassProcessor INSTANCE = new CompatClassNodeProcessor();
     public static Logger LOGGER = RevelationFixMixinPlugin.LOGGER;
+
     @Override
     public void processClass(ILaunchPluginService.Phase phase, ClassNode classNode, Type type, AtomicBoolean modified) {
         if (phase == ILaunchPluginService.Phase.BEFORE) {

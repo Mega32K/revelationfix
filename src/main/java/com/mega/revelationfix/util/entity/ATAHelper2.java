@@ -36,27 +36,32 @@ public class ATAHelper2 {
             living = spellerEntity.getOwner();
         return CuriosFinder.hasCurio(living, GRItems.ETERNAL_WATCH.get());
     }
+
     public static boolean hasBlessingScroll(LivingEntity living) {
         if (living instanceof FakeSpellerEntity spellerEntity)
             living = spellerEntity.getOwner();
         if (!(living instanceof Player)) return false;
         return CuriosFinder.hasCurio(living, EnigmaticLegacyItemInit.BLESSING_SCROLL_ITEM);
     }
+
     public static boolean hasSoulOfObsidian(LivingEntity living) {
         if (living instanceof FakeSpellerEntity spellerEntity)
             living = spellerEntity.getOwner();
         return CuriosFinder.hasCurio(living, GRItems.SOUL_OF_OBSIDIAN.get());
     }
+
     public static boolean hasAmuletOfSlime(LivingEntity living) {
         if (living instanceof FakeSpellerEntity spellerEntity)
             living = spellerEntity.getOwner();
         return CuriosFinder.hasCurio(living, GRItems.AMULET_OF_SLIME.get());
     }
+
     public static boolean hasGoldFeather(LivingEntity living) {
         if (living instanceof FakeSpellerEntity spellerEntity)
             living = spellerEntity.getOwner();
         return CuriosFinder.hasCurio(living, GRItems.GOLD_FEATHER.get());
     }
+
     public static OdamanePlayerExpandedContext getOdamaneEC(LivingEntity player) {
         if (player instanceof FakeSpellerEntity spellerEntity)
             player = spellerEntity.getOwner();

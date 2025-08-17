@@ -9,7 +9,6 @@ import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.armor.OptionArmorMaterial;
 import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
-import com.mega.revelationfix.common.init.ModAttributes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -51,6 +50,7 @@ public class SpectreArmor extends BaseArmorItem implements ISoulRepair, ISoulDis
     public Multimap<Attribute, AttributeModifier> getSetAttributesModifiers(LivingEntity living) {
         return ImmutableMultimap.of(Attributes.ATTACK_DAMAGE, SpectreArmor.ARMOR_ATTACK_DAMAGE_MODIFIER);
     }
+
     @Override
     public boolean immuneEffects(LivingEntity living, MobEffectInstance mobEffect) {
         if (this.type == Type.HELMET) {
@@ -73,9 +73,10 @@ public class SpectreArmor extends BaseArmorItem implements ISoulRepair, ISoulDis
     public boolean hasSetDescription() {
         return true;
     }
+
     @Override
     public void addSetDescription(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<CuriosMutableComponent> components, @NotNull TooltipFlag tooltipFlag) {
-        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat_noPercent(0, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s)-> ARMOR_ATTACK_DAMAGE_MODIFIER.getAmount())));
+        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat_noPercent(0, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> ARMOR_ATTACK_DAMAGE_MODIFIER.getAmount())));
     }
 
     @Override

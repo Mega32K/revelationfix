@@ -22,13 +22,18 @@ import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModAttributes;
-import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
 import com.mega.revelationfix.common.item.curios.TheNeedleItem;
+import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
 import com.mega.revelationfix.mixin.MobAccessor;
-import com.mega.revelationfix.safe.*;
-import com.mega.revelationfix.safe.entity.*;
-import com.mega.revelationfix.util.entity.ATAHelper2;
+import com.mega.revelationfix.safe.DamageSourceInterface;
+import com.mega.revelationfix.safe.GRSavedDataEC;
+import com.mega.revelationfix.safe.GRSavedDataExpandedContext;
+import com.mega.revelationfix.safe.entity.Apollyon2Interface;
+import com.mega.revelationfix.safe.entity.ApollyonExpandedContext;
+import com.mega.revelationfix.safe.entity.DeathArrowEC;
+import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.LivingEntityEC;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -67,7 +72,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -112,6 +116,10 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     private Vec3[][] clientSideIllusionOffsets;
     @Shadow(remap = false)
     private boolean regen;
+    @Shadow(remap = false)
+    private boolean killedPlayer;
+    @Shadow(remap = false)
+    private int lastKilledPlayer;
 
     public ApollyonMixin(EntityType<? extends SpellCastingCultist> type, Level p_i48551_2_) {
         super(type, p_i48551_2_);
@@ -174,10 +182,6 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     @Shadow(remap = false)
     public abstract boolean isSmited();
 
-    @Shadow(remap = false) private boolean killedPlayer;
-
-    @Shadow(remap = false) private int lastKilledPlayer;
-
     @Override
     public int revelaionfix$getHitCooldown() {
         return entityData.get(HIT_COOLDOWN2);
@@ -201,7 +205,8 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         this.entityData.define(DeathPerformance.FLAGS, (byte) 0);
         this.entityData.define(AttackDamageChangeHandler.LIMIT_TIME, AttackDamageChangeHandler.vanillaLimitTime);
         //ApollyonSynchedEntityData.hackData(revelationfix$asApostle(), this.entityData);
-    } 
+    }
+
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
     private void readAdditionalSaveData(CompoundTag pCompound, CallbackInfo ci) {
         Apostle apostle = revelationfix$asApostle();
@@ -685,6 +690,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         }
         return instance.isCreative() || ATAHelper2.hasOdamane(instance);
     }
+
     @WrapWithCondition(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean doomDisableSpell(Level level, Entity toSummon) {
         if (toSummon instanceof NetherMeteor || toSummon instanceof FireBlastTrap) {
@@ -694,6 +700,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         }
         return true;
     }
+
     @WrapWithCondition(method = "teleportHits", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean doomDisableSpell2(Level level, Entity toSummon) {
         if (toSummon instanceof NetherMeteor || toSummon instanceof FireBlastTrap) {
@@ -703,6 +710,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         }
         return true;
     }
+
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void aiStep(CallbackInfo ci) {
         if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
@@ -848,20 +856,6 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     }
 
     @Override
-    public void setTarget(@Nullable LivingEntity newTarget) {
-        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
-            revelaionfix$apollyonEC().lastTarget = this.getTarget();
-            if (this.isInNether()) {
-                if (newTarget != null && revelaionfix$apollyonEC().lastTarget instanceof Player) {
-                    if (newTarget.getY() < 127F && !(newTarget instanceof Player))
-                        return;
-                }
-            }
-        }
-        super.setTarget(newTarget);
-    }
-
-    @Override
     public void onEffectRemoved(MobEffectInstance effectInstance) {
         MobEffect key = effectInstance.getEffect();
         if (key != null && key.getCategory() == MobEffectCategory.HARMFUL)
@@ -971,18 +965,35 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
         else return null;
     }
 
+    @Override
+    public void setTarget(@Nullable LivingEntity newTarget) {
+        if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
+            revelaionfix$apollyonEC().lastTarget = this.getTarget();
+            if (this.isInNether()) {
+                if (newTarget != null && revelaionfix$apollyonEC().lastTarget instanceof Player) {
+                    if (newTarget.getY() < 127F && !(newTarget instanceof Player))
+                        return;
+                }
+            }
+        }
+        super.setTarget(newTarget);
+    }
+
     @Unique
     private ApollyonAbilityHelper revelationfix$asApollyonHelper() {
         return (ApollyonAbilityHelper) this;
     }
+
     @Unique
     private AccessorLivingEntity revelationfix$asAccessorLE() {
         return (AccessorLivingEntity) this;
     }
+
     @Unique
     private AccessorEntity revelationfix$asAccessorE() {
         return (AccessorEntity) this;
     }
+
     @Unique
     private Apostle revelationfix$asApostle() {
         return (Apostle) (Object) this;

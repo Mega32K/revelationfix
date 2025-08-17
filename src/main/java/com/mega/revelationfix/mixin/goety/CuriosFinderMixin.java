@@ -16,6 +16,7 @@ public class CuriosFinderMixin {
         }
         return src;
     }
+
     @ModifyVariable(remap = false, method = "findCurio(Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Predicate;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private static LivingEntity spellerCorrect2(LivingEntity src) {
         if (src instanceof FakeSpellerEntity spellerEntity && spellerEntity.getOwner() != null) {

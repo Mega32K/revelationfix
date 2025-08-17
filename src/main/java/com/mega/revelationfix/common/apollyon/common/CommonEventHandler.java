@@ -15,8 +15,8 @@ import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.common.spell.nether.RevelationSpell;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
-import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.LivingEntityEC;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -32,7 +32,6 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.checkerframework.checker.units.qual.C;
 import z1gned.goetyrevelation.util.ATAHelper;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 

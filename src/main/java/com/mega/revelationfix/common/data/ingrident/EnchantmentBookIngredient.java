@@ -20,6 +20,7 @@ public class EnchantmentBookIngredient extends Ingredient {
     private final ResourceLocation enchantmentID;
     private final @Nullable Enchantment enchantment;
     private final @Nullable ItemStack stack;
+
     public EnchantmentBookIngredient(String enchantmentID) {
         super(Stream.of(new TagValue(GRItems.VANISHING_CB)));
         this.enchantmentID = new ResourceLocation(enchantmentID);
@@ -37,8 +38,8 @@ public class EnchantmentBookIngredient extends Ingredient {
 
     @Override
     public ItemStack @NotNull [] getItems() {
-        if (stack == null) return new ItemStack[] {Items.AIR.getDefaultInstance()};
-        return new ItemStack[] {stack};
+        if (stack == null) return new ItemStack[]{Items.AIR.getDefaultInstance()};
+        return new ItemStack[]{stack};
     }
 
     public ResourceLocation getEnchantmentID() {

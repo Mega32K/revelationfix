@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,6 +45,7 @@ public class BlockConfig {
     public static double runeReactor_spellingCostMultiplier = 1D;
     public static Set<String> blacklistSpellNames = new ReferenceOpenHashSet<>();
     public static int darkAnvilLimitLevel;
+
     static {
         BUILDER.push("Rune Reactor");
         RUNE_REACTOR_ROOT_CORE_DELAY = BUILDER.worldRestart()
@@ -83,7 +83,7 @@ public class BlockConfig {
                 .defineInRange("normalStructure_WindCoreCost", 2, 0, 128);
         SpellingCostMultiplier = BUILDER.worldRestart()
                 .comment("The total soul cost of auto-spelling structure, Default: 2")
-                .defineInRange("runeReactor_spellingCostMultiplier", 1D, 0D, 128D );
+                .defineInRange("runeReactor_spellingCostMultiplier", 1D, 0D, 128D);
         RUNE_REACTOR_BLACK_LIST_FOCUS = BUILDER.worldRestart().comment("A list of focus items will be banned when Rune Reactor auto-spelling.")
                 .defineListAllowEmpty("blacklistSpellNames", List.of(), BlockConfig::validateFocusName);
         BUILDER.pop();
@@ -94,9 +94,11 @@ public class BlockConfig {
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
+
     public static boolean validateFocusName(final Object obj) {
         return obj instanceof final String itemName && ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)) instanceof MagicFocus;
     }
+
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         if (SPEC.isLoaded()) {
@@ -112,7 +114,7 @@ public class BlockConfig {
             runeReactor_MysticCoreCost_Focus = RUNE_REACTOR_MYSTIC_CORE_COST_FOCUS.get();
             runeReactor_WindCoreCost_Focus = RUNE_REACTOR_WIND_CORE_COST_FOCUS.get();
             runeReactor_spellingCostMultiplier = SpellingCostMultiplier.get();
-            blacklistSpellNames = RUNE_REACTOR_BLACK_LIST_FOCUS.get().stream().map(itemName -> ((MagicFocus)ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName))).getSpell().getClass().getName()).collect(Collectors.toSet());
+            blacklistSpellNames = RUNE_REACTOR_BLACK_LIST_FOCUS.get().stream().map(itemName -> ((MagicFocus) ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName))).getSpell().getClass().getName()).collect(Collectors.toSet());
             darkAnvilLimitLevel = DARK_ANVIL_BREAK_MAX_ENCHANTMENT_LEVEL.get();
         }
     }

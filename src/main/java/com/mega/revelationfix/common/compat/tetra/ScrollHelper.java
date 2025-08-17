@@ -11,7 +11,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.RegistryObject;
 import se.mickelus.tetra.TetraRegistries;
 import se.mickelus.tetra.blocks.scroll.ScrollData;

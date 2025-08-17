@@ -16,7 +16,6 @@ import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -44,8 +43,8 @@ public class ArmorEvents {
         LivingEntity target = event.getEntity();
         float damageAmount = event.getAmount();
         float totalReduce = 0;
-        for (EquipmentSlot equipmentSlot : BaseArmorItem.EQUIPMENT_SLOTS){
-            if (target.getItemBySlot(equipmentSlot).getItem() instanceof ArmorItem armorItem){
+        for (EquipmentSlot equipmentSlot : BaseArmorItem.EQUIPMENT_SLOTS) {
+            if (target.getItemBySlot(equipmentSlot).getItem() instanceof ArmorItem armorItem) {
                 if (isMagicArmor(armorItem.getMaterial())) {
                     float reducedDamage = getReducedDamage(event, armorItem);
                     totalReduce += reducedDamage;
@@ -87,18 +86,23 @@ public class ArmorEvents {
             return Component.translatable("title.goety.10");
         else return Component.translatable("title.goety.9");
     }
+
     public static boolean isMagicArmor(ArmorMaterial material) {
         return material instanceof ModArmorMaterials;
     }
+
     public static boolean isDarkmageSet(ArmorMaterial material) {
         return material == ModArmorMaterials.SPECTRE_DARKMAGE || material == ModArmorMaterials.SPIDER_DARKMAGE;
     }
+
     public static boolean isSpiderSet(ArmorMaterial material) {
         return material == ModArmorMaterials.SPIDER || material == ModArmorMaterials.SPIDER_DARKMAGE;
     }
+
     public static boolean isSpectreSet(ArmorMaterial material) {
         return material == ModArmorMaterials.SPECTRE || material == ModArmorMaterials.SPECTRE_DARKMAGE;
     }
+
     /**
      * Goety同款魔法 火焰 熔岩减伤
      */
@@ -111,6 +115,7 @@ public class ArmorEvents {
         }
         return event.getAmount() * reduction;
     }
+
     public static float getDamageReduction(TagKey<DamageType> tagKey, ArmorItem armorItem) {
         float reduction = 0;
         if (tagKey.equals(DamageTypeTags.WITCH_RESISTANT_TO)) {

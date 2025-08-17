@@ -13,11 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.BiFunction;
 
 public class MegaRenderType extends RenderType {
-    public static int id = 1;
-    private static final BiFunction<ResourceLocation, Boolean, RenderType> ALWAYS_TRANSPARENCY_CORE = Util.memoize((p_286166_, p_286167_) -> {
-        RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_EYES_SHADER).setTextureState(new RenderStateShard.TextureStateShard(p_286166_, false, false)).setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY).setDepthTestState(RenderStateShard.NO_DEPTH_TEST).createCompositeState(p_286167_);
-        return create("always_transparency_core", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, rendertype$compositestate);
-    });
     protected static final RenderStateShard.TransparencyStateShard EYES_ALPHA_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("eyes_alpha_transparency", () -> {
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -25,9 +20,13 @@ public class MegaRenderType extends RenderType {
         RenderSystem.disableBlend();
         RenderSystem.defaultBlendFunc();
     });
-    private static final RenderType  GUI_OVERLAY_NO_CULL = RenderType.create("gui_overlay_no_cull", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_GUI_OVERLAY_SHADER).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NO_DEPTH_TEST).setCullState(NO_CULL).setWriteMaskState(COLOR_WRITE).createCompositeState(false));
-
     protected static final RenderStateShard.ShaderStateShard RENDERTYPE_LIGHT_BEACON_BEAM_SHADER = new RenderStateShard.ShaderStateShard(GRShaders::getLightBeaconBeam);
+    private static final BiFunction<ResourceLocation, Boolean, RenderType> ALWAYS_TRANSPARENCY_CORE = Util.memoize((p_286166_, p_286167_) -> {
+        RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_EYES_SHADER).setTextureState(new RenderStateShard.TextureStateShard(p_286166_, false, false)).setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY).setDepthTestState(RenderStateShard.NO_DEPTH_TEST).createCompositeState(p_286167_);
+        return create("always_transparency_core", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, rendertype$compositestate);
+    });
+    private static final RenderType GUI_OVERLAY_NO_CULL = RenderType.create("gui_overlay_no_cull", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, false, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_GUI_OVERLAY_SHADER).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NO_DEPTH_TEST).setCullState(NO_CULL).setWriteMaskState(COLOR_WRITE).createCompositeState(false));
+    public static int id = 1;
 
 
     public MegaRenderType(String p_173178_, VertexFormat p_173179_, VertexFormat.Mode p_173180_, int p_173181_, boolean p_173182_, boolean p_173183_, Runnable p_173184_, Runnable p_173185_) {
@@ -76,9 +75,11 @@ public class MegaRenderType extends RenderType {
     public static RenderType alwaysEnergySwirl(ResourceLocation p_110437_, float p_110438_, float p_110439_) {
         return create("always_energy_swirl", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER).setTextureState(new RenderStateShard.TextureStateShard(p_110437_, false, false)).setTexturingState(new RenderStateShard.OffsetTexturingStateShard(p_110438_, p_110439_)).setDepthTestState(RenderStateShard.NO_DEPTH_TEST).setTransparencyState(ADDITIVE_TRANSPARENCY).setCullState(NO_CULL).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(false));
     }
+
     public static RenderType alwaysTransparencyEntityCutoutNoCull(ResourceLocation p_110444_) {
         return ALWAYS_TRANSPARENCY_CORE.apply(p_110444_, false);
     }
+
     public static RenderType guiOverlayNoCull() {
         return GUI_OVERLAY_NO_CULL;
     }

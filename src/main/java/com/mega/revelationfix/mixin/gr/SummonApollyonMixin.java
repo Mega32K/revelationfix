@@ -13,13 +13,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import z1gned.goetyrevelation.data.DefeatApollyonInNetherState;
 import z1gned.goetyrevelation.entitiy.SummonApollyon;
 
-import java.util.Iterator;
-
 @Mixin(SummonApollyon.class)
 public class SummonApollyonMixin extends SummonApostle {
     public SummonApollyonMixin(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
+
     @Override
     public void tick() {
         super.tick();

@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.StructureBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
@@ -20,10 +19,13 @@ import z1gned.goetyrevelation.ModMain;
 import java.util.Map;
 
 public class ModStructures {
+    public static final ResourceKey<Structure> CHURCH = registerKey("church");
+
     public static Structure.StructureSettings structure(
             HolderSet<Biome> pBiomes, Map<MobCategory, StructureSpawnOverride> pSpawnOverrides, GenerationStep.Decoration pStep, TerrainAdjustment pTerrainAdaptation) {
         return new Structure.StructureSettings(pBiomes, pSpawnOverrides, pStep, pTerrainAdaptation);
     }
+
     private static Structure.StructureSettings structure(HolderSet<Biome> pBiomes, GenerationStep.Decoration pStep, TerrainAdjustment pTerrainAdaptation) {
         return structure(pBiomes, Map.of(), pStep, pTerrainAdaptation);
     }
@@ -31,10 +33,11 @@ public class ModStructures {
     private static Structure.StructureSettings structure(HolderSet<Biome> pBiomes, TerrainAdjustment pTerrainAdaptation) {
         return structure(pBiomes, Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, pTerrainAdaptation);
     }
-    public static final ResourceKey<Structure> CHURCH = registerKey("church");
+
     public static ResourceKey<Structure> registerKey(String name) {
         return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(ModMain.MODID, name));
     }
+
     public static void bootstrap(BootstapContext<Structure> context) {
         // 从上下文中获得所有的生物群系
         HolderGetter<Biome> biomeHolderGetter = context.lookup(Registries.BIOME);

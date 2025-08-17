@@ -15,6 +15,7 @@ public class ApollyonRobeItem extends UnholyRobeItem {
     public @NotNull Rarity getRarity(@NotNull ItemStack p_41461_) {
         return RevelationRarity.REVELATION;
     }
+
     @Override
     public @NotNull Component getName(@NotNull ItemStack p_41458_) {
         Component component = super.getName(p_41458_);

@@ -1,8 +1,6 @@
 package com.mega.revelationfix.mixin;
 
 import com.mega.endinglib.util.annotation.DeprecatedMixin;
-import com.mega.revelationfix.common.structures.ModStructureSets;
-import com.mega.revelationfix.common.structures.church.ChurchPlacement;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.structure.StructureSet;

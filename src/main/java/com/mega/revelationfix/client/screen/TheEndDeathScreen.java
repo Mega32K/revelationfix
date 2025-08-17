@@ -11,8 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 
 public class TheEndDeathScreen extends DeathScreen {
-    public InvisibleButton waitForTheEndButton;
     private final DeathScreenAccessor accessor;
+    public InvisibleButton waitForTheEndButton;
 
     public TheEndDeathScreen(@Nullable Component p_95911_, boolean p_95912_) {
         super(p_95911_, p_95912_);

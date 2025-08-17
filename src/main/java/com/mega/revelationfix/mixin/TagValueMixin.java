@@ -27,8 +27,9 @@ public class TagValueMixin {
     @Shadow
     @Final
     private TagKey<Item> tag;
+
     @SuppressWarnings("DataFlowIssue")
-    @Inject(method = "getItems", at = @At(value = "RETURN" ), cancellable = true)
+    @Inject(method = "getItems", at = @At(value = "RETURN"), cancellable = true)
     private void getItems(CallbackInfoReturnable<Collection<ItemStack>> cir) {
         Collection<ItemStack> list = cir.getReturnValue();
         try {
@@ -58,7 +59,8 @@ public class TagValueMixin {
             } else if (tag == GRItems.MYSTERY_3) {
                 list.add(GRItems.createFragment(3));
             }
-        } catch (Throwable throwable) {}
+        } catch (Throwable throwable) {
+        }
         cir.setReturnValue(list);
     }
 }

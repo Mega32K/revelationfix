@@ -16,9 +16,12 @@ import javax.annotation.Nullable;
 @Mixin(AbstractSpellCastingMob.class)
 @ModDependsMixin("irons_spellbooks")
 public class AbstractSpellCastingMobMixin {
-    @Shadow(remap = false) @Nullable private SpellData castingSpell;
+    @Shadow(remap = false)
+    @Nullable
+    private SpellData castingSpell;
 
-    @Shadow(remap = false) private boolean recreateSpell;
+    @Shadow(remap = false)
+    private boolean recreateSpell;
 
     @Inject(method = "initiateCastSpell", at = @At("HEAD"), cancellable = true, remap = false)
     private void initiateCastSpell(AbstractSpell spell, int spellLevel, CallbackInfo ci) {
@@ -27,6 +30,7 @@ public class AbstractSpellCastingMobMixin {
             castingSpell = null;
         }
     }
+
     @Inject(method = "customServerAiStep", at = @At("HEAD"))
     private void customServerAiStep(CallbackInfo ci) {
         if (((LivingEntityEC) this).revelationfix$livingECData().banAnySpelling > 0) {

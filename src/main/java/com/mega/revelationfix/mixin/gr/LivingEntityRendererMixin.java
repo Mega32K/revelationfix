@@ -1,6 +1,5 @@
 package com.mega.revelationfix.mixin.gr;
 
-import com.mega.revelationfix.common.compat.SafeClass;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

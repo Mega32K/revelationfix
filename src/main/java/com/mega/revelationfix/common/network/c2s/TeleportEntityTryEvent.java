@@ -58,10 +58,10 @@ public class TeleportEntityTryEvent {
                         preparation.sort((e1, e2) -> (int) ((e1.distanceToSqr(serverPlayer) - e2.distanceToSqr(serverPlayer)) * 100));
                         TeleportEntity target = null;
                         for (TeleportEntity teleportEntity : preparation) {
-                             if (teleportEntity.isLookingAtMe(serverPlayer) && teleportEntity.distanceToSqr(serverPlayer) > 2) {
-                                 target = teleportEntity;
-                                 break;
-                             }
+                            if (teleportEntity.isLookingAtMe(serverPlayer) && teleportEntity.distanceToSqr(serverPlayer) > 2) {
+                                target = teleportEntity;
+                                break;
+                            }
                         }
                         if (target != null && !target.isRemoved()) {
                             serverPlayer.teleportTo(target.getX() + .5F, target.getY() + 1F, target.getZ() + .5F);
@@ -73,6 +73,7 @@ public class TeleportEntityTryEvent {
             throwable.printStackTrace();
         }
     }
+
     public static double calculateRadians(
             Vector3f line1Start, Vector3f line1End,
             Vector3f line2Start, Vector3f line2End) {

@@ -13,9 +13,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-import org.spongepowered.asm.service.MixinService;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -24,18 +26,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
     public static final Set<String> toRemovedMixins = Collections.synchronizedSet(new HashSet<>());
     public static final Set<String> handCheckMixins = Collections.synchronizedSet(new HashSet<>());
+    public static final String EVENT_UTIL_CLASS;
     private static final String ISPELL_CLASS = "com/Polarice3/Goety/api/magic/ISpell";
     private static final String IOWNED_CLASS = "com/Polarice3/Goety/api/entities/IOwned";
     private static final String MOB_EFFECT_EVENT$EXPIRED = "net/minecraftforge/event/entity/living/MobEffectEvent$Expired";
     private static final String ABSTRACT_SPELL_MIXIN = "com.mega.revelationfix.mixin.fantasy_ending.time.ironspellbook.AbstractSpellMixin";
     private static final String EVENT_BUS_MIXIN = "net/minecraftforge/eventbus/EventBus";
     private static final String IMODULAR_ITEM_CLASS = "se.mickelus.tetra.items.modular.IModularItem".replace('.', '/');
-    public static final String EVENT_UTIL_CLASS;
     public static boolean USE_FIX_MIXIN = true;
     public static Logger LOGGER = LogManager.getLogger("RevelationFix");
     public static IClassProcessor GOETY_PROCESSOR = GoetyClassNodeProcessor.INSTANCE;
     public static IClassProcessor COMPAT_PROCESSOR = CompatClassNodeProcessor.INSTANCE;
     public static IClassProcessor NORMAL_PROCESSOR = NormalClassNodeProcessor.INSTANCE;
+
     static {
         EVENT_UTIL_CLASS = EventUtil.class.getName().replace(".", "/");
         handCheckMixins.add(ABSTRACT_SPELL_MIXIN);
@@ -108,8 +111,7 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
                                         shouldWrite.set(true);
                                     }
                                 });
-                            }
-                            else if (name.endsWith("Mixin") ) {
+                            } else if (name.endsWith("Mixin")) {
                                 synchronized (toRemovedMixins) {
                                     if (toRemovedMixins.contains(name)) {
                                         clearMixinClass(classNode);
@@ -157,6 +159,7 @@ public class RevelationFixMixinPlugin extends ApplyCheckMixinConfigPlugin {
     public String getRefMapperConfig() {
         return null;
     }
+
     @Override
     public void acceptTargets(Set<String> set, Set<String> set1) {
 

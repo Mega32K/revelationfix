@@ -5,12 +5,10 @@ import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.google.common.collect.ImmutableList;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.util.DynamicUtil;
-import com.mega.revelationfix.util.java.Self;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,9 +20,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import z1gned.goetyrevelation.ModMain;
 import z1gned.goetyrevelation.item.ModItems;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 @Mixin(ModMain.class)
 public class ModMainMixin {

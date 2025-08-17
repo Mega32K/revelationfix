@@ -1,7 +1,6 @@
 package com.mega.revelationfix.client.renderer.curio;
 
 import com.Polarice3.Goety.client.render.WearRenderer;
-import com.Polarice3.Goety.client.render.model.DarkRobeModel;
 import com.Polarice3.Goety.client.render.model.GloveModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -26,15 +25,8 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import javax.annotation.Nullable;
 
-public record ApollyonRobeRenderer(ResourceLocation normal, ResourceLocation nether, HumanoidModel<LivingEntity> model) implements ICurioRenderer {
-
-    private ResourceLocation getTexture(LivingEntity livingEntity) {
-        return livingEntity.level().dimension() == Level.NETHER ? nether : normal;
-    }
-
-    private HumanoidModel<LivingEntity> getModel() {
-        return model;
-    }
+public record ApollyonRobeRenderer(ResourceLocation normal, ResourceLocation nether,
+                                   HumanoidModel<LivingEntity> model) implements ICurioRenderer {
 
     @Nullable
     public static WearRenderer getRenderer(ItemStack stack) {
@@ -44,7 +36,15 @@ public record ApollyonRobeRenderer(ResourceLocation normal, ResourceLocation net
         return null;
     }
 
-    public boolean hasCape(AbstractClientPlayer p_116618_){
+    private ResourceLocation getTexture(LivingEntity livingEntity) {
+        return livingEntity.level().dimension() == Level.NETHER ? nether : normal;
+    }
+
+    private HumanoidModel<LivingEntity> getModel() {
+        return model;
+    }
+
+    public boolean hasCape(AbstractClientPlayer p_116618_) {
         return p_116618_.isCapeLoaded() && !p_116618_.isInvisible() && p_116618_.isModelPartShown(PlayerModelPart.CAPE) && p_116618_.getCloakTextureLocation() != null;
     }
 

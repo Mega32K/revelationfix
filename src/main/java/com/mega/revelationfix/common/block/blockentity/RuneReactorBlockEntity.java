@@ -69,9 +69,9 @@ public class RuneReactorBlockEntity extends BlockEntity {
     private static final Supplier<Item> HUNGER_CORE = ModItems.HUNGER_CORE;
     private static final Supplier<Item> MYSTIC_CORE = ModItems.MYSTIC_CORE;
     private static final Supplier<Item> WIND_CORE = ModItems.WIND_CORE;
+    public final int randId = (int) (Math.random() * Util.getMillis());
     private final Set<UUID> listenerEntityUUIDS = new HashSet<>();
     private final Set<BlockBindingEntity> listenerEntities = new HashSet<>();
-    public final int randId = (int) (Math.random() * Util.getMillis());
     private final Object2IntOpenHashMap<Item> structureCodes = new Object2IntOpenHashMap<>();
     private final BlockPos[] runestonePoses = new BlockPos[]{new BlockPos(0, 0, 0), new BlockPos(0, 0, 0), new BlockPos(0, 0, 0), new BlockPos(0, 0, 0)};
     //index -> runestone index
@@ -179,6 +179,12 @@ public class RuneReactorBlockEntity extends BlockEntity {
         listenerEntities.forEach(e -> e.blockOwnerTickEvent(level, reactorPos, reactorState, reactorBlockEntity, 1));
     }
 
+    static int getDigitByMath(int number, int pos) {
+        number = Math.abs(number);
+        int divisor = (int) Math.pow(10, pos - 1);
+        return (number / divisor) % 10;
+    }
+
     public Set<UUID> getListenerEntityUUIDS() {
         return listenerEntityUUIDS;
     }
@@ -190,6 +196,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
     public void addListener(BlockBindingEntity entity, UUID uuid) {
         this.listenerEntityUUIDS.add(uuid);
     }
+
     public ItemStack getInsertItem() {
         return insertItem;
     }
@@ -214,6 +221,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
     public int toSimpleStructureCode() {
         return toSimpleStructureCode(structureCodes);
     }
+
     public int toSimpleStructureCode(Object2IntOpenHashMap<Item> structureCodes) {
         return structureCodes.getInt(ANIMATION_CORE.get()) * 1000 + structureCodes.getInt(HUNGER_CORE.get()) * 100 + structureCodes.getInt(MYSTIC_CORE.get()) * 10 + structureCodes.getInt(WIND_CORE.get());
     }
@@ -696,7 +704,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                 } else if (this.cannotCast(wandB, livingEntityIn, stack)) {
                     {
                         int CastTime = stack.getUseDuration() - spellUseTimeRemaining;
-                        spellB = GoetyEventFactory.onStopSpell(playerOwner, stack, spellB,  CastTime, spellUseTimeRemaining);
+                        spellB = GoetyEventFactory.onStopSpell(playerOwner, stack, spellB, CastTime, spellUseTimeRemaining);
                         if (spellB != null) {
                             spellB.stopSpell(serverLevel, livingEntityIn, stack, IWand.getFocus(stack), CastTime, spellB.defaultStats());
                             if (livingEntityIn instanceof FakeSpellerEntity fakeSpellerEntity) {
@@ -950,7 +958,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
             int i = event.getCurrentCode();
             if (!Integer.valueOf(i).equals(originCode)) {
                 if (Integer.valueOf(i).equals(RunestoneRitualInit.RITUAL_9)) {
-                    if (this.getListenerEntities().stream().noneMatch(e-> e instanceof TeleportEntity)) {
+                    if (this.getListenerEntities().stream().noneMatch(e -> e instanceof TeleportEntity)) {
                         TeleportEntity teleportEntity = new TeleportEntity(level, reactorPos);
                         level.addFreshEntity(teleportEntity);
                     }
@@ -962,10 +970,5 @@ public class RuneReactorBlockEntity extends BlockEntity {
             }
         }
         tempStructureCodes.clear();
-    }
-    static int getDigitByMath(int number, int pos) {
-        number = Math.abs(number);
-        int divisor = (int) Math.pow(10, pos - 1);
-        return (number / divisor) % 10;
     }
 }

@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 public class RunestoneRitualExecutorRegisterEvent extends Event {
     public RunestoneRitualExecutorRegisterEvent() {
     }
+
     public void register(int simpleCode, RunestoneRitualExe exe, Consumer<Throwable> caughtException) {
         try {
             RunestoneRitualInit.register(simpleCode, exe);
@@ -16,10 +17,12 @@ public class RunestoneRitualExecutorRegisterEvent extends Event {
             caughtException.accept(throwable);
         }
     }
+
     public void replaceExe(int simpleCode, RunestoneRitualExe exe) {
         if (RunestoneRitualInit.registries.containsKey(simpleCode))
             RunestoneRitualInit.registries.put(simpleCode, exe);
     }
+
     public void removeExe(int simpleCode) {
         if (RunestoneRitualInit.registries.containsKey(simpleCode))
             RunestoneRitualInit.registries.remove(simpleCode);

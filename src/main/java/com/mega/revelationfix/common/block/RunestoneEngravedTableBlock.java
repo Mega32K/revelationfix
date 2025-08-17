@@ -46,6 +46,7 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
     protected static final VoxelShape FULL_SHAPE = Shapes.or(BASE_SHAPE, CORE_SHAPE);
     public Object2IntArrayMap<Item> coreMap0 = new Object2IntArrayMap<>();
     public Int2ObjectOpenHashMap<Item> coreMap1 = new Int2ObjectOpenHashMap<>();
+
     public RunestoneEngravedTableBlock() {
         super(BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_PURPLE)
@@ -57,15 +58,19 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
         );
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(CORE, 0).setValue(IS_STRUCTURE_PLACED, false));
     }
+
     public boolean useShapeForLightOcclusion(@NotNull BlockState p_53079_) {
         return true;
     }
+
     public @NotNull VoxelShape getShape(BlockState p_53073_, @NotNull BlockGetter p_53074_, @NotNull BlockPos p_53075_, @NotNull CollisionContext p_53076_) {
         return p_53073_.getValue(CORE) > 0 ? FULL_SHAPE : BASE_SHAPE;
     }
+
     public BlockState getStateForPlacement(BlockPlaceContext p_53052_) {
         return this.defaultBlockState().setValue(FACING, p_53052_.getHorizontalDirection().getOpposite()).setValue(CORE, 0);
     }
+
     public @NotNull BlockState rotate(BlockState p_53068_, Rotation p_53069_) {
         return p_53068_.setValue(FACING, p_53069_.rotate(p_53068_.getValue(FACING)));
     }
@@ -73,6 +78,7 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
     public @NotNull BlockState mirror(BlockState p_53065_, Mirror p_53066_) {
         return p_53065_.rotate(p_53066_.getRotation(p_53065_.getValue(FACING)));
     }
+
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_53071_) {
         p_53071_.add(FACING, CORE, IS_STRUCTURE_PLACED);
     }
@@ -84,11 +90,11 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
         VoxelShape voxelshape = this.getShape(blockState, level, pos, CollisionContext.empty());
         Vec3 vec3 = voxelshape.bounds().getCenter();
 
-        for(int i = 0; i < 2; ++i) {
-            double d0 = (double)pos.getX() + (randomSource.nextBoolean() ? voxelshape.bounds().minX : voxelshape.bounds().maxX);
-            double d1 = (double)pos.getZ() + (randomSource.nextBoolean() ? voxelshape.bounds().minZ : voxelshape.bounds().maxZ);
+        for (int i = 0; i < 2; ++i) {
+            double d0 = (double) pos.getX() + (randomSource.nextBoolean() ? voxelshape.bounds().minX : voxelshape.bounds().maxX);
+            double d1 = (double) pos.getZ() + (randomSource.nextBoolean() ? voxelshape.bounds().minZ : voxelshape.bounds().maxZ);
 
-            level.addParticle(ModParticleTypes.FROST_FLOWER.get(), d0 + randomSource.nextDouble() / 5.0D, (double)pos.getY() + (0.5D - randomSource.nextDouble()), d1 + randomSource.nextDouble() / 5.0D, 0.0D, 0.1D, 0.0D);
+            level.addParticle(ModParticleTypes.FROST_FLOWER.get(), d0 + randomSource.nextDouble() / 5.0D, (double) pos.getY() + (0.5D - randomSource.nextDouble()), d1 + randomSource.nextDouble() / 5.0D, 0.0D, 0.1D, 0.0D);
 
         }
 
@@ -96,7 +102,8 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState blockState, @NotNull Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockHitResult) {
-        if (blockState.is(ModBlocks.RUNESTONE_ENGRAVED_TABLE.get())) {ItemStack handItem = player.getItemInHand(hand);
+        if (blockState.is(ModBlocks.RUNESTONE_ENGRAVED_TABLE.get())) {
+            ItemStack handItem = player.getItemInHand(hand);
             if (level.isClientSide) {
                 if (blockState.getValue(CORE) == 0 && isCore(handItem.getItem())) {
                     return InteractionResult.SUCCESS;
@@ -104,24 +111,25 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
                     return InteractionResult.SUCCESS;
                 } else return InteractionResult.FAIL;
             } else {
-                    if (blockState.getValue(CORE) == 0 && isCore(handItem.getItem())) {
-                        BlockState blockstate1 = blockState.setValue(CORE, getCore(handItem.getItem()));
-                        Block.pushEntitiesUp(blockState, blockstate1, level, blockPos);
-                        level.setBlock(blockPos, blockstate1, 2);
-                        handItem.shrink(1);
-                        level.levelEvent(1503, blockPos, 0);
-                        return InteractionResult.SUCCESS;
-                    } else if (blockState.getValue(CORE) > 0) {
-                        player.addItem(getCore(blockState.getValue(CORE)).getDefaultInstance());
-                        BlockState blockstate1 = blockState.setValue(CORE, 0);
-                        level.setBlock(blockPos, blockstate1, 2);
-                        level.levelEvent(232424314, blockPos, 0);
-                        return InteractionResult.SUCCESS;
-                    }
+                if (blockState.getValue(CORE) == 0 && isCore(handItem.getItem())) {
+                    BlockState blockstate1 = blockState.setValue(CORE, getCore(handItem.getItem()));
+                    Block.pushEntitiesUp(blockState, blockstate1, level, blockPos);
+                    level.setBlock(blockPos, blockstate1, 2);
+                    handItem.shrink(1);
+                    level.levelEvent(1503, blockPos, 0);
+                    return InteractionResult.SUCCESS;
+                } else if (blockState.getValue(CORE) > 0) {
+                    player.addItem(getCore(blockState.getValue(CORE)).getDefaultInstance());
+                    BlockState blockstate1 = blockState.setValue(CORE, 0);
+                    level.setBlock(blockPos, blockstate1, 2);
+                    level.levelEvent(232424314, blockPos, 0);
+                    return InteractionResult.SUCCESS;
+                }
             }
         }
         return super.use(blockState, level, blockPos, player, hand, blockHitResult);
     }
+
     @Override
     public @NotNull List<ItemStack> getDrops(@NotNull BlockState blockState, LootParams.@NotNull Builder builder) {
         List<ItemStack> stacks = super.getDrops(blockState, builder);
@@ -131,10 +139,12 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
         }
         return stacks;
     }
+
     public int getCore(Item item) {
         checkMap();
         return coreMap0.getOrDefault(item, -1);
     }
+
     public Item getCore(int core) {
         checkMap();
         return coreMap1.getOrDefault(core, Items.AIR);
@@ -162,24 +172,27 @@ public class RunestoneEngravedTableBlock extends Block implements ICoreInlaidBlo
             coreMap0.put(ModItems.WIND_CORE.get(), 4);
         }
     }
+
     public void insertCore(BlockState state, int core) {
         if (core > 0) {
             state.setValue(CORE, core);
         }
     }
+
     @Override
     public boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity) {
         if (!(entity instanceof Player player) || !player.isCreative()) {
-            if (state.getValue(IS_STRUCTURE_PLACED))  {
+            if (state.getValue(IS_STRUCTURE_PLACED)) {
                 return false;
             }
         }
         return super.canEntityDestroy(state, level, pos, entity);
     }
+
     @Override
     public float getDestroyProgress(BlockState state, Player player, BlockGetter blockGetter, BlockPos pos) {
         if (!player.isCreative()) {
-            if (state.getValue(IS_STRUCTURE_PLACED))  {
+            if (state.getValue(IS_STRUCTURE_PLACED)) {
                 return 0F;
             }
         }

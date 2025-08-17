@@ -1,7 +1,8 @@
 package com.mega.revelationfix.common.init;
 
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.common.entity.*;
+import com.mega.revelationfix.common.entity.FakeItemEntity;
+import com.mega.revelationfix.common.entity.TheEndHellfire;
 import com.mega.revelationfix.common.entity.binding.BlockShakingEntity;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.binding.RevelationCageEntity;
@@ -96,6 +97,7 @@ public class ModEntities {
             .clientTrackingRange(6)
             .updateInterval(2)
     );
+
     private static <T extends Entity> RegistryObject<EntityType<T>> register(String p_20635_, EntityType.Builder<T> p_20636_) {
         return ModEntities.ENTITIES.register(p_20635_, () -> p_20636_.build(new ResourceLocation(Revelationfix.MODID, p_20635_).toString()));
     }

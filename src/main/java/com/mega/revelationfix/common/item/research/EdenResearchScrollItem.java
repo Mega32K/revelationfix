@@ -4,13 +4,8 @@ import com.Polarice3.Goety.common.items.research.Scroll;
 import com.mega.endinglib.api.item.IDragonLightRendererItem;
 import com.mega.endinglib.api.item.IInvulnerableItem;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
-import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.common.research.ModResearches;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-
-import java.util.function.Consumer;
 
 public class EdenResearchScrollItem extends Scroll implements IInvulnerableItem, IDragonLightRendererItem {
     public EdenResearchScrollItem() {

@@ -20,12 +20,14 @@ public class MobUtilMixin {
             return player;
         return entity;
     }
+
     @ModifyVariable(remap = false, method = "areAllies", at = @At("HEAD"), argsOnly = true, ordinal = 1)
     private static Entity modifySpeller2(Entity entity) {
         if (entity instanceof FakeSpellerEntity speller && speller.getTrueOwner() instanceof Player player)
             return player;
         return entity;
     }
+
     @Inject(remap = false, method = "hurtCalculation", at = @At("RETURN"), cancellable = true)
     private static void hurtCalculation(LivingEntity livingEntity, DamageSource damageSource, float amount, CallbackInfoReturnable<Float> cir) {
         if (livingEntity instanceof FakeSpellerEntity)

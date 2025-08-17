@@ -31,6 +31,7 @@ public class ItemConfig {
     private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_ATTRIBUTE_0;
     private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_ATTRIBUTE_1;
     private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_PERCENT_INCREASE;
+    private static final ForgeConfigSpec.ConfigValue<Integer> EERIE_AXE_MAX_DEPTH_OF_DIGGING;
     public static double needleArmorPenetration;
     public static double needleEnchantmentPiercing;
     public static double needleAVMin;
@@ -51,6 +52,8 @@ public class ItemConfig {
     public static float soulOfObsidianSoulDecreaseEfficiency;
     public static float soulOfObsidianSoulStealing;
     public static float soulOfObsidianSpecialLootIncrease;
+    public static int eerieAxeMaxDepth;
+
     static {
         BUILDER.push("Blessing Scroll");
         BLESSING_SCROLL_DAMAGE_BOOST = BUILDER.worldRestart().
@@ -66,7 +69,7 @@ public class ItemConfig {
                 comment("Max Dodge provided by Scroll of a Blessing, as percentage.").
                 defineInRange("MaxDodge", 85D, 0D, 100D);
         BUILDER.pop();
-        BUILDER.push("THe Needle");
+        BUILDER.push("The Needle");
         NEEDLE_ARMOR_PENETRATION = BUILDER.worldRestart()
                 .comment("The armor penetration attribute value provided by The Needle, default:0.7")
                 .defineInRange("needleArmorPenetration", 0.7D, 0D, 1.0D);
@@ -130,6 +133,11 @@ public class ItemConfig {
                 .comment("Defined the increase in probability of special death loot from some creatures for this charm, default 25(in percent).")
                 .defineInRange("specialLootPercentIncrease", 25D, 0D, 100D);
         BUILDER.pop();
+        BUILDER.push("Eerie Axe");
+        EERIE_AXE_MAX_DEPTH_OF_DIGGING = BUILDER.worldRestart()
+                .comment("Defined the maximum depth to which this tool can collect logs at once, default 32.")
+                .defineInRange("maxDepth", 32, 0, 128);
+        BUILDER.pop();
         SPEC = BUILDER.build();
     }
 
@@ -156,6 +164,7 @@ public class ItemConfig {
             soulOfObsidianSoulStealing = SOUL_OF_OBSIDIAN_ATTRIBUTE_0.get().floatValue();
             soulOfObsidianSoulDecreaseEfficiency = SOUL_OF_OBSIDIAN_ATTRIBUTE_1.get().floatValue();
             soulOfObsidianSpecialLootIncrease = SOUL_OF_OBSIDIAN_PERCENT_INCREASE.get().floatValue();
+            eerieAxeMaxDepth = EERIE_AXE_MAX_DEPTH_OF_DIGGING.get();
         }
     }
 }

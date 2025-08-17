@@ -3,7 +3,6 @@ package com.mega.revelationfix.common.apollyon.common;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.CommonConfig;
-import com.mega.revelationfix.common.config.ModpackCommonConfig;
 import com.mega.revelationfix.safe.entity.Apollyon2Interface;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.damagesource.DamageSource;
@@ -34,6 +33,14 @@ public class AttackDamageChangeHandler {
         this.apostle = apostle;
         this.helper1 = (ApollyonAbilityHelper) apostle;
         this.helper2 = (Apollyon2Interface) apostle;
+    }
+
+    public static boolean isDoomOrGenesis(Apostle apostle) {
+        ApollyonAbilityHelper helper = (ApollyonAbilityHelper) apostle;
+        if (helper.allTitlesApostle_1_20_1$isApollyon()) {
+            return helper.allTitleApostle$getTitleNumber() == 12 || SafeClass.isDoom(apostle);
+        }
+        return false;
     }
 
     /**
@@ -80,12 +87,5 @@ public class AttackDamageChangeHandler {
 
     public void setLimitTime(int time) {
         apostle.getEntityData().set(LIMIT_TIME, Math.max(time, 0));
-    }
-    public static boolean isDoomOrGenesis(Apostle apostle) {
-        ApollyonAbilityHelper helper = (ApollyonAbilityHelper) apostle;
-        if (helper.allTitlesApostle_1_20_1$isApollyon()) {
-            return helper.allTitleApostle$getTitleNumber() == 12 || SafeClass.isDoom(apostle);
-        }
-        return false;
     }
 }

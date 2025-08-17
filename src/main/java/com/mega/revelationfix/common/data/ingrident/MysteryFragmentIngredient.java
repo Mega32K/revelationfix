@@ -2,7 +2,6 @@ package com.mega.revelationfix.common.data.ingrident;
 
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.item.other.MysteryFragment;
-import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -13,11 +12,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.stream.Stream;
 
 public class MysteryFragmentIngredient extends Ingredient {
+    public static TagKey<Item>[] TAGS = new TagKey[]{GRItems.MYSTERY_0, GRItems.MYSTERY_1, GRItems.MYSTERY_2, GRItems.MYSTERY_3};
     private final int fragmentIndex;
-    public static TagKey<Item>[] TAGS = new TagKey[] {GRItems.MYSTERY_0, GRItems.MYSTERY_1, GRItems.MYSTERY_2, GRItems.MYSTERY_3};
+
     public MysteryFragmentIngredient(int fragmentIndex) {
         super(Stream.of(new TagValue(TAGS[fragmentIndex])));
         this.fragmentIndex = fragmentIndex;
+    }
+
+    public static MysteryFragmentIngredient puzzle(int index) {
+        return new MysteryFragmentIngredient(index);
     }
 
     @Override
@@ -32,7 +36,7 @@ public class MysteryFragmentIngredient extends Ingredient {
             } else if (fragmentIndex == 3) {
                 return (itemStack.hasTag() && itemStack.getTag().getInt("fragment") == 3);
             }
-        } 
+        }
         return false;
     }
 
@@ -43,9 +47,5 @@ public class MysteryFragmentIngredient extends Ingredient {
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
         return MysteryFragmentIngredientSerializer.INSTANCE;
-    }
-
-    public static MysteryFragmentIngredient puzzle(int index) {
-        return new MysteryFragmentIngredient(index);
     }
 }

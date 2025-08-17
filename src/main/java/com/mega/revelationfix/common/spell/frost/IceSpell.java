@@ -8,7 +8,6 @@ import com.Polarice3.Goety.common.entities.projectiles.IceSpear;
 import com.Polarice3.Goety.common.entities.projectiles.IceSpike;
 import com.Polarice3.Goety.common.magic.EverChargeSpell;
 import com.Polarice3.Goety.common.magic.SpellStat;
-import com.Polarice3.Goety.common.magic.spells.FeastSpell;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ColorUtil;
 import com.Polarice3.Goety.utils.WandUtil;

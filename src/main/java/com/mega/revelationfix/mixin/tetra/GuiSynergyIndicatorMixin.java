@@ -22,17 +22,17 @@ public class GuiSynergyIndicatorMixin {
     @Inject(method = "getHeaderLine", at = @At("HEAD"), cancellable = true)
     private void getHeaderLine(boolean isActive, SynergyData data, CallbackInfoReturnable<String> cir) {
         String var10000 = isActive ? ChatFormatting.GREEN + "» " + ChatFormatting.WHITE : ChatFormatting.BOLD + "  " + ChatFormatting.DARK_GRAY;
-         cir.setReturnValue(var10000 +
-                 Stream.concat(
-                         Arrays.stream(data.moduleVariants)
-                                 .map((key) -> I18n.get("tetra.variant." + key)),
-                         Stream.concat(
-                                 Arrays.stream(data.modules)
-                                         .map((key) -> I18n.get("tetra.module." + key + ".name")),
-                                 Arrays.stream(data.improvements)
-                                         .filter((key) -> I18n.exists("tetra.improvement." + key + ".synergy_expanded_name"))
-                                         .map((key) -> I18n.get("tetra.synergy.improvement.header") + I18n.get("tetra.improvement." + key + ".synergy_expanded_name"))
-                         )
-                 ).collect(Collectors.joining(" + ")));
+        cir.setReturnValue(var10000 +
+                Stream.concat(
+                        Arrays.stream(data.moduleVariants)
+                                .map((key) -> I18n.get("tetra.variant." + key)),
+                        Stream.concat(
+                                Arrays.stream(data.modules)
+                                        .map((key) -> I18n.get("tetra.module." + key + ".name")),
+                                Arrays.stream(data.improvements)
+                                        .filter((key) -> I18n.exists("tetra.improvement." + key + ".synergy_expanded_name"))
+                                        .map((key) -> I18n.get("tetra.synergy.improvement.header") + I18n.get("tetra.improvement." + key + ".synergy_expanded_name"))
+                        )
+                ).collect(Collectors.joining(" + ")));
     }
 }

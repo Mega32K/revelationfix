@@ -11,7 +11,10 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import z1gned.goetyrevelation.config.ModConfig;
 import z1gned.goetyrevelation.util.ATAHelper;
@@ -32,6 +35,7 @@ public abstract class HellfireMixin extends GroundProjectile {
     private void getTarget(LivingEntity target, CallbackInfo ci) {
         this.allTitlesApostle_1_20_1$target = target;
     }
+
     @ModifyConstant(method = "dealDamageTo", constant = @Constant(floatValue = 2.0F), remap = false)
     private float damageAmount(float value) {
         LivingEntity owner = this.getOwner();

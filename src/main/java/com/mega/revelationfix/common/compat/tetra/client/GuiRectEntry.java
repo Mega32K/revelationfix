@@ -180,6 +180,6 @@ public class GuiRectEntry extends GuiElement {
         vertexconsumer.vertex(matrix4f, leftBottom.x, leftBottom.y, (float) zOffset).color(f, f1, f2, f3 * opacity).endVertex();
         vertexconsumer.vertex(matrix4f, rightBottom.x, rightBottom.y, (float) zOffset).color(f, f1, f2, f3 * opacity).endVertex();
         vertexconsumer.vertex(matrix4f, rightTop.x, rightTop.y, (float) zOffset).color(f, f1, f2, f3 * opacity).endVertex();
-        ((AccessorGuiGraphics)graphics).callFlushIfUnmanaged();
+        ((AccessorGuiGraphics) graphics).callFlushIfUnmanaged();
     }
 }

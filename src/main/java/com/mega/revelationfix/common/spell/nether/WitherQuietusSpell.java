@@ -28,7 +28,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -87,11 +86,11 @@ public class WitherQuietusSpell extends Spell {
             target.hurt(sourceGenerator.source(DamageTypes.WITHER, caster), 12.0F);
             target.invulnerableTime = 0;
             target.hurt(sourceGenerator.source(DamageTypes.MAGIC, caster), 8.0F);
-            if (target.isDeadOrDying() ) {
+            if (target.isDeadOrDying()) {
                 WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), worldIn);
                 servant.setTrueOwner(caster);
                 servant.setLimitedLife(5 * 60 * 20);
-                servant.finalizeSpawn((ServerLevel) worldIn, worldIn.getCurrentDifficultyAt(target.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                servant.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(target.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                 SummonCircle summonCircle = new SummonCircle(worldIn, target.blockPosition(), servant, false, true, caster);
                 worldIn.addFreshEntity(summonCircle);
             }
@@ -115,7 +114,7 @@ public class WitherQuietusSpell extends Spell {
                 if (instance != null) {
                     if (instance.getAmplifier() < 3) {
                         int a = instance.getAmplifier();
-                        MobEffectUtils.forceAdd(target, new MobEffectInstance(instance.getEffect(), 200, a+1), caster);
+                        MobEffectUtils.forceAdd(target, new MobEffectInstance(instance.getEffect(), 200, a + 1), caster);
                     } else if (instance.getAmplifier() == 3) {
                         MobEffectUtils.forceAdd(target, new MobEffectInstance(instance.getEffect(), 200, 3), caster);
                     }

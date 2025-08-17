@@ -14,10 +14,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Mob.class)
-public abstract class MobMixin extends LivingEntity  {
-    @Shadow @Final public GoalSelector goalSelector;
+public abstract class MobMixin extends LivingEntity {
+    @Shadow
+    @Final
+    public GoalSelector goalSelector;
 
-    @Shadow @Final public GoalSelector targetSelector;
+    @Shadow
+    @Final
+    public GoalSelector targetSelector;
 
     public MobMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);

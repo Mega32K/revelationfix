@@ -63,6 +63,7 @@ public class CommonConfig {
     public static float apollyon_armorPiercing;
     public static float apollyon_enchantmentPiercing;
     public static Set<MobEffect> bypassMobEffects;
+
     static {
         BUILDER.push("Others");
         BYPASSES_LIST_MOB_EFFECTS = BUILDER.worldRestart().comment("A list of mob effect that would never be cleared by curio abilities/bosses...")
@@ -134,10 +135,10 @@ public class CommonConfig {
         NETHER_APOLLYON_PHASE_GENESIS_DAMAGE_MULTIPLIER = BUILDER.worldRestart()
                 .comment("Defined the damage multiplier of the Apollyon in second phase.default : 4.0")
                 .defineInRange("netherPhaseGenesisDamageMultiplier", 4.0, 0D, 100D);
-        APOLLYON_ARMOR_PIERCING_PERCENT= BUILDER.worldRestart()
+        APOLLYON_ARMOR_PIERCING_PERCENT = BUILDER.worldRestart()
                 .comment("Defined the armor piercing attribute base value of apollyon.default : 30(percent)")
                 .defineInRange("armorPiercingAttribute", 30, 0, 100);
-        APOLLYON_ENCHANTMENT_PIERCING_PERCENT= BUILDER.worldRestart()
+        APOLLYON_ENCHANTMENT_PIERCING_PERCENT = BUILDER.worldRestart()
                 .comment("Defined the enchantment piercing attribute base value of apollyon.default : 30(percent)")
                 .defineInRange("enchantmentPiercingAttribute", 30, 0, 100);
         BUILDER.pop();
@@ -157,9 +158,11 @@ public class CommonConfig {
     public static boolean validateETName(final Object obj) {
         return obj instanceof final String itemName && ForgeRegistries.ENTITY_TYPES.containsKey(new ResourceLocation(itemName));
     }
+
     public static boolean validateMobEffectName(final Object obj) {
         return obj instanceof final String itemName && ForgeRegistries.MOB_EFFECTS.containsKey(new ResourceLocation(itemName));
     }
+
     @SuppressWarnings("ALL")
     public static boolean inWhitelist(Item item) {
         if (item == GRItems.HALO_OF_THE_END || item == GRItems.ATONEMENT_VOUCHER_ITEM) return true;
@@ -173,9 +176,11 @@ public class CommonConfig {
         else if (entity.getType().is(ModEntities.PREVENT_DISCARD_BY_APOLLYON)) return true;
         return whitelistEntities.contains(entity.getType());
     }
+
     public static boolean inBypassEffect(MobEffect mobEffect) {
         return bypassMobEffects.contains(mobEffect);
     }
+
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         if (SPEC.isLoaded()) {

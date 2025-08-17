@@ -12,6 +12,7 @@ public class BrewConfig {
             return 3;
         else return 127;
     }
+
     public static int maxAmplier(MobEffect effect) {
         return defaultModified(effect);
     }

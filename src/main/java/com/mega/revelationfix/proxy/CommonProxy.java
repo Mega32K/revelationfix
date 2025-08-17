@@ -4,7 +4,6 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.Heretic;
 import com.Polarice3.Goety.common.entities.hostile.cultists.Maverick;
 import com.mega.revelationfix.common.advancement.ModCriteriaTriggers;
 import com.mega.revelationfix.common.compat.SafeClass;
-import com.mega.revelationfix.common.compat.ironspell.IronSpellbooksEvents;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
@@ -13,7 +12,6 @@ import com.mega.revelationfix.common.init.ModPotions;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.data.RitualDataSyncPacket;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
-import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,6 +38,7 @@ public class CommonProxy implements ModProxy {
         modBus.addListener(this::buildCreativeTab);
         MinecraftForge.EVENT_BUS.register(this);
     }
+
     public void buildCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if (SafeClass.isTetraLoaded()) {
             if (event.getTabKey().location().equals(new ResourceLocation("tetra:default"))) {
@@ -73,6 +72,7 @@ public class CommonProxy implements ModProxy {
         InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.BACK.getMessageBuilder().build());
         InterModComms.sendTo("curios", "register_type", () -> SlotTypePreset.CHARM.getMessageBuilder().size(2).build());
     }
+
     @SubscribeEvent
     public void onDataSync(OnDatapackSyncEvent event) {
         List<ServerPlayer> players = event.getPlayers();

@@ -215,9 +215,12 @@ dependencies {
     implementation fg.deobf("curse.maven:Cobweb-968456:6089406")
     implementation fg.deobf("curse.maven:Spark-361579:4738952")
     implementation fg.deobf("curse.maven:GeckoLib-388172:5675221")
+    implementation fg.deobf("curse.maven:FTBUltimate-386134:5363345")
+    implementation fg.deobf("curse.maven:Architectury-419699:5137938")
+    implementation fg.deobf("curse.maven:FTBLib-404465:6164053")
 
-    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.3.1-all"))  {
-        jarJar.ranged(it, "[1.3.1-all,)")
+    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.3.2-all"))  {
+        jarJar.ranged(it, "[1.3.2-all,)")
     }
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

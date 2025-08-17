@@ -14,6 +14,7 @@ public class SpellCircleStatePacket {
     private final byte state;
     private final boolean isMainHand;
     private final float radius;
+
     public SpellCircleStatePacket(SpellType spellType, byte state, boolean isMainHand, float radius) {
         this.spell = spellType;
         this.state = state;
@@ -41,6 +42,10 @@ public class SpellCircleStatePacket {
         context.get().setPacketHandled(true);
     }
 
+    static void handle0(SpellCircleStatePacket packet, Supplier<NetworkEvent.Context> context) {
+        SpellClientContext.receiveSpellStatePacket(packet);
+    }
+
     public byte getState() {
         return state;
     }
@@ -55,9 +60,5 @@ public class SpellCircleStatePacket {
 
     public boolean isMainHand() {
         return isMainHand;
-    }
-
-    static void handle0(SpellCircleStatePacket packet, Supplier<NetworkEvent.Context> context) {
-        SpellClientContext.receiveSpellStatePacket(packet);
     }
 }

@@ -6,7 +6,6 @@ import com.mega.endinglib.api.item.IDamageLimitItem;
 import com.mega.endinglib.api.item.armor.ModifiableArmorItem;
 import com.mega.endinglib.api.item.armor.OptionArmorMaterial;
 import com.mega.revelationfix.api.item.armor.IGoetyDamageResistanceArmor;
-import com.mega.revelationfix.client.font.effect.LoreHelper;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -25,7 +24,7 @@ import java.util.UUID;
 public abstract class BaseArmorItem extends ModifiableArmorItem implements IGoetyDamageResistanceArmor {
     public static final float MAGIC_DAMAGE_DIV = 25.0F;
     public static final float HOT_DIV = 10.0F;
-    public static final EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+    public static final EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     public static final AttributeModifier ATTACK_DAMAGE_MODIFIER = new AttributeModifier(UUID.fromString("5f90fe78-8c3a-4c1c-a3f7-ea61fa77425b"), "ArmorSet Modifier", 0.1F, AttributeModifier.Operation.MULTIPLY_TOTAL);
     protected static final EnumMap<Type, UUID> EXTRA_MODIFIER_UUID_PER_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266744_) -> {
         p_266744_.put(ArmorItem.Type.BOOTS, UUID.fromString("7c3fcaa9-ca78-402c-b204-10e2dc351421"));
@@ -37,6 +36,7 @@ public abstract class BaseArmorItem extends ModifiableArmorItem implements IGoet
     public BaseArmorItem(OptionArmorMaterial optionArmorMaterial, Type armorType, Properties itemProperties) {
         super(optionArmorMaterial, armorType, itemProperties);
     }
+
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @javax.annotation.Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);

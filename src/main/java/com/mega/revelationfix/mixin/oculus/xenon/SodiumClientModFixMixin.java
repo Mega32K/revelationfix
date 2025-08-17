@@ -17,7 +17,7 @@ public abstract class SodiumClientModFixMixin {
     private static void updateFingerprint() {
     }
 
-    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lme/jellysquid/mods/sodium/client/SodiumClientMod;updateFingerprint()V", remap = false) )
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lme/jellysquid/mods/sodium/client/SodiumClientMod;updateFingerprint()V", remap = false))
     private void updateFingerprint2() {
         boolean z = true;
         try {

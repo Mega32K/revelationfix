@@ -10,6 +10,7 @@ public class RotationUtils {
         float f1 = Mth.clamp(f, -limit, limit);
         return p_24957_ + f1;
     }
+
     public static void rotationAtoB(Entity a, Vec3 targetPos) {
         a.setYRot(getYRotD(a, targetPos.x, targetPos.z));
         a.setYHeadRot(getYRotD(a, targetPos.x, targetPos.z));
@@ -18,6 +19,7 @@ public class RotationUtils {
         a.yRotO = a.getYRot();
 
     }
+
     public static float getXRotD(Entity e, double wantedX, double wantedY, double wantedZ) {
         double d0 = wantedX - e.getX();
         double d1 = wantedY - e.getEyeY();

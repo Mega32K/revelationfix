@@ -5,10 +5,10 @@ import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.youkai.YoukaiKiller;
 import com.mega.revelationfix.common.item.ModItemTiers;
-import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.entity.LivingEventEC;
 import net.minecraft.sounds.SoundEvents;
@@ -31,7 +31,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
@@ -95,9 +98,9 @@ public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon, IS
             if (player.isShiftKeyDown() && !player.getCooldowns().isOnCooldown(this)) {
                 float f7 = player.getYRot();
                 float f = player.getXRot();
-                float f1 = -Mth.sin(f7 * ((float)Math.PI / 180F)) * Mth.cos(f * ((float)Math.PI / 180F));
-                float f2 = -Mth.sin(f * ((float)Math.PI / 180F));
-                float f3 = Mth.cos(f7 * ((float)Math.PI / 180F)) * Mth.cos(f * ((float)Math.PI / 180F));
+                float f1 = -Mth.sin(f7 * ((float) Math.PI / 180F)) * Mth.cos(f * ((float) Math.PI / 180F));
+                float f2 = -Mth.sin(f * ((float) Math.PI / 180F));
+                float f3 = Mth.cos(f7 * ((float) Math.PI / 180F)) * Mth.cos(f * ((float) Math.PI / 180F));
                 float f4 = Mth.sqrt(f1 * f1 + f2 * f2 + f3 * f3);
                 float f5 = 3.0F * 1.2F;
                 f1 *= f5 / f4;
@@ -106,7 +109,7 @@ public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon, IS
                 player.push(f1, f2, f3);
                 player.startAutoSpinAttack(15);
                 player.getCooldowns().addCooldown(this, 10);
-                player.level().playSound((Player)null, player, SoundEvents.TRIDENT_RIPTIDE_1, SoundSource.PLAYERS, 1.0F, 1.3F);
+                player.level().playSound(null, player, SoundEvents.TRIDENT_RIPTIDE_1, SoundSource.PLAYERS, 1.0F, 1.3F);
                 player.hurtMarked = true;
             }
         }

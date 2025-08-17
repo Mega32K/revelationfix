@@ -70,9 +70,10 @@ public class EntityActuallyHurt {
     }
 
     public final LivingEntity entity;
-    private boolean disableEffects;
     public final AccessorLivingEntity accessorLivingEntity;
     public final AccessorEntity accessorEntity;
+    private boolean disableEffects;
+
     public EntityActuallyHurt(LivingEntity entity) {
         this.entity = entity;
         accessorLivingEntity = (AccessorLivingEntity) entity;

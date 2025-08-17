@@ -62,6 +62,7 @@ public class TetraWrapped {
     private static void createPercentAttributeBar(Attribute attribute, String languageKey) {
         createPercentAttributeBar(attribute, 10.0D, languageKey);
     }
+
     @OnlyIn(Dist.CLIENT)
     private static void createPercentAttributeBar(Attribute attribute, double max, String languageKey) {
         try {
@@ -74,6 +75,7 @@ public class TetraWrapped {
         } catch (Throwable throwable) {
         }
     }
+
     public static void registerEvents() {
         MinecraftForge.EVENT_BUS.register(new DeicideEffect());
         MinecraftForge.EVENT_BUS.register(JesusDeathEvent.class);

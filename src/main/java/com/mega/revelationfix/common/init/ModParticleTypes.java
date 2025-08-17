@@ -8,6 +8,6 @@ import net.minecraftforge.registries.RegistryObject;
 import z1gned.goetyrevelation.ModMain;
 
 public class ModParticleTypes {
-    public static DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, ModMain.MODID);;
+    public static DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, ModMain.MODID);
     public static final RegistryObject<SimpleParticleType> FROST_FLOWER = PARTICLE_TYPES.register("frost_flower", () -> new SimpleParticleType(false));
 }

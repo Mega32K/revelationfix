@@ -1,13 +1,14 @@
 package com.mega.revelationfix.client.renderer.entity;
 
+import com.mega.revelationfix.client.model.entity.TeleportEntityModel;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.entity.binding.TeleportEntity;
-import com.mega.revelationfix.client.model.entity.TeleportEntityModel;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -23,6 +24,7 @@ import z1gned.goetyrevelation.ModMain;
 public class TeleportEntityRenderer extends EntityRenderer<TeleportEntity> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(ModMain.MODID, "textures/entity/teleport_entity/teleport_entity.png");
     protected TeleportEntityModel model;
+
     public TeleportEntityRenderer(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
         this.model = new TeleportEntityModel(renderManagerIn.bakeLayer(TeleportEntityModel.LAYER_LOCATION));
@@ -37,7 +39,7 @@ public class TeleportEntityRenderer extends EntityRenderer<TeleportEntity> {
     public void render(@NotNull TeleportEntity teleportEntity, float entityYaw, float pPartialTicks, @NotNull PoseStack pMatrixStack, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         try {
             pMatrixStack.pushPose();
-            pMatrixStack.translate(.5, -0.5 - (3F/16F), .5);
+            pMatrixStack.translate(.5, -0.5 - (3F / 16F), .5);
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(getTextureLocation(teleportEntity)));
             this.model.setupAnim(teleportEntity, 0.0F, 0.0F, pPartialTicks, 0.0F, 0.0F);
             Player player = Wrapped.clientPlayer();

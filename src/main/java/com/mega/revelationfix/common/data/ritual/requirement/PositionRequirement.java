@@ -11,6 +11,16 @@ import net.minecraft.world.phys.AABB;
 public class PositionRequirement implements Requirement {
     public static final double width = 1000000000D;
     private AABB range;
+
+    public static PositionRequirement createFromJson(JsonElement element) {
+        PositionRequirement requirement = null;
+        if (element instanceof JsonObject jsonObject) {
+            requirement = new PositionRequirement();
+            requirement.compileData(jsonObject);
+        }
+        return requirement;
+    }
+
     @Override
     public String getType() {
         return RitualData.POSITION;
@@ -20,7 +30,7 @@ public class PositionRequirement implements Requirement {
     public void compileData(JsonElement jsonElement) {
         range = new AABB(-width, -width, -width, width, width, width);
         if (jsonElement instanceof JsonObject jsonObject) {
-            double[] newRange = new double[] {-width, -width, -width, width, width, width};
+            double[] newRange = new double[]{-width, -width, -width, width, width, width};
             if (jsonObject.get("posX") instanceof JsonObject part) {
                 newRange[0] = GsonHelper.getAsDouble(part, "min", newRange[0]);
                 newRange[3] = GsonHelper.getAsDouble(part, "max", newRange[3]);
@@ -36,18 +46,11 @@ public class PositionRequirement implements Requirement {
             range = new AABB(newRange[0], newRange[1], newRange[2], newRange[3], newRange[4], newRange[5]);
         }
     }
+
     public boolean canUse(Level level, BlockPos actorPos) {
         if (this.range != null) {
             return range.contains(actorPos.getCenter());
         }
         return false;
-    }
-    public static PositionRequirement createFromJson(JsonElement element) {
-        PositionRequirement requirement = null;
-        if (element instanceof JsonObject jsonObject) {
-            requirement = new PositionRequirement();
-            requirement.compileData(jsonObject);
-        }
-        return requirement;
     }
 }

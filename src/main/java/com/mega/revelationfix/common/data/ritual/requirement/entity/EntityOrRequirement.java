@@ -7,11 +7,12 @@ import net.minecraft.world.level.Level;
 
 public class EntityOrRequirement extends EntityRequirement {
     private EntityRequirement[] or;
+
     @Override
     protected void compileSelfData(JsonObject jsonObject) {
         if (jsonObject.get("members") instanceof JsonArray jsonArray) {
             or = new EntityRequirement[jsonArray.size()];
-            for (int i=0;i<jsonArray.size();i++) {
+            for (int i = 0; i < jsonArray.size(); i++) {
                 or[i] = EntityRequirement.createFromJson(jsonArray.get(i));
             }
         }
@@ -20,7 +21,7 @@ public class EntityOrRequirement extends EntityRequirement {
     @Override
     protected boolean canUse(Level level, Entity entity) {
         if (or != null && or.length > 0) {
-            for (int i=0;i<or.length;i++)
+            for (int i = 0; i < or.length; i++)
                 if (or[i].canUse(level, entity))
                     return true;
             return false;

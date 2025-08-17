@@ -100,6 +100,7 @@ public class PostEffectHandler {
         }
         return new float[]{};
     }
+
     public static void register() {
         PostEffectHandler.registerEffect(new PuzzleEffect());
         PostEffectHandler.registerEffect(new AberrationDistortionPostEffect());

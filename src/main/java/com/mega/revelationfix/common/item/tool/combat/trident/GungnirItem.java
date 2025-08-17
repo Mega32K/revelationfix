@@ -5,10 +5,9 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.client.enums.ModUseAnim;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
-import com.mega.revelationfix.common.item.FontItemExtensions;
-import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.entity.LivingEventEC;
 import net.minecraft.client.model.HumanoidModel;
@@ -80,10 +79,12 @@ public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon, 
     public int getUseDuration(@NotNull ItemStack itemStack) {
         return 72000;
     }
+
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
         return super.onEntitySwing(stack, entity);
     }
+
     public void releaseUsing(@NotNull ItemStack itemStack, @NotNull Level level, @NotNull LivingEntity livingEntity, int timeLeft) {
         if (livingEntity instanceof Player player) {
             int i = this.getUseDuration(itemStack) - timeLeft;

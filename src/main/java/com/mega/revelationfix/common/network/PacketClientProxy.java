@@ -39,6 +39,7 @@ public class PacketClientProxy {
         }
 
     }
+
     public static void doFrostParticles(double xPos, double yPos, double zPos) {
         Level world = Minecraft.getInstance().level;
         if (world != null) {
@@ -53,7 +54,8 @@ public class PacketClientProxy {
                 double targetZ = zPos + offsetZ;
                 if (Math.random() < 0.5F)
                     world.addParticle(new DustColorTransitionOptions(new Vector3f(0.69F, 0.87F, 0.90F), new Vector3f(0.0F, 0.0F, 0.0F), 1.0F), targetX, yPos, targetZ, offsetX * (double) speedFactor, 0.15, offsetZ * (double) speedFactor);
-                else world.addParticle(new DustColorTransitionOptions(new Vector3f(0.43F, 0.51F, 0.95F), new Vector3f(0.0F, 0.0F, 0.0F), 1.0F), targetX, yPos, targetZ, offsetX * (double) speedFactor, 0.15, offsetZ * (double) speedFactor);
+                else
+                    world.addParticle(new DustColorTransitionOptions(new Vector3f(0.43F, 0.51F, 0.95F), new Vector3f(0.0F, 0.0F, 0.0F), 1.0F), targetX, yPos, targetZ, offsetX * (double) speedFactor, 0.15, offsetZ * (double) speedFactor);
             }
         }
 
@@ -65,10 +67,10 @@ public class PacketClientProxy {
             if (packet.id == IceSpellParticlePacket.CIRCLE_PARTICLES) {
                 if (Wrapped.getEntityByUUID(packet.casterID) instanceof LivingEntity living) {
                     RandomSource random = living.getRandom();
-                    for (int i = 0; i< Mth.TWO_PI * packet.radius; i++) {
-                        for (int j=1;j<5;j++) {
-                            double x = Mth.cos(i/(Mth.TWO_PI ))* packet.radius + living.getX();
-                            double z = Mth.sin(i/(Mth.TWO_PI )) * packet.radius + living.getZ();
+                    for (int i = 0; i < Mth.TWO_PI * packet.radius; i++) {
+                        for (int j = 1; j < 5; j++) {
+                            double x = Mth.cos(i / (Mth.TWO_PI)) * packet.radius + living.getX();
+                            double z = Mth.sin(i / (Mth.TWO_PI)) * packet.radius + living.getZ();
                             mc.level.addParticle(ModParticleTypes.FROST_FLOWER.get(), x, living.getY() + 0.3F, z, random.triangle(0F, 0.02F), random.triangle(1F, 0.04F), random.triangle(0F, 0.02F));
                             mc.level.addParticle(ModParticleTypes.FROST_FLOWER.get(), x + random.triangle(0F, 0.1F), living.getY() + 0.3F + random.triangle(0.3F, 0.1F), z, random.triangle(0F, 0.02F) + random.triangle(0F, 0.1F), random.triangle(.4F, 0.04F), random.triangle(0F, 0.02F));
                         }
@@ -83,8 +85,8 @@ public class PacketClientProxy {
                             double posY = target.getY();
                             double posZ = target.getZ();
                             doFrostParticles(posX, posY, posZ);
-                            for (int i=0;i<16;i++) {
-                                mc.level.addParticle(com.Polarice3.Goety.client.particles.ModParticleTypes.FROST_NOVA.get(), posX, posY+i/2F+0.5F, posZ, 0F, 0F, 0F);
+                            for (int i = 0; i < 16; i++) {
+                                mc.level.addParticle(com.Polarice3.Goety.client.particles.ModParticleTypes.FROST_NOVA.get(), posX, posY + i / 2F + 0.5F, posZ, 0F, 0F, 0F);
                             }
                         }
                     }

@@ -1,6 +1,5 @@
 package com.mega.revelationfix.common.compat.jade;
 
-import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.compat.jade.ServantModeProvider;
 import com.Polarice3.Goety.compat.jade.SummonLifespanProvider;
 import com.Polarice3.Goety.compat.jade.SummonOwnerProvider;
@@ -18,6 +17,7 @@ import snownee.jade.api.WailaPlugin;
 @WailaPlugin
 public class JadePlugin implements IWailaPlugin {
     public static IWailaClientRegistration CLIENT_REGISTRATION;
+
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerEntityComponent(SummonLifespanProvider.INSTANCE, ApostleServant.class);

@@ -9,6 +9,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 
 public class ItemFrameEntityRequirement extends EntityRequirement {
     private Ingredient ingredient;
+
     @Override
     protected void compileSelfData(JsonObject jsonObject) {
         if (jsonObject.has("display"))

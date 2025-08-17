@@ -18,7 +18,8 @@ import java.util.Optional;
 public class ChurchStructure extends Structure {
     public static Codec<ChurchStructure> CODEC = RecordCodecBuilder.create((p_226611_) -> {
         return p_226611_.group(settingsCodec(p_226611_)).apply(p_226611_, ChurchStructure::new);
-    });;
+    });
+
     public ChurchStructure(StructureSettings structureSettings) {
         super(structureSettings);
     }
@@ -28,6 +29,7 @@ public class ChurchStructure extends Structure {
         return onTopOfChunkCenter(generationContext, Heightmap.Types.WORLD_SURFACE_WG, builder -> this.generatePieces(builder, generationContext));
 
     }
+
     private void generatePieces(StructurePiecesBuilder builder, GenerationContext generationContext) {
         ChunkPos chunkpos = generationContext.chunkPos();
         WorldgenRandom worldgenrandom = generationContext.random();
@@ -35,6 +37,7 @@ public class ChurchStructure extends Structure {
         Rotation rotation = Rotation.getRandom(worldgenrandom);
         ChurchPieces.addPieces(generationContext.structureTemplateManager(), blockpos, rotation, builder, worldgenrandom);
     }
+
     @Override
     public @NotNull StructureType<?> type() {
         return ModStructureTypes.CHURCH.get();

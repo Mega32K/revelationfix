@@ -1,7 +1,6 @@
 package com.mega.revelationfix.mixin;
 
 import com.mega.revelationfix.common.data.ingrident.TheEndCraftingIngredient;
-import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

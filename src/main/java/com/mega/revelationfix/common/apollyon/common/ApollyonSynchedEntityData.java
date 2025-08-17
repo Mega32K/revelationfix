@@ -3,22 +3,9 @@ package com.mega.revelationfix.common.apollyon.common;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.endinglib.mixin.accessor.AccessorSynchedEntityData;
 import com.mega.endinglib.util.java.ClassHelper;
-import com.mega.revelationfix.mixin.BypassesDataItemAccessor;
-import com.mega.revelationfix.util.java.Hack;
-import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
-import net.minecraft.ReportedException;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.fml.unsafe.UnsafeHacks;
-import org.apache.commons.lang3.ObjectUtils;
-import org.jetbrains.annotations.NotNull;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
-
-import java.lang.invoke.VarHandle;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 public class ApollyonSynchedEntityData extends SynchedEntityData {
     private Apostle apostle;

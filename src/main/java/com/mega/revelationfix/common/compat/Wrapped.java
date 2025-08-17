@@ -10,7 +10,6 @@ import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -29,6 +28,7 @@ import java.util.function.Predicate;
 
 public class Wrapped {
     static Minecraft minecraft = Minecraft.getInstance();
+
     @OnlyIn(Dist.CLIENT)
     public static boolean isNetherApollyonLoaded(Predicate<Apostle> predicate) {
         return BossBarEvent.BOSS_BARS.values().stream().anyMatch(mob ->
@@ -78,12 +78,14 @@ public class Wrapped {
         SoundManager soundHandler = Minecraft.getInstance().getSoundManager();
         soundHandler.queueTickingSound(new PostBossMusic(ModMain.APOLLYON_THEME_POST.get(), apostle));
     }
+
     public static Entity getEntityByUUID(UUID uuid) {
         if (uuid == null)
             return null;
         if (clientLevel() == null) return null;
         return ((AccessorClientLevel) clientLevel()).invokeGetEntities().get(uuid);
     }
+
     public static void onShaderModeChange() {
         PostEffectRegistry.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
 

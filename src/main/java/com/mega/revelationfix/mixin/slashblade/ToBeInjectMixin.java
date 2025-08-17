@@ -19,6 +19,7 @@ public class ToBeInjectMixin {
         if (item instanceof ItemSlashBlade)
             cir.setReturnValue(true);
     }
+
     @Inject(method = "inWhitelist(Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), cancellable = true, remap = false)
     private static void inWhitelist(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof IShootable)

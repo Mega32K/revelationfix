@@ -1,7 +1,6 @@
 package com.mega.revelationfix.common.event.handler;
 
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
-import com.Polarice3.Goety.common.items.curios.WindyRobeItem;
 import com.Polarice3.Goety.utils.ColorUtil;
 import com.Polarice3.Goety.utils.ServerParticleUtil;
 import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
@@ -66,150 +65,6 @@ import java.util.*;
 @Mod.EventBusSubscriber
 public class CommonEventHandler {
     private static final List<Item> vanillaItems = new ArrayList<>();
-    /*
-    @SubscribeEvent
-    public static void sfdw(AttackEntityEvent event) {
-        try {
-            Unsafe unsafe = UnsafeAccess.UNSAFE;
-            TransformingClassLoader classLoader = (TransformingClassLoader) unsafe.getObject(Launcher.INSTANCE, unsafe.objectFieldOffset(Launcher.class.getDeclaredField("classLoader")));
-            Method method = TransformingClassLoader.class.getDeclaredMethod("buildTransformedClassNodeFor", String.class, String.class);
-            method.setAccessible(true);
-            byte[] bytes = (byte[]) method.invoke(classLoader, EventBus.class.getName(), "classloading");
-            File file = new File("C:\\Users\\admin\\Desktop\\EventBus.class");
-            FileOutputStream stream = new FileOutputStream(file);
-            stream.write(bytes);
-            stream.flush();
-            stream.close();
-        } catch (Throwable throwable) {}
-
-    }
-     */
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-    public static class EntityEvents {
-        @SubscribeEvent(priority = EventPriority.HIGH)
-        public static void onEntityDeath(LivingDeathEvent event) {
-            LivingEntity entity = event.getEntity();
-            Level level = entity.level();
-            if (!level.isClientSide) {
-                if (ATAHelper2.hasAmuletOfSlime(entity) && event.getSource().is(DamageTypeTags.IS_FALL)) {
-                    Item curio = GRItems.AMULET_OF_SLIME.get();
-                    if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(curio)) {
-                        event.setCanceled(true);
-                        entity.setHealth(1F);
-                        entity.heal(1F);
-                        int size = entity.getRandom().nextInt(1, 3);
-                        {
-                            Slime slime = new Slime(EntityType.SLIME, level);
-                            slime.setSize(size, true);
-                            slime.setPos(entity.getRandomX(2D), entity.getY() + 0.5D, entity.getRandomZ(2D));
-                            level.addFreshEntity(slime);
-                        }
-                        if (level instanceof ServerLevel serverLevel) {
-                            ColorUtil color = new ColorUtil(0x71a7af);
-                            ServerParticleUtil.windParticle(serverLevel, color, 1.0F + serverLevel.random.nextFloat() * 0.5F, 0.0F, entity.getId(), entity.position());
-                            ServerParticleUtil.circularParticles(serverLevel, ParticleTypes.CLOUD, entity, 1.0F);
-                            ServerParticleUtil.windShockwaveParticle(serverLevel, color, 0.75F, 0.01F, 0.1F, 25, entity.getId(), entity.position());
-                        }
-                        if (entity instanceof Player player) {
-                            player.playSound(SoundEvents.SLIME_SQUISH);
-                            player.getCooldowns().addCooldown(curio, (int) (ItemConfig.amuletOfSlimeCooldown * 20));
-                        }
-                    }
-                }
-            }
-        }
-        @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static void onMobChangeTarget(LivingChangeTargetEvent event) {
-            LivingEntity target = event.getNewTarget();
-            if (target != null) {
-                LivingEntity entity = event.getEntity();
-                Set<String> tags = entity.getTags();
-                Set<String> targetTags = target.getTags();
-                if ((targetTags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(target))) {
-                    if (tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(entity)) {
-                        if (tags.contains(EntityExpandedContext.GR_FT_CHURCH) && targetTags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
-                            event.setCanceled(true);
-                        } else if (EntityExpandedContext.isOwnerFriendlyTag_Church(entity) && EntityExpandedContext.isOwnerFriendlyTag_Church(target))
-                            event.setCanceled(true);
-                    }
-                }
-            }
-        }
-        @SubscribeEvent
-        public static void onPlayerAttack(AttackEntityEvent event) {
-            if (event.getTarget() instanceof ObsidianMonolith monolith) {
-                if (!monolith.level().isClientSide) {
-                    if (monolith.getMasterOwner() == event.getEntity() && monolith.getTrueOwner() instanceof ApostleServant servant && event.getEntity().isShiftKeyDown()) {
-                        monolith.die(event.getEntity().damageSources().playerAttack(event.getEntity()));
-                        event.setCanceled(true);
-                    }
-                }
-            }
-        }
-
-        @SubscribeEvent
-        public static void resistanceAttributeHandler(LivingHurtEvent event) {
-            LivingEntity living = event.getEntity();
-            if (living.level().isClientSide) return;
-            Attribute attribute = ModAttributes.DAMAGE_RESISTANCE.get();
-            AttributeInstance attributeInstance = living.getAttribute(attribute);
-            double value;
-            if (attributeInstance != null && (value = living.getAttributeValue(attribute)) > 1.0D) {
-                event.setAmount((float) (event.getAmount() * (2.0F - Mth.clamp(value, 1.0D, 2.0D))));
-            }
-        }
-        @SubscribeEvent
-        public static void odamaneFinalDeath(EarlyLivingDeathEvent event) {
-            if (event.getEntity() instanceof ServerPlayer player && player.level().dimension() == Level.END) {
-                if (player.getTags().contains("odamaneFinalDeath")) {
-                    player.getTags().remove("odamaneFinalDeath");
-                    player.setHealth(player.getMaxHealth());
-                    BlockPos blockpos = player.getRespawnPosition();
-                    float f = player.getRespawnAngle();
-                    boolean flag = player.isRespawnForced();
-                    ServerLevel serverlevel = player.server.getLevel(player.getRespawnDimension());
-                    Optional<Vec3> optional;
-                    if (serverlevel != null && blockpos != null) {
-                        optional = Player.findRespawnPositionAndUseSpawnBlock(serverlevel, blockpos, f, flag, false);
-                    } else {
-                        optional = Optional.empty();
-                    }
-                    ServerLevel serverlevel1 = serverlevel != null && optional.isPresent() ? serverlevel : player.server.overworld();
-                    if (optional.isPresent()) {
-                        BlockState blockstate = serverlevel1.getBlockState(blockpos);
-                        boolean flag1 = blockstate.is(Blocks.RESPAWN_ANCHOR);
-                        Vec3 vec3 = optional.get();
-                        float f1;
-                        if (!blockstate.is(BlockTags.BEDS) && !flag1) {
-                        } else {
-                            Vec3 vec31 = Vec3.atBottomCenterOf(blockpos).subtract(vec3).normalize();
-                        }
-                        player.setPos(vec3.x, vec3.y, vec3.z);
-                        player.setRespawnPosition(player.level().dimension(), null, 0F, true, false);
-                        PacketHandler.sendToAll(new TheEndDeathPacket(player.getId(), new Vector3f((float) vec3.x, (float) vec3.y, (float) vec3.z)));
-                    }
-
-                    event.setCanceled(true);
-                }
-            }
-        }
-        @SubscribeEvent
-        public static void writeDataToNewPlayer(PlayerEvent.PlayerLoggedInEvent event) {
-            try {
-                if (event.getEntity().getServer() == null) return;
-                DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(event.getEntity().getServer());
-                GRSavedDataEC savedDataEC = (GRSavedDataEC) state;
-                GRSavedDataExpandedContext context = savedDataEC.revelationfix$dataEC();
-                if (isValid(context.getPUZZLE1()) && isValid(context.getPUZZLE2()) && isValid(context.getPUZZLE3()) && isValid(context.getPUZZLE4()) && isValid(context.getTheEndCraftItem()))
-                    PacketHandler.sendToAll(new TheEndPuzzleUpdatePacket(context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem()));
-                else
-                    RevelationFixMixinPlugin.LOGGER.debug("Checked Invalid puzzle/end_craft : {}", context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem());
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-                System.exit(-1);
-            }
-        }
-    }
 
     @SuppressWarnings("deprecation")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -299,6 +154,155 @@ public class CommonEventHandler {
 
     static boolean isValid(ResourceLocation resourceLocation) {
         return resourceLocation != null && !resourceLocation.getPath().isEmpty();
+    }
+
+    /*
+    @SubscribeEvent
+    public static void sfdw(AttackEntityEvent event) {
+        try {
+            Unsafe unsafe = UnsafeAccess.UNSAFE;
+            TransformingClassLoader classLoader = (TransformingClassLoader) unsafe.getObject(Launcher.INSTANCE, unsafe.objectFieldOffset(Launcher.class.getDeclaredField("classLoader")));
+            Method method = TransformingClassLoader.class.getDeclaredMethod("buildTransformedClassNodeFor", String.class, String.class);
+            method.setAccessible(true);
+            byte[] bytes = (byte[]) method.invoke(classLoader, EventBus.class.getName(), "classloading");
+            File file = new File("C:\\Users\\admin\\Desktop\\EventBus.class");
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(bytes);
+            stream.flush();
+            stream.close();
+        } catch (Throwable throwable) {}
+
+    }
+     */
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class EntityEvents {
+        @SubscribeEvent(priority = EventPriority.HIGH)
+        public static void onEntityDeath(LivingDeathEvent event) {
+            LivingEntity entity = event.getEntity();
+            Level level = entity.level();
+            if (!level.isClientSide) {
+                if (ATAHelper2.hasAmuletOfSlime(entity) && event.getSource().is(DamageTypeTags.IS_FALL)) {
+                    Item curio = GRItems.AMULET_OF_SLIME.get();
+                    if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(curio)) {
+                        event.setCanceled(true);
+                        entity.setHealth(1F);
+                        entity.heal(1F);
+                        int size = entity.getRandom().nextInt(1, 3);
+                        {
+                            Slime slime = new Slime(EntityType.SLIME, level);
+                            slime.setSize(size, true);
+                            slime.setPos(entity.getRandomX(2D), entity.getY() + 0.5D, entity.getRandomZ(2D));
+                            level.addFreshEntity(slime);
+                        }
+                        if (level instanceof ServerLevel serverLevel) {
+                            ColorUtil color = new ColorUtil(0x71a7af);
+                            ServerParticleUtil.windParticle(serverLevel, color, 1.0F + serverLevel.random.nextFloat() * 0.5F, 0.0F, entity.getId(), entity.position());
+                            ServerParticleUtil.circularParticles(serverLevel, ParticleTypes.CLOUD, entity, 1.0F);
+                            ServerParticleUtil.windShockwaveParticle(serverLevel, color, 0.75F, 0.01F, 0.1F, 25, entity.getId(), entity.position());
+                        }
+                        if (entity instanceof Player player) {
+                            player.playSound(SoundEvents.SLIME_SQUISH);
+                            player.getCooldowns().addCooldown(curio, (int) (ItemConfig.amuletOfSlimeCooldown * 20));
+                        }
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent(priority = EventPriority.HIGHEST)
+        public static void onMobChangeTarget(LivingChangeTargetEvent event) {
+            LivingEntity target = event.getNewTarget();
+            if (target != null) {
+                LivingEntity entity = event.getEntity();
+                Set<String> tags = entity.getTags();
+                Set<String> targetTags = target.getTags();
+                if ((targetTags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(target))) {
+                    if (tags.contains(EntityExpandedContext.GR_MAY_FRIENDLY_TAG) || EntityExpandedContext.isOwnerFriendlyTag(entity)) {
+                        if (tags.contains(EntityExpandedContext.GR_FT_CHURCH) && targetTags.contains(EntityExpandedContext.GR_FT_CHURCH)) {
+                            event.setCanceled(true);
+                        } else if (EntityExpandedContext.isOwnerFriendlyTag_Church(entity) && EntityExpandedContext.isOwnerFriendlyTag_Church(target))
+                            event.setCanceled(true);
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public static void onPlayerAttack(AttackEntityEvent event) {
+            if (event.getTarget() instanceof ObsidianMonolith monolith) {
+                if (!monolith.level().isClientSide) {
+                    if (monolith.getMasterOwner() == event.getEntity() && monolith.getTrueOwner() instanceof ApostleServant servant && event.getEntity().isShiftKeyDown()) {
+                        monolith.die(event.getEntity().damageSources().playerAttack(event.getEntity()));
+                        event.setCanceled(true);
+                    }
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public static void resistanceAttributeHandler(LivingHurtEvent event) {
+            LivingEntity living = event.getEntity();
+            if (living.level().isClientSide) return;
+            Attribute attribute = ModAttributes.DAMAGE_RESISTANCE.get();
+            AttributeInstance attributeInstance = living.getAttribute(attribute);
+            double value;
+            if (attributeInstance != null && (value = living.getAttributeValue(attribute)) > 1.0D) {
+                event.setAmount((float) (event.getAmount() * (2.0F - Mth.clamp(value, 1.0D, 2.0D))));
+            }
+        }
+
+        @SubscribeEvent
+        public static void odamaneFinalDeath(EarlyLivingDeathEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player && player.level().dimension() == Level.END) {
+                if (player.getTags().contains("odamaneFinalDeath")) {
+                    player.getTags().remove("odamaneFinalDeath");
+                    player.setHealth(player.getMaxHealth());
+                    BlockPos blockpos = player.getRespawnPosition();
+                    float f = player.getRespawnAngle();
+                    boolean flag = player.isRespawnForced();
+                    ServerLevel serverlevel = player.server.getLevel(player.getRespawnDimension());
+                    Optional<Vec3> optional;
+                    if (serverlevel != null && blockpos != null) {
+                        optional = Player.findRespawnPositionAndUseSpawnBlock(serverlevel, blockpos, f, flag, false);
+                    } else {
+                        optional = Optional.empty();
+                    }
+                    ServerLevel serverlevel1 = serverlevel != null && optional.isPresent() ? serverlevel : player.server.overworld();
+                    if (optional.isPresent()) {
+                        BlockState blockstate = serverlevel1.getBlockState(blockpos);
+                        boolean flag1 = blockstate.is(Blocks.RESPAWN_ANCHOR);
+                        Vec3 vec3 = optional.get();
+                        float f1;
+                        if (!blockstate.is(BlockTags.BEDS) && !flag1) {
+                        } else {
+                            Vec3 vec31 = Vec3.atBottomCenterOf(blockpos).subtract(vec3).normalize();
+                        }
+                        player.setPos(vec3.x, vec3.y, vec3.z);
+                        player.setRespawnPosition(player.level().dimension(), null, 0F, true, false);
+                        PacketHandler.sendToAll(new TheEndDeathPacket(player.getId(), new Vector3f((float) vec3.x, (float) vec3.y, (float) vec3.z)));
+                    }
+
+                    event.setCanceled(true);
+                }
+            }
+        }
+
+        @SubscribeEvent
+        public static void writeDataToNewPlayer(PlayerEvent.PlayerLoggedInEvent event) {
+            try {
+                if (event.getEntity().getServer() == null) return;
+                DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(event.getEntity().getServer());
+                GRSavedDataEC savedDataEC = (GRSavedDataEC) state;
+                GRSavedDataExpandedContext context = savedDataEC.revelationfix$dataEC();
+                if (isValid(context.getPUZZLE1()) && isValid(context.getPUZZLE2()) && isValid(context.getPUZZLE3()) && isValid(context.getPUZZLE4()) && isValid(context.getTheEndCraftItem()))
+                    PacketHandler.sendToAll(new TheEndPuzzleUpdatePacket(context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem()));
+                else
+                    RevelationFixMixinPlugin.LOGGER.debug("Checked Invalid puzzle/end_craft : {}", context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+                System.exit(-1);
+            }
+        }
     }
 
     @Mod.EventBusSubscriber

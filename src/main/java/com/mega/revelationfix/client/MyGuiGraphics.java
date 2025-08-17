@@ -40,6 +40,7 @@ public class MyGuiGraphics extends GuiGraphics implements net.minecraftforge.cli
     public final MultiBufferSource.BufferSource bufferSource;
     public final ItemStack tooltipStack = ItemStack.EMPTY;
     private final AccessorGuiGraphics accessorGuiGraphics = (AccessorGuiGraphics) this;
+
     public MyGuiGraphics(Minecraft p_282144_, PoseStack p_281551_, MultiBufferSource.BufferSource p_281460_) {
         super(p_282144_, p_281460_);
         this.minecraft = p_282144_;

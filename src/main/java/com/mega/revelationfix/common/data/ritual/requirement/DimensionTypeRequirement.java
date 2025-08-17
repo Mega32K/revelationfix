@@ -13,6 +13,16 @@ import java.util.Set;
 
 public class DimensionTypeRequirement implements Requirement {
     private final Set<ResourceLocation> dimensionIngredient = new ObjectArraySet<>();
+
+    public static DimensionTypeRequirement createFromJson(JsonElement element) {
+        DimensionTypeRequirement requirement = null;
+        if (element instanceof JsonObject jsonObject) {
+            requirement = new DimensionTypeRequirement();
+            requirement.compileData(jsonObject);
+        }
+        return requirement;
+    }
+
     @Override
     public String getType() {
         return RitualData.DIMENSION;
@@ -31,15 +41,8 @@ public class DimensionTypeRequirement implements Requirement {
             }
         }
     }
+
     public boolean canUse(Level level) {
         return dimensionIngredient.contains(new ResourceLocation(level.dimension().location().toString()));
-    }
-    public static DimensionTypeRequirement createFromJson(JsonElement element) {
-        DimensionTypeRequirement requirement = null;
-        if (element instanceof JsonObject jsonObject) {
-            requirement = new DimensionTypeRequirement();
-            requirement.compileData(jsonObject);
-        }
-        return requirement;
     }
 }

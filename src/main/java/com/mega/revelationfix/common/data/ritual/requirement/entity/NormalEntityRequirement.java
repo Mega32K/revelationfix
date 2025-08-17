@@ -1,7 +1,6 @@
 package com.mega.revelationfix.common.data.ritual.requirement.entity;
 
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class NormalEntityRequirement extends EntityRequirement {
     private EntityType<?> entityType;
     private TagKey<EntityType<?>> typeTag;
+
     @Override
     protected void compileSelfData(JsonObject jsonObject) {
         if (jsonObject.has("entity")) {

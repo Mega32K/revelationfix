@@ -1,6 +1,6 @@
 package com.mega.revelationfix.client.renderer.entity;
 
-import com.Polarice3.Goety.init.ModTags;
+import com.Polarice3.Goety.common.blocks.PedestalBlock;
 import com.mega.revelationfix.client.citadel.GRRenderTypes;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;
@@ -45,7 +45,7 @@ public class BlockShakingEntityRenderer extends EntityRenderer<BlockShakingEntit
     public void render(BlockShakingEntity entity, float p_114635_, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         BlockState state = entity.getBlockState();
         if (SafeClass.usingShaderPack())
-            if (!state.is(ModTags.Blocks.SHADE_STONE)) return;
+            if (!(state.getBlock() instanceof PedestalBlock)) return;
         PostEffectRegistry.renderEffectForNextTick(ClientProxy.HOLOGRAM_SHADER);
         bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         PostEffectHandler.updateUniform_post(PostEffectRegistry.getPostChainFor(ClientProxy.HOLOGRAM_SHADER), "Alpha", entity.getProgress(partialTick) * 2.0F);
@@ -60,7 +60,7 @@ public class BlockShakingEntityRenderer extends EntityRenderer<BlockShakingEntit
                 BlockPos blockpos = new BlockPos((int) entity.getX(), (int) entity.getBoundingBox().maxY, (int) entity.getZ());
                 float scale = 1.1F;
                 float offset = (scale - 1F) / 2f;
-                poseStack.translate(-offset, -2.0F - offset,  - offset);
+                poseStack.translate(-offset, -2.0F - offset, -offset);
                 poseStack.scale(scale, scale, scale);
                 BakedModel model = this.dispatcher.getBlockModel(blockstate);
                 this.dispatcher.getModelRenderer().tesselateBlock(level, model, blockstate, blockpos, poseStack, bufferSource.getBuffer(renderType), false, RandomSource.create(), blockstate.getSeed(entity.getStartPos()), OverlayTexture.NO_OVERLAY, ModelData.EMPTY, renderType);

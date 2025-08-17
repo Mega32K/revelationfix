@@ -35,6 +35,7 @@ public class RitualDataManager {
     public static final FriendlyByteBuf.Writer<RitualData> SIMPLE_RITUAL_DATA_WRITER = RitualDataWriter.getInstance();
     public static final FriendlyByteBuf.Reader<RitualData> SIMPLE_RITUAL_DATA_READER = RitualDataReader.getInstance();
     public static final Map<String, RitualData> REGISTRIES = new HashMap<>();
+
     public static Map<String, RitualData> getRegistries() {
         return REGISTRIES;
     }
@@ -42,6 +43,7 @@ public class RitualDataManager {
     public static Collection<RitualData> getRituals() {
         return REGISTRIES.values();
     }
+
     public static void register(String plugin, RitualData data) {
         REGISTRIES.put(plugin, data);
         {
@@ -56,15 +58,19 @@ public class RitualDataManager {
             logger.debug("   -Entities: size->{} ", data.requirements.get(RitualData.ENTITIES).size());
         }
     }
+
     public static @Nullable RitualData getRitualByPlugin(String plugin) {
         return REGISTRIES.get(plugin);
     }
-    public static void clearData()  {
+
+    public static void clearData() {
         REGISTRIES.clear();
     }
+
     public static boolean isCustomRitual(String craftType) {
         return REGISTRIES.containsKey(craftType);
     }
+
     public static boolean getProperStructure(String craftType, RitualBlockEntity pTileEntity, BlockPos pPos, Level pLevel) {
         RitualData ritualData = REGISTRIES.get(craftType);
         {
@@ -120,7 +126,7 @@ public class RitualDataManager {
                         BlockState blockstate = pLevel.getBlockState(blockpos1);
                         for (BlockRequirement requirement : map.keySet()) {
                             if (requirement.canUse(pLevel, blockpos1, blockstate)) {
-                                map.put(requirement, map.get(requirement)+1);
+                                map.put(requirement, map.get(requirement) + 1);
                             }
                         }
                     }
@@ -140,7 +146,7 @@ public class RitualDataManager {
             for (Entity entity : pLevel.getEntitiesOfClass(Entity.class, new AABB(pPos).inflate(xRange, yRange, zRange))) {
                 for (EntityRequirement requirement : map.keySet()) {
                     if (requirement.canUseRequirement(pLevel, entity))
-                        map.put(requirement, map.get(requirement)+1);
+                        map.put(requirement, map.get(requirement) + 1);
                 }
             }
 

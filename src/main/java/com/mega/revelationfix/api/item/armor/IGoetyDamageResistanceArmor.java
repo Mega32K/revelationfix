@@ -4,9 +4,7 @@ import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
@@ -29,6 +27,7 @@ public interface IGoetyDamageResistanceArmor {
                 )
         );
     }
+
     default List<Component> damageResistanceTooltip(ArmorItem armorItem, ItemStack itemStack) {
         return CuriosMutableComponent.listBake(damageResistanceTooltipCMC(armorItem, itemStack), itemStack);
     }

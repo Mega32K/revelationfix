@@ -110,6 +110,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
             GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.NOT_ENOUGH_SOULS_WITHOUT_MSG);
         }
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 0))
     private void stopRitual_INVALID_RITUAL_RECIPE(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.INVALID_RITUAL_RECIPE)) {
@@ -117,6 +118,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.INVALID_RITUAL_RECIPE);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 1))
     private void stopRitual_NOT_ENOUGH_SOULS_WITH_MSG(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.NOT_ENOUGH_SOULS_WITH_MSG)) {
@@ -124,6 +126,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.NOT_ENOUGH_SOULS_WITH_MSG);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 2))
     private void stopRitual_ENCHANTMENT_RITUAL_NOT_ENOUGH_EXP(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.ENCHANTMENT_RITUAL_NOT_ENOUGH_EXP)) {
@@ -131,6 +134,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.ENCHANTMENT_RITUAL_NOT_ENOUGH_EXP);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 3))
     private void stopRitual_CANNOT_CONSUME_INGREDIENTS(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.CANNOT_CONSUME_INGREDIENTS)) {
@@ -138,6 +142,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.CANNOT_CONSUME_INGREDIENTS);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 4))
     private void stopRitual_FINISHED_ENCHANTMENT(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.FINISHED_ENCHANTMENT)) {
@@ -145,6 +150,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.FINISHED_ENCHANTMENT);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 5))
     private void stopRitual_FINISHED_NORMAL(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.FINISHED_NORMAL)) {
@@ -152,6 +158,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.FINISHED_NORMAL);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 6))
     private void stopRitual_FINISHED_CONVERSION(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.FINISHED_CONVERSION)) {
@@ -159,6 +166,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.FINISHED_CONVERSION);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 7))
     private void stopRitual_CONVERSION_NOT_IN_RANGE_WHEN_WILL_FINISHED(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.CONVERSION_NOT_IN_RANGE_WHEN_WILL_FINISHED)) {
@@ -166,6 +174,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.CONVERSION_NOT_IN_RANGE_WHEN_WILL_FINISHED);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 8))
     private void stopRitual_INVALID_STRUCTURE(DarkAltarBlockEntity instance, boolean z) {
         if (!GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.INVALID_STRUCTURE)) {
@@ -173,6 +182,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
         GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, false, z, DarkAltarEvent.StopRitualEvent.Reason.INVALID_STRUCTURE);
     }
+
     @Redirect(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;stopRitual(Z)V", ordinal = 9))
     private void stopRitual_CONVERSION_NOT_IN_RANGE(DarkAltarBlockEntity instance, boolean z) {
         if (GoetyEventHooks.postStopRitualEvent(this.level, this.getBlockPos(), this.getBlockState(), instance, true, z, DarkAltarEvent.StopRitualEvent.Reason.CONVERSION_NOT_IN_RANGE)) {
@@ -183,17 +193,19 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
 
     @Inject(remap = false, method = "tick", at = @At("HEAD"), cancellable = true)
     private void tickHead(CallbackInfo ci) {
-        if (GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object)this), DarkAltarEvent.TickEvent.TickPhase.HEAD))
+        if (GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object) this), DarkAltarEvent.TickEvent.TickPhase.HEAD))
             ci.cancel();
     }
+
     @Inject(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;getCurrentRitualRecipe()Lcom/Polarice3/Goety/common/crafting/RitualRecipe;", ordinal = 0), cancellable = true)
     private void tickAfterHasSouls(CallbackInfo ci) {
-        if (GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object)this), DarkAltarEvent.TickEvent.TickPhase.AFTER_HAS_SOULS))
+        if (GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object) this), DarkAltarEvent.TickEvent.TickPhase.AFTER_HAS_SOULS))
             ci.cancel();
     }
+
     @Inject(remap = false, method = "tick", at = @At(value = "TAIL"))
     private void tickTail(CallbackInfo ci) {
-        GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object)this), DarkAltarEvent.TickEvent.TickPhase.TAIL);
+        GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object) this), DarkAltarEvent.TickEvent.TickPhase.TAIL);
     }
 
     @Redirect(remap = false, method = "activate", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;startRitual(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/crafting/RitualRecipe;)V"))
@@ -203,6 +215,7 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
             instance.startRitual(player, activationItem, ritualRecipe);
         } else isStartRitualCanceled.set(true);
     }
+
     @Inject(remap = false, method = "activate", at = @At("RETURN"), cancellable = true)
     private void active(Level world, BlockPos pos, Player player, InteractionHand hand, Direction face, CallbackInfoReturnable<Boolean> cir, @Share("isStartRitualCanceled") LocalBooleanRef isStartRitualCanceled) {
         if (isStartRitualCanceled.get())

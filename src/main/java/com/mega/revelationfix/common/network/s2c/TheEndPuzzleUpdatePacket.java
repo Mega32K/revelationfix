@@ -2,9 +2,9 @@ package com.mega.revelationfix.common.network.s2c;
 
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
+import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import com.mega.revelationfix.safe.level.ClientLevelExpandedContext;
 import com.mega.revelationfix.safe.level.ClientLevelInterface;
-import com.mega.revelationfix.safe.TheEndRitualItemContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

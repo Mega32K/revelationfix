@@ -9,7 +9,6 @@ import com.mega.endinglib.api.item.IDragonLightRendererItem;
 import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.client.model.entity.SpectreDarkmageHatModel;
-import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.item.FontItemExtensions;
@@ -48,6 +47,7 @@ public class SpectreDarkmageArmor extends SpectreArmor implements IDragonLightRe
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new FontItemExtensions() {
             private SpectreDarkmageHatModel model;
+
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 if (equipmentSlot == EquipmentSlot.HEAD) {
@@ -106,7 +106,7 @@ public class SpectreDarkmageArmor extends SpectreArmor implements IDragonLightRe
     public void addSetDescription(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<CuriosMutableComponent> components, @NotNull TooltipFlag tooltipFlag) {
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.darkmage_set.desc0"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         super.addSetDescription(itemStack, level, components, tooltipFlag);
-        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s)-> BaseArmorItem.ATTACK_DAMAGE_MODIFIER.getAmount() * 100.0F)));
+        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> BaseArmorItem.ATTACK_DAMAGE_MODIFIER.getAmount() * 100.0F)));
     }
 
     @Override

@@ -22,6 +22,7 @@ public class BrewingSacrificeProcessorMixin {
         instance = BrewEffects.INSTANCE;
         return instance.getBrewEffect(s);
     }
+
     @Redirect(method = "process", at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/effects/brew/BrewEffects;getSacrificeFromEffect(Ljava/lang/String;)Lnet/minecraft/world/entity/EntityType;"))
     private EntityType<?> redirectInit1(BrewEffects instance, String string) {
         if (BrewEffects.INSTANCE == null) {

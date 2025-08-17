@@ -11,6 +11,7 @@ public interface BrewEffectsInvoker {
     void register_(BrewEffect effect, Item ingredient);
 
     void register_(BrewEffect effect, EntityType<?> sacrifice);
+
     void forceModifierRegister_(BrewModifier modifier, Item ingredient);
 
     void forceRegister_(BrewEffect effect, Item ingredient);

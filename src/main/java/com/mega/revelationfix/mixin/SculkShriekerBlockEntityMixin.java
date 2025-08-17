@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class SculkShriekerBlockEntityMixin {
     @Inject(method = "tryShriek", at = @At("HEAD"), cancellable = true)
     private void tryShriek(ServerLevel p_222842_, ServerPlayer player, CallbackInfo ci) {
-        if (player != null ) {
+        if (player != null) {
             if (ArmorUtils.findBoots(player, ModArmorMaterials.SPECTRE) || ArmorUtils.findBoots(player, ModArmorMaterials.SPECTRE_DARKMAGE))
                 ci.cancel();
         }

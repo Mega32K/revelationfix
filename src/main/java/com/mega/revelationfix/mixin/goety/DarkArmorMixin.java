@@ -1,6 +1,5 @@
 package com.mega.revelationfix.mixin.goety;
 
-import com.Polarice3.Goety.common.items.armor.BlackIronArmor;
 import com.Polarice3.Goety.common.items.armor.DarkArmor;
 import com.mega.endinglib.api.client.cmc.LoreHelper;
 import com.mega.revelationfix.api.item.armor.IGoetyDamageResistanceArmor;

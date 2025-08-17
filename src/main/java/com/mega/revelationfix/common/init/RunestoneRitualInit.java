@@ -45,11 +45,7 @@ public class RunestoneRitualInit {
     public static final int RITUAL_9 = 3010;
     private static final double ZOMBIE_SPEED = 0.0623D;
     public static Int2ObjectOpenHashMap<RunestoneRitualExe> registries = new Int2ObjectOpenHashMap<>();
-    public static void register(int structureCode, RunestoneRitualExe exe) {
-        if (registries.containsKey(structureCode))
-            throw new RuntimeException("Duplicate runestone ritual exe: " + structureCode);
-        registries.put(structureCode, exe);
-    }
+
     static {
 
         {
@@ -65,9 +61,9 @@ public class RunestoneRitualInit {
                 if (k > 0 && serverLevel.random.nextBoolean()) {
                     ProfilerFiller profilerfiller = serverLevel.getProfiler();
                     AABB aabb = reactorBlockEntity.getRitualRange();
-                    for (int i=(int)aabb.minX;i<=(int)aabb.maxX;i++) {
-                        for (int j=(int)aabb.minZ;j<=(int)aabb.maxZ;j++) {
-                            for (int k0=(int)aabb.minY+6;k0<=(int)aabb.maxY-6;k0++) {
+                    for (int i = (int) aabb.minX; i <= (int) aabb.maxX; i++) {
+                        for (int j = (int) aabb.minZ; j <= (int) aabb.maxZ; j++) {
+                            for (int k0 = (int) aabb.minY + 6; k0 <= (int) aabb.maxY - 6; k0++) {
                                 BlockPos pos = new BlockPos(i, k0, j);
                                 BlockState blockstate2 = serverLevel.getBlockState(pos);
                                 Block block = blockstate2.getBlock();
@@ -99,7 +95,7 @@ public class RunestoneRitualInit {
                         multiplier = 3F;
                     }
                     double distanceToCenter = Math.max(0.5F, entity.distanceToSqr(center));
-                    Vec3 pos = (entity.position().add(center.scale(-1F))).normalize().scale(size1 / distanceToCenter).scale(multiplier*reverse);
+                    Vec3 pos = (entity.position().add(center.scale(-1F))).normalize().scale(size1 / distanceToCenter).scale(multiplier * reverse);
                     entity.hurtMarked = true;
                     entity.push(Mth.clamp(pos.x, -0.5F, 0.5F), Mth.clamp(pos.y, -0.5F, 0.5F), Mth.clamp(pos.z, -0.5F, 0.5F));
                 }
@@ -134,7 +130,8 @@ public class RunestoneRitualInit {
                     power = 2D;
                 for (Entity entity : serverLevel.getEntitiesOfClass(Entity.class, aabb, EntityExpandedContext.NO_GODS)) {
                     if (entity == reactorBlockEntity.getOwner()) entity.resetFallDistance();
-                    if ((entity == reactorBlockEntity.getOwner() && !entity.isShiftKeyDown()) || entity instanceof Projectile) continue;
+                    if ((entity == reactorBlockEntity.getOwner() && !entity.isShiftKeyDown()) || entity instanceof Projectile)
+                        continue;
                     entity.hurtMarked = true;
                     entity.push(0F, 0.1F * power, 0F);
                 }
@@ -151,13 +148,14 @@ public class RunestoneRitualInit {
                     power = 2D;
                 for (Entity entity : serverLevel.getEntitiesOfClass(Entity.class, aabb, EntityExpandedContext.NO_GODS)) {
                     if (entity == reactorBlockEntity.getOwner()) entity.resetFallDistance();
-                    if ((entity == reactorBlockEntity.getOwner() && !entity.isShiftKeyDown()) || entity instanceof Projectile) continue;
+                    if ((entity == reactorBlockEntity.getOwner() && !entity.isShiftKeyDown()) || entity instanceof Projectile)
+                        continue;
                     entity.hurtMarked = true;
                     entity.push(0F, -0.1F * power, 0F);
                 }
             }));
             register(RITUAL_6, ((serverLevel, reactorPos, reactorState, reactorBlockEntity) -> {
-                if (reactorBlockEntity.tickCount % (reactorBlockEntity.getRitualDelay()*4) == 0) {
+                if (reactorBlockEntity.tickCount % (reactorBlockEntity.getRitualDelay() * 4) == 0) {
                     for (LivingEntity living : serverLevel.getEntitiesOfClass(LivingEntity.class, reactorBlockEntity.getRitualRange().inflate(0.5), EntityExpandedContext.NO_GODS.and((entity -> !MobUtil.areAllies(entity, reactorBlockEntity.getOwner()))))) {
                         if (living == reactorBlockEntity.getOwner()) continue;
                         living.invulnerableTime = 0;
@@ -177,7 +175,7 @@ public class RunestoneRitualInit {
                     if (living == reactorBlockEntity.getOwner()) continue;
                     double d0 = living.getDeltaMovement().x;
                     double d1 = living.getDeltaMovement().z;
-                    double speed = Math.sqrt(d0*d0 + d1*d1);
+                    double speed = Math.sqrt(d0 * d0 + d1 * d1);
                     if (speed <= 0.05) continue;
                     if (living.hurt(living.damageSources().flyIntoWall(), (float) Math.max(1F, speed / ZOMBIE_SPEED))) {
                         living.level().levelEvent(232424314, living.blockPosition(), 6);
@@ -199,5 +197,11 @@ public class RunestoneRitualInit {
         if (SafeClass.isKJSLoaded()) {
             KjsSafeClass.postRunestoneEvent_0();
         }
+    }
+
+    public static void register(int structureCode, RunestoneRitualExe exe) {
+        if (registries.containsKey(structureCode))
+            throw new RuntimeException("Duplicate runestone ritual exe: " + structureCode);
+        registries.put(structureCode, exe);
     }
 }

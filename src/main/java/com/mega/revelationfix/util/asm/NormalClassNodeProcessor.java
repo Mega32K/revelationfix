@@ -12,11 +12,25 @@ import org.objectweb.asm.tree.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NormalClassNodeProcessor implements IClassProcessor {
-    public static NormalClassNodeProcessor INSTANCE = new NormalClassNodeProcessor();
-    public static Logger LOGGER = RevelationFixMixinPlugin.LOGGER;
     public static final String SELF_AT_ITF = "Lcom/mega/revelationfix/util/java/Self;";
     public static final String DYNAMIC_UTIL_CLASS = "com/mega/revelationfix/util/DynamicUtil";
     public static final String GR_ITEMS_CLASS = "com/mega/revelationfix/common/init/GRItems";
+    public static NormalClassNodeProcessor INSTANCE = new NormalClassNodeProcessor();
+    public static Logger LOGGER = RevelationFixMixinPlugin.LOGGER;
+
+    public static boolean hasRuntimeVisibleAnnotation(FieldNode field, String annotationDescriptor) {
+        if (field.visibleAnnotations == null) {
+            return false;
+        }
+
+        for (AnnotationNode ann : field.visibleAnnotations) {
+            if (annotationDescriptor.equals(ann.desc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void processClass(ILaunchPluginService.Phase phase, ClassNode classNode, Type type, AtomicBoolean atomicBoolean) {
         if (phase == ILaunchPluginService.Phase.BEFORE) {
@@ -39,17 +53,5 @@ public class NormalClassNodeProcessor implements IClassProcessor {
                 });
             }
         }
-    }
-    public static boolean hasRuntimeVisibleAnnotation(FieldNode field, String annotationDescriptor) {
-        if (field.visibleAnnotations == null) {
-            return false;
-        }
-
-        for (AnnotationNode ann : field.visibleAnnotations) {
-            if (annotationDescriptor.equals(ann.desc)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

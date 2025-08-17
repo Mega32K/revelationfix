@@ -1,7 +1,6 @@
 package com.mega.revelationfix.common.data.loot;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootTable;
 import z1gned.goetyrevelation.ModMain;
 
 public class ModLootTables {

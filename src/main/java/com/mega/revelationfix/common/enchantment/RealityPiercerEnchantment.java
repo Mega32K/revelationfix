@@ -1,6 +1,5 @@
 package com.mega.revelationfix.common.enchantment;
 
-import com.Polarice3.Goety.client.inventory.container.DarkAnvilMenu;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.eeeab.eeeabsmobs.sever.entity.guling.EntityNamelessGuardian;
 import com.eeeab.eeeabsmobs.sever.entity.immortal.EntityImmortal;

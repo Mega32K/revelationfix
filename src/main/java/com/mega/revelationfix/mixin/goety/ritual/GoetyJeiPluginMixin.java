@@ -5,20 +5,14 @@ import com.Polarice3.Goety.compat.jei.JeiRecipeTypes;
 import com.Polarice3.Goety.compat.jei.ModRitualCategory;
 import com.mega.revelationfix.common.compat.jei.GoetyJeiPlugin2;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
-import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
-import mezz.jei.common.Internal;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,9 +25,10 @@ import java.util.List;
 @Mixin(value = GoetyJeiPlugin.class, remap = false)
 public abstract class GoetyJeiPluginMixin {
     @Shadow
-    public abstract void registerRitualType(IRecipeRegistration registration, RecipeManager recipeManager, String type);
+    public static IJeiHelpers jeiHelper;
 
-    @Shadow public static IJeiHelpers jeiHelper;
+    @Shadow
+    public abstract void registerRitualType(IRecipeRegistration registration, RecipeManager recipeManager, String type);
 
     @Inject(method = "registerCategories", at = @At("HEAD"))
     private void registerCategories(IRecipeCategoryRegistration registration, CallbackInfo ci) {
@@ -63,6 +58,6 @@ public abstract class GoetyJeiPluginMixin {
         //Internal.getJeiRuntime().getRecipeManager().addRecipes();
         for (var entry : RitualDataManager.getRegistries().keySet()) {
             this.registerRitualType(registration, recipeManager, entry);
-        } 
+        }
     }
 }

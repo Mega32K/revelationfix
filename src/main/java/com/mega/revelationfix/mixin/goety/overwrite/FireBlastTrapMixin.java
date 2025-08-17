@@ -40,6 +40,22 @@ import java.util.UUID;
 public abstract class FireBlastTrapMixin extends Entity {
     @Unique
     private static final EntityDataAccessor<Float> AREA_EFFECT_DATA = SynchedEntityData.defineId(FireBlastTrap.class, EntityDataSerializers.FLOAT);
+    @Shadow(remap = false)
+    @Final
+    private static EntityDataAccessor<Boolean> IMMEDIATE;
+    @Shadow(remap = false)
+    public LivingEntity owner;
+    @Shadow(remap = false)
+    private int burning;
+    @Shadow(remap = false)
+    private UUID ownerUniqueId;
+    @Shadow(remap = false)
+    private float extraDamage;
+
+    public FireBlastTrapMixin(EntityType<?> p_19870_, Level p_19871_) {
+        super(p_19870_, p_19871_);
+    }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -49,6 +65,7 @@ public abstract class FireBlastTrapMixin extends Entity {
         this.entityData.define(AREA_EFFECT_DATA, 0.0F);
         this.entityData.define(IMMEDIATE, false);
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -63,6 +80,7 @@ public abstract class FireBlastTrapMixin extends Entity {
         this.setAreaOfEffect(compound.getFloat("AreaOfEffect"));
         this.burning = compound.getInt("Burning");
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -77,15 +95,7 @@ public abstract class FireBlastTrapMixin extends Entity {
         compound.putFloat("AreaOfEffect", this.getAreaOfEffect());
         compound.putInt("Burning", this.burning);
     }
-    /**
-     * @author Mega
-     * @reason TPS UP FIX
-     */
-    @Overwrite(remap = false)
-    public void setOwner(@Nullable LivingEntity ownerIn) {
-        this.owner = ownerIn;
-        this.ownerUniqueId = ownerIn == null ? null : ownerIn.getUUID();
-    }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -102,14 +112,17 @@ public abstract class FireBlastTrapMixin extends Entity {
 
         return this.owner;
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
      */
     @Overwrite(remap = false)
-    public void setBurning(int burning) {
-        this.burning = burning;
+    public void setOwner(@Nullable LivingEntity ownerIn) {
+        this.owner = ownerIn;
+        this.ownerUniqueId = ownerIn == null ? null : ownerIn.getUUID();
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -118,14 +131,16 @@ public abstract class FireBlastTrapMixin extends Entity {
     public int getBurning() {
         return this.burning;
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
      */
     @Overwrite(remap = false)
-    public void setExtraDamage(float damage) {
-        this.extraDamage = damage;
+    public void setBurning(int burning) {
+        this.burning = burning;
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -134,14 +149,16 @@ public abstract class FireBlastTrapMixin extends Entity {
     public float getExtraDamage() {
         return this.extraDamage;
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
      */
     @Overwrite(remap = false)
-    public void setAreaOfEffect(float damage) {
-        this.entityData.set(AREA_EFFECT_DATA, damage);
+    public void setExtraDamage(float damage) {
+        this.extraDamage = damage;
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -150,6 +167,25 @@ public abstract class FireBlastTrapMixin extends Entity {
     public float getAreaOfEffect() {
         return this.entityData.get(AREA_EFFECT_DATA);
     }
+
+    /**
+     * @author Mega
+     * @reason TPS UP FIX
+     */
+    @Overwrite(remap = false)
+    public void setAreaOfEffect(float damage) {
+        this.entityData.set(AREA_EFFECT_DATA, damage);
+    }
+
+    /**
+     * @author Mega
+     * @reason TPS UP FIX
+     */
+    @Overwrite(remap = false)
+    public boolean getImmediate() {
+        return this.entityData.get(IMMEDIATE);
+    }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -158,14 +194,7 @@ public abstract class FireBlastTrapMixin extends Entity {
     public void setImmediate(boolean immediate) {
         this.entityData.set(IMMEDIATE, immediate);
     }
-    /**
-     * @author Mega
-     * @reason TPS UP FIX
-     */
-    @Overwrite(remap = false)
-    public boolean getImmediate() {
-        return (Boolean) this.entityData.get(IMMEDIATE);
-    }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -174,6 +203,7 @@ public abstract class FireBlastTrapMixin extends Entity {
     public @NotNull PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
     }
+
     /**
      * @author Mega
      * @reason TPS UP FIX
@@ -182,18 +212,6 @@ public abstract class FireBlastTrapMixin extends Entity {
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return new ClientboundAddEntityPacket(this);
     }
-
-    public FireBlastTrapMixin(EntityType<?> p_19870_, Level p_19871_) {
-        super(p_19870_, p_19871_);
-    }
-
-    @Shadow(remap = false) public LivingEntity owner;
-
-    @Shadow(remap = false) private int burning;
-
-    @Shadow(remap = false) @Final private static EntityDataAccessor<Boolean> IMMEDIATE;
-    @Shadow(remap = false) private UUID ownerUniqueId;
-    @Shadow(remap = false) private float extraDamage;
 
     /**
      * @author Mega
@@ -212,7 +230,7 @@ public abstract class FireBlastTrapMixin extends Entity {
                 float f7 = Mth.sqrt(this.random.nextFloat()) * f;
                 float f8 = Mth.cos(f6) * f7;
                 float f9 = Mth.sin(f6) * f7;
-                level.addParticle(ModParticleTypes.BURNING.get(), this.getX() + (double) f8, this.getY(), this.getZ() + (double) f9, 0, 0,0);
+                level.addParticle(ModParticleTypes.BURNING.get(), this.getX() + (double) f8, this.getY(), this.getZ() + (double) f9, 0, 0, 0);
             }
             ColorUtil color = new ColorUtil(ChatFormatting.GOLD);
             ClientParticleUtil.windParticle(level, color, (f - 1.0F) + level.random.nextFloat() * 0.5F, 0.0F, this.getId(), this.position());
@@ -230,12 +248,12 @@ public abstract class FireBlastTrapMixin extends Entity {
             }
         }
         if (level instanceof ServerLevel serverLevel) {
-            if (this.tickCount == 20 || this.getImmediate()){
+            if (this.tickCount == 20 || this.getImmediate()) {
                 List<Entity> targets = new ArrayList<>();
                 float area0 = 1.0F + area;
                 AABB aabb = this.getBoundingBox();
                 AABB aabb1 = new AABB(aabb.minX - area0, aabb.minY - 1.0F, aabb.minZ - area0, aabb.maxX + area0, aabb.maxY + 1.0F, aabb.maxZ + area0);
-                for (Entity entity : this.level().getEntitiesOfClass(Entity.class, aabb1)){
+                for (Entity entity : this.level().getEntitiesOfClass(Entity.class, aabb1)) {
                     if (this.owner != null) {
                         if (entity != this.owner && !MobUtil.areAllies(entity, this.owner)) {
                             if (this.owner instanceof Mob mob && this.owner instanceof Enemy && entity instanceof Enemy) {
@@ -250,7 +268,7 @@ public abstract class FireBlastTrapMixin extends Entity {
                         targets.add(entity);
                     }
                 }
-                if (!targets.isEmpty()){
+                if (!targets.isEmpty()) {
                     for (Entity entity : targets) {
                         if ((this.owner != null && CuriosFinder.hasUnholySet(this.owner))) {
                             if (entity instanceof LivingEntity livingEntity) {
@@ -258,9 +276,9 @@ public abstract class FireBlastTrapMixin extends Entity {
                             }
                             entity.hurt(ModDamageSource.hellfire(this, this.owner), AttributesConfig.ApostleMagicDamage.get().floatValue() + this.getExtraDamage());
                         } else {
-                            if (this.owner != null){
+                            if (this.owner != null) {
                                 float damage = 5.0F;
-                                if (this.owner instanceof Mob mob && mob.getAttribute(Attributes.ATTACK_DAMAGE) != null){
+                                if (this.owner instanceof Mob mob && mob.getAttribute(Attributes.ATTACK_DAMAGE) != null) {
                                     damage = (float) mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
                                 }
                                 entity.hurt(ModDamageSource.magicFireBreath(this, this.owner), damage + this.getExtraDamage());
@@ -270,7 +288,7 @@ public abstract class FireBlastTrapMixin extends Entity {
                         }
                         if (entity instanceof LivingEntity livingEntity) {
                             MobUtil.push(livingEntity, 0.0D, 1.0D, 0.0D, 0.5D);
-                            if (this.burning > 0){
+                            if (this.burning > 0) {
                                 livingEntity.setSecondsOnFire(this.burning * 4);
                             }
                         }
@@ -278,19 +296,19 @@ public abstract class FireBlastTrapMixin extends Entity {
                 }
             }
         }
-        if (this.tickCount > 20 || (this.getImmediate() && this.tickCount > 5)){
+        if (this.tickCount > 20 || (this.getImmediate() && this.tickCount > 5)) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.25D, 0.0D));
             this.move(MoverType.SELF, this.getDeltaMovement());
         }
-        if (this.tickCount == 20 || (this.getImmediate() && this.tickCount == 5)){
+        if (this.tickCount == 20 || (this.getImmediate() && this.tickCount == 5)) {
             this.playSound(SoundEvents.GENERIC_EXPLODE, 1.0F, 0.5F);
         }
-        if (this.owner != null){
-            if (this.owner.isDeadOrDying() || this.owner.isRemoved()){
+        if (this.owner != null) {
+            if (this.owner.isDeadOrDying() || this.owner.isRemoved()) {
                 this.discard();
             }
         }
-        if (this.tickCount % 30 == 0){
+        if (this.tickCount % 30 == 0) {
             this.discard();
         }
     }

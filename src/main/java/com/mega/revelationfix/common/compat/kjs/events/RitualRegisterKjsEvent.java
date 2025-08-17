@@ -6,8 +6,6 @@ import com.mega.revelationfix.common.data.ritual.requirement.DimensionTypeRequir
 import com.mega.revelationfix.common.data.ritual.requirement.PositionRequirement;
 import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
 import com.mega.revelationfix.common.data.ritual.requirement.TimeRequirement;
-import com.mega.revelationfix.common.data.ritual.requirement.block.BlockRequirement;
-import com.mega.revelationfix.common.data.ritual.requirement.entity.EntityRequirement;
 import dev.latvian.mods.kubejs.event.EventJS;
 
 import java.util.Collection;
@@ -20,9 +18,11 @@ public class RitualRegisterKjsEvent extends EventJS {
     public RitualData getData(String id) {
         return RitualDataManager.getRitualByPlugin(id);
     }
+
     public Collection<RitualData> getExistData() {
         return RitualDataManager.getRituals();
     }
+
     public RitualData create(String plugin, String iconItem, Collection<Requirement> blockRequirements, Collection<Requirement> entityRequirements, DimensionTypeRequirement dimensionTypeRequirement, TimeRequirement timeRequirement, PositionRequirement positionRequirement) {
         RitualData ritualData = new RitualData(plugin);
         ritualData.setIconItemKey(iconItem);

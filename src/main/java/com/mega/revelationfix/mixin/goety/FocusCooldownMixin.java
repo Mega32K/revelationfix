@@ -52,7 +52,7 @@ public abstract class FocusCooldownMixin {
     private void addCooldown(Player player, Level level, Item item, int coolDown, CallbackInfo ci) {
         ci.cancel();
         if (!level.isClientSide) {
-            coolDown = Math.round(coolDown * (float)Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
+            coolDown = Math.round(coolDown * (float) Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
         }
         this.cooldowns.put(item, new FocusCooldown.CooldownInstance(coolDown));
         if (!level.isClientSide) {

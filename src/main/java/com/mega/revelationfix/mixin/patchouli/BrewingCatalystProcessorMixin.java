@@ -22,6 +22,7 @@ public class BrewingCatalystProcessorMixin {
         instance = BrewEffects.INSTANCE;
         return instance.getBrewEffect(s);
     }
+
     @Redirect(method = "process", at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/common/effects/brew/BrewEffects;getCatalystFromEffect(Ljava/lang/String;)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack redirectInit1(BrewEffects instance, String string) {
         if (BrewEffects.INSTANCE == null) {

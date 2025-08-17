@@ -1,9 +1,7 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.endinglib.util.annotation.DeprecatedMixin;
 import com.mega.revelationfix.common.structures.church.ChurchPlacement;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -13,14 +11,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(Feature.class)
 public class FeatureFixMixin {
 
-    @Shadow @Final public static Feature<ColumnFeatureConfiguration> BASALT_COLUMNS;
+    @Shadow
+    @Final
+    public static Feature<ColumnFeatureConfiguration> BASALT_COLUMNS;
 
     @Redirect(method = "place(Lnet/minecraft/world/level/levelgen/feature/configurations/FeatureConfiguration;Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/world/level/chunk/ChunkGenerator;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/BlockPos;)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/WorldGenLevel;ensureCanWrite(Lnet/minecraft/core/BlockPos;)Z"))

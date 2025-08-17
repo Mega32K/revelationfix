@@ -11,7 +11,6 @@ import com.Polarice3.Goety.common.effects.brew.modifiers.BrewModifier;
 import com.Polarice3.Goety.common.effects.brew.modifiers.CapacityModifier;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.utils.BrewUtils;
-import com.mega.revelationfix.api.event.register.CustomBrewRegisterEvent;
 import com.mega.revelationfix.common.config.BrewConfig;
 import com.mega.revelationfix.common.data.brew.BrewData;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -121,9 +119,11 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
     @Shadow(remap = false)
     public abstract BrewCauldronBlockEntity.Mode fail();
 
-    @Shadow public abstract @NotNull ItemStack getItem(int pIndex);
+    @Shadow
+    public abstract @NotNull ItemStack getItem(int pIndex);
 
-    @Shadow(remap = false) public abstract EntityType<?> getSacrificed(int pIndex);
+    @Shadow(remap = false)
+    public abstract EntityType<?> getSacrificed(int pIndex);
 
     @Unique
     private void fuckingClearContent() {
@@ -477,6 +477,7 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
 
         return this.fail();
     }
+
     /**
      * @author Mega
      * @reason reason in text versions
@@ -499,10 +500,10 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                 BrewEffect brewEffect = BrewEffects.INSTANCE.getEffectFromCatalyst(item);
                 BrewingRecipe brewingRecipe = this.level.getRecipeManager().getAllRecipesFor(ModRecipeSerializer.BREWING_TYPE.get()).stream().filter(recipe -> recipe.input.test(itemStack)).findFirst().orElse(null);
                 EntityType<?> entityType = this.getSacrificed(i);
-                if (entityType != null){
+                if (entityType != null) {
                     brewingRecipe = this.level.getRecipeManager().getAllRecipesFor(ModRecipeSerializer.BREWING_TYPE.get()).stream()
                             .filter(recipe -> {
-                                if (recipe.getEntityTypeTag() != null){
+                                if (recipe.getEntityTypeTag() != null) {
                                     return entityType.is(recipe.getEntityTypeTag());
                                 } else if (recipe.getEntityType() != null) {
                                     return entityType == recipe.getEntityType();
@@ -514,8 +515,8 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
                 BrewingRecipe finalBrewingRecipe = brewingRecipe;
                 if (brewingRecipe != null && effects.stream().noneMatch(effect -> effect.getEffect() == finalBrewingRecipe.output)) {
                     effects.add(new MobEffectInstance(brewingRecipe.output, brewingRecipe.duration));
-                } else if (brewEffect != null){
-                    if (brewEffect instanceof PotionBrewEffect potionBrewEffect){
+                } else if (brewEffect != null) {
+                    if (brewEffect instanceof PotionBrewEffect potionBrewEffect) {
                         effects.add(new MobEffectInstance(potionBrewEffect.mobEffect, potionBrewEffect.duration));
                     } else {
                         blockEffects.add(new BrewEffectInstance(brewEffect, brewEffect.duration));

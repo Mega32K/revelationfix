@@ -1,7 +1,5 @@
 package com.mega.revelationfix.common.item.curios;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMultimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.client.text.TextColorUtils;
@@ -12,8 +10,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import org.jetbrains.annotations.NotNull;

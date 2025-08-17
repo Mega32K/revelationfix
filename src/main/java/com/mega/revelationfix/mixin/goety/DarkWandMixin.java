@@ -26,7 +26,8 @@ import java.util.List;
 
 @Mixin(DarkWand.class)
 public class DarkWandMixin implements ILevelWand {
-    @Shadow(remap = false) public SpellType spellType;
+    @Shadow(remap = false)
+    public SpellType spellType;
 
     @ModifyVariable(remap = false, method = "SoulUse", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private LivingEntity SoulUse2(LivingEntity value) {
@@ -34,6 +35,7 @@ public class DarkWandMixin implements ILevelWand {
             value = spellerEntity.getOwner();
         return value;
     }
+
     @Inject(remap = false, method = "SoulUse", at = @At("RETURN"), cancellable = true)
     private void SoulUse(LivingEntity entityLiving, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         if (ATAHelper2.hasOdamane(entityLiving))
@@ -51,11 +53,13 @@ public class DarkWandMixin implements ILevelWand {
         tooltip.add(Component.translatable("tooltip.goety_revelation.wand_type").append(spellType.getName()));
         tooltip.add(Component.translatable("tooltip.goety_revelation.wand_level").append(LoreHelper.getStaffLevelDesc(this, stack)));
     }
+
     @Inject(method = "onUseTick", at = @At("HEAD"), cancellable = true)
     private void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count, CallbackInfo ci) {
         if (livingEntityIn instanceof FakeSpellerEntity)
             ci.cancel();
     }
+
     @Override
     public boolean expandedRightStaffLogic(Spell spell, ItemStack stack) {
         return spell.getSpellType() == this.spellType;
@@ -68,9 +72,9 @@ public class DarkWandMixin implements ILevelWand {
 
     @Override
     public int getStaffLevel() {
-        if(this.equals(ModItems.DARK_WAND.get()))
+        if (this.equals(ModItems.DARK_WAND.get()))
             return 0;
-        if ((Object)this instanceof NamelessStaff)
+        if ((Object) this instanceof NamelessStaff)
             return 2;
         return 1;
     }

@@ -46,50 +46,46 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     public static EntityDataAccessor<ItemStack> INSERT_WAND = SynchedEntityData.defineId(FakeSpellerEntity.class, EntityDataSerializers.ITEM_STACK);
     public static EntityDataAccessor<BlockPos> REACTOR_POS = SynchedEntityData.defineId(FakeSpellerEntity.class, EntityDataSerializers.BLOCK_POS);
     private final AccessorEntity accessorEntity;
+    public Vec3 customPos = Vec3.ZERO;
+
     public FakeSpellerEntity(Level worldIn, ItemStack wand, BlockPos reactorPos) {
         super(ModEntities.FAKE_SPELLER.get(), worldIn);
         this.setWand(wand);
         this.setReactorPos(reactorPos);
         this.accessorEntity = (AccessorEntity) this;
     }
+
     public FakeSpellerEntity(EntityType<? extends Owned> type, Level worldIn) {
         super(type, worldIn);
         this.accessorEntity = (AccessorEntity) this;
     }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.1F).add(Attributes.ATTACK_SPEED).add(Attributes.LUCK).add(net.minecraftforge.common.ForgeMod.BLOCK_REACH.get()).add(Attributes.ATTACK_KNOCKBACK).add(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).add(Attributes.FOLLOW_RANGE);
+    }
+
     public ItemStack getWand() {
         return this.entityData.get(INSERT_WAND);
     }
+
     public void setWand(ItemStack stack) {
         this.entityData.set(INSERT_WAND, stack);
     }
 
-    @Override
-    public void setTarget(@Nullable LivingEntity p_21544_) {
-        if (!level().isClientSide) {
-            if (p_21544_ != null)
-                this.entityData.set(TARGET_UUID, Optional.of(p_21544_.getUUID()));
-            else this.entityData.set(TARGET_UUID, Optional.empty());
-        }
-
-    }
-    public void setTarget(UUID uuid) {
-        if (!level().isClientSide) {
-            this.entityData.set(TARGET_UUID, Optional.of(uuid));
-        }
-    }
-
     public BlockPos getReactorPos() {
         BlockPos pos = this.entityData.get(REACTOR_POS);
-        this.customPos = new Vec3(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
+        this.customPos = new Vec3(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
         return pos;
     }
+
     public void setReactorPos(BlockPos pos) {
         this.entityData.set(REACTOR_POS, pos);
     }
-    public Vec3 customPos = Vec3.ZERO;
+
     public BlockState getReactorBlockState() {
         return this.level().getBlockState(this.getReactorPos());
     }
+
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         if (compound.contains("InsertWand", 10)) {
@@ -101,9 +97,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
         this.setReactorPos(new BlockPos(listTag.getInt(0), listTag.getInt(1), listTag.getInt(2)));
         super.readAdditionalSaveData(compound);
     }
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.1F).add(Attributes.ATTACK_SPEED).add(Attributes.LUCK).add(net.minecraftforge.common.ForgeMod.BLOCK_REACH.get()).add(Attributes.ATTACK_KNOCKBACK).add(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).add(Attributes.FOLLOW_RANGE);
-    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         compound.put("InsertWand", this.getWand().save(new CompoundTag()));
@@ -112,6 +106,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
         compound.put("ReactorPos", this.newIntList(this.getReactorPos().getX(), this.getReactorPos().getY(), this.getReactorPos().getZ()));
         super.addAdditionalSaveData(compound);
     }
+
     @Override
     public void defineSynchedData() {
         this.entityData.define(INSERT_WAND, ItemStack.EMPTY);
@@ -131,6 +126,22 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
             if (entityData.get(TARGET_UUID).isPresent() && Wrapped.getEntityByUUID(entityData.get(TARGET_UUID).get()) instanceof LivingEntity living) {
                 return living;
             } else return super.getTarget();
+        }
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity p_21544_) {
+        if (!level().isClientSide) {
+            if (p_21544_ != null)
+                this.entityData.set(TARGET_UUID, Optional.of(p_21544_.getUUID()));
+            else this.entityData.set(TARGET_UUID, Optional.empty());
+        }
+
+    }
+
+    public void setTarget(UUID uuid) {
+        if (!level().isClientSide) {
+            this.entityData.set(TARGET_UUID, Optional.of(uuid));
         }
     }
 
@@ -160,12 +171,12 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
             }
             if (this.getTarget() != null) {
                 AABB aabb = getTarget().getBoundingBox();
-                Vec3 vec3 = aabb.getCenter().add(0, aabb.getYsize()/2.1F, 0);
+                Vec3 vec3 = aabb.getCenter().add(0, aabb.getYsize() / 2.1F, 0);
                 RotationUtils.rotationAtoB(this, vec3);
 
             }
         }
-        float xR  = this.getXRot();
+        float xR = this.getXRot();
         float yR = this.getYRot();
         float yHR = this.getYHeadRot();
         super.tick();
@@ -177,21 +188,21 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public @NotNull Component getName() {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.getName();
         return super.getName();
     }
 
     @Override
     public @NotNull Component getDisplayName() {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.getDisplayName();
         return super.getDisplayName();
     }
 
     @Override
     public float getHealth() {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.getHealth();
         return super.getHealth();
     }
@@ -206,7 +217,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     @Nullable
     @Override
     public Team getTeam() {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.getTeam();
         return super.getTeam();
     }
@@ -215,16 +226,17 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     protected int getFireImmuneTicks() {
         return 0;
     }
+
     @Override
     public double getAttributeBaseValue(@NotNull Holder<Attribute> p_248605_) {
-        if ( this.getOwner() instanceof Player player && p_248605_.get() != Attributes.FOLLOW_RANGE)
+        if (this.getOwner() instanceof Player player && p_248605_.get() != Attributes.FOLLOW_RANGE)
             return player.getAttributeBaseValue(p_248605_);
         return super.getAttributeBaseValue(p_248605_);
     }
 
     @Override
     public double getAttributeBaseValue(@NotNull Attribute p_21173_) {
-        if ( this.getOwner() instanceof Player player && p_21173_ != Attributes.FOLLOW_RANGE)
+        if (this.getOwner() instanceof Player player && p_21173_ != Attributes.FOLLOW_RANGE)
             return player.getAttributeBaseValue(p_21173_);
         return super.getAttributeBaseValue(p_21173_);
     }
@@ -238,35 +250,35 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public double getAttributeValue(@NotNull Holder<Attribute> p_251296_) {
-        if ( this.getOwner() instanceof Player player && p_251296_.get() != Attributes.FOLLOW_RANGE)
+        if (this.getOwner() instanceof Player player && p_251296_.get() != Attributes.FOLLOW_RANGE)
             return player.getAttributeValue(p_251296_);
         return super.getAttributeValue(p_251296_);
     }
 
     @Override
     public boolean isAlive() {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.isAlive();
         return super.isAlive();
     }
 
     @Override
     public boolean isAlliedTo(@NotNull Team p_20032_) {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.isAlliedTo(p_20032_);
         return super.isAlliedTo(p_20032_);
     }
 
     @Override
     public boolean isAlliedTo(Entity entityIn) {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.isAlliedTo(entityIn);
         return super.isAlliedTo(entityIn);
     }
 
     @Override
     public boolean isDeadOrDying() {
-        if ( this.getOwner() instanceof Player player)
+        if (this.getOwner() instanceof Player player)
             return player.isDeadOrDying();
         return super.isDeadOrDying();
     }
@@ -275,15 +287,17 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
     public boolean isInvulnerable() {
         return true;
     }
+
     protected ListTag newIntList(int... p_20064_) {
         ListTag listtag = new ListTag();
 
-        for(int d0 : p_20064_) {
+        for (int d0 : p_20064_) {
             listtag.add(IntTag.valueOf(d0));
         }
 
         return listtag;
     }
+
     @Override
     public @NotNull Vec3 position() {
         return customPos;
@@ -291,15 +305,17 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public double getX() {
-        return getReactorPos().getX()+0.5;
+        return getReactorPos().getX() + 0.5;
     }
+
     @Override
     public double getY() {
-        return getReactorPos().getY()+1.5;
+        return getReactorPos().getY() + 1.5;
     }
+
     @Override
     public double getZ() {
-        return getReactorPos().getZ()+0.5;
+        return getReactorPos().getZ() + 0.5;
     }
 
     @Override
@@ -309,17 +325,17 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public double getX(double p_20166_) {
-        return this.getX() + (double)this.getBbWidth() * p_20166_;
+        return this.getX() + (double) this.getBbWidth() * p_20166_;
     }
 
     @Override
     public double getY(double p_20228_) {
-        return this.getY() + (double)this.getBbHeight() * p_20228_;
+        return this.getY() + (double) this.getBbHeight() * p_20228_;
     }
 
     @Override
     public double getZ(double p_20247_) {
-        return this.getZ() + (double)this.getBbWidth() * p_20247_;
+        return this.getZ() + (double) this.getBbWidth() * p_20247_;
     }
 
     @Override
@@ -366,9 +382,7 @@ public class FakeSpellerEntity extends Owned implements BlockBindingEntity {
 
     @Override
     public boolean hurt(DamageSource p_21016_, float p_21017_) {
-        if (p_21016_.is(ModDamageSource.DEATH))
-            return true;
-        return false;
+        return p_21016_.is(ModDamageSource.DEATH);
     }
 
     @Override

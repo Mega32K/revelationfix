@@ -6,21 +6,18 @@ import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.Polarice3.Goety.init.ModSounds;
 import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
-import com.mega.revelationfix.common.item.FontItemExtensions;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
-import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.MUtils;
+import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -28,7 +25,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +33,6 @@ import z1gned.goetyrevelation.util.ATAHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class BowOfRevelationItem extends BowItem implements ISoulRepair {

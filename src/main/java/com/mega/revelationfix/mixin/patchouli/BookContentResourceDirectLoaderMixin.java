@@ -23,6 +23,7 @@ public class BookContentResourceDirectLoaderMixin {
         int index = PatchouliBrewEntriesInjector.getCategoryIndex(file);
         fileIndexRef.set(index);
     }
+
     @ModifyArg(method = "loadJson", at = @At(value = "INVOKE", target = "Lvazkii/patchouli/client/book/BookContentLoader$LoadResult;<init>(Lcom/google/gson/JsonElement;Ljava/lang/String;)V", remap = false), index = 0, remap = false)
     private JsonElement modifyArg0(JsonElement element, @Share(value = "fileIndex", namespace = "goety_revelation") LocalIntRef fileIndexRef) {
         if (fileIndexRef.get() > -1)

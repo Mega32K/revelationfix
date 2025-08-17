@@ -54,6 +54,7 @@ public class IceBladeEffect {
         private static final IStatGetter efficiencyGetter;
         private static final IStatGetter levelGetter;
         private static final IStatGetter levelGetter2;
+
         static {
             efficiencyGetter = new StatGetterEffectEfficiency(itemEffect, 1.0);
             levelGetter = new StatGetterEffectLevel(itemEffect, 1.0);

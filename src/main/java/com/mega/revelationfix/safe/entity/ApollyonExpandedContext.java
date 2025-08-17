@@ -17,6 +17,7 @@ public class ApollyonExpandedContext {
     public float lastPercent = 1.0F;
     public float percent = 1.0F;
     public LivingEntity lastTarget;
+
     public ApollyonExpandedContext(Apostle apostle) {
         this.apostle = apostle;
         this.attackDamageReducer = new AttackDamageChangeHandler(apostle);

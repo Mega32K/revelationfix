@@ -6,7 +6,6 @@ import com.mega.revelationfix.common.data.ritual.RitualData;
 import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
 import com.mega.revelationfix.util.ClassHandler;
 import net.minecraft.CrashReport;
-import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -30,33 +29,9 @@ public abstract class BlockRequirement implements Requirement {
         m.put(TYPE_AND, BlockAndRequirement.class);
         return m;
     });
-    private int requiredCount;
     public String type = "normal";
-    @Override
-    public String getType() {
-        return RitualData.BLOCKS;
-    }
-    public String getReadType() {
-        return this.type;
-    }
-    public int getRequiredCount() {
-        return requiredCount;
-    }
-    @Override
-    public final void compileData(JsonElement jsonElement) {
-        if (jsonElement instanceof JsonObject jsonObject) {
-            this.requiredCount = GsonHelper.getAsInt(jsonObject, "count", 1);
-            try {
-                this.compileSelfData(jsonObject);
-            } catch (Throwable throwable) {
-                CrashReport report = CrashReport.forThrowable(throwable, "Reading Requirement: %s, jsonData : %s".formatted(this.getClass(), jsonElement));
-                new ReportedException(report).printStackTrace();
-                throwable.printStackTrace();
-            }
-        }
-    }
-    protected abstract void compileSelfData(JsonObject jsonObject);
-    public abstract boolean canUse(Level level, BlockPos blockPos, BlockState state);
+    private int requiredCount;
+
     public static BlockRequirement createFromJson(JsonElement element) {
 
         BlockRequirement requirement = null;
@@ -70,4 +45,35 @@ public abstract class BlockRequirement implements Requirement {
         }
         return requirement;
     }
+
+    @Override
+    public String getType() {
+        return RitualData.BLOCKS;
+    }
+
+    public String getReadType() {
+        return this.type;
+    }
+
+    public int getRequiredCount() {
+        return requiredCount;
+    }
+
+    @Override
+    public final void compileData(JsonElement jsonElement) {
+        if (jsonElement instanceof JsonObject jsonObject) {
+            this.requiredCount = GsonHelper.getAsInt(jsonObject, "count", 1);
+            try {
+                this.compileSelfData(jsonObject);
+            } catch (Throwable throwable) {
+                CrashReport report = CrashReport.forThrowable(throwable, "Reading Requirement: %s, jsonData : %s".formatted(this.getClass(), jsonElement));
+                new ReportedException(report).printStackTrace();
+                throwable.printStackTrace();
+            }
+        }
+    }
+
+    protected abstract void compileSelfData(JsonObject jsonObject);
+
+    public abstract boolean canUse(Level level, BlockPos blockPos, BlockState state);
 }

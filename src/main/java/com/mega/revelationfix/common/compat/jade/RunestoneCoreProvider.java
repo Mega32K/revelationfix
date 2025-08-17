@@ -15,6 +15,7 @@ import z1gned.goetyrevelation.ModMain;
 
 public enum RunestoneCoreProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;
+
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
         if (blockAccessor.getServerData().contains("CoreName")) {

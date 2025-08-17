@@ -16,7 +16,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,6 +29,30 @@ public class NormalBlockRequirement extends BlockRequirement {
     private Pair<Block, TagKey<Block>> ingredient;
     @Nullable
     private Map<String, String> blockStateMap = null;
+
+    public static ImmutableMap.Builder<String, String> deserialize(JsonElement json) throws JsonParseException {
+        try {
+            JsonObject jo = json.getAsJsonObject();
+            ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+            for (var entry : jo.asMap().entrySet()) {
+                if (entry.getValue() instanceof JsonPrimitive jp)
+                    builder.put(entry.getKey(), jp.getAsString());
+            }
+            return builder;
+        } catch (JsonParseException var5) {
+            RevelationFixMixinPlugin.LOGGER.debug("Failed to parse block state: {}", json, var5);
+            return null;
+        }
+    }
+
+    public static Multimap<String, Property<?>> propertyMultimap(Collection<Property<?>> properties) {
+        ImmutableMultimap.Builder<String, Property<?>> builder = ImmutableMultimap.builder();
+        for (Property<?> property : properties) {
+            builder.put(property.getName(), property);
+        }
+        return builder.build();
+    }
+
     @Override
     protected void compileSelfData(JsonObject jsonObject) {
         String originalString = GsonHelper.getAsString(jsonObject, "block", "minecraft:bedrock");
@@ -74,26 +97,5 @@ public class NormalBlockRequirement extends BlockRequirement {
             }
         }
         return check;
-    }
-    public static ImmutableMap.Builder<String, String> deserialize(JsonElement json) throws JsonParseException {
-        try {
-            JsonObject jo = json.getAsJsonObject();
-            ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-            for (var entry : jo.asMap().entrySet()) {
-                if (entry.getValue() instanceof JsonPrimitive jp)
-                    builder.put(entry.getKey(), jp.getAsString());
-            }
-            return builder;
-        } catch (JsonParseException var5) {
-            RevelationFixMixinPlugin.LOGGER.debug("Failed to parse block state: {}", json, var5);
-            return null;
-        }
-    }
-    public static Multimap<String, Property<?>> propertyMultimap(Collection<Property<?>> properties) {
-        ImmutableMultimap.Builder<String, Property<?>> builder = ImmutableMultimap.builder();
-        for (Property<?> property : properties) {
-            builder.put(property.getName(), property);
-        }
-        return builder.build();
     }
 }

@@ -2,7 +2,6 @@ package com.mega.revelationfix.mixin.ironspellbooks.goety_revelation;
 
 import com.mega.endinglib.util.annotation.ModDependsMixin;
 import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
-import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.item.armor.BaseArmorItem;
 import com.mega.revelationfix.common.item.armor.SpectreArmor;
 import com.mega.revelationfix.common.item.armor.SpectreDarkmageArmor;
@@ -28,6 +27,7 @@ public abstract class SpectreDarkmageArmorMixin extends SpectreArmor implements 
     SpectreDarkmageArmorMixin(Type p_40387_) {
         super(p_40387_);
     }
+
     @Inject(method = "injectExtraArmorAttributes", at = @At("TAIL"), remap = false)
     private void injectExtraArmorAttributes(ArmorModifiersBuilder builder, CallbackInfo ci) {
         UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);

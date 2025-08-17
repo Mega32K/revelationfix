@@ -1,4 +1,5 @@
 package com.mega.revelationfix.common.data.loot.modifier;
+
 import com.mojang.serialization.Codec;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.DeferredRegister;

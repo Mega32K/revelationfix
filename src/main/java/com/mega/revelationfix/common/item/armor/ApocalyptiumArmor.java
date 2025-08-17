@@ -3,7 +3,6 @@ package com.mega.revelationfix.common.item.armor;
 import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.api.items.armor.ISoulDiscount;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
-import com.mega.endinglib.api.client.cmc.LoreHelper;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.IDamageLimitItem;
 import com.mega.endinglib.api.item.IInvulnerableItem;
@@ -11,14 +10,10 @@ import com.mega.endinglib.api.item.armor.ModifiableArmorItem;
 import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.item.armor.IGoetyDamageResistanceArmor;
-import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -27,7 +22,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -47,6 +41,10 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
 
     public ApocalyptiumArmor(Type armorType) {
         super(ModArmorMaterials.APOCALYPTIUM, armorType, new Properties().fireResistant().rarity(Rarity.UNCOMMON));
+    }
+
+    public static int getApocalyptiumTitleId(LivingEntity living) {
+        return (living.tickCount / 100) % 3;
     }
 
     public int getSoulDiscount(EquipmentSlot equipmentSlot) {
@@ -177,9 +175,6 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
         }
     }
 
-    public static int getApocalyptiumTitleId(LivingEntity living) {
-        return (living.tickCount / 100) % 3;
-    }
     @Override
     public int getUseDamageLimit(ItemStack stack) {
         return 20;
@@ -200,7 +195,7 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
         switch (type) {
             case BOOTS -> {
                 components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.apocalyptium_boots.desc0"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
-                components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.apocalyptium_boots.desc1") , LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
+                components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.apocalyptium_boots.desc1"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
             }
             case HELMET -> {
                 components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.apocalyptium_helmet.desc"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));

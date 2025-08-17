@@ -2,9 +2,6 @@ package com.mega.revelationfix.client.screen.post;
 
 import com.google.gson.JsonSyntaxException;
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
-import com.mega.revelationfix.client.screen.post.custom.AberrationDistortionPostEffect;
-import com.mega.revelationfix.client.screen.post.custom.PuzzleEffect;
-import com.mega.revelationfix.client.screen.post.custom.TimeStoppingGrayPostEffect;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
@@ -23,8 +20,8 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class PostProcessingShaders implements ResourceManagerReloadListener {
-    public static volatile boolean isReloading = false;
     public static final PostProcessingShaders INSTANCE = new PostProcessingShaders(Minecraft.getInstance());
+    public static volatile boolean isReloading = false;
     public static List<Entity> currentCLEntities = new ArrayList<>();
     public static HashMap<CustomScreenEffect, PostChain> postChains = new HashMap<>();
     private final Minecraft minecraft;
@@ -80,7 +77,8 @@ public class PostProcessingShaders implements ResourceManagerReloadListener {
                     LOGGER.warn("Failed to load shader: {}", effect.getShaderLocation(), var4);
                 }
             });
-        } catch (Throwable throwable) {}
+        } catch (Throwable throwable) {
+        }
         isReloading = false;
 
     }

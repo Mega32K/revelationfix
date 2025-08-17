@@ -10,8 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
-import java.lang.invoke.MethodHandle;
-
 public abstract class DarkAltarEvent extends BlockEvent {
     private final DarkAltarBlockEntity altarBlockEntity;
 
@@ -23,16 +21,15 @@ public abstract class DarkAltarEvent extends BlockEvent {
     public DarkAltarBlockEntity getAltarBlockEntity() {
         return altarBlockEntity;
     }
+
     public static class TickEvent extends DarkAltarEvent {
-        public enum TickPhase {
-            HEAD, TAIL, AFTER_HAS_SOULS
-        }
         private final TickPhase tickPhase;
 
         public TickEvent(LevelAccessor level, BlockPos pos, BlockState state, DarkAltarBlockEntity altarBlockEntity, TickPhase tickPhase) {
             super(level, pos, state, altarBlockEntity);
             this.tickPhase = tickPhase;
         }
+
         public TickPhase getTickPhase() {
             return tickPhase;
         }
@@ -41,8 +38,44 @@ public abstract class DarkAltarEvent extends BlockEvent {
         public boolean isCancelable() {
             return this.getTickPhase() != TickPhase.TAIL;
         }
+
+        public enum TickPhase {
+            HEAD, TAIL, AFTER_HAS_SOULS
+        }
     }
+
     public static class StopRitualEvent extends DarkAltarEvent {
+        private final boolean isBefore;
+        private final boolean isFinished;
+        private final Reason reason;
+        public StopRitualEvent(LevelAccessor level, BlockPos pos, BlockState state, DarkAltarBlockEntity altarBlockEntity, boolean isBefore, boolean isFinished, Reason reason) {
+            super(level, pos, state, altarBlockEntity);
+            this.isBefore = isBefore;
+            this.isFinished = isFinished;
+            this.reason = reason;
+        }
+
+        public boolean isFinished() {
+            return isFinished;
+        }
+
+        public boolean isTypeBefore() {
+            return isBefore;
+        }
+
+        public boolean isTypeAfter() {
+            return !isTypeBefore();
+        }
+
+        public Reason getReason() {
+            return reason;
+        }
+
+        @Override
+        public boolean isCancelable() {
+            return isTypeBefore();
+        }
+
         /**
          * 代码分布<br>
          * <blockquote><pre>{@code public void tick() {
@@ -240,35 +273,8 @@ public abstract class DarkAltarEvent extends BlockEvent {
             FINISHED_NORMAL,
             FINISHED_CONVERSION
         }
-        public StopRitualEvent(LevelAccessor level, BlockPos pos, BlockState state, DarkAltarBlockEntity altarBlockEntity, boolean isBefore, boolean isFinished, Reason reason) {
-            super(level, pos, state, altarBlockEntity);
-            this.isBefore = isBefore;
-            this.isFinished = isFinished;
-            this.reason = reason;
-        }
-
-        private final boolean isBefore;
-        private final boolean isFinished;
-        private final Reason reason;
-        public boolean isFinished() {
-            return isFinished;
-        }
-        public boolean isTypeBefore() {
-            return isBefore;
-        }
-        public boolean isTypeAfter() {
-            return !isTypeBefore();
-        }
-
-        public Reason getReason() {
-            return reason;
-        }
-
-        @Override
-        public boolean isCancelable() {
-            return isTypeBefore();
-        }
     }
+
     @Cancelable
     public static class StartRitualEvent extends DarkAltarEvent {
         private final Player castingPlayer;

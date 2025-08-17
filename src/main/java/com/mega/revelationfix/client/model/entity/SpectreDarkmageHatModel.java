@@ -1,9 +1,6 @@
 package com.mega.revelationfix.client.model.entity;
 
-import com.Polarice3.Goety.client.render.model.WitchHatModel;
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -21,6 +18,14 @@ public class SpectreDarkmageHatModel extends HumanoidModel<LivingEntity> {
     public final ModelPart top_top;
     public final ModelPart hat4;
 
+    public SpectreDarkmageHatModel(ModelPart root) {
+        super(root);
+        this.hat = root.getChild("hat2");
+        this.top = this.hat.getChild("top");
+        this.top_top = this.top.getChild("top_top");
+        this.hat4 = this.top_top.getChild("hat4");
+    }
+
     public static LayerDefinition createHatLayer() {
         MeshDefinition meshdefinition = HumanoidModel.createMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0F);
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -37,14 +42,6 @@ public class SpectreDarkmageHatModel extends HumanoidModel<LivingEntity> {
         PartDefinition hat4 = top_top.addOrReplaceChild("hat4", CubeListBuilder.create().texOffs(16, 25).addBox(-2.4662F, -15.6457F, -4.3375F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.2094F, 0.0F, 0.1047F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
-    }
-
-    public SpectreDarkmageHatModel(ModelPart root) {
-        super(root);
-        this.hat = root.getChild("hat2");
-        this.top = this.hat.getChild("top");
-        this.top_top = this.top.getChild("top_top");
-        this.hat4 = this.top_top.getChild("hat4");
     }
 
     @Override

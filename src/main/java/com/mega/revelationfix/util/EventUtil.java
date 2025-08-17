@@ -1,12 +1,10 @@
 package com.mega.revelationfix.util;
 
-import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.utils.SEHelper;
-import com.Polarice3.Goety.utils.TotemFinder;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.compat.Wrapped;
@@ -36,6 +34,7 @@ import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
 public class EventUtil {
     public static final String EVENT_UTIL_CLASS = "com/mega/revelationfix/util/EventUtil";
+
     public static int increaseSouls(Player player, int souls) {
         double attributeV = player.getAttributeValue(ModAttributes.SOUL_INCREASE_EFFICIENCY.get());
         if (Math.abs(attributeV - 1.0D) > 0.0e-6) {
@@ -43,6 +42,7 @@ public class EventUtil {
         }
         return souls;
     }
+
     public static int decreaseSouls(Player player, int souls) {
         if (!SEHelper.getSEActive(player)) {
             double attributeV = player.getAttributeValue(ModAttributes.SOUL_DECREASE_EFFICIENCY.get());
@@ -52,6 +52,7 @@ public class EventUtil {
         }
         return souls;
     }
+
     public static int decreaseSESouls(Player player, int souls) {
         double attributeV = player.getAttributeValue(ModAttributes.SOUL_DECREASE_EFFICIENCY.get());
         if (Math.abs(attributeV - 1.0D) > 0.0e-6) {
@@ -59,15 +60,17 @@ public class EventUtil {
         }
         return souls;
     }
+
     public static int getLevels(Enchantment enchantment, LivingEntity livingEntity, int srcLevel) {
         if (enchantment == ModEnchantments.POTENCY.get()) {
             MobEffectInstance effect = livingEntity.getEffect(ModEffects.COUNTERSPELL.get());
             if (effect != null) {
-                srcLevel = Math.max(0, ((effect.getAmplifier()+1)+1) / 2);
+                srcLevel = Math.max(0, ((effect.getAmplifier() + 1) + 1) / 2);
             }
         }
         return srcLevel;
     }
+
     public static LivingEntity modifyOwner(LivingEntity entity) {
         if (entity instanceof FakeSpellerEntity spellerEntity) {
             if (spellerEntity.getOwner() != null)
@@ -75,6 +78,7 @@ public class EventUtil {
         }
         return entity;
     }
+
     public static void tryCaughtThrowable(Throwable throwable) {
         System.exit(-1);
         RevelationFixMixinPlugin.LOGGER.error("RevelationBusFix try caught :" + throwable.getMessage());
@@ -106,7 +110,7 @@ public class EventUtil {
             }
             Player player = Wrapped.clientPlayer();
             if (player != null)
-                duration = Math.round(duration * (float)Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
+                duration = Math.round(duration * (float) Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
         }
         return duration;
     }
@@ -132,6 +136,7 @@ public class EventUtil {
         modifySpellStatsByRuneReactor(iSpell, worldIn, caster, staff, spellStat);
         iSpell.startSpell(worldIn, caster, staff, spellStat);
     }
+
     public static void redirectStopSpell(ISpell spell, ServerLevel worldIn, LivingEntity caster, ItemStack staff, ItemStack focus, int castTime, SpellStat spellStat) {
         modifySpellStatsByRuneReactor(spell, worldIn, caster, staff, spellStat);
         spell.stopSpell(worldIn, caster, staff, focus, castTime, spellStat);
@@ -187,6 +192,7 @@ public class EventUtil {
         }
         statItf.giveModifiedTag((byte) 0, true);
     }
+
     public static int spellStatISTORE(ISpell spell, ServerLevel worldIn, LivingEntity caster, ItemStack staff, int src, GoetyClassNodeProcessor.SpellStatField statField) {
         AttributeInstance attribute;
         if (caster == null) return src;
@@ -209,6 +215,7 @@ public class EventUtil {
         }
         return src;
     }
+
     public static float spellStatFSTORE(ISpell spell, ServerLevel worldIn, LivingEntity caster, ItemStack staff, float src, GoetyClassNodeProcessor.SpellStatField statField) {
         AttributeInstance attribute;
         if (caster == null) return src;
@@ -219,6 +226,7 @@ public class EventUtil {
         }
         return src;
     }
+
     public static double spellStatDSTORE(ISpell spell, ServerLevel worldIn, LivingEntity caster, ItemStack staff, double src, GoetyClassNodeProcessor.SpellStatField statField) {
         AttributeInstance attribute;
         if (caster == null) return src;
@@ -229,6 +237,7 @@ public class EventUtil {
         }
         return src;
     }
+
     public static float damageIncrease(LivingEntity living, DamageSource source, float amount) {
         if (source.getEntity() instanceof Apostle apostle) {
             ApollyonAbilityHelper abilityHelper = (ApollyonAbilityHelper) apostle;

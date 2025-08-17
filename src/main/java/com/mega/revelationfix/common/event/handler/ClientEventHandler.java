@@ -3,10 +3,8 @@ package com.mega.revelationfix.common.event.handler;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.endinglib.mixin.accessor.AccessorLevelRenderer;
 import com.mega.revelationfix.Revelationfix;
-import com.mega.revelationfix.api.event.render.RenderTooltipPostEvent;
-import com.mega.revelationfix.client.font.OdamaneFont;
-import com.mega.revelationfix.client.spell.SpellClientContext;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
+import com.mega.revelationfix.client.spell.SpellClientContext;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
 import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.config.CommonConfig;
@@ -26,7 +24,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -377,6 +374,7 @@ public class ClientEventHandler {
             }
         }
     }
+
     @SubscribeEvent
     public static void renderSpellCircle(RenderPlayerEvent event) {
         //if (SafeClass.isYSMLoaded()) return;

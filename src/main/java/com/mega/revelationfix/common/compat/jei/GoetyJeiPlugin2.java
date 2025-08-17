@@ -19,6 +19,7 @@ public class GoetyJeiPlugin2 {
     public static IJeiHelpers getJeiHelper() {
         return goetyJeiHelper;
     }
+
     public void registerRitualType(IRecipeRegistration registration, RecipeManager recipeManager, String type) {
         this.registerRitualType(registration, recipeManager, type, type);
     }
@@ -28,6 +29,6 @@ public class GoetyJeiPlugin2 {
     }
 
     public List<RitualRecipe> ritualTypeRecipe(RecipeManager recipeManager, String type) {
-        return recipeManager.getAllRecipesFor( ModRecipeSerializer.RITUAL_TYPE.get()).stream().filter((ritualRecipe) -> ritualRecipe.getCraftType().contains(type)).toList();
+        return recipeManager.getAllRecipesFor(ModRecipeSerializer.RITUAL_TYPE.get()).stream().filter((ritualRecipe) -> ritualRecipe.getCraftType().contains(type)).toList();
     }
 }

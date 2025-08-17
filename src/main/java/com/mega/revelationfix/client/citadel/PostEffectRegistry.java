@@ -1,7 +1,6 @@
 package com.mega.revelationfix.client.citadel;
 
 import com.google.gson.JsonSyntaxException;
-import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;

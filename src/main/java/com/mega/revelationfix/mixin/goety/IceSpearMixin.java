@@ -31,7 +31,7 @@ public abstract class IceSpearMixin implements IceSpikeEC {
             else {
                 int amplifier = livingEntity.getEffect(sapped).getAmplifier();
                 if (amplifier <= 4)
-                    livingEntity.addEffect(new MobEffectInstance(sapped, 120, Math.min(4, amplifier+1)));
+                    livingEntity.addEffect(new MobEffectInstance(sapped, 120, Math.min(4, amplifier + 1)));
             }
         }
     }

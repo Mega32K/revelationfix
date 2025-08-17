@@ -29,6 +29,7 @@ public class ClientConfig {
     public static boolean displayApostleServantBossbar;
     public static boolean enableSpecialHaloEffect;
     public static boolean enableTimeFreezingGrayEffect;
+
     static {
         BUILDER.push("Music");
         NEW_BOSS_MUSIC = BUILDER.comment("Enable new Apollyon boss music (when \"Apollyon\" in dimension Nether)").define("enableNewBossMusic", true);

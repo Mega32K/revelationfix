@@ -11,13 +11,13 @@ import com.mega.revelationfix.common.config.ModpackCommonConfig;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.s2c.PlayApollyonPostThemePacket;
+import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.entity.Apollyon2Interface;
 import com.mega.revelationfix.safe.entity.ApollyonExpandedContext;
-import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import com.mega.revelationfix.util.LivingEntityEC;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
-import com.mega.revelationfix.util.LivingEntityEC;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -84,6 +84,7 @@ public class DeathPerformance {
         else return false;
 
     }
+
     public static void setDropped(Apostle apostle, boolean z) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
             setFlags(apostle, 4, z);
@@ -96,6 +97,7 @@ public class DeathPerformance {
         else return false;
 
     }
+
     public static void setBarrierKilled(Apostle apostle, boolean z) {
         if (((ApollyonAbilityHelper) apostle).allTitlesApostle_1_20_1$isApollyon())
             setFlags(apostle, 2, z);

@@ -6,6 +6,8 @@ import net.minecraft.world.item.ItemStack;
 
 public interface ILevelWand {
     int getStaffLevel();
+
     boolean expandedRightStaffLogic(Spell spell, ItemStack stack);
+
     boolean expandedTypeStaffLogic(SpellType spellType, ItemStack stack);
 }

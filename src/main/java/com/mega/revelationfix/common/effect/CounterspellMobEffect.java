@@ -1,21 +1,16 @@
 package com.mega.revelationfix.common.effect;
 
 import com.mega.revelationfix.common.init.ModAttributes;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class CounterspellMobEffect extends MobEffect {
     private static final UUID SPELL_POWER_MODIFIER = UUID.fromString("4f755d02-edcc-480a-beb0-4a6c5eaccc4b");
+
     public CounterspellMobEffect() {
         super(MobEffectCategory.HARMFUL, 11141290);
         this.addAttributeModifier(ModAttributes.SPELL_COOLDOWN.get(), "d654243e-4f8d-4420-9e92-479ad1c02439", -0.05, AttributeModifier.Operation.MULTIPLY_TOTAL);

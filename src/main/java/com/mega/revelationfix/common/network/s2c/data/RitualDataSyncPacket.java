@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 
 public class RitualDataSyncPacket {
     private final Map<String, RitualData> copiedData;
+
     public RitualDataSyncPacket(Map<String, RitualData> copiedData) {
         this.copiedData = ImmutableMap.copyOf(copiedData);
     }

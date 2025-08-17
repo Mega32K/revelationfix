@@ -8,14 +8,10 @@ import com.mega.endinglib.api.item.IDamageLimitItem;
 import com.mega.endinglib.api.item.IDragonLightRendererItem;
 import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
-import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
 import com.mega.revelationfix.client.model.entity.SpiderDarkmageArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
-import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.init.ModAttributes;
-import com.mega.revelationfix.common.item.FontItemExtensions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
@@ -48,10 +44,12 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
     public SpiderDarkmageArmor(Type p_40387_) {
         super(ModArmorMaterials.SPIDER_DARKMAGE, p_40387_, new Properties().rarity(RevelationRarity.SPIDER));
     }
+
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private SpiderDarkmageArmorModel model;
+
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 EntityModelSet modelSet = Minecraft.getInstance().getEntityModels();
@@ -78,22 +76,27 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
             }
         });
     }
+
     @Override
     public @Nullable String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return ModMain.MODID + ":textures/models/armor/spider_darkmage_armor_layer.png";
     }
+
     @Override
     public int getSoulDiscount(EquipmentSlot equipmentSlot) {
         return super.getSoulDiscount(equipmentSlot) + 2;
     }
+
     @Override
     public boolean enableDragonLightRenderer(ItemStack stack) {
         return true;
     }
+
     @Override
     public int getUseDamageLimit(ItemStack stack) {
         return 20;
     }
+
     @Override
     public void injectExtraArmorAttributes(ArmorModifiersBuilder builder) {
         UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);
@@ -105,6 +108,7 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
         builder.addModifier(ModAttributes.CAST_DURATION.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.ADDITION));
         builder.addModifier(ModAttributes.SPELL_COOLDOWN.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.ADDITION));
     }
+
     @Override
     public void onArmorSetLivingAttack(LivingAttackEvent event) {
         //黑魔法师套全套免疫爆炸火焰
@@ -112,6 +116,7 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
         if (damageSource.is(DamageTypeTags.IS_EXPLOSION) || ArmorUtils.isFire(damageSource))
             event.setCanceled(true);
     }
+
     @Override
     public void onSetHurtOthers(LivingHurtEvent event, LivingEntity attacker, LivingEntity beHurt) {
         //神经蚀刻套吸血
@@ -141,6 +146,6 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.spider_darkmage_set.desc0"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         super.addSetDescription(itemStack, level, components, tooltipFlag);
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.darkmage_set.desc0"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
-        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s)-> BaseArmorItem.ATTACK_DAMAGE_MODIFIER.getAmount() * 100.0F)));
+        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> BaseArmorItem.ATTACK_DAMAGE_MODIFIER.getAmount() * 100.0F)));
     }
 }

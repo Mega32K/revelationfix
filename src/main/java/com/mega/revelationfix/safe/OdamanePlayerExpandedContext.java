@@ -13,7 +13,6 @@ import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModBlocks;
-import com.mega.revelationfix.common.item.curios.OdamaneHalo;
 import com.mega.revelationfix.mixin.gr.PlayerMixin;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
@@ -107,6 +106,11 @@ public class OdamanePlayerExpandedContext {
     public PlayerInterface playerInterface;
     public PlayerAbilityHelper abilityHelper;
     /**
+     * 巫术引动台3010号仪式玩家占位时间
+     */
+    public int teleportStayingTime;
+    public int teleportStayingTimeOld;
+    /**
      * 触发复活后玩家剩余的无敌时间
      */
     private int reviveInvulnerableTime;
@@ -123,12 +127,6 @@ public class OdamanePlayerExpandedContext {
      * 更强的无敌帧
      */
     private int invulnerableTime;
-
-    /**
-     *巫术引动台3010号仪式玩家占位时间
-     */
-    public int teleportStayingTime;
-    public int teleportStayingTimeOld;
 
     public OdamanePlayerExpandedContext(Player player) {
         this.player = player;

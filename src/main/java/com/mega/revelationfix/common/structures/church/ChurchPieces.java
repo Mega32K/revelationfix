@@ -62,21 +62,22 @@ public class ChurchPieces {
             STRUCTURE_LOCATION_CHURCH_2, new BlockPos(-48, 0, 48),
             STRUCTURE_LOCATION_CHURCH_3, BlockPos.ZERO,
             STRUCTURE_LOCATION_CHURCH_4, new BlockPos(0, 0, 48),
-            STRUCTURE_LOCATION_CHURCH_5, new BlockPos(-48, 48-1, 0),
-            STRUCTURE_LOCATION_CHURCH_6, new BlockPos(-48, 48-1, 48),
-            STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48-1, 0),
-            STRUCTURE_LOCATION_CHURCH_8, new BlockPos(1, 48-1, 48)
+            STRUCTURE_LOCATION_CHURCH_5, new BlockPos(-48, 48 - 1, 0),
+            STRUCTURE_LOCATION_CHURCH_6, new BlockPos(-48, 48 - 1, 48),
+            STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48 - 1, 0),
+            STRUCTURE_LOCATION_CHURCH_8, new BlockPos(1, 48 - 1, 48)
     );
+
     public static void addPieces(StructureTemplateManager pStructureTemplateManager, BlockPos pStartPos, Rotation pRotation, StructurePieceAccessor pPieces, RandomSource pRandom) {
         OFFSETS = ImmutableMap.of(
                 STRUCTURE_LOCATION_CHURCH_1, new BlockPos(-48, 0, 0),
                 STRUCTURE_LOCATION_CHURCH_2, new BlockPos(-48, 0, 48),
                 STRUCTURE_LOCATION_CHURCH_3, BlockPos.ZERO,
                 STRUCTURE_LOCATION_CHURCH_4, new BlockPos(0, 0, 48),
-                STRUCTURE_LOCATION_CHURCH_5, new BlockPos(-48, 48-1, 0),
-                STRUCTURE_LOCATION_CHURCH_6, new BlockPos(-48, 48-1, 48),
-                STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48-1, 0),
-                STRUCTURE_LOCATION_CHURCH_8, new BlockPos(1, 48-1, 48)
+                STRUCTURE_LOCATION_CHURCH_5, new BlockPos(-48, 48 - 1, 0),
+                STRUCTURE_LOCATION_CHURCH_6, new BlockPos(-48, 48 - 1, 48),
+                STRUCTURE_LOCATION_CHURCH_7, new BlockPos(0, 48 - 1, 0),
+                STRUCTURE_LOCATION_CHURCH_8, new BlockPos(1, 48 - 1, 48)
         );
         int x = pStartPos.getX();
         int z = pStartPos.getZ();
@@ -116,13 +117,15 @@ public class ChurchPieces {
             rotationOffSet = OFFSETS.get(STRUCTURE_LOCATION_CHURCH_7).rotate(pRotation);
             blockpos = rotationOffSet.offset(x, pStartPos.getY(), z);
             pPieces.addPiece(new ChurchPiece(pStructureTemplateManager, STRUCTURE_LOCATION_CHURCH_7, blockpos, pRotation, 1));
-        }{
+        }
+        {
             rotationOffSet = OFFSETS.get(STRUCTURE_LOCATION_CHURCH_8).rotate(pRotation);
             blockpos = rotationOffSet.offset(x, pStartPos.getY(), z);
             pPieces.addPiece(new ChurchPiece(pStructureTemplateManager, STRUCTURE_LOCATION_CHURCH_8, blockpos, pRotation, 1));
         }
 
     }
+
     public static class ChurchPiece extends TemplateStructurePiece {
         public ResourceLocation rl;
 
@@ -137,6 +140,7 @@ public class ChurchPieces {
         public ChurchPiece(StructureTemplateManager pStructureTemplateManager, CompoundTag pTag) {
             super(ModStructurePieceTypes.CHURCH.get(), pTag, pStructureTemplateManager, resourceLocation -> makeSettings(Rotation.valueOf(pTag.getString("Rot")), resourceLocation));
         }
+
         private static StructurePlaceSettings makeSettings(Rotation pRotation, ResourceLocation pLocation) {
             return new StructurePlaceSettings()
                     .setRotation(pRotation)
@@ -146,6 +150,23 @@ public class ChurchPieces {
 
         private static BlockPos makePosition(ResourceLocation pLocation, BlockPos pPos, int pDown) {
             return pPos.below(pDown);
+        }
+
+        private static Item[] createDecoratedPotItems(RandomSource pRandom) {
+            Item[] stacks = new Item[4];
+            for (int i = 0; i < 4; i++) {
+                Item stack;
+                int index = pRandom.nextInt(0, 6);
+                if (index == 0)
+                    stack = new Item[]{ModItems.ANIMATION_CORE.get(), ModItems.HUNGER_CORE.get(), ModItems.MYSTIC_CORE.get(), ModItems.WIND_CORE.get()}[pRandom.nextInt(0, 4)];
+                else if (index == 1) stack = Items.NETHERITE_SCRAP;
+                else if (index == 2) stack = Items.QUARTZ;
+                else if (index == 3) stack = Items.GOLD_INGOT;
+                else if (index == 4) stack = ModItems.SPIDER_EGG.get();
+                else stack = Items.ENCHANTED_GOLDEN_APPLE;
+                stacks[i] = stack;
+            }
+            return stacks;
         }
 
         @Override
@@ -158,27 +179,12 @@ public class ChurchPieces {
         protected void handleDataMarker(@NotNull String p_226906_, @NotNull BlockPos p_226907_, @NotNull ServerLevelAccessor p_226908_, @NotNull RandomSource p_226909_, @NotNull BoundingBox p_226910_) {
 
         }
-        private static Item[] createDecoratedPotItems(RandomSource pRandom) {
-            Item[] stacks = new Item[4];
-            for (int i=0;i<4;i++) {
-                Item stack;
-                int index = pRandom.nextInt(0, 6);
-                if (index == 0)
-                    stack = new Item[] {ModItems.ANIMATION_CORE.get(), ModItems.HUNGER_CORE.get(), ModItems.MYSTIC_CORE.get(), ModItems.WIND_CORE.get()} [pRandom.nextInt(0, 4)] ;
-                else if (index == 1) stack = Items.NETHERITE_SCRAP;
-                else if (index == 2) stack = Items.QUARTZ;
-                else if (index == 3) stack = Items.GOLD_INGOT;
-                else if (index == 4) stack = ModItems.SPIDER_EGG.get();
-                else stack = Items.ENCHANTED_GOLDEN_APPLE;
-                stacks[i] = stack;
-            }
-            return stacks;
-        }
+
         @Override
         public void postProcess(@NotNull WorldGenLevel pLevel, @NotNull StructureManager p_226900_, @NotNull ChunkGenerator p_226901_, @NotNull RandomSource pRandom, @NotNull BoundingBox boundingBox, @NotNull ChunkPos p_226904_, @NotNull BlockPos pPos) {
             super.postProcess(pLevel, p_226900_, p_226901_, pRandom, boundingBox, p_226904_, pPos);
             try {
-                for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.BARREL)) {
+                for (StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.BARREL)) {
                     if (pLevel.getBlockEntity(structuretemplate$structureblockinfo.pos()) instanceof BarrelBlockEntity barrelBlockEntity && barrelBlockEntity.isEmpty()) {
                         if (rl.equals(ChurchPieces.STRUCTURE_LOCATION_CHURCH_1)) {
                             barrelBlockEntity.setLootTable(pRandom.nextBoolean() ? ModLootTables.Chests.CHURCH_FOOD : ModLootTables.Chests.CHURCH_FOOD_2, pRandom.nextLong());
@@ -194,9 +200,9 @@ public class ChurchPieces {
                         }
                     }
                 }
-                for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.CHEST)) {
+                for (StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.CHEST)) {
                     BlockPos pos = structuretemplate$structureblockinfo.pos();
-                    if(pLevel.getBlockEntity(pos) instanceof ChestBlockEntity chestBlockEntity && chestBlockEntity.isEmpty()){
+                    if (pLevel.getBlockEntity(pos) instanceof ChestBlockEntity chestBlockEntity && chestBlockEntity.isEmpty()) {
                         if (pos.getY() < 128) {
                             if (pRandom.nextBoolean()) {
                                 chestBlockEntity.setLootTable(BuiltInLootTables.BASTION_TREASURE, pRandom.nextLong());
@@ -208,9 +214,9 @@ public class ChurchPieces {
                         }
                     }
                 }
-                for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, ModBlocks.LOFTY_CHEST.get())) {
+                for (StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, ModBlocks.LOFTY_CHEST.get())) {
                     BlockPos pos = structuretemplate$structureblockinfo.pos();
-                    if(pLevel.getBlockEntity(pos) instanceof LoftyChestBlockEntity chestBlockEntity && chestBlockEntity.isEmpty() ){
+                    if (pLevel.getBlockEntity(pos) instanceof LoftyChestBlockEntity chestBlockEntity && chestBlockEntity.isEmpty()) {
                         if (pos.getY() > 128) {
                             if (pRandom.nextBoolean()) {
                                 chestBlockEntity.setLootTable(BuiltInLootTables.BASTION_TREASURE, pRandom.nextLong());
@@ -220,9 +226,9 @@ public class ChurchPieces {
                         }
                     }
                 }
-                for(StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.DECORATED_POT)) {
+                for (StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.DECORATED_POT)) {
                     BlockPos pos = structuretemplate$structureblockinfo.pos();
-                    if(pLevel.getBlockEntity(pos) instanceof DecoratedPotBlockEntity chestBlockEntity ){
+                    if (pLevel.getBlockEntity(pos) instanceof DecoratedPotBlockEntity chestBlockEntity) {
                         DecoratedPotBlockEntityAccessor accessor = (DecoratedPotBlockEntityAccessor) chestBlockEntity;
                         Item[] stacks = createDecoratedPotItems(pRandom);
                         accessor.setDecorations(new DecoratedPotBlockEntity.Decorations(stacks[0], stacks[1], stacks[2], stacks[3]));

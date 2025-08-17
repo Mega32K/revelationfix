@@ -1,18 +1,12 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.endinglib.util.annotation.DeprecatedMixin;
-import com.mega.endinglib.util.annotation.NoModDependsMixin;
-import com.mega.revelationfix.util.entity.EntityRedirectUtils;
 import it.unimi.dsi.fastutil.Pair;
-import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;

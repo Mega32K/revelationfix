@@ -25,20 +25,22 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
 @Mixin(CraftItemRitual.class)
 public abstract class CraftRitualMixin extends Ritual implements RitualRecipeInterface {
 
+    @Unique
+    private ItemStack tempActivation;
+
     public CraftRitualMixin(RitualRecipe recipe) {
         super(recipe);
     }
-    @Unique
-    private ItemStack tempActivation;
+
     @Unique
     private static boolean isValidEnderChest(PlayerEnderChestContainer chestContainer) {
         return chestContainer.hasAnyMatching(stack -> stack.is(GRItems.THE_END_PUZZLES) && stack.is(GRItems.PUZZLE_ITEM.get()))
@@ -62,11 +64,13 @@ public abstract class CraftRitualMixin extends Ritual implements RitualRecipeInt
         }
         return super.isValid(world, darkAltarPos, tileEntity, castingPlayer, activationItem, remainingAdditionalIngredients);
     }
+
     @Redirect(method = "finish", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"))
     private void shrink(ItemStack instance, int p_41775_) {
         instance.shrink(1);
         this.tempActivation = instance;
     }
+
     @ModifyArg(remap = false, method = "finish",
             at = @At(remap = false, value = "INVOKE", target = "Lnet/minecraftforge/items/IItemHandler;insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;"),
             index = 1
@@ -134,6 +138,7 @@ public abstract class CraftRitualMixin extends Ritual implements RitualRecipeInt
         }
         return false;
     }
+
     @ModifyArg(method = "finish", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/items/IItemHandler;insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", remap = false), remap = false)
     private ItemStack result(ItemStack stack) {
         if (stack.is(ModItems.JEI_DUMMY_NONE.get()))

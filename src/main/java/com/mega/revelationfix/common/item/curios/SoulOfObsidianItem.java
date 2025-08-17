@@ -5,7 +5,6 @@ import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
-import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.init.ModAttributes;
 import net.minecraft.ChatFormatting;

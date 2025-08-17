@@ -1,14 +1,11 @@
 package com.mega.revelationfix.common.item.curios;
 
-import com.google.common.collect.ImmutableMultimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.client.text.TextColorUtils;
 import com.mega.endinglib.api.item.curios.SimpleDescriptiveCurio;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Rarity;
 
 public class GoldFeatherItem extends SimpleDescriptiveCurio {

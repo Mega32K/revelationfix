@@ -12,10 +12,12 @@ import java.util.Locale;
 public class ModStructurePieceTypes {
     // 注册器
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES = DeferredRegister.create(Registries.STRUCTURE_PIECE, ModMain.MODID);
-    // 注册的对象
-    public static final RegistryObject<StructurePieceType> CHURCH = registerPieceType("church", ChurchPieces.ChurchPiece::new);
+
     // 辅助注册的方法
     private static RegistryObject<StructurePieceType> registerPieceType(String name, StructurePieceType.StructureTemplateType structurePieceType) {
         return STRUCTURE_PIECE_TYPES.register(name.toLowerCase(Locale.ROOT), () -> structurePieceType);
-    }
+    }    // 注册的对象
+    public static final RegistryObject<StructurePieceType> CHURCH = registerPieceType("church", ChurchPieces.ChurchPiece::new);
+
+
 }

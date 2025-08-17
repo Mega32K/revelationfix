@@ -10,9 +10,11 @@ public class KjsSafeClass {
     public static void postBrewEvent_0() {
         KjsEvents.CUSTOM_BREW_REGISTER.post(new WitchBrewRegisterKjsEvent(CustomBrewRegisterEvent.Phase.CHECK));
     }
+
     public static void postRunestoneEvent_0() {
         KjsEvents.RUNESTONE_RITUAL_EXECUTOR_REGISTER.post(new RunestoneRitualExecutorRegisterKjsEvent());
     }
+
     public static void postRitualEvent_0() {
         KjsEvents.CUSTOM_RITUAL_REGISTER.post(new RitualRegisterKjsEvent());
     }

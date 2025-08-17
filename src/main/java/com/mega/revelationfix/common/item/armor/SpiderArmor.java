@@ -12,7 +12,6 @@ import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
-import com.mega.revelationfix.common.item.FontItemExtensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -47,17 +46,21 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
     public SpiderArmor(ArmorItem.Type p_40387_) {
         super(ModArmorMaterials.SPIDER, p_40387_, new Properties().rarity(RevelationRarity.SPIDER));
     }
+
+    public SpiderArmor(OptionArmorMaterial optionArmorMaterial, Type armorType, Properties itemProperties) {
+        super(optionArmorMaterial, armorType, itemProperties);
+    }
+
     @Override
     public @Nullable String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return ModMain.MODID + ":textures/models/armor/spider_armor_layer.png";
     }
-    public SpiderArmor(OptionArmorMaterial optionArmorMaterial, Type armorType, Properties itemProperties) {
-        super(optionArmorMaterial, armorType, itemProperties);
-    }
+
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private SpiderArmorModel model;
+
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 EntityModelSet modelSet = Minecraft.getInstance().getEntityModels();
@@ -84,6 +87,7 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
             }
         });
     }
+
     @Override
     public int getSoulDiscount(EquipmentSlot equipmentSlot) {
         return 4;
@@ -96,6 +100,7 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
                 living.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1360, 0, false, false));
         }
     }
+
     @Override
     public boolean immuneEffects(LivingEntity living, MobEffectInstance mobEffect) {
         if (this.type == Type.HELMET) {

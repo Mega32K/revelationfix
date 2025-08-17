@@ -16,7 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin extends AbstractClientPlayer {
-    @Shadow public Input input;
+    @Shadow
+    public Input input;
 
     LocalPlayerMixin(ClientLevel p_250460_, GameProfile p_249912_) {
         super(p_250460_, p_249912_);

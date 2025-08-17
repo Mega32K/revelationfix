@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class FadingEffect {
-    public static ItemEffect itemEffect = ItemEffect.get("goety_revelation.fading");
     private static final UUID MAX_HEALTH = UUID.fromString("490791fd-833c-4141-bd68-2a495e57f4ad");
     private static final UUID ATTACK_DAMAGE = UUID.fromString("b01065c1-ffcd-4098-97ba-e1e939b5d1af");
     private static final UUID ATTACK_SPEED = UUID.fromString("c8e83dd9-8142-4408-ab0b-b5932a33741f");
@@ -38,6 +37,7 @@ public class FadingEffect {
     private static final UUID ARMOR_TOUGHNESS = UUID.fromString("0e6ead1e-9837-46e8-8e3c-6c1678f79ead");
     private static final UUID MOVEMENT_SPEED = UUID.fromString("a63f962f-9d88-4c17-b8fb-214e4d7793c6");
     private static final Map<Attribute, UUID> attributes = new HashMap<>();
+    public static ItemEffect itemEffect = ItemEffect.get("goety_revelation.fading");
 
     @OnlyIn(Dist.CLIENT)
     public static void init() {

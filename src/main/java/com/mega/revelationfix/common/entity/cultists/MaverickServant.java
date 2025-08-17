@@ -2,7 +2,6 @@ package com.mega.revelationfix.common.entity.cultists;
 
 import com.Polarice3.Goety.api.entities.IAutoRideable;
 import com.Polarice3.Goety.api.entities.IOwned;
-import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.advancements.ModCriteriaTriggers;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
@@ -13,7 +12,6 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.Maverick;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.config.MobsConfig;
-import com.Polarice3.Goety.init.ModMobType;
 import com.Polarice3.Goety.utils.*;
 import com.mega.revelationfix.common.entity.IMonsterServant;
 import com.mega.revelationfix.mixin.PatrollingMonsterAccessor;
@@ -175,17 +173,20 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     @Override
-    public void setTarget(@javax.annotation.Nullable LivingEntity p_21544_) {
+    public void setTarget(@javax.annotation.Nullable LivingEntity newTarget) {
+        if (this.getTrueOwner() == newTarget)
+            return;
+        if (newTarget != null && !canAttack(newTarget)) return;
         if (this.isPatrolling()) {
-            if (p_21544_ != null) {
-                if (p_21544_.distanceToSqr(this.vec3BoundPos()) <= (double) Mth.square(GUARDING_RANGE)) {
-                    this.normalSetTarget(p_21544_);
+            if (newTarget != null) {
+                if (newTarget.distanceToSqr(this.vec3BoundPos()) <= (double) Mth.square(GUARDING_RANGE)) {
+                    this.normalSetTarget(newTarget);
                 }
             } else {
                 this.normalSetTarget(null);
             }
         } else {
-            this.normalSetTarget(p_21544_);
+            this.normalSetTarget(newTarget);
         }
 
     }
@@ -581,7 +582,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     public boolean canUpdateMove() {
-        return this.getMobType() == MobType.UNDEAD || this.getMobType() == ModMobType.NATURAL;
+        return true;
     }
 
     public boolean isUpgraded() {

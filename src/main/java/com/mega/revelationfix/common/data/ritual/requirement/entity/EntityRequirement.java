@@ -14,8 +14,6 @@ import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.commands.data.DataCommands;
-import net.minecraft.server.commands.data.EntityDataAccessor;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,51 +37,10 @@ public abstract class EntityRequirement implements Requirement {
         m.put(TYPE_AND, EntityAndRequirement.class);
         return m;
     });
-    private int requiredCount;
-    protected CompoundTag nbt;
     public String type = "normal";
-    @Override
-    public String getType() {
-        return RitualData.ENTITIES;
-    }
-    public String getReadType() {
-        return this.type;
-    }
+    protected CompoundTag nbt;
+    private int requiredCount;
 
-    public int getRequiredCount() {
-        return requiredCount;
-    }
-    @Override
-    public final void compileData(JsonElement jsonElement) {
-        if (jsonElement instanceof JsonObject jsonObject) {
-            this.requiredCount = GsonHelper.getAsInt(jsonObject, "count", 1);
-            if (canCompareNBT() && jsonObject.has("nbt")) {
-                nbt = CraftingHelper.getNBT(jsonObject.get("nbt"));
-            }
-            try {
-                this.compileSelfData(jsonObject);
-            } catch (Throwable throwable) {
-                CrashReport report = CrashReport.forThrowable(throwable, "Reading Requirement: %s, jsonData : %s".formatted(this.getClass(), jsonElement));
-                new ReportedException(report).printStackTrace();
-                throwable.printStackTrace();
-            }
-        }
-    }
-    protected abstract void compileSelfData(JsonObject jsonObject);
-    public final boolean canUseRequirement(Level level, Entity entity) {
-        boolean hasNbtAndCorrect = true;
-        if (nbt != null && canCompareNBT()) {
-            if (entity instanceof LivingEntity) {
-                EntityExpandedContext ec = ((LivingEntityEC) entity).revelationfix$livingECData();
-                if (ec.tempTagForServer == null) {
-                    ec.tempTagForServer = NbtPredicate.getEntityTagToCompare(entity);
-                }
-                hasNbtAndCorrect = contains(ec.tempTagForServer, nbt);
-            }
-        }
-        return hasNbtAndCorrect && canUse(level, entity);
-    }
-    protected abstract boolean canUse(Level level, Entity entity);
     public static EntityRequirement createFromJson(JsonElement element) {
         EntityRequirement requirement = null;
         if (element instanceof JsonObject jsonObject) {
@@ -97,32 +54,6 @@ public abstract class EntityRequirement implements Requirement {
         return requirement;
     }
 
-    /**
-     * @param main 实体nbt
-     * @param toCheck 要包含的nbt
-     * @return 实体nbt是否包含所有toCheck
-     */
-    public boolean contains(CompoundTag main, CompoundTag toCheck) {
-        for(String s : toCheck.getAllKeys()) {
-            Tag tag = toCheck.get(s);
-            if (tag.getId() == 10) {
-                if (main.contains(s, 10)) {
-                    CompoundTag compoundtag = main.getCompound(s);
-                    return contains(compoundtag, (CompoundTag)tag);
-                } else {
-                    return false;
-                }
-            } else {
-                if (main.contains(s)) {
-                    if (!NbtUtils.compareNbt(main.get(s), tag, true))
-                        return false;
-                } else {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
     public static boolean isArray(Object obj) {
         return obj != null && obj.getClass().isArray();
     }
@@ -153,6 +84,82 @@ public abstract class EntityRequirement implements Requirement {
         }
         return true;
     }
+
+    @Override
+    public String getType() {
+        return RitualData.ENTITIES;
+    }
+
+    public String getReadType() {
+        return this.type;
+    }
+
+    public int getRequiredCount() {
+        return requiredCount;
+    }
+
+    @Override
+    public final void compileData(JsonElement jsonElement) {
+        if (jsonElement instanceof JsonObject jsonObject) {
+            this.requiredCount = GsonHelper.getAsInt(jsonObject, "count", 1);
+            if (canCompareNBT() && jsonObject.has("nbt")) {
+                nbt = CraftingHelper.getNBT(jsonObject.get("nbt"));
+            }
+            try {
+                this.compileSelfData(jsonObject);
+            } catch (Throwable throwable) {
+                CrashReport report = CrashReport.forThrowable(throwable, "Reading Requirement: %s, jsonData : %s".formatted(this.getClass(), jsonElement));
+                new ReportedException(report).printStackTrace();
+                throwable.printStackTrace();
+            }
+        }
+    }
+
+    protected abstract void compileSelfData(JsonObject jsonObject);
+
+    public final boolean canUseRequirement(Level level, Entity entity) {
+        boolean hasNbtAndCorrect = true;
+        if (nbt != null && canCompareNBT()) {
+            if (entity instanceof LivingEntity) {
+                EntityExpandedContext ec = ((LivingEntityEC) entity).revelationfix$livingECData();
+                if (ec.tempTagForServer == null) {
+                    ec.tempTagForServer = NbtPredicate.getEntityTagToCompare(entity);
+                }
+                hasNbtAndCorrect = contains(ec.tempTagForServer, nbt);
+            }
+        }
+        return hasNbtAndCorrect && canUse(level, entity);
+    }
+
+    protected abstract boolean canUse(Level level, Entity entity);
+
+    /**
+     * @param main    实体nbt
+     * @param toCheck 要包含的nbt
+     * @return 实体nbt是否包含所有toCheck
+     */
+    public boolean contains(CompoundTag main, CompoundTag toCheck) {
+        for (String s : toCheck.getAllKeys()) {
+            Tag tag = toCheck.get(s);
+            if (tag.getId() == 10) {
+                if (main.contains(s, 10)) {
+                    CompoundTag compoundtag = main.getCompound(s);
+                    return contains(compoundtag, (CompoundTag) tag);
+                } else {
+                    return false;
+                }
+            } else {
+                if (main.contains(s)) {
+                    if (!NbtUtils.compareNbt(main.get(s), tag, true))
+                        return false;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     protected boolean canCompareNBT() {
         return true;
     }

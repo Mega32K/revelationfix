@@ -23,7 +23,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -57,6 +56,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     public final float initialZRot = (float) (Math.random() * 360F);
     public final double rotationFactor = random.triangle(0F, 2F);
     public final List<TrailPoint> trailPoints = new ArrayList<>();
+    private final AccessorAbstractArrow accessorAbstractArrow = (AccessorAbstractArrow) this;
     public int clientSideReturnTridentTickCount;
     public boolean shouldBack = false;
     public Vector4f color = new Vector4f(202 / 255F, 122 / 255F, 84 / 255F, 1F);
@@ -67,7 +67,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     protected @Nullable Entity targetEntity;
     private ItemStack spearItem = new ItemStack(GRItems.GUNGNIR.get());
     private boolean dealtDamage;
-    private final AccessorAbstractArrow accessorAbstractArrow = (AccessorAbstractArrow) this;
+
     public GungnirSpearEntity(EntityType<? extends GungnirSpearEntity> p_37561_, Level p_37562_) {
         super(p_37561_, p_37562_);
     }
@@ -75,7 +75,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     public GungnirSpearEntity(Level p_37569_, LivingEntity p_37570_, ItemStack p_37571_) {
         super(ModEntities.GUNGNIR.get(), p_37570_, p_37569_);
         this.spearItem = p_37571_.copy();
-        this.entityData.set(ID_LOYALTY, (byte)5);
+        this.entityData.set(ID_LOYALTY, (byte) 5);
         this.entityData.set(ID_FOIL, p_37571_.hasFoil());
         this.setBaseDamage(0F);
     }
@@ -155,7 +155,8 @@ public class GungnirSpearEntity extends AbstractArrow {
             }
         }
         super.tick();
-        label:{
+        label:
+        {
             if (this.isSeek() && !dealtDamage) {
                 if (!isThisArrowFlying())
                     break label;

@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BarrelDistortionCoordinatesPostEffect implements CustomScreenEffect {
     public static int tickCount;
     public static Vec2 centerOffset;
+
     @Override
     public String getName() {
         return "barrel_distortion_coordinates";
@@ -27,7 +28,7 @@ public class BarrelDistortionCoordinatesPostEffect implements CustomScreenEffect
     public void onRenderTick(float partialTicks) {
         float p = (float) Math.sin((tickCount + partialTicks) / 10F * Mth.PI) * 0.3F;
         PostEffectHandler.updateUniform_post(this, "Distortion", p);
-        PostEffectHandler.updateUniform_post(this, "CenterOffset", new float[] {centerOffset.x, centerOffset.y});
+        PostEffectHandler.updateUniform_post(this, "CenterOffset", new float[]{centerOffset.x, centerOffset.y});
     }
 
     @Override
