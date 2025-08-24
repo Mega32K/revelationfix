@@ -4,7 +4,9 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.mega.endinglib.mixin.accessor.AccessorArrow;
 import com.mega.endinglib.util.entity.MobEffectUtils;
-import com.mega.revelationfix.common.apollyon.client.WrappedTrailUpdate;
+import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
+import com.mega.revelationfix.client.renderer.entity.DeathArrowTrailTask;
+import com.mega.revelationfix.common.apollyon.client.WrappedTrailData;
 import com.mega.revelationfix.common.apollyon.common.BypassInvulArrow;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
 import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
@@ -28,46 +30,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 
 @Mixin(DeathArrow.class)
-public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
-    static {
-        WrappedTrailUpdate.SHOULD_RENDER_TRAIL = SynchedEntityData.defineId(DeathArrow.class, EntityDataSerializers.BOOLEAN);
-    }
+public abstract  class DeathArrowMixin extends Arrow implements DeathArrowEC {
 
     @Unique
     public int revelationfix$inGroundTime = 0;
     @Unique
-    private WrappedTrailUpdate revelationfix$wrappedTrailUpdate;
+    private WrappedTrailData revelationfix$wrappedTrailData;
 
     public DeathArrowMixin(EntityType<? extends Arrow> p_36858_, Level p_36859_) {
         super(p_36858_, p_36859_);
     }
 
-    @Override
-    public void defineSynchedData() {
-        this.entityData.define(WrappedTrailUpdate.SHOULD_RENDER_TRAIL, false);
-        super.defineSynchedData();
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag p_36875_) {
-        super.readAdditionalSaveData(p_36875_);
-        revelationfix$getTrailData().setShouldRenderTrail(p_36875_.getBoolean("ShouldRenderDoomTrail"));
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag p_36881_) {
-        super.addAdditionalSaveData(p_36881_);
-        p_36881_.putBoolean("ShouldRenderDoomTrail", revelationfix$getTrailData().shouldRenderTrail());
-    }
-
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("RETURN"))
     private void init1(EntityType p_36721_, Level p_36722_, CallbackInfo ci) {
-        revelationfix$wrappedTrailUpdate = new WrappedTrailUpdate(this);
+        revelationfix$wrappedTrailData = new WrappedTrailData(this);
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;)V", at = @At("RETURN"))
     private void init2(Level p_36866_, LivingEntity p_36867_, CallbackInfo ci) {
-        revelationfix$wrappedTrailUpdate = new WrappedTrailUpdate(this);
+        revelationfix$wrappedTrailData = new WrappedTrailData(this);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -76,8 +57,8 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
             revelationfix$inGroundTime++;
         if (!level().isClientSide) {
 
-            if (revelationfix$inGroundTime > 20 && revelationfix$getTrailData().shouldRenderTrail()) {
-                revelationfix$wrappedTrailUpdate.setShouldRenderTrail(false);
+            if (revelationfix$inGroundTime > 20 && getWrappedTrailData().shouldRenderTrail()) {
+                revelationfix$wrappedTrailData.setShouldRenderTrail(false);
                 this.discard();
 
             }
@@ -99,13 +80,23 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
 
     @Override
     public void onClientRemoval() {
-        revelationfix$wrappedTrailUpdate.remove();
+        revelationfix$wrappedTrailData.remove();
         super.onClientRemoval();
     }
 
     @Override
-    public WrappedTrailUpdate revelationfix$getTrailData() {
-        return revelationfix$wrappedTrailUpdate;
+    public WrappedTrailData getWrappedTrailData() {
+        return revelationfix$wrappedTrailData;
+    }
+
+    @Override
+    public boolean shouldRenderWrappedTrail() {
+        return !this.onGround() || ((DeathArrowEC) this).revelationfix$inGroundTime() < 20;
+    }
+
+    @Override
+    public TrailRenderTask createTrailRenderTask(WrappedTrailData data) {
+        return new DeathArrowTrailTask(data.trailPoints);
     }
 
     @Override
@@ -117,7 +108,7 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
 
     @Override
     public boolean displayFireAnimation() {
-        if (revelationfix$getTrailData().shouldRenderTrail())
+        if (getWrappedTrailData().shouldRenderTrail())
             return false;
         return super.displayFireAnimation();
     }
@@ -137,5 +128,10 @@ public abstract class DeathArrowMixin extends Arrow implements DeathArrowEC {
                 }
             }
         }
+    }
+
+    @Override
+    public float getTrailRenderPosDeltaMultiplier() {
+        return -0.4F;
     }
 }

@@ -1,9 +1,8 @@
 package com.mega.revelationfix.safe.entity;
 
-import com.mega.revelationfix.common.apollyon.client.WrappedTrailUpdate;
+import com.mega.revelationfix.api.entity.ITrailRendererEntity;
+import com.mega.revelationfix.common.apollyon.client.WrappedTrailData;
 
-public interface DeathArrowEC {
+public interface DeathArrowEC extends ITrailRendererEntity {
     int revelationfix$inGroundTime();
-
-    WrappedTrailUpdate revelationfix$getTrailData();
 }

@@ -16,6 +16,8 @@ import com.Polarice3.Goety.utils.*;
 import com.mega.revelationfix.common.entity.IMonsterServant;
 import com.mega.revelationfix.mixin.PatrollingMonsterAccessor;
 import com.mega.revelationfix.mixin.goety.MaverickAccessor;
+import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import com.mega.revelationfix.util.LivingEntityEC;
 import com.mega.revelationfix.util.entity.GRServantUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -144,8 +146,12 @@ public class MaverickServant extends Maverick implements IMonsterServant {
 
     @Override
     public void heal(float p_21116_) {
-        if (this.getLifespan() > 0)
-            super.heal(p_21116_);
+        if (this.hasLifespan()) {
+            if (this.getLifespan() <= 1) {
+                return;
+            }
+        }
+        super.heal(p_21116_);
     }
 
     public void checkDespawn() {
@@ -939,5 +945,12 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     @Override
     public Entity getIMSTarget() {
         return this.getTarget();
+    }
+
+    @Override
+    public void lifeSpanDamage() {
+        IMonsterServant.super.lifeSpanDamage();
+        EntityExpandedContext ec = ((LivingEntityEC) this).revelationfix$livingECData();
+        ec.banHealingTime = 110;
     }
 }

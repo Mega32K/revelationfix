@@ -6,6 +6,7 @@ import com.mega.revelationfix.client.TimeContext;
 import com.mega.revelationfix.client.citadel.GRRenderTypes;
 import com.mega.revelationfix.client.renderer.MegaRenderType;
 import com.mega.revelationfix.client.renderer.RendererUtils;
+import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.common.compat.SafeClass;
@@ -168,7 +169,7 @@ public class StarArrowRenderer extends EntityRenderer<StarArrow> {
         return STAR_TEXTURE;
     }
 
-    record StarTrailTask(StarArrow starArrow) implements VFRBuilders.WorldVFRTrailBuilder.TrailRenderTask {
+    record StarTrailTask(StarArrow starArrow) implements TrailRenderTask {
         @Override
         public void task(PoseStack matrix, VFRBuilders.WorldVFRTrailBuilder vfrTrailBuilder) {
             if (SafeClass.usingShaderPack()) return;

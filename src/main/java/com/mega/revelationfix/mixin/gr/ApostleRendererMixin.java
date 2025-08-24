@@ -60,7 +60,7 @@ public abstract class ApostleRendererMixin extends CultistRenderer<Apostle> {
     public @NotNull ResourceLocation getTextureLocation0(@NotNull Apostle entity) {
         ApollyonAbilityHelper abilityHelper = (ApollyonAbilityHelper) entity;
         if (abilityHelper.allTitlesApostle_1_20_1$isApollyon()) {
-            if (SafeClass.yearDay() == 824)
+            if (SafeClass.manbaDay())
                 return entity.isSecondPhase() ? MANBA_TEXTURE_2 : MANBA_TEXTURE;
             if (entity.isInNether() && ClientConfig.enableNewNetherApollyonTexture) {
                 return entity.isSecondPhase() ? APOLLYON_NETHER_TEXTURE_2 : APOLLYON_NETHER_TEXTURE;

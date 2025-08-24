@@ -14,8 +14,10 @@ import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModBlocks;
 import com.mega.revelationfix.mixin.gr.PlayerMixin;
+import com.mega.revelationfix.proxy.CommonProxy;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
+import com.mega.revelationfix.util.entity.CapabilityGetter;
 import com.mega.revelationfix.util.java.SynchedFixedLengthList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -77,10 +79,6 @@ public class OdamanePlayerExpandedContext {
      */
     public static final int REVIVE_INVULNERABLE_FLAG = 1;
     public static final int BLASPHEMOUS_FLAG = 2;
-    /**
-     * 提供多个双端同步开关
-     */
-    public static EntityDataAccessor<Integer> EXPANDED_FLAGS;
     public static List<TagKey<DamageType>> INVULNERABLE_TO_TAGS;
     public static Predicate<DamageSource> INVULNERABLE_TO_DAMAGE = (damageSource -> {
         //                                魔法                                   仙人掌                                  挤压                                     岩浆                                 铁砧                                           动能                                           冰冻                                   窒息
@@ -164,27 +162,18 @@ public class OdamanePlayerExpandedContext {
     }
 
     private boolean getFlag(int mask) {
-        int i = player.getEntityData().get(EXPANDED_FLAGS);
+        int i = CommonProxy.getPlayerCapInstance(player).readAllExpandedFlags();
         return (i & mask) != 0;
     }
 
-    private void setAllFlags(int flags) {
-        player.getEntityData().set(EXPANDED_FLAGS, flags);
-    }
-
-    private int readAllFlags() {
-        return player.getEntityData().get(EXPANDED_FLAGS);
-    }
-
     private void setFlags(int mask, boolean value) {
-        int i = player.getEntityData().get(EXPANDED_FLAGS);
+        int i = CommonProxy.getPlayerCapInstance(player).readAllExpandedFlags();
         if (value) {
             i |= mask;
         } else {
             i &= ~mask;
         }
-
-        player.getEntityData().set(EXPANDED_FLAGS, i & 255);
+        CommonProxy.getPlayerCapInstance(player).setAllExpandedFlags(i & 255);
     }
 
     /**
@@ -196,7 +185,6 @@ public class OdamanePlayerExpandedContext {
         this.invulnerableTime = nbt.getInt("OdamaneInvulTime");
         this.reviveInvulnerableTime = nbt.getInt("OdamaneReviveInvulnerableTime");
         this.nextReviveCooldowns = nbt.getInt("OdamaneReviveCooldowns");
-        this.setAllFlags(nbt.getInt("OdamaneFlags"));
     }
 
     /**
@@ -208,7 +196,6 @@ public class OdamanePlayerExpandedContext {
         nbt.putInt("OdamaneInvulTime", this.invulnerableTime);
         nbt.putInt("OdamaneReviveInvulnerableTime", this.reviveInvulnerableTime);
         nbt.putInt("OdamaneReviveCooldowns", this.nextReviveCooldowns);
-        nbt.putInt("OdamaneFlags", this.readAllFlags());
     }
 
     public void tick() {

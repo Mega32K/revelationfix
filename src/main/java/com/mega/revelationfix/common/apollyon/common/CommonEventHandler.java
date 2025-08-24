@@ -11,6 +11,8 @@ import com.mega.revelationfix.common.compat.FeModSafe;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.iaf.IAFWrapped;
 import com.mega.revelationfix.common.config.CommonConfig;
+import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
+import com.mega.revelationfix.common.entity.projectile.StarArrow;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.common.spell.nether.RevelationSpell;
 import com.mega.revelationfix.safe.entity.DeathArrowEC;
@@ -23,6 +25,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -121,8 +124,9 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void deathArrowEffect(EntityJoinLevelEvent event) {
         if (event.getEntity().level().isClientSide) {
-            if (event.getEntity() instanceof DeathArrow deathArrow) {
-                ((DeathArrowEC) deathArrow).revelationfix$getTrailData().join(5);
+            Entity entity = event.getEntity();
+            if (entity instanceof DeathArrow deathArrow) {
+                ((DeathArrowEC) deathArrow).getWrappedTrailData().join(5);
             }
         }
     }

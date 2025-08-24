@@ -6,14 +6,18 @@ import com.Polarice3.Goety.utils.OwnedDamageSource;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
+import com.mega.revelationfix.common.capability.entity.GoetyRevelationPlayerCapability;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
+import com.mega.revelationfix.proxy.CommonProxy;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
+import com.mega.revelationfix.util.entity.CapabilityGetter;
 import com.mega.revelationfix.util.entity.EntityActuallyHurt;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -28,6 +32,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -40,8 +47,6 @@ import z1gned.goetyrevelation.util.ApollyonAbilityHelper;
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity implements PlayerInterface {
     @Unique
-    private static EntityDataAccessor<Boolean> BASE_ATTRIBUTE_MODE;
-    @Unique
     private boolean revelationfix$isBaseAttributeMode = false;
     @Unique
     private OdamanePlayerExpandedContext revelationfix$context = new OdamanePlayerExpandedContext(((Player) (Object) this));
@@ -50,23 +55,13 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerInterfac
         super(p_20966_, p_20967_);
     }
 
-    @Inject(method = "<clinit>", at = @At("RETURN"))
-    private static void clinit(CallbackInfo ci) {
-        BASE_ATTRIBUTE_MODE = SynchedEntityData.defineId(Player.class, EntityDataSerializers.BOOLEAN);
-        OdamanePlayerExpandedContext.EXPANDED_FLAGS = SynchedEntityData.defineId(Player.class, EntityDataSerializers.INT);
-    }
-
     @Shadow
     public abstract boolean isCreative();
 
     @Shadow
     public abstract boolean isSpectator();
 
-    @Inject(method = "defineSynchedData", at = @At("HEAD"))
-    private void defineSynchedData(CallbackInfo ci) {
-        this.entityData.define(BASE_ATTRIBUTE_MODE, false);
-        this.entityData.define(OdamanePlayerExpandedContext.EXPANDED_FLAGS, 0);
-    }
+    @Shadow public abstract <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing);
 
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
     private void readAdditionalSaveData(CompoundTag p_36215_, CallbackInfo ci) {
@@ -147,12 +142,13 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerInterfac
 
     @Override
     public boolean revelationfix$isBaseAttributeMode() {
-        return this.entityData.get(BASE_ATTRIBUTE_MODE);
+        LazyOptional<GoetyRevelationPlayerCapability> optional = this.getCapability(CommonProxy.getPlayerCap());
+        return optional.isPresent() && CapabilityGetter.unsafeGetLazyOptional(optional, this).isDefaultAttributeMode();
     }
 
     @Override
     public void revelationfix$setBaseAttributeMode(boolean z) {
-        this.entityData.set(BASE_ATTRIBUTE_MODE, z);
+        CapabilityGetter.unsafeGetCapability(CommonProxy.getPlayerCap(), this).setDefaultAttributeMode(z);
     }
 
     @Override

@@ -3,14 +3,11 @@ package com.mega.revelationfix.mixin.gr;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.common.entities.projectiles.NetherMeteor;
 import com.Polarice3.Goety.init.ModSounds;
+import com.mega.revelationfix.proxy.CommonProxy;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -38,13 +35,7 @@ import z1gned.goetyrevelation.util.PlayerAbilityHelper;
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity implements PlayerAbilityHelper {
     @Unique
-    private static final EntityDataAccessor<Float> SPIN = SynchedEntityData.defineId(Player.class, EntityDataSerializers.FLOAT);
-    @Unique
-    private static final EntityDataAccessor<Integer> INVUL = SynchedEntityData.defineId(Player.class, EntityDataSerializers.INT);
-    @Unique
-    private static final EntityDataAccessor<Integer> METEOR = SynchedEntityData.defineId(Player.class, EntityDataSerializers.INT);
-    @Unique
-    private static final EntityDataAccessor<Integer> METEORING = SynchedEntityData.defineId(Player.class, EntityDataSerializers.INT);
+    private float revelationfix$haloSpin;
     @Unique
     private ObsidianMonolith obsidianMonolith;
 
@@ -58,25 +49,7 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerAbilityH
     @Shadow
     public abstract boolean isSpectator();
 
-    @Inject(at = @At("TAIL"), method = "defineSynchedData")
-    private void registerData(CallbackInfo ci) {
-        this.entityData.define(SPIN, 0.0F);
-        this.entityData.define(INVUL, 0);
-        this.entityData.define(METEOR, 0);
-        this.entityData.define(METEORING, 0);
-    }
-
-    @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
-    private void readNbt(CompoundTag p_36215_, CallbackInfo ci) {
-        this.setMeteor(p_36215_.getInt("Meteor"));
-        this.setMeteoring(p_36215_.getInt("Meteoring"));
-    }
-
-    @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
-    private void writeNbt(CompoundTag p_36265_, CallbackInfo ci) {
-        p_36265_.putInt("Meteor", this.getMeteor());
-        p_36265_.putInt("Meteoring", this.getMeteoring());
-    }
+    @Shadow public abstract void tick();
 
     @Inject(at = @At("RETURN"), method = "isInvulnerableTo", cancellable = true)
     private void invul(DamageSource p_36249_, CallbackInfoReturnable<Boolean> cir) {
@@ -138,7 +111,6 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerAbilityH
 
                     if ((double) blockPos.getY() > this.getY() + 32.0) {
                         NetherMeteor fireball = this.getNetherMeteor();
-                        fireball.setDangerous(false);
                         fireball.setPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
                         this.level().addFreshEntity(fireball);
                     }
@@ -182,42 +154,42 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerAbilityH
 
     @Override
     public float getSpin() {
-        return this.entityData.get(SPIN);
+        return revelationfix$haloSpin;
     }
 
     @Override
     public void setSpin(float spin) {
-        this.entityData.set(SPIN, spin);
+        this.revelationfix$haloSpin = spin;
     }
 
     @Override
     public int getInvulTick() {
-        return this.entityData.get(INVUL);
+        return CommonProxy.getPlayerCapInstance((Player) (Object) this).getInvulTick();
     }
 
     @Override
     public void setInvulTick(int tick) {
-        this.entityData.set(INVUL, tick);
+        CommonProxy.getPlayerCapInstance((Player) (Object) this).setInvulTick(tick);
     }
 
     @Override
     public int getMeteor() {
-        return this.entityData.get(METEOR);
+        return CommonProxy.getPlayerCapInstance((Player) (Object) this).getHaloReviveCooldown();
     }
 
     @Override
     public void setMeteor(int tick) {
-        this.entityData.set(METEOR, tick);
+        CommonProxy.getPlayerCapInstance((Player) (Object) this).setHaloReviveCooldown(tick);
     }
 
     @Override
     public int getMeteoring() {
-        return this.entityData.get(METEORING);
+        return CommonProxy.getPlayerCapInstance((Player) (Object) this).getMeteorTime();
     }
 
     @Override
     public void setMeteoring(int tick) {
-        this.entityData.set(METEORING, tick);
+        CommonProxy.getPlayerCapInstance((Player) (Object) this).setMeteorTime(tick);
     }
 
     @Override
@@ -247,7 +219,9 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerAbilityH
         double d2 = (double) random.nextInt(trueRange) * d;
         double d3 = -900.0;
         double d4 = (double) random.nextInt(trueRange) * e;
-        return new NetherMeteor(this.level(), this, d2, d3, d4);
+        NetherMeteor meteor = new NetherMeteor(this.level(), this, d2, d3, d4);
+        meteor.setDangerous(false);
+        return meteor;
     }
 
 }

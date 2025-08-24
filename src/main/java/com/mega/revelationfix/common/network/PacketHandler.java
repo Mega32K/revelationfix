@@ -38,6 +38,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(id(), IceSpellParticlePacket.class, IceSpellParticlePacket::encode, IceSpellParticlePacket::decode, IceSpellParticlePacket::handle);
         INSTANCE.registerMessage(id(), TeleportEntityTryEvent.class, TeleportEntityTryEvent::encode, TeleportEntityTryEvent::decode, TeleportEntityTryEvent::handle);
         INSTANCE.registerMessage(id(), RitualDataSyncPacket.class, RitualDataSyncPacket::encode, RitualDataSyncPacket::decode, RitualDataSyncPacket::handle);
+        INSTANCE.registerMessage(id(), EntityTagsSyncPacket.class, EntityTagsSyncPacket::encode, EntityTagsSyncPacket::decode, EntityTagsSyncPacket::handle);
     }
 
     public static int id() {
@@ -56,7 +57,7 @@ public class PacketHandler {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), msg);
     }
 
-    public static <MGS> void sendToEntity(MGS message, LivingEntity entity) {
+    public static <MSG> void sendToEntity(Entity entity, MSG message) {
         INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
     }
 

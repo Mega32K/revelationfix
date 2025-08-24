@@ -1,5 +1,6 @@
 package com.mega.revelationfix.client.renderer.entity;
 
+import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -7,7 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
 
 public record DeathArrowTrailTask(
-        List<TrailPoint> trailPoints) implements VFRBuilders.WorldVFRTrailBuilder.TrailRenderTask {
+        List<TrailPoint> trailPoints) implements TrailRenderTask {
     @Override
     public void task(PoseStack matrix, VFRBuilders.WorldVFRTrailBuilder vfrTrailBuilder) {
         if (!trailPoints.isEmpty()) {

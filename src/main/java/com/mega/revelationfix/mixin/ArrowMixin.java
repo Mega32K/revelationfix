@@ -12,7 +12,7 @@ public abstract class ArrowMixin {
     @Inject(method = "makeParticle", at = @At("HEAD"), cancellable = true)
     private void makeParticle(int p_36877_, CallbackInfo ci) {
         if (this instanceof DeathArrowEC deathArrowEC) {
-            if (deathArrowEC.revelationfix$getTrailData().shouldRenderTrail())
+            if (deathArrowEC.getWrappedTrailData().shouldRenderTrail())
                 ci.cancel();
         }
     }

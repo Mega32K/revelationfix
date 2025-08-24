@@ -1,20 +1,29 @@
 package com.mega.revelationfix.common.apollyon.client;
 
+import com.mega.revelationfix.api.entity.ITrailRendererEntity;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
+import com.mega.revelationfix.common.network.PacketHandler;
+import com.mega.revelationfix.common.network.s2c.EntityTagsSyncPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import z1gned.goetyrevelation.ModMain;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WrappedTrailUpdate {
-    public static EntityDataAccessor<Boolean> SHOULD_RENDER_TRAIL;
+public class WrappedTrailData {
     public final List<TrailPoint> trailPoints = new ArrayList<>();
     public Entity entity;
-
-    public WrappedTrailUpdate(Entity entity) {
+    @Nullable
+    public ITrailRendererEntity trailRenderer;
+    public WrappedTrailData(Entity entity) {
         this.entity = entity;
+        if (entity instanceof ITrailRendererEntity i)
+            this.trailRenderer = i;
     }
 
     public void join(int size) {
@@ -46,10 +55,13 @@ public class WrappedTrailUpdate {
     }
 
     public void setShouldRenderTrail(boolean z) {
-        entity.getEntityData().set(SHOULD_RENDER_TRAIL, z);
+        entity.addTag(ModMain.MODID + "_shouldRenderTrail");
+        PacketHandler.sendToAll(new EntityTagsSyncPacket(this.entity.getId(), this.entity.getTags()));
     }
 
     public boolean shouldRenderTrail() {
-        return entity.getEntityData().get(SHOULD_RENDER_TRAIL);
+        if (trailRenderer != null && !trailRenderer.shouldRenderWrappedTrail())
+            return false;
+        return entity.getTags().contains(ModMain.MODID + "_shouldRenderTrail");
     }
 }

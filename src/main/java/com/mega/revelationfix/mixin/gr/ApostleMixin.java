@@ -489,7 +489,7 @@ public abstract class ApostleMixin extends SpellCastingCultist implements Apolly
                 //MODIFIED
                 if (this.isSecondPhase() && this.isInNether())
                     if (abstractarrowentity instanceof DeathArrow deathArrow)
-                        ((DeathArrowEC) deathArrow).revelationfix$getTrailData().setShouldRenderTrail(true);
+                        ((DeathArrowEC) deathArrow).getWrappedTrailData().setShouldRenderTrail(true);
                 if (this.isSecondPhase())
                     abstractarrowentity.addTag(BypassInvulArrow.TAG_BYPASS_NAME);
                 if (SafeClass.isDoom((Apostle) (Object) this))

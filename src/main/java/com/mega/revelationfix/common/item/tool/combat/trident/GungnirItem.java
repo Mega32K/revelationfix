@@ -128,7 +128,6 @@ public class GungnirItem extends Item implements Vanishable, ICustomHurtWeapon, 
                                 }
                             }
                             level.addFreshEntity(gungnirSpear);
-
                         }
                     }
 

@@ -31,7 +31,7 @@ public class ApostleModelMixin<T extends Apostle> extends CultistModel<T> {
     private void hatVisible(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
         if (((ApollyonAbilityHelper) entity).allTitlesApostle_1_20_1$isApollyon()) {
             this.hat2.visible = true;
-            if (SafeClass.yearDay() == 824)
+            if (SafeClass.manbaDay())
                 this.nose.visible = false;
         }
     }

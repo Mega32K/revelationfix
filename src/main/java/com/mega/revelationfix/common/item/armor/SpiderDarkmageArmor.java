@@ -100,13 +100,13 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
     @Override
     public void injectExtraArmorAttributes(ArmorModifiersBuilder builder) {
         UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);
+        UUID uuid2 = EXTRA_MODIFIER_UUID_PER_TYPE_2.get(type);
         if (this.type == Type.BOOTS)
             builder.addModifier(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor Modifier", 1D, AttributeModifier.Operation.ADDITION));
         builder.addModifier(ModAttributes.SPELL_POWER.get(), new AttributeModifier(uuid, "Armor modifier", 0.35, AttributeModifier.Operation.ADDITION));
-        builder.addModifier(ModAttributes.SPELL_POWER.get(), new AttributeModifier(UUID.fromString("02a1113b-07b4-4e15-a23f-7485c054a3c3"), "Armor modifier", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL));
         builder.addModifier(ModAttributes.SPELL_POWER_MULTIPLIER.get(), new AttributeModifier(uuid, "Armor modifier", .15, AttributeModifier.Operation.ADDITION));
-        builder.addModifier(ModAttributes.CAST_DURATION.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.ADDITION));
-        builder.addModifier(ModAttributes.SPELL_COOLDOWN.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.ADDITION));
+        builder.addModifier(ModAttributes.CAST_DURATION.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.MULTIPLY_TOTAL));
+        builder.addModifier(ModAttributes.SPELL_COOLDOWN.get(), new AttributeModifier(uuid, "Armor modifier", .1, AttributeModifier.Operation.MULTIPLY_TOTAL));
     }
 
     @Override
@@ -133,7 +133,7 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
 
     @Override
     public Multimap<Attribute, AttributeModifier> getSetAttributesModifiers(LivingEntity living) {
-        return ImmutableMultimap.of(Attributes.ATTACK_DAMAGE, BaseArmorItem.ATTACK_DAMAGE_MODIFIER);
+        return ImmutableMultimap.of(Attributes.ATTACK_DAMAGE, BaseArmorItem.ATTACK_DAMAGE_MODIFIER, ModAttributes.SPELL_POWER.get(), BaseArmorItem.SPELL_POWER_MODIFIER);
     }
 
     @Override
@@ -147,5 +147,6 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
         super.addSetDescription(itemStack, level, components, tooltipFlag);
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.darkmage_set.desc0"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> BaseArmorItem.ATTACK_DAMAGE_MODIFIER.getAmount() * 100.0F)));
+        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name." + ModMain.MODID + ".spell_power", (s) -> BaseArmorItem.SPELL_POWER_MODIFIER.getAmount() * 100.0F)));
     }
 }

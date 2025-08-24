@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.entity;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
-import com.mega.revelationfix.common.apollyon.client.WrappedTrailUpdate;
+import com.mega.revelationfix.common.apollyon.client.WrappedTrailData;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.init.ModEntities;
 import net.minecraft.core.BlockPos;
@@ -34,7 +34,7 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
     private static final int INFINITE_PICKUP_DELAY = 32767;
     private static final int INFINITE_LIFETIME = -32768;
     public final float bobOffs;
-    public WrappedTrailUpdate wrappedTrailUpdate = new WrappedTrailUpdate(this);
+    public WrappedTrailData wrappedTrailData = new WrappedTrailData(this);
     /**
      * The maximum maxLife of this EntityItem.  The item is expired once this is reached.
      */
@@ -265,7 +265,7 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
 
     @Override
     public void onClientRemoval() {
-        wrappedTrailUpdate.remove();
+        wrappedTrailData.remove();
         super.onClientRemoval();
     }
 

@@ -7,6 +7,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(ServerPlayerGameMode.class)
 public interface ServerPlayerGameModeAccessor {
-    @Invoker
+    @Invoker(remap = false)
     boolean invokeRemoveBlock(BlockPos p_180235_1_, boolean canHarvest);
 }

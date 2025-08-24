@@ -36,9 +36,10 @@ public class EntityExpandedContext {
     public int banHealingTime;
     @Nullable
     public UUID quietusCasterID;
-    public int tetraFadingTime;
+    public short tetraFadingTime;
     public int banAnySpelling;
-    public CompoundTag tempTagForServer;
+    public CompoundTag tempNbtForServer;
+    public short usingTempNbtSeconds;
     public WalkAnimationState customArmorWalkAnimState = new WalkAnimationState();
     @Nullable
     private LivingEntity quietusCaster;
@@ -123,8 +124,11 @@ public class EntityExpandedContext {
                 }
             }
         }
-        if (entity.tickCount % 40 == 0)
-            tempTagForServer = null;
+        if (entity.tickCount % 20 == 0) {
+            if (usingTempNbtSeconds <= 0)
+                tempNbtForServer = null;
+            else usingTempNbtSeconds--;
+        }
         if (ArmorUtils.findChestplate(entity, ModArmorMaterials.SPIDER_DARKMAGE)) {
             if (entity.onClimbable())
                 customArmorWalkAnimState.update(customArmorWalkAnimState.speed() + 0.2F, 0.4F);

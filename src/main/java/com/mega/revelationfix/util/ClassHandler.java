@@ -1,5 +1,6 @@
 package com.mega.revelationfix.util;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import sun.misc.Unsafe;
 
 import java.lang.invoke.MethodHandle;
@@ -18,8 +19,8 @@ import java.util.function.Predicate;
 public class ClassHandler {
     public static Class<?> MEMEBER_NAME;
     public static MethodHandle MEMBER_NAME_COS;
-    public static Map<Class<?>, List<Class<?>>> parentsMapping = new HashMap<>();
-    public static Map<Class<?>, Map<Predicate<Field>, List<FieldVarHandle>>> bigFilter = new HashMap<>();
+    public static Map<Class<?>, List<Class<?>>> parentsMapping = new Object2ObjectOpenHashMap<>();
+    public static Map<Class<?>, Map<Predicate<Field>, List<FieldVarHandle>>> bigFilter = new Object2ObjectOpenHashMap<>();
 
     static {
         try {
@@ -89,9 +90,13 @@ public class ClassHandler {
         List<Field> fields = new ArrayList<>();
         List<FieldVarHandle> fieldVarHandles = new ArrayList<>();
         for (Class<?> c : classes) {
-            for (Field f : c.getDeclaredFields()) {
-                if (fieldPredicate.test(f))
-                    fields.add(f);
+            Field[] fields1 = c.getDeclaredFields();
+            for (int index =0;index<fields1.length;index++) {
+                try {
+                    Field f = fields1[index];
+                    if (fieldPredicate.test(f))
+                        fields.add(f);
+                } catch (Throwable throwable) {}
             }
         }
         for (Field field : fields)

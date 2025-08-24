@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
 
-@Mixin(ChatFormatting.class)
+@Mixin(value = ChatFormatting.class, priority = 232424314)
 public class ChatFormattingMixin {
     @Shadow(remap = false)
     @Final

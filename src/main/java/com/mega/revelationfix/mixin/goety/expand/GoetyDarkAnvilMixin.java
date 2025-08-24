@@ -1,4 +1,4 @@
-package com.mega.revelationfix.mixin.goety;
+package com.mega.revelationfix.mixin.goety.expand;
 
 import com.Polarice3.Goety.client.inventory.container.DarkAnvilMenu;
 import com.mega.endinglib.util.annotation.NoModDependsMixin;

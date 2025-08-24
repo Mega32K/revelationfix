@@ -52,7 +52,9 @@ public class SafeClass {
         }
         return yearDate;
     }
-
+    public static boolean manbaDay() {
+        return yearDay() >= 814 && yearDay() <= 824;
+    }
     public static boolean isIronSpellbookslLoaded() {
         if (irons_spellbooks_loaded == -1) {
             irons_spellbooks_loaded = (EarlyConfig.modIds.contains("irons_spellbooks") || ModList.get().isLoaded("irons_spellbooks")) ? 1 : 2;

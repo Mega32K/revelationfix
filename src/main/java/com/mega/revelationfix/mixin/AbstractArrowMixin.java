@@ -39,14 +39,14 @@ public abstract class AbstractArrowMixin extends Projectile {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;isCritArrow()Z"))
     private void tick0(CallbackInfo ci) {
         if ((Object) this instanceof DeathArrow deathArrow)
-            if (((DeathArrowEC) deathArrow).revelationfix$getTrailData().shouldRenderTrail())
+            if (((DeathArrowEC) deathArrow).getWrappedTrailData().shouldRenderTrail())
                 doomArrowDisableParticle = false;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", ordinal = 0, shift = At.Shift.AFTER))
     private void tick1(CallbackInfo ci) {
         if ((Object) this instanceof DeathArrow deathArrow)
-            if (((DeathArrowEC) deathArrow).revelationfix$getTrailData().shouldRenderTrail())
+            if (((DeathArrowEC) deathArrow).getWrappedTrailData().shouldRenderTrail())
                 doomArrowDisableParticle = true;
     }
 

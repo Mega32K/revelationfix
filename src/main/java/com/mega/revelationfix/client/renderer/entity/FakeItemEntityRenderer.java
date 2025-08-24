@@ -1,5 +1,6 @@
 package com.mega.revelationfix.client.renderer.entity;
 
+import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.common.compat.SafeClass;
@@ -65,14 +66,14 @@ public class FakeItemEntityRenderer extends EntityRenderer<FakeItemEntity> {
             double x = Mth.lerp(partialTicks, itemEntity.xOld, itemEntity.getX());
             double y = Mth.lerp(partialTicks, itemEntity.yOld, itemEntity.getY());
             double z = Mth.lerp(partialTicks, itemEntity.zOld, itemEntity.getZ());
-            final List<TrailPoint> trailPoints = itemEntity.wrappedTrailUpdate.trailPoints;
+            final List<TrailPoint> trailPoints = itemEntity.wrappedTrailData.trailPoints;
             if (!trailPoints.isEmpty()) {
                 label0:
                 {
                     if (Minecraft.getInstance().player != null && SafeClass.isClientTimeStop()) break label0;
-                    itemEntity.wrappedTrailUpdate.update(x, y, z, partialTicks);
+                    itemEntity.wrappedTrailData.update(x, y, z, partialTicks);
                 }
-            } else itemEntity.wrappedTrailUpdate.join(5);
+            } else itemEntity.wrappedTrailData.join(5);
             VFRBuilders.WorldVFRTrailBuilder trailBuilder = ClientEventHandler.normalStarTrailsBuilder;
             if (trailBuilder != null)
                 trailBuilder.addTrailListRenderTask(new FakeItemTrailTask(trailPoints));
@@ -144,7 +145,7 @@ public class FakeItemEntityRenderer extends EntityRenderer<FakeItemEntity> {
     }
 
     /*==================================== FORGE END =============================================*/
-    record FakeItemTrailTask(List<TrailPoint> trailPoints) implements VFRBuilders.WorldVFRTrailBuilder.TrailRenderTask {
+    record FakeItemTrailTask(List<TrailPoint> trailPoints) implements TrailRenderTask {
         @Override
         public void task(PoseStack matrix, VFRBuilders.WorldVFRTrailBuilder vfrTrailBuilder) {
             if (!trailPoints.isEmpty()) {

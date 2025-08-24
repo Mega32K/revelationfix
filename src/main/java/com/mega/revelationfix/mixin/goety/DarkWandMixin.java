@@ -1,16 +1,20 @@
 package com.mega.revelationfix.mixin.goety;
 
 import com.Polarice3.Goety.api.magic.SpellType;
+import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.common.items.magic.NamelessStaff;
 import com.Polarice3.Goety.common.magic.Spell;
 import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
+import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
 import com.mega.revelationfix.safe.mixinpart.goety.ILevelWand;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -77,5 +81,18 @@ public class DarkWandMixin implements ILevelWand {
         if ((Object) this instanceof NamelessStaff)
             return 2;
         return 1;
+    }
+    @Inject(method = "onLeftClickEntity", at = @At("HEAD"), cancellable = true, remap = false)
+    private void onLeftClickEntity(ItemStack stack, Player player, Entity entity, CallbackInfoReturnable<Boolean> cir) {
+        if (player.isShiftKeyDown()) {
+            if (entity instanceof ObsidianMonolith monolith) {
+                if (monolith.getTrueOwner() instanceof Player ownerPlayer) {
+                    if (ownerPlayer.getId() == player.getId()) {
+                        monolith.die(player.damageSources().playerAttack(player));
+                        cir.setReturnValue(true);
+                    }
+                }
+            }
+        }
     }
 }

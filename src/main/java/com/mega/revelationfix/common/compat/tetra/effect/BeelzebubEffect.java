@@ -57,7 +57,7 @@ public class BeelzebubEffect {
                         }
                     }
                     target.playSound(SoundEvents.WITHER_HURT, 0.2F, 1.0F);
-                    PacketHandler.sendToEntity(new LifeStealParticlesS2CPacket(target.getX(), target.getY(0.5), target.getZ()), target);
+                    PacketHandler.sendToEntity(target, new LifeStealParticlesS2CPacket(target.getX(), target.getY(0.5), target.getZ()));
                 }
             }
         }

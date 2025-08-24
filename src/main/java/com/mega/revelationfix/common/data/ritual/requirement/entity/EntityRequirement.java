@@ -122,10 +122,11 @@ public abstract class EntityRequirement implements Requirement {
         if (nbt != null && canCompareNBT()) {
             if (entity instanceof LivingEntity) {
                 EntityExpandedContext ec = ((LivingEntityEC) entity).revelationfix$livingECData();
-                if (ec.tempTagForServer == null) {
-                    ec.tempTagForServer = NbtPredicate.getEntityTagToCompare(entity);
+                if (ec.tempNbtForServer == null) {
+                    ec.tempNbtForServer = NbtPredicate.getEntityTagToCompare(entity);
+                    ec.usingTempNbtSeconds = 10;
                 }
-                hasNbtAndCorrect = contains(ec.tempTagForServer, nbt);
+                hasNbtAndCorrect = contains(ec.tempNbtForServer, nbt);
             }
         }
         return hasNbtAndCorrect && canUse(level, entity);

@@ -109,7 +109,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "getVoicePitch", at = @At("RETURN"), cancellable = true)
     private void getVoicePitch(CallbackInfoReturnable<Float> cir) {
-        if ((Object) this instanceof Player player && ATAHelper2.hasOdamane(player))
+        if (ATAHelper2.hasOdamane(this))
             cir.setReturnValue(cir.getReturnValueF() * 1.2F);
     }
 

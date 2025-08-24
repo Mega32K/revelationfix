@@ -6,10 +6,16 @@ import com.Polarice3.Goety.common.entities.projectiles.Hellfire;
 import com.mega.endinglib.mixin.accessor.AccessorAbstractArrow;
 import com.mega.endinglib.util.entity.DamageSourceGenerator;
 import com.mega.endinglib.util.entity.MobEffectUtils;
-import com.mega.revelationfix.client.renderer.trail.TrailPoint;
+import com.mega.revelationfix.api.entity.ITrailRendererEntity;
+import com.mega.revelationfix.client.renderer.entity.SpearTrailTask;
+import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
+import com.mega.revelationfix.client.renderer.VFRBuilders;
+import com.mega.revelationfix.common.apollyon.client.WrappedTrailData;
+import com.mega.revelationfix.common.config.ClientConfig;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.safe.DamageSourceInterface;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -36,10 +42,9 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class GungnirSpearEntity extends AbstractArrow {
+public class GungnirSpearEntity extends AbstractArrow implements ITrailRendererEntity {
     public static final int maxTrails = 16;
     public static final EntityDataAccessor<Boolean> INVISIBLE = SynchedEntityData.defineId(GungnirSpearEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(GungnirSpearEntity.class, EntityDataSerializers.BYTE);
@@ -55,7 +60,7 @@ public class GungnirSpearEntity extends AbstractArrow {
     public static int maxTrialLife = 53;
     public final float initialZRot = (float) (Math.random() * 360F);
     public final double rotationFactor = random.triangle(0F, 2F);
-    public final List<TrailPoint> trailPoints = new ArrayList<>();
+    public final WrappedTrailData trailData;
     private final AccessorAbstractArrow accessorAbstractArrow = (AccessorAbstractArrow) this;
     public int clientSideReturnTridentTickCount;
     public boolean shouldBack = false;
@@ -70,6 +75,7 @@ public class GungnirSpearEntity extends AbstractArrow {
 
     public GungnirSpearEntity(EntityType<? extends GungnirSpearEntity> p_37561_, Level p_37562_) {
         super(p_37561_, p_37562_);
+        this.trailData = new WrappedTrailData(this);
     }
 
     public GungnirSpearEntity(Level p_37569_, LivingEntity p_37570_, ItemStack p_37571_) {
@@ -78,6 +84,7 @@ public class GungnirSpearEntity extends AbstractArrow {
         this.entityData.set(ID_LOYALTY, (byte) 5);
         this.entityData.set(ID_FOIL, p_37571_.hasFoil());
         this.setBaseDamage(0F);
+        this.trailData = new WrappedTrailData(this);
     }
 
     public static boolean shouldHurt(Player owner, Entity iterator) {
@@ -124,6 +131,10 @@ public class GungnirSpearEntity extends AbstractArrow {
     }
 
     public void tick() {
+        if (!level().isClientSide) {
+            if (!this.getWrappedTrailData().shouldRenderTrail())
+                this.getWrappedTrailData().setShouldRenderTrail(true);
+        }
         if (this.inGroundTime > 4) {
             this.dealtDamage = true;
         }
@@ -527,5 +538,20 @@ public class GungnirSpearEntity extends AbstractArrow {
     public void setShouldBack(boolean p_36791_) {
         this.shouldBack = p_36791_;
         accessorAbstractArrow.callSetFlag(FLAG_SHOULD_BACK, p_36791_);
+    }
+
+    @Override
+    public WrappedTrailData getWrappedTrailData() {
+        return this.trailData;
+    }
+
+    @Override
+    public boolean shouldRenderWrappedTrail() {
+        return ClientConfig.enableTrailRenderer && this.getTrailLifeTime() > 35;
+    }
+
+    @Override
+    public TrailRenderTask createTrailRenderTask(WrappedTrailData data) {
+        return new SpearTrailTask(this);
     }
 }

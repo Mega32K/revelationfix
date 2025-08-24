@@ -3,6 +3,7 @@ package com.mega.revelationfix.common.event.handler;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.mega.endinglib.mixin.accessor.AccessorLevelRenderer;
 import com.mega.revelationfix.Revelationfix;
+import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.client.spell.SpellClientContext;
 import com.mega.revelationfix.common.apollyon.common.PlayerTickrateExecutor;
@@ -370,7 +371,7 @@ public class ClientEventHandler {
         if (ClientConfig.enableTrailRenderer && normalStarTrailsBuilder != null) {
             if (event.phase == TickEvent.Phase.START) {
                 if (!normalStarTrailsBuilder.toRender.isEmpty())
-                    normalStarTrailsBuilder.toRender.forEach(VFRBuilders.WorldVFRTrailBuilder.TrailRenderTask::tick);
+                    normalStarTrailsBuilder.toRender.forEach(TrailRenderTask::tick);
             }
         }
     }

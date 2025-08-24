@@ -101,11 +101,7 @@ public class BowOfRevelationItem extends BowItem implements ISoulRepair {
                         for (int i2 = 0; i2 < repeatTimes; i2++) {
                             ArrowItem arrowitem = (ArrowItem) (itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
                             AbstractArrow deathArrow = new DeathArrow(level, player);
-                            if (player.isShiftKeyDown()) {
-                                ((DeathArrowEC) deathArrow).revelationfix$getTrailData().setShouldRenderTrail(true);
-                                deathArrow.addTag(BypassInvulArrow.TAG_BYPASS_NAME);
-                            }
-                            deathArrow.addTag(FORCE_ADD_EFFECT);
+
                             ((DeathArrow) (deathArrow)).setEffectsFromItem(itemStack);
                             deathArrow = customArrow(deathArrow);
                             deathArrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.2F * ((isOdamane || isAscension) ? 2.0F : 1.0F), i2 == 0 ? 1.0F : 5.0F);
@@ -156,6 +152,11 @@ public class BowOfRevelationItem extends BowItem implements ISoulRepair {
                             });
                             deathArrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                             level.addFreshEntity(deathArrow);
+                            if (player.isShiftKeyDown()) {
+                                ((DeathArrowEC) deathArrow).getWrappedTrailData().setShouldRenderTrail(true);
+                                deathArrow.addTag(BypassInvulArrow.TAG_BYPASS_NAME);
+                            }
+                            deathArrow.addTag(FORCE_ADD_EFFECT);
                         }
                     }
                     level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.APOSTLE_SHOOT.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);

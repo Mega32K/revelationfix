@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.client.renderer.trail.TrailRenderPoint;
+import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.util.MUtils;
 import com.mega.revelationfix.util.other.VecHelper;
@@ -480,11 +481,5 @@ public class VFRBuilders {
             toRender.clear();
         }
 
-        public interface TrailRenderTask {
-            void task(PoseStack matrix, WorldVFRTrailBuilder vfrTrailBuilder);
-
-            default void tick() {
-            }
-        }
     }
 }

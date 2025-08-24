@@ -47,38 +47,7 @@ public class GungnirSpearRenderer extends EntityRenderer<GungnirSpearEntity> {
             if (spearEntity.getOwner() instanceof LivingEntity living) {
                 if (itemStack == null)
                     itemStack = new ItemStack(GRItems.GUNGNIR.get());
-                Minecraft mc = Minecraft.getInstance();
-                int trialLife = spearEntity.getTrailLifeTime();
-                MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
-                Camera camera = gameRenderer.getMainCamera();
-                if (ClientConfig.enableTrailRenderer && trialLife > 35) {
-                    List<TrailPoint> trailPoints = spearEntity.trailPoints;
-                    double x = Mth.lerp(partialTicks, spearEntity.xOld, spearEntity.getX());
-                    double y = Mth.lerp(partialTicks, spearEntity.yOld, spearEntity.getY());
-                    double z = Mth.lerp(partialTicks, spearEntity.zOld, spearEntity.getZ());
-                    if (trailPoints.size() > 0) {
-                        label0:
-                        {
-                            if (mc.player != null && SafeClass.isClientTimeStop() || mc.isPaused()) break label0;
-                            synchronized (trailPoints) {
-                                trailPoints.set(0, new TrailPoint(new Vec3(x, y, z), 0));
-                                for (int i = trailPoints.size() - 1; i >= 1; i--) {
-                                    TrailPoint point = trailPoints.get(i);
-                                    if (point.getPosition().distanceToSqr(trailPoints.get(i - 1).getPosition()) < 4)
-                                        trailPoints.set(i, point.lerp(trailPoints.get(i - 1), partialTicks));
-                                    else trailPoints.set(i, new TrailPoint(trailPoints.get(i - 1).getPosition()));
-                                }
-                            }
-                        }
-                    } else {
-                        for (int i = 0; i < StarArrow.maxTrails; i++) {
-                            trailPoints.add(new TrailPoint(spearEntity.position(), 0));
-                        }
-                    }
-                    VFRBuilders.WorldVFRTrailBuilder trailBuilder = ClientEventHandler.normalStarTrailsBuilder;
-                    if (trailBuilder != null)
-                        trailBuilder.addTrailListRenderTask(new GungnirSpearRenderer.SpearTrailTask(spearEntity));
-                }
+                spearEntity.updateWrappedTrail(spearEntity, nothing, partialTicks, poseStack, bufferSource, packedLight);
                 poseStack.pushPose();
                 packedLight = 0xFF00F0;
                 poseStack.scale(2F, 2F, 2.3F);
@@ -105,34 +74,4 @@ public class GungnirSpearRenderer extends EntityRenderer<GungnirSpearEntity> {
         return new ResourceLocation("");
     }
 
-    record SpearTrailTask(GungnirSpearEntity gungnirSpear) implements VFRBuilders.WorldVFRTrailBuilder.TrailRenderTask {
-        @Override
-        public void task(PoseStack matrix, VFRBuilders.WorldVFRTrailBuilder vfrTrailBuilder) {
-            Minecraft minecraft = Minecraft.getInstance();
-            if (SafeClass.usingShaderPack()) return;
-            if (!gungnirSpear.trailPoints.isEmpty()) {
-                vfrTrailBuilder.r = gungnirSpear.color.x;
-                vfrTrailBuilder.g = gungnirSpear.color.y;
-                vfrTrailBuilder.b = gungnirSpear.color.z;
-                vfrTrailBuilder.a = 0.44F;
-                vfrTrailBuilder.renderTrail(matrix, gungnirSpear.trailPoints, f -> (1.0F - f) * 0.7F * (Math.abs(Mth.cos((minecraft.level.getTimeOfDay(minecraft.getPartialTick()) + f * 12F) * ((float) Math.PI * 2F))) / 3F + 0.5F));
-            }
-        }
-
-        @Override
-        public void tick() {
-            if (Minecraft.getInstance().isPaused()) return;
-
-            if (gungnirSpear.getTrailLifeTime() <= 0) {
-                synchronized (gungnirSpear.trailPoints) {
-                    gungnirSpear.trailPoints.clear();
-                }
-            }
-            if (gungnirSpear.isInvisibleSpear()) {
-                gungnirSpear.zOld = gungnirSpear.getZ();
-                gungnirSpear.yOld = gungnirSpear.getY();
-                gungnirSpear.xOld = gungnirSpear.getX();
-            }
-        }
-    }
 }

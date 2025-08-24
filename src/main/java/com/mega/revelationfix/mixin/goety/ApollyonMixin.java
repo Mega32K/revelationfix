@@ -713,8 +713,14 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
 
     @Inject(method = "aiStep", at = @At("HEAD"))
     private void aiStep(CallbackInfo ci) {
+        Level level = this.level();
+        if (!level.isClientSide) {
+            if (this.getTarget() instanceof Player player)
+                if (player.isCreative() || player.isSpectator())
+                    this.setTarget(null);
+        }
         if (revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
-            Level level = this.level();
+
             //禁止亚波伦杀完玩家后消失
             this.killedPlayer = false;
             this.lastKilledPlayer = 200;
@@ -831,7 +837,7 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
             if (this.isInNether()) {
                 AbstractArrow abstractArrow = cir.getReturnValue();
                 if (abstractArrow instanceof DeathArrow deathArrow && this.isSecondPhase())
-                    ((DeathArrowEC) deathArrow).revelationfix$getTrailData().setShouldRenderTrail(true);
+                    ((DeathArrowEC) deathArrow).getWrappedTrailData().setShouldRenderTrail(true);
                 if (this.isDoomNow())
                     abstractArrow.addTag(BypassInvulArrow.TAG_NAME);
                 if (this.isSecondPhase())

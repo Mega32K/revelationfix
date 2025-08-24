@@ -88,6 +88,16 @@ public class EerieAxeItem extends AxeItem {
             TreeKillerServerTask task = new TreeKillerServerTask(args);
             task.addToManager();
         }
-        return super.mineBlock(itemStack, level, blockState, blockPos, livingEntity);
+        if (!level.isClientSide && !blockState.is(BlockTags.LEAVES) && blockState.getDestroySpeed(level, blockPos) != 0.0F) {
+            itemStack.hurtAndBreak(1, livingEntity, (p_40992_) -> p_40992_.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+        }
+        return true;
+    }
+
+    @Override
+    public float getDestroySpeed(@NotNull ItemStack itemStack, @NotNull BlockState blockState) {
+        if (blockState.is(BlockTags.LEAVES))
+            return this.speed;
+        return super.getDestroySpeed(itemStack, blockState);
     }
 }

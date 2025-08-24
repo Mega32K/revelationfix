@@ -6,6 +6,7 @@ import com.mega.endinglib.util.java.Args;
 import com.mega.revelationfix.mixin.ServerPlayerGameModeAccessor;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
@@ -20,11 +21,33 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Queue;
 
 public class TreeKillerServerTask extends ServerTaskInstance {
+    public static final Vec3i[] LOGS_FOUND_DELTA = new Vec3i[] {
+            new Vec3i(1, 0, 1),
+            new Vec3i(1, 0, 0),
+            new Vec3i(1, 0, -1),
+            new Vec3i(0, 0, 1),
+            new Vec3i(0, 0, -1),
+            new Vec3i(-1, 0, 1),
+            new Vec3i(-1, 0, 0),
+            new Vec3i(-1, 0, -1),
+
+
+            new Vec3i(1, 1, 1),
+            new Vec3i(1, 1, 0),
+            new Vec3i(1, 1, -1),
+            new Vec3i(0, 1, 1),
+            new Vec3i(0, 1, 0),
+            new Vec3i(0, 1, -1),
+            new Vec3i(-1, 1, 1),
+            new Vec3i(-1, 1, 0),
+            new Vec3i(-1, 1, -1),
+    };
     final int maxPhase = 32;
     public Queue<BlockPos> nextTickToBreak = Queues.newArrayDeque();
     int phase = 0;
@@ -43,26 +66,28 @@ public class TreeKillerServerTask extends ServerTaskInstance {
         BlockPos origin = this.getOriginBlockPos();
         if (eerieAxe.isEmpty())
             eerieAxe = player.getMainHandItem();
-        if (player instanceof ServerPlayer serverPlayer && origin != null && player.isAlive() && player.level() instanceof ServerLevel level) {
-            if (phase == 1) {
-                nextTickToBreak.addAll(findLogs(origin, level));
-            }
-            if (!nextTickToBreak.isEmpty()) {
-                List<BlockPos> toAddList = new ObjectArrayList<>();
-                BlockPos pos;
-                while ((pos = nextTickToBreak.poll()) != null) {
-                    if (mineLog(level, level.getBlockState(pos), pos, serverPlayer, eerieAxe)) {
-                        brokeCount++;
-                        toAddList.add(pos);
+        if (phase % 2 == 0) {
+            if (player instanceof ServerPlayer serverPlayer && origin != null && player.isAlive() && player.level() instanceof ServerLevel level) {
+                if (phase == 2) {
+                    nextTickToBreak.addAll(findLogs(origin, level));
+                }
+                if (!nextTickToBreak.isEmpty()) {
+                    List<BlockPos> toAddList = new ObjectArrayList<>();
+                    BlockPos pos;
+                    while ((pos = nextTickToBreak.poll()) != null) {
+                        if (mineLog(level, level.getBlockState(pos), pos, serverPlayer, eerieAxe)) {
+                            brokeCount++;
+                            toAddList.add(pos);
+                        }
+                    }
+                    if (!toAddList.isEmpty()) {
+                        for (BlockPos nextToAdd : toAddList) {
+                            nextTickToBreak.addAll(findLogs(nextToAdd, level));
+                        }
                     }
                 }
-                if (!toAddList.isEmpty()) {
-                    for (BlockPos nextToAdd : toAddList) {
-                        nextTickToBreak.addAll(findLogs(nextToAdd, level));
-                    }
-                }
-            }
-        } else this.setRemoved(true);
+            } else this.setRemoved(true);
+        }
         if (phase >= maxPhase)
             this.setRemoved(true);
     }
@@ -77,15 +102,11 @@ public class TreeKillerServerTask extends ServerTaskInstance {
 
     public List<BlockPos> findLogs(BlockPos origin, Level level) {
         List<BlockPos> blockPos = new ObjectArrayList<>(18);
-        for (int deltaY = 0; deltaY <= 1; deltaY++) {
-            for (int deltaX = -1; deltaX <= 1; deltaX++) {
-                for (int deltaZ = -1; deltaZ <= 1; deltaZ++) {
-                    BlockPos blockPos1 = origin.offset(deltaX, deltaY, deltaZ);
-                    BlockState state = level.getBlockState(blockPos1);
-                    if (state.is(BlockTags.LOGS))
-                        blockPos.add(blockPos1);
-                }
-            }
+        for (Vec3i delta : LOGS_FOUND_DELTA) {
+            BlockPos blockPos1 = origin.offset(delta);
+            BlockState state = level.getBlockState(blockPos1);
+            if (state.is(BlockTags.LOGS))
+                blockPos.add(blockPos1);
         }
         return blockPos;
     }
