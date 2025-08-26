@@ -7,16 +7,24 @@ import com.Polarice3.Goety.common.entities.projectiles.SpiderWeb;
 import com.Polarice3.Goety.utils.MathHelper;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
+import com.mega.endinglib.api.item.IModeToggleItem;
 import com.mega.endinglib.api.item.armor.OptionArmorMaterial;
 import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
+import com.mega.revelationfix.proxy.CommonProxy;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -27,6 +35,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -42,7 +51,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDiscount {
+public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDiscount, IModeToggleItem {
     public SpiderArmor(ArmorItem.Type p_40387_) {
         super(ModArmorMaterials.SPIDER, p_40387_, new Properties().rarity(RevelationRarity.SPIDER));
     }
@@ -143,6 +152,10 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.spider_set.desc0"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.spider_set.desc1"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.spider_set.desc2"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
+        if (!(this instanceof SpiderDarkmageArmor)) {
+            components.add(CuriosMutableComponent.EMPTY);
+            components.add(CuriosMutableComponent.create().appendFormat("%s", (s) -> new Object[]{I18n.get("tooltip.goety_revelation.armor.ability_skill_toggle", KeyMapping.createNameSupplier("key.revelationfix.armor_skill").get().getString().toUpperCase())}));
+        }
     }
 
     @Override
@@ -164,5 +177,13 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
         UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);
         if (this.type == Type.BOOTS)
             builder.addModifier(ForgeMod.STEP_HEIGHT_ADDITION.get(), new AttributeModifier(uuid, "Armor Modifier", .5D, AttributeModifier.Operation.ADDITION));
+    }
+
+    @Override
+    public void toggleMode(ServerPlayer serverPlayer, Item item) {
+        serverPlayer.getCapability(CommonProxy.getPlayerCap()).ifPresent(cap -> {
+            cap.setArmorClimbing(!cap.isArmorClimbingMode());
+            serverPlayer.sendSystemMessage(Component.translatable("message.goety_revelation.armor.climbing_mode", cap.isArmorClimbingMode() ? LoreHelper.TRUE().getString() : LoreHelper.FALSE().getString()), true);
+        });
     }
 }

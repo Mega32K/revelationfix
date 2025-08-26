@@ -26,6 +26,7 @@ public class GoetyRevelationPlayerCapability extends EntitySyncCapabilityBase {
     public CapabilityEntityData<Integer> PURPLE_INVUL_TIME = this.dataManager.define(2, "PurpleInvulnerableTime", 0, CapabilityDataSerializers.INT);
     public CapabilityEntityData<Integer> HALO_REVIVE_COOLDOWN = this.dataManager.define(3, "HaloRvvCooldown", 0, CapabilityDataSerializers.INT);
     public CapabilityEntityData<Integer> HALO_REVIVE_METEOR_TIME = this.dataManager.define(4, "RvvMeteorTime", 0, CapabilityDataSerializers.INT);
+    public CapabilityEntityData<Boolean> ARMOR_CLIMBING_MODE = this.dataManager.define(5, "ArmorClimbing", true, CapabilityDataSerializers.BOOLEAN);
 
     @Override
     public ResourceLocation getRegistryName() {
@@ -98,5 +99,11 @@ public class GoetyRevelationPlayerCapability extends EntitySyncCapabilityBase {
     }
     public void setMeteorTime(int tick) {
         this.dataManager.setValue(HALO_REVIVE_METEOR_TIME, tick);
+    }
+    public void setArmorClimbing(boolean flag) {
+        this.dataManager.setValue(ARMOR_CLIMBING_MODE, flag);
+    }
+    public boolean isArmorClimbingMode() {
+        return this.dataManager.getValue(ARMOR_CLIMBING_MODE);
     }
 }

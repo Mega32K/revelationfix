@@ -24,7 +24,7 @@ public class EternalWatchItem extends SimpleDescriptiveCurio implements IJEIInvi
                 CuriosMutableComponent.create().appendFormat("%s", s -> new Object[]{I18n.get("item.goety_revelation.eternal_watch.lore0")}),
                 CuriosMutableComponent.create().appendFormat("%s", s -> new Object[]{I18n.get("item.goety_revelation.eternal_watch.lore1")})
         ).withTail(
-                CuriosMutableComponent.create().appendFormat("%s", (s) -> new Object[]{I18n.get("tooltip.goety_revelation.currentKeybind", KeyMapping.createNameSupplier("key.revelationfix.curios_skill").get().getString().toUpperCase())}),
+                CuriosMutableComponent.create().appendFormat("%s", (s) -> new Object[]{I18n.get("tooltip.goety.armor.ability_skill_toggle", KeyMapping.createNameSupplier("key.revelationfix.armor_skill").get().getString().toUpperCase())}),
                 CuriosMutableComponent.EMPTY,
                 CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc0").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)),
                 CuriosMutableComponent.create().appendComponent(Component.translatable("item.goety_revelation.eternal_watch.desc1").withStyle(TextColorUtils.MIDDLE, ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)),

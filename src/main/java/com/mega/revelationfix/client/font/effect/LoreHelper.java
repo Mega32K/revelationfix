@@ -25,7 +25,12 @@ public class LoreHelper {
     public static String codeMode(ChatFormatting formatting) {
         return codeMap.getOrDefault(formatting, String.valueOf(ChatFormatting.PREFIX_CODE) + formatting.getChar());
     }
-
+    public static Component TRUE() {
+        return Component.translatable("message.goety_revelation.true");
+    }
+    public static Component FALSE() {
+        return Component.translatable("message.goety_revelation.false");
+    }
     public static Component getStaffLevelDesc(ILevelWand staff, ItemStack stack) {
         int index = Mth.clamp(staff.getStaffLevel(), 0, staffLevelNameID.length - 1);
         return Component.translatable("tooltip.goety_revelation.wand_level." + staffLevelNameID[index]).withStyle(staffLevelColors.length == staffLevelNameID.length ? staffLevelColors[index] : ChatFormatting.GRAY);

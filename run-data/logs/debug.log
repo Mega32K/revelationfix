@@ -2063,7 +2063,7 @@ java.lang.IllegalAccessException: class io.netty.util.internal.PlatformDependent
 [197月2025 10:44:31.265] [modloading-worker-0/INFO] [mixin/]: Renaming synthetic method lambda$onGatherTooltipComponents$0(Ljava/util/List;Lnet/minecraft/world/inventory/tooltip/TooltipComponent;)V to md4a357c$lambda$onGatherTooltipComponents$0$4 in enigmaticlegacy.mixins.json:MixinForgeHooksClient
 [197月2025 10:44:31.275] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.config.ConfigTracker/CONFIG]: Config file revelationfix/revelationfix-block.toml for revelationfix tracking
 [197月2025 10:44:31.275] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Attempting to inject @EventBusSubscriber classes into the eventbus for revelationfix
-[197月2025 10:44:31.276] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.mega.revelationfix.client.key.CuriosSkillKeyMapping to FORGE
+[197月2025 10:44:31.276] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing com.mega.revelationfix.client.key.ModKeyMappings to FORGE
 [197月2025 10:44:31.278] [modloading-worker-0/DEBUG] [net.minecraftforge.fml.javafmlmod.AutomaticEventSubscriber/LOADING]: Auto-subscribing net.minecraftforge.client.ClientForgeMod to MOD
 [197月2025 10:44:31.279] [modloading-worker-0/DEBUG] [mixin/]: Mixing goety.DarkWandMixin from revelationfix.mixins.json into com.Polarice3.Goety.common.items.magic.DarkWand
 [197月2025 10:44:31.282] [modloading-worker-0/DEBUG] [mixin/]: Mixing DarkWandMixin from mixins.goety_revelation.json into com.Polarice3.Goety.common.items.magic.DarkWand

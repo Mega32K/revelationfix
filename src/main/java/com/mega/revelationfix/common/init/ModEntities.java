@@ -8,6 +8,7 @@ import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.binding.RevelationCageEntity;
 import com.mega.revelationfix.common.entity.binding.TeleportEntity;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
+import com.mega.revelationfix.common.entity.boss.IceHermitEntity;
 import com.mega.revelationfix.common.entity.cultists.HereticServant;
 import com.mega.revelationfix.common.entity.cultists.MaverickServant;
 import com.mega.revelationfix.common.entity.misc.QuietusVirtualEntity;
@@ -97,7 +98,11 @@ public class ModEntities {
             .clientTrackingRange(6)
             .updateInterval(2)
     );
-
+    public static final RegistryObject<EntityType<IceHermitEntity>> ICE_HERMIT = register("ice_hermit",
+            EntityType.Builder.of(IceHermitEntity::new, MobCategory.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8));
     private static <T extends Entity> RegistryObject<EntityType<T>> register(String p_20635_, EntityType.Builder<T> p_20636_) {
         return ModEntities.ENTITIES.register(p_20635_, () -> p_20636_.build(new ResourceLocation(Revelationfix.MODID, p_20635_).toString()));
     }

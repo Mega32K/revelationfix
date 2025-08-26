@@ -219,8 +219,8 @@ dependencies {
     implementation fg.deobf("curse.maven:Architectury-419699:5137938")
     implementation fg.deobf("curse.maven:FTBLib-404465:6164053")
 
-    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.4-all"))  {
-        jarJar.ranged(it, "[1.4-all,)")
+    implementation fg.deobf(jarJar("blank:EndingLibrary-1.20.1:1.4.1-all"))  {
+        jarJar.ranged(it, "[1.4.1-all,)")
     }
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("maven.modrinth:tetraclip:1.0.5")

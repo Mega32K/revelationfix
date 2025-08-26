@@ -10,6 +10,7 @@ import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
+import com.mega.revelationfix.common.entity.boss.IceHermitEntity;
 import com.mega.revelationfix.common.init.ModEntities;
 import com.mega.revelationfix.common.init.ModPotions;
 import com.mega.revelationfix.common.network.PacketHandler;
@@ -19,6 +20,7 @@ import com.mega.revelationfix.util.entity.CapabilityGetter;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -78,6 +80,7 @@ public class CommonProxy implements ModProxy {
         event.put(ModEntities.MAVERICK_SERVANT.get(), Maverick.setCustomAttributes().build());
         event.put(ModEntities.APOSTLE_SERVANT.get(), ApostleServant.setCustomAttributes().build());
         event.put(ModEntities.FAKE_SPELLER.get(), FakeSpellerEntity.createAttributes().build());
+        event.put(ModEntities.ICE_HERMIT.get(), IceHermitEntity.createAttributes().build());
     }
 
     private void enqueueIMC(InterModEnqueueEvent event) {

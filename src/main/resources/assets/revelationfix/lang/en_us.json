@@ -23,6 +23,7 @@
   "entity.revelationfix.block_shaking_entity": "Rendering Block",
   "entity.revelationfix.the_end_hellfire":"The-End Fire",
   "entity.revelationfix.star_arrow":"Star Arrow",
+  "entity.revelationfix.ice_hermit":"Mystic Recluse",
 
   "effect.revelationfix.quietus" : "Quietus",
   "effect.revelationfix.counterspell" : "Counterspell",
@@ -159,7 +160,8 @@
   "curios.goety_revelation.modifiers.slots" : "Slots",
 
   "key.revelationfix.category" : "§qGoety Revelation",
-  "key.revelationfix.curios_skill" : "Activate curios skills",
+  "key.revelationfix.curios_skill" : "Activate curio skills",
+  "key.revelationfix.armor_skill" : "Switching Armor Ability",
 
   "tetra.material.gr_jade.prefix" : "Jade",
   "tetra.material.gr_savage_tooth.prefix" : "Savage Tooth",

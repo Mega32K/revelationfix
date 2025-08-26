@@ -23,6 +23,7 @@
   "entity.revelationfix.block_shaking_entity": "技术渲染方块",
   "entity.revelationfix.the_end_hellfire":"终末之焰",
   "entity.revelationfix.star_arrow":"星辰之矢",
+  "entity.revelationfix.ice_hermit":"寒冰隐士",
 
   "effect.revelationfix.quietus" : "寂灭",
   "effect.revelationfix.counterspell" : "法术反制",
@@ -160,6 +161,7 @@
 
   "key.revelationfix.category" : "§q诡厄巫法 启示录",
   "key.revelationfix.curios_skill" : "发动饰品技能",
+  "key.revelationfix.armor_skill" : "切换盔甲能力",
 
   "tetra.material.gr_jade.prefix" : "玉",
   "tetra.material.gr_savage_tooth.prefix" : "野蛮之牙",

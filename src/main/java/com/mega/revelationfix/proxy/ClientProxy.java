@@ -10,14 +10,14 @@ import com.mega.revelationfix.client.CuriosRenderer;
 import com.mega.revelationfix.client.PlayerRendererContext;
 import com.mega.revelationfix.client.citadel.GRShaders;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
-import com.mega.revelationfix.client.key.CuriosSkillKeyMapping;
+import com.mega.revelationfix.client.key.ModKeyMappings;
 import com.mega.revelationfix.client.model.curio.ApollyonRobeModel;
-import com.mega.revelationfix.client.model.entity.SpectreDarkmageHatModel;
-import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
-import com.mega.revelationfix.client.model.entity.SpiderDarkmageArmorModel;
-import com.mega.revelationfix.client.model.entity.TeleportEntityModel;
+import com.mega.revelationfix.client.model.entity.*;
 import com.mega.revelationfix.client.particle.FrostFlowerParticle;
 import com.mega.revelationfix.client.renderer.entity.*;
+import com.mega.revelationfix.client.renderer.entity.mob.HereticServantRenderer;
+import com.mega.revelationfix.client.renderer.entity.mob.IceHermitEntityRenderer;
+import com.mega.revelationfix.client.renderer.entity.mob.MaverickServantRenderer;
 import com.mega.revelationfix.client.screen.post.PostProcessingShaders;
 import com.mega.revelationfix.common.block.RuneReactorBlock;
 import com.mega.revelationfix.common.block.blockentity.renderer.RuneReactorBERenderer;
@@ -298,6 +298,7 @@ public class ClientProxy implements ModProxy {
         event.registerLayerDefinition(SpiderDarkmageArmorModel.OUTER, SpiderDarkmageArmorModel::creteOuter);
         event.registerLayerDefinition(SpectreDarkmageHatModel.LAYER_LOCATION, SpectreDarkmageHatModel::createHatLayer);
         event.registerLayerDefinition(ApollyonRobeModel.LAYER_LOCATION, ApollyonRobeModel::createBodyLayer);
+        event.registerLayerDefinition(IceHermitModel.LAYER_LOCATION, IceHermitModel::createBodyLayer);
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {
@@ -317,6 +318,7 @@ public class ClientProxy implements ModProxy {
             EntityRenderers.register(ModEntities.GUNGNIR.get(), GungnirSpearRenderer::new);
             EntityRenderers.register(ModEntities.FAKE_SPELLER.get(), FakeSpellerRenderer::new);
             EntityRenderers.register(ModEntities.TELEPORT_ENTITY.get(), TeleportEntityRenderer::new);
+            EntityRenderers.register(ModEntities.ICE_HERMIT.get(), IceHermitEntityRenderer::new);
             //if (!SafeClass.isYSMLoaded())
             CuriosRendererRegistry.register(GRItems.HALO_OF_THE_END, OdamaneHaloLayer::new);
             BlockEntityRenderers.register(ModBlocks.RUNE_REACTOR_ENTITY.get(), RuneReactorBERenderer::new);
@@ -344,7 +346,7 @@ public class ClientProxy implements ModProxy {
     }
 
     public void registerKeys(RegisterKeyMappingsEvent evt) {
-        evt.register(CuriosSkillKeyMapping.ACTIVE_SKILL);
+        evt.register(ModKeyMappings.ACTIVE_CURIO_SKILL);
     }
 
     public void onParticleFactoryRegistration(RegisterParticleProvidersEvent event) {

@@ -3,6 +3,7 @@ package com.mega.revelationfix.mixin;
 import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
+import com.mega.revelationfix.proxy.CommonProxy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -21,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(value = ForgeHooks.class, priority = 888)
 public class ForgeHooksMixin {
@@ -34,10 +36,10 @@ public class ForgeHooksMixin {
     @Inject(remap = false, method = "isLivingOnLadder", at = @At("HEAD"), cancellable = true)
     private static void isLivingOnLadder(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull LivingEntity entity, CallbackInfoReturnable<Optional<BlockPos>> cir) {
         if (entity.horizontalCollision)
-
             if (ArmorEvents.isSpiderSet(ArmorUtils.getArmorSet(entity))) {
                 boolean isSpectator = (entity instanceof Player && entity.isSpectator());
-                if (isSpectator) cir.setReturnValue(Optional.empty());
+                if (entity instanceof Player player && !CommonProxy.getPlayerCapInstance(player).isArmorClimbingMode()) return;
+                if (isSpectator) return;
                 if (!ForgeConfig.SERVER.fullBoundingBoxLadders.get()) {
                     cir.setReturnValue(Optional.of(pos));
                 } else {

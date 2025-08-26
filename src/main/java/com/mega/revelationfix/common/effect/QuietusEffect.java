@@ -71,7 +71,7 @@ public class QuietusEffect extends MobEffect {
     public static void onDeath(LivingDeathEvent event) {
         if (event.getEntity().hasEffect(ModEffects.QUIETUS.get())) {
             LivingEntity living = event.getEntity();
-            if (!living.level().isClientSide) {
+            if (!living.level().isClientSide && living.isDeadOrDying()) {
                 EntityExpandedContext expandedContext = ((LivingEntityEC) living).revelationfix$livingECData();
                 Level level = living.level();
                 WitherSkeletonServant servant = new WitherSkeletonServant(ModEntityType.WITHER_SKELETON_SERVANT.get(), level);

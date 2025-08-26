@@ -1,7 +1,10 @@
 package com.mega.revelationfix.common.init;
 
 import com.Polarice3.Goety.common.effects.GoetyEffects;
+import com.Polarice3.Goety.common.items.ModSpawnEggItem;
+import com.Polarice3.Goety.common.items.ModSpawnEggs;
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
+import com.Polarice3.Goety.init.ModCreativeTab;
 import com.mega.endinglib.api.item.NameCenteredItem;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
@@ -194,6 +197,7 @@ public class GRItems {
     public static RegistryObject<BlockItem> BI_RUNESTONE_ENGRAVED_TABLE;
     @Self
     public static RegistryObject<Item> EDEN_SCROLL;
+    public static RegistryObject<ModSpawnEggItem> ICE_HERMIT_SPAWN_EGG;
 
     public static void init(DeferredRegister<Item> ITEMS) {
         ODAMANE_HALO = ITEMS.register("halo_of_the_end", OdamaneHalo::new);
@@ -264,6 +268,8 @@ public class GRItems {
         AMULET_OF_SLIME = ITEMS.register("amulet_of_slime", AmuletOfSlimeItem::new);
         GOLD_FEATHER = ITEMS.register("gold_feather", GoldFeatherItem::new);
         EERIE_AXE = ITEMS.register("eerie_axe", EerieAxeItem::new);
+        ICE_HERMIT_SPAWN_EGG = ITEMS.register("ice_hermit_spawn_egg",
+                () -> new ModSpawnEggItem(ModEntities.ICE_HERMIT, 0xd1f2ff, 0x68b0f3, ModSpawnEggs.egg()));
         if (SafeClass.isEnigmaticLegacyLoaded())
             EnigmaticLegacyItemInit.init();
 
