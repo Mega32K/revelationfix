@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.compat.tetra.effect;
 
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.tetra.TetraVersionCompat;

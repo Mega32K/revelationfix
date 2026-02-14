@@ -5,11 +5,18 @@ import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.client.events.ClientEvents;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.mega.endinglib.mixin.accessor.AccessorClientLevel;
+import com.mega.endinglib.util.mixin.data_expand.ExtraPlayerRenderer;
 import com.mega.revelationfix.client.citadel.PostEffectRegistry;
+import com.mega.revelationfix.client.renderer.entity.WrappedPlayerRenderer;
+import com.mega.revelationfix.common.entity.ShadowPlayerEntity;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -76,7 +83,7 @@ public class Wrapped {
     public static void play(Apostle apostle) {
         ClientEvents.BOSS_MUSIC = null;
         SoundManager soundHandler = Minecraft.getInstance().getSoundManager();
-        soundHandler.queueTickingSound(new PostBossMusic(ModMain.APOLLYON_THEME_POST.get(), apostle));
+        soundHandler.queueTickingSound(new PostBossMusic(ModMain.APOLLYON_THEME_POST.get(), apostle, 1F, 1F));
     }
 
     public static Entity getEntityByUUID(UUID uuid) {
@@ -89,5 +96,20 @@ public class Wrapped {
     public static void onShaderModeChange() {
         PostEffectRegistry.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
 
+    }
+    public static void setShadowPlayerRenderer(ShadowPlayerEntity entity, Player player) {
+        if (player instanceof AbstractClientPlayer clientPlayer) {
+            Minecraft mc = Minecraft.getInstance();
+            EntityRenderer<? super Player> renderer = mc.getEntityRenderDispatcher().getRenderer(player);
+            if ((Object)(renderer) instanceof PlayerRenderer playerRenderer) {
+                entity.renderer = new WrappedPlayerRenderer(
+                        new EntityRendererProvider.Context(mc.getEntityRenderDispatcher(),mc.getItemRenderer(),mc.getBlockRenderer(),mc.gameRenderer.itemInHandRenderer, mc.getResourceManager(), mc.getEntityModels(), mc.font),
+                        ((ExtraPlayerRenderer) playerRenderer).endinglib$isSlim()
+                );
+            }
+            entity.sWalkSpeed = player.walkAnimation.speed(mc.getPartialTick());
+            entity.sWalkPosition = player.walkAnimation.position(mc.getPartialTick());
+            entity.sAttackAnim = player.getAttackAnim(mc.getPartialTick());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.mega.revelationfix.util;
 
+import com.Polarice3.Goety.api.items.IPersist;
 import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
@@ -9,6 +10,7 @@ import com.Polarice3.Goety.utils.WandUtil;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
 import com.mega.revelationfix.common.compat.Wrapped;
 import com.mega.revelationfix.common.config.CommonConfig;
+import com.mega.revelationfix.common.config.GoetyModificationCommonConfig;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.init.ModEffects;
@@ -255,5 +257,25 @@ public class EventUtil {
         }
         return amount;
     }
-
+    public static boolean wrapConfigPersist(boolean o) {
+        if (GoetyModificationCommonConfig.noPersist)
+            return false;
+        return o;
+    }
+    public static boolean wrapIsNotBroken(Object o, ItemStack itemStack, boolean original) {
+        if (o instanceof IPersist) {
+            if (GoetyModificationCommonConfig.noPersist)
+                return true;
+            else return original;
+        }
+        return original;
+    }
+    public static boolean wrapIsBroken(Object o, ItemStack itemStack, boolean original) {
+        if (o instanceof IPersist) {
+            if (GoetyModificationCommonConfig.noPersist)
+                return false;
+            else return original;
+        }
+        return original;
+    }
 }

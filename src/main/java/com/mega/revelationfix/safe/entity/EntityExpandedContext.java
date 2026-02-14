@@ -1,7 +1,7 @@
 package com.mega.revelationfix.safe.entity;
 
 import com.Polarice3.Goety.api.entities.IOwned;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import com.mega.revelationfix.util.LivingEntityEC;
@@ -13,13 +13,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.WalkAnimationState;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
@@ -48,8 +47,10 @@ public class EntityExpandedContext {
         this.entity = entity;
         this.className = entity.getClass().getName();
         if (!SafeClass.isFantasyEndingLoaded()) {
-            EntityActuallyHurt.checkAndSave(entity);
-            this.indexAndType = EntityActuallyHurt.entityHealthDatas.get(className);
+            //this.indexAndType = EntityActuallyHurt.checkAndSave(entity);
+            if (EntityActuallyHurt.entityHealthData.containsKey(this.className))
+                this.indexAndType = EntityActuallyHurt.checkAndSave(entity);
+            else CompletableFuture.runAsync(()-> this.indexAndType = EntityActuallyHurt.checkAndSave(entity));
         }
     }
 
@@ -107,20 +108,15 @@ public class EntityExpandedContext {
         if (SafeClass.isTetraLoaded()) {
             if (tetraFadingTime > 0) {
                 tetraFadingTime--;
-            }
-
-            if (tetraFadingTime == 0) {
-                try {
-                    LOCK.lock();
-                    Map<Attribute, UUID> attributeUUIDMap = Collections.synchronizedMap(SafeClass.getAttributes());
-                    for (Map.Entry<Attribute, UUID> s : attributeUUIDMap.entrySet()) {
-                        AttributeInstance instance = entity.getAttribute(s.getKey());
-                        if (instance != null) {
-                            instance.removeModifier(s.getValue());
+                if (tetraFadingTime == 0) {
+                    synchronized (entity.getAttributes()) {
+                        for (var entry : SafeClass.getAttributes().object2ObjectEntrySet()) {
+                            AttributeInstance instance = entity.getAttribute(entry.getKey());
+                            if (instance != null) {
+                                instance.removeModifier(entry.getValue());
+                            }
                         }
                     }
-                } finally {
-                    LOCK.unlock();
                 }
             }
         }

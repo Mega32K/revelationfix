@@ -4,6 +4,7 @@ import com.Polarice3.Goety.api.magic.SpellType;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.tetra.effect.*;
 import com.mega.revelationfix.common.init.ModAttributes;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -95,7 +96,7 @@ public class TetraWrapped {
         DoomEffect.doPostHurt(living, target);
     }
 
-    public static Map<Attribute, UUID> getAttributes() {
+    public static Object2ObjectOpenHashMap<Attribute, UUID> getAttributes() {
         return FadingEffect.getAttributes();
     }
 }

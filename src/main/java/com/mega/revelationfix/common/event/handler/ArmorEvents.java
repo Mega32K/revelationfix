@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.event.handler;
 
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.api.event.entity.LivingHurtByTargetGoalEvent;
 import com.mega.revelationfix.api.event.entity.StandOnFluidEvent;

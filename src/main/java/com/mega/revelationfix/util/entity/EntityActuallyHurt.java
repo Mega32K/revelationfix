@@ -7,6 +7,7 @@ import com.mega.revelationfix.mixin.SyncEntityDataAccessor;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
 import com.mega.revelationfix.util.ClassHandler;
 import com.mega.revelationfix.util.MCMapping;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -51,11 +52,11 @@ public class EntityActuallyHurt {
      * Integer indexOfDataItem
      */
     public static final Class<?> HEAD = LivingEntity.class;
-    public static final HashMap<String, IndexAndType> entityHealthDatas = new HashMap<>();
+    public static final Object2ObjectOpenHashMap<String, IndexAndType> entityHealthData = new Object2ObjectOpenHashMap<>();
     public static final IndexAndType NULL_DATA = new IndexAndType(-1, false);
     //Vanilla
     public static final Method getMaxHealth;
-    public static Predicate<Field> isHealthField;
+    public static final Predicate<Field> isHealthField;
 
     static {
         try {
@@ -84,112 +85,110 @@ public class EntityActuallyHurt {
         return str.toUpperCase().contains(searchStr.toUpperCase());
     }
 
-    public static void checkAndSave(LivingEntity living) {
-        try {
-            checkAndSave0(living);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+    public static IndexAndType checkAndSave(LivingEntity living) {
+        return checkAndSave0(living);
     }
 
-    private static void checkAndSave0(LivingEntity living) {
+    private static IndexAndType checkAndSave0(LivingEntity living) {
         SynchedEntityData eD = living.getEntityData();
         SyncEntityDataAccessor accessor = (SyncEntityDataAccessor) eD;
         Class<? extends LivingEntity> klass = living.getClass();
-        synchronized (entityHealthDatas) {
-            if (!entityHealthDatas.containsKey(klass.getName()))
-                if (living instanceof Player || klass.getName().startsWith("net.minecraft.")) {
-                    entityHealthDatas.put(klass.getName(), new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
-                }
-            if (!entityHealthDatas.containsKey(klass.getName()))
-                accessor.itemsById().forEach((integer, dataItem) -> {
-                    synchronized (living) {
-                        List<ClassHandler.FieldVarHandle> fields;
-                        try {
-                            fields = ClassHandler.bigFilter_allSuper(living.getClass(), HEAD, isHealthField, false, false);
-                        } catch (Throwable e) {
-                            throw new RuntimeException(e);
-                        }
-                        VarHandle handle = fields.size() > 1 ? fields.get(fields.size() - 1).varHandle() : fields.size() == 1 ? fields.get(0).varHandle() : null;
-                        if (handle != null) {
-                            //if (!hasVanillaGetHealth(klass.getDeclaredMethods()) && hasSelfGetHealth(klass.getDeclaredMethods()).size() > 0) {
-                            //    EntityASMUtil.cantUseASMGetHealthAndHasSelfMethodClasses.add(klass);
-                            //}
-                            EntityDataAccessor<?> data = (EntityDataAccessor<?>) handle.get();
-                            if (getItem((SyncEntityDataAccessor) living.getEntityData(), data).getValue() instanceof Float) {
-                                accessor.itemsById().forEach((index, dataItem0) -> {
-                                    if (dataItem0.getAccessor() == data) {
-                                        entityHealthDatas.put(klass.getName(), new IndexAndType(index, true));
-                                    }
-                                });
-                                return;
-                            } else if (getItem((SyncEntityDataAccessor) living.getEntityData(), data).getValue() instanceof Double) {
-                                accessor.itemsById().forEach((index, dataItem0) -> {
-                                    if (dataItem0.getAccessor() == data) {
-                                        entityHealthDatas.put(klass.getName(), new IndexAndType(index, false));
-                                    }
-                                });
-                                return;
-                            }
-
-                        } else {
+        synchronized (entityHealthData) {
+            String klassName = klass.getName();
+            if (!entityHealthData.containsKey(klassName)) {
+                if (living instanceof Player || klassName.startsWith("net.minecraft.")) {
+                    entityHealthData.put(klassName, new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
+                } else {
+                    accessor.itemsById().forEach((integer, dataItem) -> {
+                        synchronized (living) {
+                            List<ClassHandler.FieldVarHandle> fields;
                             try {
-                                if (dataItem.getValue() instanceof Float) {
-                                    float dataHealth = getValue(living, LivingEntity.DATA_HEALTH_ID);
-                                    if (Objects.equals(dataHealth, living.getHealth())) {
-                                        float health = dataHealth;
-                                        living.getEntityData().set(LivingEntity.DATA_HEALTH_ID, health - 0.1F);
-                                        dataHealth = getValue(living, LivingEntity.DATA_HEALTH_ID);
-                                        if (Objects.equals(dataHealth, living.getHealth())) {
-                                            entityHealthDatas.put(klass.getName(), new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
+                                fields = ClassHandler.bigFilter_allSuper(living.getClass(), HEAD, isHealthField, false, false);
+                            } catch (Throwable e) {
+                                throw new RuntimeException(e);
+                            }
+                            VarHandle handle = fields.size() > 1 ? fields.get(fields.size() - 1).varHandle() : fields.size() == 1 ? fields.get(0).varHandle() : null;
+                            if (handle != null) {
+                                //if (!hasVanillaGetHealth(klass.getDeclaredMethods()) && hasSelfGetHealth(klass.getDeclaredMethods()).size() > 0) {
+                                //    EntityASMUtil.cantUseASMGetHealthAndHasSelfMethodClasses.add(klass);
+                                //}
+                                EntityDataAccessor<?> data = (EntityDataAccessor<?>) handle.get();
+                                if (getItem((SyncEntityDataAccessor) living.getEntityData(), data).getValue() instanceof Float) {
+                                    accessor.itemsById().forEach((index, dataItem0) -> {
+                                        if (dataItem0.getAccessor() == data) {
+                                            entityHealthData.put(klassName, new IndexAndType(index, true));
                                         }
-                                    }
-                                    if (!entityHealthDatas.containsKey(klass.getName())) {
-                                        boolean flag1 = Objects.equals(living.getHealth(), (getItem(accessor, dataItem.getAccessor()).getValue()));
-                                        living.setHealth(living.getHealth() + .001F);
-                                        boolean flag2 = Objects.equals(living.getHealth(), dataItem.getValue());
-                                        living.setHealth(living.getHealth() - .001F);
-                                        if (flag1 && flag2) {
-                                            entityHealthDatas.put(klass.getName(), new IndexAndType(integer, dataItem.getValue() instanceof Float));
+                                    });
+                                    return;
+                                } else if (getItem((SyncEntityDataAccessor) living.getEntityData(), data).getValue() instanceof Double) {
+                                    accessor.itemsById().forEach((index, dataItem0) -> {
+                                        if (dataItem0.getAccessor() == data) {
+                                            entityHealthData.put(klassName, new IndexAndType(index, false));
                                         }
-                                    }
-                                } else if (dataItem.getValue() instanceof Double) {
-                                    boolean flag1 = Objects.equals((double) living.getHealth(), dataItem.getValue());
-                                    living.setHealth(living.getHealth() + .001F);
-                                    boolean flag2 = Objects.equals((double) living.getHealth(), dataItem.getValue());
-                                    living.setHealth(living.getHealth() - .001F);
-                                    if (flag1 && flag2) {
-                                        entityHealthDatas.put(klass.getName(), new IndexAndType(integer, dataItem.getValue() instanceof Float));
-                                    }
-                                }
-                            } catch (Throwable throwable) {
-                                if (!entityHealthDatas.containsKey(klass.getName())) {
-                                    entityHealthDatas.put(klass.getName(), new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
+                                    });
                                     return;
                                 }
+
+                            } else {
+                                try {
+                                    if (dataItem.getValue() instanceof Float) {
+                                        float dataHealth = getValue(living, LivingEntity.DATA_HEALTH_ID);
+                                        if (Objects.equals(dataHealth, living.getHealth())) {
+                                            float health = dataHealth;
+                                            living.getEntityData().set(LivingEntity.DATA_HEALTH_ID, health - 0.1F);
+                                            dataHealth = getValue(living, LivingEntity.DATA_HEALTH_ID);
+                                            if (Objects.equals(dataHealth, living.getHealth())) {
+                                                entityHealthData.put(klassName, new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
+                                            }
+                                        }
+                                        if (!entityHealthData.containsKey(klassName)) {
+                                            boolean flag1 = Objects.equals(living.getHealth(), (getItem(accessor, dataItem.getAccessor()).getValue()));
+                                            living.setHealth(living.getHealth() + .001F);
+                                            boolean flag2 = Objects.equals(living.getHealth(), dataItem.getValue());
+                                            living.setHealth(living.getHealth() - .001F);
+                                            if (flag1 && flag2) {
+                                                entityHealthData.put(klassName, new IndexAndType(integer, dataItem.getValue() instanceof Float));
+                                            }
+                                        }
+                                    } else if (dataItem.getValue() instanceof Double) {
+                                        boolean flag1 = Objects.equals((double) living.getHealth(), dataItem.getValue());
+                                        living.setHealth(living.getHealth() + .001F);
+                                        boolean flag2 = Objects.equals((double) living.getHealth(), dataItem.getValue());
+                                        living.setHealth(living.getHealth() - .001F);
+                                        if (flag1 && flag2) {
+                                            entityHealthData.put(klassName, new IndexAndType(integer, dataItem.getValue() instanceof Float));
+                                        }
+                                    }
+                                } catch (Throwable throwable) {
+                                    if (!entityHealthData.containsKey(klassName)) {
+                                        entityHealthData.put(klassName, new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
+                                        return;
+                                    }
+                                }
                             }
                         }
-                    }
-                    if (!entityHealthDatas.containsKey(klass.getName())) {
-                        accessor.itemsById().forEach((index, dataItem0) -> {
-                            if (dataItem0.getAccessor() == LivingEntity.DATA_HEALTH_ID)
-                                entityHealthDatas.put(klass.getName(), new IndexAndType(index, true));
-                        });
-                    }
-                });
+                        if (!entityHealthData.containsKey(klassName)) {
+                            accessor.itemsById().forEach((index, dataItem0) -> {
+                                if (dataItem0.getAccessor() == LivingEntity.DATA_HEALTH_ID)
+                                    entityHealthData.put(klassName, new IndexAndType(index, true));
+                            });
+                        }
+                    });
+                }
+            }
+            return entityHealthData.get(klassName);
         }
     }
 
     /**
      * 存储类里最大血量数据的字段和自定义血量字段
      */
-    private static void checkAndSave0_class(Class<? extends LivingEntity> clazz) throws Throwable {
-        if (!entityHealthDatas.containsKey(clazz.getName()))
+    private static void checkAndSave0_class(Class<? extends LivingEntity> clazz) {
+        if (!entityHealthData.containsKey(clazz.getName()))
             if (clazz.isAssignableFrom(Player.class) || clazz.getName().startsWith("net.minecraft.")) {
-                entityHealthDatas.put(clazz.getName(), new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
+                entityHealthData.put(clazz.getName(), new IndexAndType(LivingEntity.DATA_HEALTH_ID.getId(), true));
             }
-        if (!entityHealthDatas.containsKey(clazz.getName())) {
+        if (!entityHealthData.containsKey(clazz.getName())) {
 
             List<ClassHandler.FieldVarHandle> fields;
             try {
@@ -201,7 +200,7 @@ public class EntityActuallyHurt {
             if (handle != null) {
                 EntityDataAccessor<?> data = (EntityDataAccessor<?>) handle.get();
                 boolean typeFloat = ClassHandler.getActuallyType(data.getClass()).isAssignableFrom(Float.class);
-                entityHealthDatas.put(clazz.getName(), new IndexAndType(data.getId(), typeFloat));
+                entityHealthData.put(clazz.getName(), new IndexAndType(data.getId(), typeFloat));
             }
         }
 

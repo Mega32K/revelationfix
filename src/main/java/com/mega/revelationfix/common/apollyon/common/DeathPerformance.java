@@ -4,7 +4,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.apollyon.client.SafePlayPostMusic;
 import com.mega.revelationfix.common.config.CommonConfig;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;

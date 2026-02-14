@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
 
 @Mixin(CraftItemRitual.class)
-public abstract class CraftRitualMixin extends Ritual implements RitualRecipeInterface {
+public abstract class CraftRitualMixin extends Ritual  {
 
     @Unique
     private ItemStack tempActivation;
@@ -102,43 +102,9 @@ public abstract class CraftRitualMixin extends Ritual implements RitualRecipeInt
         return stack;
     }
 
-    @Override
-    public boolean consumeAdditionalIngredient(Level world, BlockPos darkAltarPos,
-                                               List<PedestalBlockEntity> pedestals,
-                                               Ingredient ingredient, List<ItemStack> consumedIngredients) {
-        for (PedestalBlockEntity pedestal : pedestals) {
-            if (pedestal.itemStackHandler.map(handler -> {
-                ItemStack stack = handler.extractItem(0, 1, true);
-                if (ingredient.test(stack)) {
-                    ItemStack extracted = handler.extractItem(0, 1, false);
-
-                    consumedIngredients.add(extracted);
-
-                    if (extracted.getItem() instanceof BucketItem bucketItem && !bucketItem.getFluid().defaultFluidState().isEmpty()) {
-                        ItemHelper.addItemEntity(world, pedestal.getBlockPos().above(), new ItemStack(Items.BUCKET));
-                        world.playSound(null, pedestal.getBlockPos(), SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS,
-                                0.7F, 0.7F);
-                    } else if (extracted.hasCraftingRemainingItem()) {
-                        ItemHelper.addItemEntity(world, pedestal.getBlockPos().above(), extracted.getCraftingRemainingItem());
-                    } else if (extracted.is(GRItems.THE_END_PUZZLES) || extracted.is(GRItems.THE_END_PUZZLES2) || extracted.is(GRItems.THE_END_PUZZLES3) || extracted.is(GRItems.THE_END_PUZZLES4)) {
-                        if (recipe.getCraftType().equals(ModRitualTypes.THE_END_MAGIC) && recipe.getId().toString().contains("goety_revelation:mystery_fragment_"))
-                            ItemHelper.addItemEntity(world, pedestal.getBlockPos().above(), extracted.copy());
-                    }
-
-                    handler.setStackInSlot(0, ItemStack.EMPTY);
-
-                    world.playSound(null, pedestal.getBlockPos(), SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS,
-                            0.7F, 0.7F);
-                    return true;
-                }
-                return false;
-            }).orElse(false))
-                return true;
-
-        }
-        return false;
-    }
-
+    /**
+     * 修复仅参考物品输出
+     */
     @ModifyArg(method = "finish", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/items/IItemHandler;insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", remap = false), remap = false)
     private ItemStack result(ItemStack stack) {
         if (stack.is(ModItems.JEI_DUMMY_NONE.get()))

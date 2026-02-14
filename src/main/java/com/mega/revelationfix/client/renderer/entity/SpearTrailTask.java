@@ -12,18 +12,19 @@ public record SpearTrailTask(GungnirSpearEntity gungnirSpear) implements TrailRe
     public void task(PoseStack matrix, VFRBuilders.WorldVFRTrailBuilder vfrTrailBuilder) {
         Minecraft minecraft = Minecraft.getInstance();
         if (!gungnirSpear.getWrappedTrailData().trailPoints.isEmpty()) {
+            vfrTrailBuilder.setLight(0xFF00F0);
             vfrTrailBuilder.r = gungnirSpear.color.x;
             vfrTrailBuilder.g = gungnirSpear.color.y;
             vfrTrailBuilder.b = gungnirSpear.color.z;
             vfrTrailBuilder.a = 0.44F;
             vfrTrailBuilder.renderTrail(matrix, gungnirSpear.getWrappedTrailData().trailPoints, f -> (1.0F - f) * 0.7F * (Math.abs(Mth.cos((minecraft.level.getTimeOfDay(minecraft.getPartialTick()) + f * 12F) * ((float) Math.PI * 2F))) / 3F + 0.5F));
+            vfrTrailBuilder.setLight(15728880);
         }
     }
 
     @Override
     public void tick() {
         if (Minecraft.getInstance().isPaused()) return;
-
         if (gungnirSpear.getTrailLifeTime() <= 0) {
             gungnirSpear.getWrappedTrailData().remove();
         }

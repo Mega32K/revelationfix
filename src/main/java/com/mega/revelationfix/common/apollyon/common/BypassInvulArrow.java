@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.apollyon.common;
 
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;

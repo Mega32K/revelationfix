@@ -2,7 +2,11 @@ package com.mega.revelationfix.common.compat.tetra.effect;
 
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.mega.revelationfix.common.compat.tetra.TetraVersionCompat;
+import com.mega.revelationfix.common.config.ServerConfig;
 import com.mega.revelationfix.util.LivingEntityEC;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.Util;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -19,6 +23,7 @@ import se.mickelus.tetra.blocks.workbench.gui.WorkbenchStatsGui;
 import se.mickelus.tetra.effect.ItemEffect;
 import se.mickelus.tetra.gui.stats.StatsHelper;
 import se.mickelus.tetra.gui.stats.bar.GuiStatBar;
+import se.mickelus.tetra.gui.stats.getter.IStatGetter;
 import se.mickelus.tetra.gui.stats.getter.LabelGetterBasic;
 import se.mickelus.tetra.gui.stats.getter.StatFormat;
 import se.mickelus.tetra.gui.stats.getter.StatGetterEffectLevel;
@@ -36,7 +41,16 @@ public class FadingEffect {
     private static final UUID ARMOR = UUID.fromString("bba6b1d0-9aa4-4694-826a-b2ea17d23ef6");
     private static final UUID ARMOR_TOUGHNESS = UUID.fromString("0e6ead1e-9837-46e8-8e3c-6c1678f79ead");
     private static final UUID MOVEMENT_SPEED = UUID.fromString("a63f962f-9d88-4c17-b8fb-214e4d7793c6");
-    private static final Map<Attribute, UUID> attributes = new HashMap<>();
+    private static final Object2ObjectOpenHashMap<Attribute, UUID> attributes = Util.make(()-> {
+        Object2ObjectOpenHashMap<Attribute, UUID> map = new Object2ObjectOpenHashMap<>();
+        map.put(Attributes.MAX_HEALTH, MAX_HEALTH);
+        map.put(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE);
+        map.put(Attributes.ATTACK_SPEED, ATTACK_SPEED);
+        map.put(Attributes.ARMOR, ARMOR);
+        map.put(Attributes.ARMOR_TOUGHNESS, ARMOR_TOUGHNESS);
+        map.put(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED);
+        return map;
+    });
     public static ItemEffect itemEffect = ItemEffect.get("goety_revelation.fading");
 
     @OnlyIn(Dist.CLIENT)
@@ -44,14 +58,34 @@ public class FadingEffect {
         try {
             StatGetterEffectLevel statGetterEffectLevel = new StatGetterEffectLevel(itemEffect, 1.0D);
             MultiStatGetterEffectLevel statGetterEffectLevel1 = new MultiStatGetterEffectLevel(itemEffect, 3.0D, 0D, statGetterEffectLevel);
-            GuiStatBar effectBar = new GuiStatBar(0, 0, 59, "goety_revelation.effect.fading.name", 0.0D, 100.0, false, statGetterEffectLevel, LabelGetterBasic.decimalLabel, TetraVersionCompat.createTGM("goety_revelation.effect.fading.tooltip", StatsHelper.withStats(statGetterEffectLevel, statGetterEffectLevel1), StatFormat.noDecimal, StatFormat.noDecimal));
+
+            GuiStatBar effectBar = new GuiStatBar(0, 0, 59, "goety_revelation.effect.fading.name", 0.0D, 100.0, false, statGetterEffectLevel, LabelGetterBasic.decimalLabel,
+                    TetraVersionCompat.createTGM(
+                            "goety_revelation.effect.fading.tooltip",
+                            StatsHelper.withStats(statGetterEffectLevel, new IStatGetter() {
+                                @Override
+                                public double getValue(Player player, ItemStack itemStack) {
+                                    return ServerConfig.tetra_maxFadingEffectDecrease * 100;
+                                }
+
+                                @Override
+                                public double getValue(Player player, ItemStack itemStack, String s) {
+                                    return ServerConfig.tetra_maxFadingEffectDecrease * 100;
+                                }
+
+                                @Override
+                                public double getValue(Player player, ItemStack itemStack, String s, String s1) {
+                                    return ServerConfig.tetra_maxFadingEffectDecrease * 100;
+                                }
+                            }, statGetterEffectLevel1),
+                            StatFormat.noDecimal, new StatFormat("%s"), StatFormat.noDecimal));
             WorkbenchStatsGui.addBar(effectBar);
             HoloStatsGui.addBar(effectBar);
-        } catch (Throwable throwable) {
+        } catch (Throwable ignore) {
         }
     }
 
-    public static Map<Attribute, UUID> getAttributes() {
+    public static Object2ObjectOpenHashMap<Attribute, UUID> getAttributes() {
         return attributes;
     }
 
@@ -63,42 +97,30 @@ public class FadingEffect {
                 return;
             if (beHurt instanceof OwnableEntity owned && owned.getOwnerUUID() != null && owned.getOwnerUUID().equals(event.getEntity().getUUID()))
                 return;
-            if (attributes.isEmpty()) {
-                attributes.put(Attributes.MAX_HEALTH, MAX_HEALTH);
-                attributes.put(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE);
-                attributes.put(Attributes.ATTACK_SPEED, ATTACK_SPEED);
-                attributes.put(Attributes.ARMOR, ARMOR);
-                attributes.put(Attributes.ARMOR_TOUGHNESS, ARMOR_TOUGHNESS);
-                attributes.put(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED);
-            }
             Player attacker = event.getEntity();
             ItemStack itemStack = attacker.getMainHandItem();
             if (itemStack.getItem() instanceof ModularItem modularItem) {
                 int level = modularItem.getEffectLevel(itemStack, itemEffect);
                 if (level <= 0) return;
-                if (Math.random() * 100D <= level * 3)
-                    return;
                 ((LivingEntityEC) beHurt).revelationfix$livingECData().tetraFadingTime = 1200;
                 for (Attribute attribute : attributes.keySet()) {
                     AttributeInstance instance = beHurt.getAttribute(attribute);
                     if (instance != null) {
                         UUID uuid = attributes.get(attribute);
                         AttributeModifier modifier = instance.getModifier(uuid);
-                        if (modifier != null && modifier.getAmount() > -0.9F) {
-                            double amount = modifier.getAmount();
-                            amount = Math.max(-0.9F, amount - level / 100D);
+                        if (modifier != null && modifier.getAmount() > -ServerConfig.tetra_maxFadingEffectDecrease) {
+                            double d1 = 1D + modifier.getAmount();
+                            double d2 = d1 - d1 * 0.1D;
+                            double d3 = d2 - 1D;
+                            double amount = Math.max(-ServerConfig.tetra_maxFadingEffectDecrease, d3);
                             instance.removeModifier(modifier);
                             instance.addTransientModifier(new AttributeModifier(uuid, "Tetra Modifier", amount, AttributeModifier.Operation.MULTIPLY_TOTAL));
-                            if (!attribute.isClientSyncable()) {
-                                beHurt.getAttributes().getDirtyAttributes().add(instance);
-                            }
+
                         }
                         if (modifier == null) {
                             modifier = new AttributeModifier(uuid, "Tetra Modifier", -level / 100D, AttributeModifier.Operation.MULTIPLY_TOTAL);
                             instance.addTransientModifier(modifier);
-                            if (!attribute.isClientSyncable()) {
-                                beHurt.getAttributes().getDirtyAttributes().add(instance);
-                            }
+
                         }
                     }
                 }

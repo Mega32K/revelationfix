@@ -1,6 +1,6 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.event.entity.StandOnFluidEvent;
 import com.mega.revelationfix.common.item.armor.ModArmorMaterials;
 import net.minecraft.core.BlockPos;

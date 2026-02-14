@@ -40,7 +40,7 @@ public abstract class DarkAltarEvent extends BlockEvent {
         }
 
         public enum TickPhase {
-            HEAD, TAIL, AFTER_HAS_SOULS
+            HEAD, TAIL, AFTER_HAS_SOULS, CRAFTING_SECOND
         }
     }
 

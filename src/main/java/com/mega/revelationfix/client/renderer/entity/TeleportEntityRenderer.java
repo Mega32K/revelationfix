@@ -1,5 +1,6 @@
 package com.mega.revelationfix.client.renderer.entity;
 
+import com.mega.endinglib.client.ClientWrapped;
 import com.mega.revelationfix.client.model.entity.TeleportEntityModel;
 import com.mega.revelationfix.client.renderer.VFRBuilders;
 import com.mega.revelationfix.common.compat.Wrapped;
@@ -39,6 +40,12 @@ public class TeleportEntityRenderer extends EntityRenderer<TeleportEntity> {
     public void render(@NotNull TeleportEntity teleportEntity, float entityYaw, float pPartialTicks, @NotNull PoseStack pMatrixStack, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         try {
             pMatrixStack.pushPose();
+            double distance = teleportEntity.distanceToSqr(ClientWrapped.clientPlayer());
+            float d = (float) distance / 4096F;
+            if (distance > 4096F) {
+                pMatrixStack.translate(-.5F * d, d * -.2F, -.5F * d);
+                pMatrixStack.scale(d, d, d);
+            }
             pMatrixStack.translate(.5, -0.5 - (3F / 16F), .5);
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(this.model.renderType(getTextureLocation(teleportEntity)));
             this.model.setupAnim(teleportEntity, 0.0F, 0.0F, pPartialTicks, 0.0F, 0.0F);

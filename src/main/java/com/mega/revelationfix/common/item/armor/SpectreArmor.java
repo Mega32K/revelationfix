@@ -7,7 +7,7 @@ import com.google.common.collect.Multimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.armor.OptionArmorMaterial;
-import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
+import com.mega.endinglib.util.mc.entity.armor.ArmorModifiersBuilder;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
@@ -42,7 +42,7 @@ public class SpectreArmor extends BaseArmorItem implements ISoulRepair, ISoulDis
     }
 
     @Override
-    public int getSoulDiscount(EquipmentSlot equipmentSlot) {
+    public int getSoulDiscount(EquipmentSlot equipmentSlot, ItemStack itemStack) {
         return 4;
     }
 

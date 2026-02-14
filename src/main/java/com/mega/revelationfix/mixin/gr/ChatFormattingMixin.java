@@ -2,6 +2,7 @@ package com.mega.revelationfix.mixin.gr;
 
 import com.mega.revelationfix.client.enums.ModChatFormatting;
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,15 +36,11 @@ public class ChatFormattingMixin {
     private static void addFormatting(CallbackInfo ci) {
         int ordinal = $VALUES.length;
 
-        $VALUES = Arrays.copyOf($VALUES, ordinal + 4);
+        $VALUES = Arrays.copyOf($VALUES, ordinal + 2);
         ModChatFormatting.APOLLYON = (ChatFormatting) (Object) (new ChatFormattingMixin("APOLLYON", ordinal, "APOLLYON", 'q', 0, 0));
         $VALUES[ordinal] = ModChatFormatting.APOLLYON;
-        ModChatFormatting.FROST = (ChatFormatting) (Object) (new ChatFormattingMixin("GR_FROST", ordinal + 1, "GR_FROST", 'w', 16, 0x8ec5fc));
-        $VALUES[ordinal + 1] = ModChatFormatting.FROST;
-        ModChatFormatting.SPIDER = (ChatFormatting) (Object) (new ChatFormattingMixin("GR_SPIDER", ordinal + 1, "GR_SPIDER", '?', 17, 0x6f4853));
-        $VALUES[ordinal + 2] = ModChatFormatting.SPIDER;
         ModChatFormatting.EDEN = (ChatFormatting) (Object) (new ChatFormattingMixin("GR_EDEN", ordinal + 1, "GR_EDEN", '-', 18, 0x7f8492));
-        $VALUES[ordinal + 3] = ModChatFormatting.EDEN;
+        $VALUES[ordinal + 1] = ModChatFormatting.EDEN;
     }
 }
 

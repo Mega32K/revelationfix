@@ -3,6 +3,7 @@ package com.mega.revelationfix.common.network.s2c.data;
 import com.google.common.collect.ImmutableMap;
 import com.mega.revelationfix.common.data.ritual.RitualData;
 import com.mega.revelationfix.common.data.ritual.RitualDataManager;
+import com.mega.revelationfix.common.ritual.ModRitualTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -36,6 +37,7 @@ public class RitualDataSyncPacket {
         RitualDataManager.LOCK.lock();
         try {
             synchronized (RitualDataManager.REGISTRIES) {
+                RitualDataManager.clearData();
                 Map<String, RitualData> data = packet.copiedData;
                 for (var entry : data.entrySet()) {
                     RitualData packetRitualData = entry.getValue();

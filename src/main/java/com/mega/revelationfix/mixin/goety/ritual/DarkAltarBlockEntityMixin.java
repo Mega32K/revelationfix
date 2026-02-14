@@ -17,12 +17,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.items.IItemHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -88,8 +88,8 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
         }
     }
 
-    @Inject(remap = false, method = "removeItem", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;markNetworkDirty()V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void removeItem(CallbackInfo ci, IItemHandler handler, ItemStack itemStack) {
+    @Inject(remap = false, method = "removeItem(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;markNetworkDirty()V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void removeItem(LivingEntity livingEntity, CallbackInfo ci) {
         if (this.level != null && !this.level.isClientSide) {
             for (BlockShakingEntity ter : this.level.getEntitiesOfClass(BlockShakingEntity.class, new AABB(this.getBlockPos()).inflate(Ritual.RANGE + 1))) {
                 ter.setDuration(30);
@@ -200,6 +200,12 @@ public abstract class DarkAltarBlockEntityMixin extends PedestalBlockEntity {
     @Inject(remap = false, method = "tick", at = @At(remap = false, value = "INVOKE", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;getCurrentRitualRecipe()Lcom/Polarice3/Goety/common/crafting/RitualRecipe;", ordinal = 0), cancellable = true)
     private void tickAfterHasSouls(CallbackInfo ci) {
         if (GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object) this), DarkAltarEvent.TickEvent.TickPhase.AFTER_HAS_SOULS))
+            ci.cancel();
+    }
+
+    @Inject(remap = false, method = "tick", at = @At(remap = false, value = "FIELD", target = "Lcom/Polarice3/Goety/common/blocks/entities/DarkAltarBlockEntity;currentTime:I", ordinal = 0), cancellable = true)
+    private void tickCraftingSec(CallbackInfo ci) {
+        if (GoetyEventHooks.postDarkAltarBETickEvent(this.level, this.getBlockPos(), this.getBlockState(), ((DarkAltarBlockEntity) (Object) this), DarkAltarEvent.TickEvent.TickPhase.CRAFTING_SECOND))
             ci.cancel();
     }
 

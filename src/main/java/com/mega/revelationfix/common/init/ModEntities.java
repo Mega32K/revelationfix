@@ -2,6 +2,7 @@ package com.mega.revelationfix.common.init;
 
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.common.entity.FakeItemEntity;
+import com.mega.revelationfix.common.entity.ShadowPlayerEntity;
 import com.mega.revelationfix.common.entity.TheEndHellfire;
 import com.mega.revelationfix.common.entity.binding.BlockShakingEntity;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
@@ -95,7 +96,7 @@ public class ModEntities {
             .fireImmune()
             .setShouldReceiveVelocityUpdates(false)
             .sized(.001F, .001F)
-            .clientTrackingRange(6)
+            .clientTrackingRange(32)
             .updateInterval(2)
     );
     public static final RegistryObject<EntityType<IceHermitEntity>> ICE_HERMIT = register("ice_hermit",
@@ -103,6 +104,14 @@ public class ModEntities {
                     .canSpawnFarFromPlayer()
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8));
+
+    public static final RegistryObject<EntityType<ShadowPlayerEntity>> SHADOW_PLAYER = register("shadow_player",
+            EntityType.Builder.<ShadowPlayerEntity>of(ShadowPlayerEntity::new, MobCategory.MISC)
+                    .sized(0, 0)
+                    .noSave()
+                    .noSummon()
+                    .clientTrackingRange(6).updateInterval(20)
+    );
     private static <T extends Entity> RegistryObject<EntityType<T>> register(String p_20635_, EntityType.Builder<T> p_20636_) {
         return ModEntities.ENTITIES.register(p_20635_, () -> p_20636_.build(new ResourceLocation(Revelationfix.MODID, p_20635_).toString()));
     }

@@ -13,7 +13,6 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.Heretic;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.entities.projectiles.HellChant;
 import com.Polarice3.Goety.common.items.ModItems;
-import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.*;
@@ -46,6 +45,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.scores.Team;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import z1gned.goetyrevelation.util.ATAHelper;
 
@@ -79,7 +79,6 @@ public class HereticServant extends Heretic implements IMonsterServant {
         HOSTILE = SynchedEntityData.defineId(HereticServant.class, EntityDataSerializers.BOOLEAN);
         NATURAL = SynchedEntityData.defineId(HereticServant.class, EntityDataSerializers.BOOLEAN);
     }
-
     //Owned
     private final NearestAttackableTargetGoal<Player> targetGoal = new NearestAttackableTargetGoal<>(this, Player.class, true);
     //Summoned
@@ -157,7 +156,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
 
     }
 
-    public ItemStack getProjectile(ItemStack pShootable) {
+    public @NotNull ItemStack getProjectile(ItemStack pShootable) {
         if (pShootable.getItem() instanceof ProjectileWeaponItem) {
             Predicate<ItemStack> predicate = ((ProjectileWeaponItem) pShootable.getItem()).getSupportedHeldProjectiles();
             ItemStack itemstack = ProjectileWeaponItem.getHeldProjectile(this, predicate);
@@ -201,7 +200,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @javax.annotation.Nullable SpawnGroupData pSpawnData, @javax.annotation.Nullable CompoundTag pDataTag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor pLevel, @NotNull DifficultyInstance pDifficulty, @NotNull MobSpawnType pReason, @javax.annotation.Nullable SpawnGroupData pSpawnData, @javax.annotation.Nullable CompoundTag pDataTag) {
         //Summoned Owned
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         //Owned
@@ -241,7 +240,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
         return this.getTrueOwner() != null && CuriosFinder.hasCurio(this.getTrueOwner(), ModItems.RING_OF_THE_FORGE.get());
     }
 
-    public void populateDefaultEquipmentSlots(RandomSource p_217055_, DifficultyInstance p_217056_) {
+    public void populateDefaultEquipmentSlots(@NotNull RandomSource p_217055_, @NotNull DifficultyInstance p_217056_) {
         if (this.canSpawnArmor()) {
             this.populateDefaultArmor(p_217055_, p_217056_);
         } else {
@@ -256,8 +255,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
             EquipmentSlot[] var3 = EquipmentSlot.values();
             int var4 = var3.length;
 
-            for (int var5 = 0; var5 < var4; ++var5) {
-                EquipmentSlot equipmentslot = var3[var5];
+            for (EquipmentSlot equipmentslot : var3) {
                 if (equipmentslot.getType() == EquipmentSlot.Type.ARMOR) {
                     int i = randomSource.nextInt(2);
                     if (randomSource.nextFloat() < 0.095F) {
@@ -289,7 +287,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     public void populateDefaultWeapons(RandomSource randomSource, DifficultyInstance difficulty) {
     }
 
-    public void die(DamageSource pCause) {
+    public void die(@NotNull DamageSource pCause) {
         if (!this.level().isClientSide && this.hasCustomName() && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
             this.getTrueOwner().sendSystemMessage(this.getCombatTracker().getDeathMessage());
         }
@@ -316,7 +314,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     }
 
     @Override
-    public boolean doHurtTarget(Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entityIn) {
         boolean flag = doHurtTarget_owned(entityIn);
         if (flag) {
             if (this.getMobType() == MobType.UNDEAD) {
@@ -450,7 +448,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     }
 
     @Override
-    public void hurtArmor(DamageSource pDamageSource, float pDamage) {
+    public void hurtArmor(@NotNull DamageSource pDamageSource, float pDamage) {
         if (!(pDamage <= 0.0F)) {
             pDamage /= 4.0F;
             if (pDamage < 1.0F) {
@@ -460,8 +458,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
             EquipmentSlot[] var3 = EquipmentSlot.values();
             int var4 = var3.length;
 
-            for (int var5 = 0; var5 < var4; ++var5) {
-                EquipmentSlot equipmentSlotType = var3[var5];
+            for (EquipmentSlot equipmentSlotType : var3) {
                 if (equipmentSlotType.getType() == EquipmentSlot.Type.ARMOR) {
                     ItemStack itemstack = this.getItemBySlot(equipmentSlotType);
                     if ((!pDamageSource.is(DamageTypeTags.IS_FIRE) || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {

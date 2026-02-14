@@ -42,9 +42,4 @@ public class TheEndHellfire extends Hellfire {
         super.dealDamageTo(target);
         target.invulnerableTime--;
     }
-
-    @Override
-    public ResourceLocation getResourceLocation() {
-        return HellfireTextures.TEXTURES.getOrDefault(this.getAnimation(), (ResourceLocation) HellfireTextures.TEXTURES.get(0));
-    }
 }

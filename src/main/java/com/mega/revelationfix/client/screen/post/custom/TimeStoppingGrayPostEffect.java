@@ -1,7 +1,7 @@
 package com.mega.revelationfix.client.screen.post.custom;
 
 import com.mega.endinglib.api.client.Easing;
-import com.mega.endinglib.client.RendererUtils;
+import com.mega.endinglib.client.ClientContext;
 import com.mega.endinglib.util.time.TimeContext;
 import com.mega.endinglib.util.time.TimeStopUtils;
 import com.mega.revelationfix.Revelationfix;
@@ -49,6 +49,6 @@ public class TimeStoppingGrayPostEffect implements CustomScreenEffect {
         if (!flag)
             return false;
 
-        return RendererUtils.isTimeStop_andSameDimension;
+        return ClientContext.isTimeStop_andSameDimension;
     }
 }

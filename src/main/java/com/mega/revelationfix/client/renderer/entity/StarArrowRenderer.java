@@ -172,7 +172,6 @@ public class StarArrowRenderer extends EntityRenderer<StarArrow> {
     record StarTrailTask(StarArrow starArrow) implements TrailRenderTask {
         @Override
         public void task(PoseStack matrix, VFRBuilders.WorldVFRTrailBuilder vfrTrailBuilder) {
-            if (SafeClass.usingShaderPack()) return;
             if (!starArrow.trailPoints.isEmpty()) {
                 vfrTrailBuilder.r = starArrow.getRed() * 0.77F;
                 vfrTrailBuilder.g = starArrow.getGreen() * 0.77F;

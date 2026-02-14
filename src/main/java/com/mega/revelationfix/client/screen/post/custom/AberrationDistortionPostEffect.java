@@ -45,7 +45,7 @@ public class AberrationDistortionPostEffect implements CustomScreenEffect {
             ClientLevelExpandedContext context = ((ClientLevelInterface) mc.level).revelationfix$ECData();
             BlockPos blockPos = context.teEndRitualBE;
             float distance = (float) Math.sqrt(mc.player.distanceToSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
-            if (distance > 40) {
+            if (distance > 400) {
                 BlockState state = mc.level.getBlockState(blockPos);
                 if (state.isAir()
                         || (!(mc.level.getBlockEntity(blockPos) instanceof DarkAltarBlockEntity darkAltarBlockEntity)

@@ -1,5 +1,6 @@
 package com.mega.revelationfix.safe.level;
 
+import com.Polarice3.Goety.common.blocks.DarkAltarBlock;
 import com.Polarice3.Goety.common.blocks.ModBlocks;
 import com.Polarice3.Goety.common.blocks.entities.DarkAltarBlockEntity;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
@@ -61,7 +62,8 @@ public class ClientLevelExpandedContext extends LevelExpandedContext {
         if (clientLevel.dimension() == Level.END) {
             if (teEndRitualRunning && teEndRitualBE != null) {
                 BlockState state;
-                if ((state = clientLevel.getBlockState(teEndRitualBE)).is(ModBlocks.DARK_ALTAR.get())) {
+
+                if ((state = clientLevel.getBlockState(teEndRitualBE)).getBlock() instanceof DarkAltarBlock) {
                     BlockEntity blockEntity = clientLevel.getBlockEntity(teEndRitualBE);
                     if (!(blockEntity instanceof DarkAltarBlockEntity darkAltar && darkAltar.getCurrentRitualRecipe() != null && darkAltar.getCurrentRitualRecipe().getId().equals(new ResourceLocation(ModMain.MODID, "the_end_ritual")))) {
                         teEndRitualRunning = false;

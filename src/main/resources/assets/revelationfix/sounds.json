@@ -24,5 +24,10 @@
     "sounds": [
       "revelationfix:star_arrow_cast"
     ]
+  },
+  "ender_keeper.back": {
+    "sounds": [
+      "revelationfix:ender_keeper/back"
+    ]
   }
 }

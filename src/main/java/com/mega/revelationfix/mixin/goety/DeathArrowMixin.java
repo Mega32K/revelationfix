@@ -3,7 +3,7 @@ package com.mega.revelationfix.mixin.goety;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.projectiles.DeathArrow;
 import com.mega.endinglib.mixin.accessor.AccessorArrow;
-import com.mega.endinglib.util.entity.MobEffectUtils;
+import com.mega.endinglib.util.mc.entity.MobEffectUtils;
 import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
 import com.mega.revelationfix.client.renderer.entity.DeathArrowTrailTask;
 import com.mega.revelationfix.common.apollyon.client.WrappedTrailData;

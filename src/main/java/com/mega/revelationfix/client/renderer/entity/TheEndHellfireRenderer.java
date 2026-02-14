@@ -13,13 +13,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 
 public class TheEndHellfireRenderer extends HellfireRenderer {
     private final IceBouquetModel<Hellfire> model;
 
     public TheEndHellfireRenderer(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
-        this.model = new IceBouquetModel(renderManagerIn.bakeLayer(ModModelLayer.ICE_BOUQUET));
+        this.model = new IceBouquetModel<>(renderManagerIn.bakeLayer(ModModelLayer.ICE_BOUQUET));
     }
 
     @Override
@@ -39,4 +40,8 @@ public class TheEndHellfireRenderer extends HellfireRenderer {
         }
     }
 
+    @Override
+    public ResourceLocation getTextureLocation(Hellfire entity) {
+        return HellfireTextures.TEXTURES.get((int) (entity.level().getGameTime() % 31L));
+    }
 }

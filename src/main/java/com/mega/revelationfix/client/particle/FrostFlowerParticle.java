@@ -15,12 +15,12 @@ import org.joml.Vector3f;
 
 public class FrostFlowerParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
-    float r0 = 0x8e / 255F;
-    float g0 = 0xc5 / 255F;
-    float b0 = 0xfc / 255F;
-    float r1 = 0xb0 / 255F;
-    float g1 = 0xe0 / 255F;
-    float b1 = 0xe6 / 255F;
+    static final float r0 = 0x8e / 255F;
+    static final float g0 = 0xc5 / 255F;
+    static final float b0 = 0xfc / 255F;
+    static final float r1 = 0xb0 / 255F;
+    static final float g1 = 0xe0 / 255F;
+    static final float b1 = 0xe6 / 255F;
     int rand = (int) (Math.random() * 20) + 40;
 
     protected FrostFlowerParticle(ClientLevel p_172292_, double p_172293_, double p_172294_, double p_172295_, double p_172296_, double p_172297_, double p_172298_, SpriteSet p_172299_) {

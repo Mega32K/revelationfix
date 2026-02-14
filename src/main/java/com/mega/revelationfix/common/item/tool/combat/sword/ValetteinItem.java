@@ -3,8 +3,9 @@ package com.mega.revelationfix.common.item.tool.combat.sword;
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
+import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
 import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.compat.youkai.YoukaiKiller;
@@ -160,6 +161,8 @@ public class ValetteinItem extends ModSwordItem implements ICustomHurtWeapon, IS
                 }
             }
         }
+        //if (event.getEntity() instanceof Apostle apostle)
+        //    apostle.moddedInvul = 0;
         LivingEventEC ec = (LivingEventEC) event;
         ((DamageSourceInterface) event.getSource()).revelationfix$setBypassAll(true);
         ec.revelationfix$hackedUnCancelable(true);

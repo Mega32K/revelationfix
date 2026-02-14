@@ -23,6 +23,7 @@ import com.mega.revelationfix.common.item.research.EdenResearchScrollItem;
 import com.mega.revelationfix.common.item.research.GodForgingResearchScrollItem;
 import com.mega.revelationfix.common.item.template.ApocalyptiumTemplateItem;
 import com.mega.revelationfix.common.item.tool.combat.bow.BowOfRevelationItem;
+import com.mega.revelationfix.common.item.tool.combat.sword.EnderKeeperSword;
 import com.mega.revelationfix.common.item.tool.combat.sword.ValetteinItem;
 import com.mega.revelationfix.common.item.tool.combat.trident.GungnirItem;
 import com.mega.revelationfix.common.item.tool.combat.whip.SpectreWhipItem;
@@ -112,6 +113,8 @@ public class GRItems {
     public static RegistryObject<Item> VALETTEIN;
     public static RegistryObject<Item> GUNGNIR;
     public static RegistryObject<Item> BOW_OF_REVELATION;
+    public static RegistryObject<Item> BROKEN_ENDER_KEEPER_SWORD;
+    public static RegistryObject<Item> ENDER_KEEPER_SWORD;
     public static RegistryObject<Item> THE_NEEDLE;
     public static RegistryObject<Item> DIMENSIONAL_WILL;
     public static RegistryObject<Item> ETERNAL_WATCH;
@@ -270,12 +273,14 @@ public class GRItems {
         EERIE_AXE = ITEMS.register("eerie_axe", EerieAxeItem::new);
         ICE_HERMIT_SPAWN_EGG = ITEMS.register("ice_hermit_spawn_egg",
                 () -> new ModSpawnEggItem(ModEntities.ICE_HERMIT, 0xd1f2ff, 0x68b0f3, ModSpawnEggs.egg()));
+        BROKEN_ENDER_KEEPER_SWORD = ITEMS.register("broken_ender_keeper", ()-> new SwordItem(Tiers.WOOD, 1, -3.5F, new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
+        ENDER_KEEPER_SWORD = ITEMS.register("ender_keeper_sword", EnderKeeperSword::new);
         if (SafeClass.isEnigmaticLegacyLoaded())
             EnigmaticLegacyItemInit.init();
 
         GRItems.insertAfterTabMap.put(ASCENSION_HARD_CANDY, () -> List.of(DISC_1.get().getDefaultInstance(), DISC_2.get().getDefaultInstance(), DISC_3.get().getDefaultInstance()));
 
-        GRItems.insertAfterTabMap.put(BOW_OF_REVELATION, () -> {
+        GRItems.insertAfterTabMap.put(THE_NEEDLE, () -> {
             ItemStack stack = GRItems.THE_NEEDLE.get().getDefaultInstance();
             stack.getOrCreateTag().putBoolean(TheNeedleItem.IS_REAL_NBT, true);
             return List.of(stack);

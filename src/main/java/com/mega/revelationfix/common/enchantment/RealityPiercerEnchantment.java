@@ -1,6 +1,8 @@
 package com.mega.revelationfix.common.enchantment;
 
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.Polarice3.Goety.common.entities.boss.EnderKeeper;
+import com.Polarice3.Goety.common.entities.boss.Vizier;
 import com.eeeab.eeeabsmobs.sever.entity.guling.EntityNamelessGuardian;
 import com.eeeab.eeeabsmobs.sever.entity.immortal.EntityImmortal;
 import com.mega.revelationfix.common.compat.SafeClass;
@@ -32,6 +34,12 @@ public class RealityPiercerEnchantment extends Enchantment {
         if (beHurt instanceof Apostle apostle) {
             apostle.moddedInvul -= maxTicks;
             if (apostle.moddedInvul < 0) apostle.moddedInvul = 0;
+        } else if (beHurt instanceof EnderKeeper enderKeeper) {
+            enderKeeper.moddedInvul -= maxTicks;
+            if (enderKeeper.moddedInvul < 0) enderKeeper.moddedInvul = 0;
+        } else if (beHurt instanceof Vizier vizier) {
+            vizier.moddedInvul -= maxTicks;
+            if (vizier.moddedInvul < 0) vizier.moddedInvul = 0;
         }
         if (beHurt instanceof Apostle apostle && apostle instanceof ApollyonAbilityHelper helper && apostle instanceof Apollyon2Interface apollyon2Interface) {
             if (helper.allTitlesApostle_1_20_1$isApollyon()) {

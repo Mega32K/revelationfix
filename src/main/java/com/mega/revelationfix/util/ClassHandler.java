@@ -1,6 +1,8 @@
 package com.mega.revelationfix.util;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import sun.misc.Unsafe;
 
 import java.lang.invoke.MethodHandle;
@@ -58,7 +60,7 @@ public class ClassHandler {
     }
 
     public static List<Field> allFields(List<Class<?>> classes) {
-        List<Field> fields = new ArrayList<>();
+        List<Field> fields = new ReferenceArrayList<>();
         for (Class<?> c : classes)
             fields.addAll(List.of(c.getDeclaredFields()));
         return fields;
@@ -66,7 +68,7 @@ public class ClassHandler {
 
     public static List<Class<?>> superClasses(Class<?> o, Class<?> head, boolean withoutHead, boolean withoutSelf) {
         if (parentsMapping.containsKey(o)) return parentsMapping.get(o);
-        List<Class<?>> superClasses = new ArrayList<>();
+        List<Class<?>> superClasses = new ReferenceArrayList<>();
         if (!withoutHead)
             superClasses.add(head);
         if (!withoutSelf)
@@ -87,8 +89,8 @@ public class ClassHandler {
         if (bigFilter.containsKey(klass) && bigFilter.get(klass).containsKey(fieldPredicate))
             return bigFilter.get(klass).get(fieldPredicate);
         List<Class<?>> classes = superClasses(klass, head, withoutHead, withoutSelf);
-        List<Field> fields = new ArrayList<>();
-        List<FieldVarHandle> fieldVarHandles = new ArrayList<>();
+        List<Field> fields = new ReferenceArrayList<>();
+        List<FieldVarHandle> fieldVarHandles = new ObjectArrayList<>();
         for (Class<?> c : classes) {
             Field[] fields1 = c.getDeclaredFields();
             for (int index =0;index<fields1.length;index++) {

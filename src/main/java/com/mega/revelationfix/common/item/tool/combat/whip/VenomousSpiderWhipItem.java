@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.neutral.Wartling;
 import com.Polarice3.Goety.utils.MathHelper;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;

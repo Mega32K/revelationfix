@@ -1,6 +1,6 @@
 package com.mega.revelationfix.common.odamane.common;
 
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
 import com.mega.revelationfix.common.apollyon.common.ExtraDamageTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;

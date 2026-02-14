@@ -2,8 +2,8 @@ package com.mega.revelationfix.common.item.tool.combat.whip;
 
 import com.Polarice3.Goety.api.items.ISoulRepair;
 import com.Polarice3.Goety.utils.SEHelper;
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.common.init.ModEffects;

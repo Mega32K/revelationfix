@@ -1,6 +1,7 @@
 package com.mega.revelationfix.mixin.goety;
 
 import com.Polarice3.Goety.common.items.armor.DarkArmor;
+import com.mega.endinglib.api.client.cmc.ClientLoreHelper;
 import com.mega.endinglib.api.client.cmc.LoreHelper;
 import com.mega.revelationfix.api.item.armor.IGoetyDamageResistanceArmor;
 import net.minecraft.network.chat.Component;
@@ -24,7 +25,7 @@ public class DarkArmorMixin extends ArmorItem implements IGoetyDamageResistanceA
 
     @Inject(method = "appendHoverText", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", shift = At.Shift.BEFORE))
     private void appendOtherTooltip(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn, CallbackInfo ci) {
-        if (LoreHelper.hasShiftDown()) {
+        if (ClientLoreHelper.hasShiftDown()) {
             tooltip.add(Component.translatable("tooltip.endinglib.specialEffect"));
             tooltip.addAll(this.damageResistanceTooltip(this, stack));
         } else tooltip.add(Component.translatable("tooltip.endinglib.holdShiftEffect"));

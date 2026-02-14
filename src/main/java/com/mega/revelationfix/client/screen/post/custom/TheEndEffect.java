@@ -1,27 +1,41 @@
 package com.mega.revelationfix.client.screen.post.custom;
 
 import com.mega.endinglib.api.client.Easing;
+import com.mega.endinglib.mixin.accessor.AccessorPostChain;
+import com.mega.endinglib.util.mc.client.ClientUtils;
 import com.mega.revelationfix.Revelationfix;
 import com.mega.revelationfix.client.screen.CustomScreenEffect;
 import com.mega.revelationfix.client.screen.post.PostEffectHandler;
+import com.mega.revelationfix.safe.level.ClientLevelInterface;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector4f;
+import z1gned.goetyrevelation.ModMain;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class TheEndEffect implements CustomScreenEffect {
-    public static Matrix4f MODEL_VIEW = new Matrix4f();
-    public static Matrix4f PROJ_MAT = new Matrix4f();
+    public static ResourceLocation LICHEN = new ResourceLocation(ModMain.MODID, "textures/ui/lichen.png");
+    public static ResourceLocation FADE = new ResourceLocation(ModMain.MODID, "textures/ui/fade.png");
     static Minecraft mc = Minecraft.getInstance();
     static int tickCount = 0;
     static int tickCountO = 0;
@@ -29,6 +43,8 @@ public class TheEndEffect implements CustomScreenEffect {
     static GuiGraphics guiGraphics;
     static TheEndEffect INSTANCE;
     float saturation = 1.0F;
+    private float lastStamp;
+    private float time;
 
     public TheEndEffect() {
         TheEndEffect.INSTANCE = this;
@@ -46,14 +62,6 @@ public class TheEndEffect implements CustomScreenEffect {
         } else if (tickCount > 0) tickCount--;
     }
 
-    @SubscribeEvent
-    public static void modelViewGetter(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-            MODEL_VIEW = new Matrix4f(event.getPoseStack().last().pose());
-            PROJ_MAT = event.getProjectionMatrix();
-        }
-    }
-
     @Override
     public String getName() {
         return "the_end";
@@ -66,38 +74,82 @@ public class TheEndEffect implements CustomScreenEffect {
 
     @Override
     public void onRenderTick(float partialTicks) {
-
-        float percent = Mth.lerp(partialTicks, TheEndEffect.tickCountO, TheEndEffect.tickCount) / 25F;
-        PostEffectHandler.updateUniform_post(this, "Percent", Easing.OUT_CUBIC.calculate(percent));
-        /*
-        float ticks = Mth.lerp(partialTicks, tickCountO, tickCount) - 1.0F;
-        if (mc.player != null) {
-            ClientLevelExpandedContext context = ((ClientLevelInterface) mc.level).revelationfix$ECData();
-            BlockPos blockPos = context.teEndRitualBE;
-            if (blockPos == null) return;
-            float d0 = blockPos.getX();
-            float d1 = blockPos.getY();
-            float d2 = blockPos.getZ();
-            Camera camera = mc.gameRenderer.getMainCamera();
-            PoseStack posestack = RenderSystem.getModelViewStack();
-            posestack.pushPose();
-            posestack.mulPoseMatrix(MODEL_VIEW);
-            RenderSystem.applyModelViewMatrix();
-            Vector4f pos = new Vector4f((float) -camera.getPosition().x, (float) -camera.getPosition().y, (float) -camera.getPosition().z, 1.0F);
-
-            //玩家坐标  model坐标
-            //x -> y
-            //y -> z
-            //z -> x
-            //pos model坐标
-            float distance = (float) Math.sqrt(mc.player.distanceToSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
-            PostEffectHandler.updateUniform_post(this, "HaloPos", new float[]{pos.x, pos.y, pos.z, pos.w});
-            PostEffectHandler.updateUniform_post(this, "Scale", 1F);
-            posestack.popPose();
-            RenderSystem.applyModelViewMatrix();
+        if (partialTicks < this.lastStamp) {
+            this.time += 1.0F - this.lastStamp;
+            this.time += partialTicks;
+        } else {
+            this.time += partialTicks - this.lastStamp;
         }
-        PostEffectHandler.updateUniform_post(this, "Saturation", Math.max(0.05F, saturation - ticks * 0.02F));
-         */
+        lastStamp = partialTicks;
+        float percent = Mth.lerp(partialTicks, TheEndEffect.tickCountO, TheEndEffect.tickCount) / 25F;
+        PostEffectHandler.updateUniform_post(this, "SeriousTotalTime", time * 0.05F);
+        PostEffectHandler.updateUniform_post(this, "Percent", Easing.OUT_CUBIC.calculate(percent));
+        ((AccessorPostChain) this.current()).getPasses().get(0).getEffect().setSampler("LichenSampler", () -> mc.textureManager.getTexture(LICHEN).getId());
+        ((AccessorPostChain) this.current()).getPasses().get(0).getEffect().setSampler("FadeSampler", () -> mc.textureManager.getTexture(FADE).getId());
+
+        if (mc.level != null) {
+            BlockPos pos = ((ClientLevelInterface) mc.level).revelationfix$ECData().teEndRitualBE;
+            if (pos != null) {
+                Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
+                Matrix4f transformMat = new Matrix4f(ClientUtils.LEVEL_PROJ_MAT).mul(ClientUtils.LEVEL_MODEL_VIEW_MAT);
+                Set<Vec3> toTrans = new ObjectOpenHashSet<>();
+                float step = 0.4F;
+                toTrans.add(pos.getCenter().add(0F, step + 0.25F, 0F).add(cameraPos.scale(-1)));
+                toTrans.add(pos.getCenter().add(0F, -step + 0.25F, 0F).add(cameraPos.scale(-1)));
+                toTrans.add(pos.getCenter().add(step, 0F + 0.25F, 0F).add(cameraPos.scale(-1)));
+                toTrans.add(pos.getCenter().add(-step, 0F + 0.25F, 0F).add(cameraPos.scale(-1)));
+                toTrans.add(pos.getCenter().add(0F, 0F + 0.25F, step).add(cameraPos.scale(-1)));
+                toTrans.add(pos.getCenter().add(0F, 0F + 0.25F, -step).add(cameraPos.scale(-1)));
+                List<Vec2> transformed = new ObjectArrayList<>(toTrans.stream().map(p -> {
+                    Vector4f vector4f = transformMat.transform(new Vector4f(p.toVector3f(), 0F));
+                    return new Vec2((vector4f.x / vector4f.z + 1F) / 2F, (vector4f.y / vector4f.z + 1F) / 2F);
+                }).toList());
+                float distance = 0F;
+                double[] x = limitX(transformed);
+                double[] y = limitY(transformed);
+                distance = new Vector2f((float) x[0], (float) y[0]).distance(new Vector2f((float) x[1], (float) y[1]));
+                Vector4f center = transformMat.transform(new Vector4f(pos.getCenter().add(0F,  0.25F, 0F).add(cameraPos.scale(-1)).toVector3f(), 0F));
+
+                PostEffectHandler.updateUniform_post(this, "Center", new float[]{(center.x / center.z + 1F) / 2F, (center.y / center.z + 1F) / 2F, center.z});
+                PostEffectHandler.updateUniform_post(this, "Distance", distance);
+            }
+        }
+    }
+
+    double[] limitX(Collection<Vec2> vec2s) {
+        double min = Double.NaN;
+        double max = Double.NaN;
+        for (Vec2 vec2 : vec2s) {
+            if (Double.isNaN(min) || Double.isNaN(max)) {
+                min = max = vec2.x;
+            } else {
+                if (min >= vec2.x) {
+                    min = vec2.x;
+                }
+                if (max <= vec2.x) {
+                    max = vec2.x;
+                }
+            }
+        }
+        return new double[]{min, max};
+    }
+
+    double[] limitY(Collection<Vec2> vec2s) {
+        double min = Double.NaN;
+        double max = Double.NaN;
+        for (Vec2 vec2 : vec2s) {
+            if (Double.isNaN(min) || Double.isNaN(max)) {
+                min = max = vec2.y;
+            } else {
+                if (min >= vec2.y) {
+                    min = vec2.y;
+                }
+                if (max <= vec2.y) {
+                    max = vec2.y;
+                }
+            }
+        }
+        return new double[]{min, max};
     }
 
     @Override

@@ -56,18 +56,4 @@ public class ModRitualCategoryMixin {
                 ci.cancel();
         }
     }
-
-    @Inject(method = "getTypeIcon", at = @At("HEAD"), cancellable = true)
-    private void getTypeIcon(RitualRecipe recipe, CallbackInfoReturnable<ItemStack> cir) {
-        String craftType = recipe.getCraftType();
-        for (var entry : RitualDataManager.getRegistries().entrySet()) {
-            if (craftType.equals(entry.getKey()))
-                cir.setReturnValue(entry.getValue().getIconItem());
-        }
-    }
-
-    @Redirect(method = "getTypeIcon", at = @At(value = "INVOKE", target = "Ljava/lang/String;contains(Ljava/lang/CharSequence;)Z"))
-    private boolean replaceToEquals(String instance, CharSequence s) {
-        return instance.contentEquals(s);
-    }
 }

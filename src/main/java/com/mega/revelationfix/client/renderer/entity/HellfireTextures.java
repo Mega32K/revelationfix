@@ -2,13 +2,15 @@ package com.mega.revelationfix.client.renderer.entity;
 
 import com.google.common.collect.Maps;
 import com.mega.revelationfix.Revelationfix;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
 
 public class HellfireTextures {
-    public static final Map<Integer, ResourceLocation> TEXTURES = Util.make(Maps.newHashMap(), (map) -> {
+    public static final Map<Integer, ResourceLocation> TEXTURES = Util.make(()-> {
+        Int2ObjectOpenHashMap<ResourceLocation> map = new Int2ObjectOpenHashMap<>();
         map.put(0, location("fire1.png"));
         map.put(1, location("fire2.png"));
         map.put(2, location("fire3.png"));
@@ -41,6 +43,7 @@ public class HellfireTextures {
         map.put(29, location("fire30.png"));
         map.put(30, location("fire31.png"));
         map.put(31, location("fire32.png"));
+        return map;
     });
 
     public HellfireTextures() {

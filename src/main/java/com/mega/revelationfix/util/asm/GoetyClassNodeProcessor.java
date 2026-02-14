@@ -1,13 +1,17 @@
 package com.mega.revelationfix.util.asm;
 
+import com.Polarice3.Goety.api.items.IPersist;
 import com.Polarice3.Goety.api.magic.ISpell;
+import com.Polarice3.Goety.common.items.equipment.BladeOfEnderItem;
 import com.Polarice3.Goety.common.magic.SpellStat;
+import com.Polarice3.Goety.config.ItemConfig;
 import com.mega.endinglib.coremod.forge.IClassProcessor;
 import com.mega.endinglib.util.asm.injection.InjectionFinder;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import cpw.mods.modlauncher.serviceapi.ILaunchPluginService;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.Opcodes;
@@ -159,27 +163,70 @@ public class GoetyClassNodeProcessor implements IClassProcessor, Opcodes {
                 classNode.methods.forEach(methodNode -> {
                     //遍历每一个方法的Code属性，检查是否调用了ISpell类相关方法
                     methodNode.instructions.forEach(abstractInsnNode -> {
-                        if (abstractInsnNode instanceof MethodInsnNode mNode) {
+                        if (abstractInsnNode instanceof MethodInsnNode min) {
                             //改调用，让巫术反应台的修改被应用
-                            if (mNode.owner.equals(ISPELL_CLASS)) {
-                                if (mNode.name.equals("SpellResult") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
+                            if (min.owner.equals(ISPELL_CLASS)) {
+                                if (min.name.equals("SpellResult") && min.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
                                     modified.set(true);
-                                    methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectSpellResult", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
-                                } else if (mNode.name.equals("startSpell") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
+                                    methodNode.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectSpellResult", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
+                                } else if (min.name.equals("startSpell") && min.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
                                     modified.set(true);
-                                    methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectStartSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
-                                } else if (mNode.name.equals("useSpell") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
+                                    methodNode.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectStartSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
+                                } else if (min.name.equals("useSpell") && min.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
                                     modified.set(true);
-                                    methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectUseSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
-                                } else if (mNode.name.equals("stopSpell") && mNode.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
+                                    methodNode.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectUseSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
+                                } else if (min.name.equals("stopSpell") && min.desc.equals("(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V")) {
                                     modified.set(true);
-                                    methodNode.instructions.set(mNode, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectStopSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
+                                    methodNode.instructions.set(min, new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "redirectStopSpell", "(Lcom/Polarice3/Goety/api/magic/ISpell;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;ILcom/Polarice3/Goety/common/magic/SpellStat;)V", false));
+                                }
+                            } else if (min.name.equals("isBroken")) {
+                                if (min.desc.equals("(Lnet/minecraft/world/item/ItemStack;)Z")) {
+                                    if (min.getOpcode() == Opcodes.INVOKEVIRTUAL || min.getOpcode() == INVOKESPECIAL) {
+                                        InsnList insnNodes = new InsnList();
+                                        insnNodes.add(new InsnNode(Opcodes.DUP2));
+                                        insnNodes.add(new MethodInsnNode(min.getOpcode(), min.owner, min.name, min.desc, min.itf));
+                                        insnNodes.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/mega/revelationfix/util/EventUtil", "wrapIsBroken", "(Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Z)Z"));
+                                        methodNode.instructions.insertBefore(min, insnNodes);
+                                        methodNode.instructions.remove(min);
+                                        modified.set(true);
+                                    }
+                                }
+                            } else if (min.name.equals("isNotBroken")) {
+                                if (min.desc.equals("(Lnet/minecraft/world/item/ItemStack;)Z")) {
+                                    if (min.getOpcode() == Opcodes.INVOKEVIRTUAL || min.getOpcode() == INVOKESPECIAL) {
+                                        InsnList insnNodes = new InsnList();
+                                        insnNodes.add(new InsnNode(Opcodes.DUP2));
+                                        insnNodes.add(new MethodInsnNode(min.getOpcode(), min.owner, min.name, min.desc, min.itf));
+                                        insnNodes.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/mega/revelationfix/util/EventUtil", "wrapIsNotBroken", "(Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Z)Z"));
+                                        methodNode.instructions.insertBefore(min, insnNodes);
+                                        methodNode.instructions.remove(min);
+                                        modified.set(true);
+                                    }
                                 }
                             }
                         }
 
                     });
                 });
+                if (classNode.interfaces.contains("com/Polarice3/Goety/api/items/IPersist")) {
+                    classNode.methods.forEach(m -> {
+                        if (m.name.equals("damageItem") && m.desc.equals("(Lnet/minecraft/world/item/ItemStack;ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)I")) {
+                            m.instructions.forEach(insn -> {
+                                if (insn instanceof MethodInsnNode min) {
+                                    if (min.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                                        if (min.owner.equals("net/minecraftforge/common/ForgeConfigSpec$ConfigValue") && min.name.equals("get") && min.desc.equals("()Ljava/lang/Object;")) {
+                                            if (m.instructions.get(m.instructions.indexOf(min)+2) instanceof MethodInsnNode min_booleanValue && min_booleanValue.getOpcode() == Opcodes.INVOKEVIRTUAL &&
+                                                    min_booleanValue.owner.equals("java/lang/Boolean") && min_booleanValue.name.equals("booleanValue") && min_booleanValue.desc.equals("()Z")) {
+                                                m.instructions.insert(min_booleanValue, new MethodInsnNode(Opcodes.INVOKESTATIC, "com/mega/revelationfix/util/EventUtil", "wrapConfigPersist", "(Z)Z"));
+                                                modified.set(true);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
             }
             switch (name) {
                 case ISPELL_CLASS -> {

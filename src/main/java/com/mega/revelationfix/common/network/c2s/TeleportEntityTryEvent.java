@@ -54,7 +54,7 @@ public class TeleportEntityTryEvent {
                 BlockPos blockPos = serverPlayer.blockPosition().above(-1);
                 if (serverLevel.getBlockState(blockPos).is(ModBlocks.RUNE_REACTOR.get())) {
                     if (serverLevel.getBlockEntity(blockPos) instanceof RuneReactorBlockEntity reactorBlockEntity) {
-                        List<TeleportEntity> preparation = new ArrayList<>(serverLevel.getEntitiesOfClass(TeleportEntity.class, new AABB(serverPlayer.blockPosition()).inflate(128D)));
+                        List<TeleportEntity> preparation = new ArrayList<>(serverLevel.getEntitiesOfClass(TeleportEntity.class, new AABB(serverPlayer.blockPosition()).inflate(4096D)));
                         preparation.sort((e1, e2) -> (int) ((e1.distanceToSqr(serverPlayer) - e2.distanceToSqr(serverPlayer)) * 100));
                         TeleportEntity target = null;
                         for (TeleportEntity teleportEntity : preparation) {

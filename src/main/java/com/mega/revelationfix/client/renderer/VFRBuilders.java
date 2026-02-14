@@ -6,12 +6,14 @@ import com.mega.revelationfix.client.renderer.trail.TrailPoint;
 import com.mega.revelationfix.client.renderer.trail.TrailRenderPoint;
 import com.mega.revelationfix.client.renderer.trail.TrailRenderTask;
 import com.mega.revelationfix.common.compat.SafeClass;
+import com.mega.revelationfix.common.compat.iris.IrisCompat;
 import com.mega.revelationfix.util.MUtils;
 import com.mega.revelationfix.util.other.VecHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -39,7 +41,7 @@ import java.util.function.Function;
  */
 public class VFRBuilders {
     public static final ResourceLocation beam = new ResourceLocation(Revelationfix.MODID, "textures/particle/white.png");
-    public static RenderType PRT_WHITE = MegaRenderType.particle(beam);
+    //public static RenderType PRT_WHITE = MegaRenderType.particle(beam);
     public static RenderType PRT_LIGHT_WHITE = MegaRenderType.lightParticle(beam);
 
     public VFRBuilders() {
@@ -436,7 +438,7 @@ public class VFRBuilders {
 
         @Override
         public RenderType getRenderType() {
-            return !SafeClass.usingShaderPack() ? PRT_LIGHT_WHITE : PRT_WHITE;
+            return PRT_LIGHT_WHITE;
         }
 
         @Override
@@ -461,11 +463,11 @@ public class VFRBuilders {
             toRender.add(task);
         }
 
-        public void renderTrails(PoseStack matrix) {
+        public void renderTrails(PoseStack matrix, LevelRenderer renderer) {
             if (!toRender.isEmpty()) {
                 synchronized (toRender) {
                     if (!toRender.isEmpty()) {
-                        setRenderType(!SafeClass.usingShaderPack() ? PRT_LIGHT_WHITE : PRT_WHITE);
+                        setRenderType(PRT_LIGHT_WHITE);
                         MUtils.safelyForEach(toRender, (task, i) -> {
                             if (i < 64)
                                 task.task(matrix, this);

@@ -34,18 +34,18 @@ public abstract class GoetyJeiPluginMixin {
     private void registerCategories(IRecipeCategoryRegistration registration, CallbackInfo ci) {
         if (GoetyJeiPlugin2.goetyJeiHelper == null)
             GoetyJeiPlugin2.setGoetyJeiHelper(jeiHelper);
-        for (var entry : RitualDataManager.getRegistries().keySet()) {
-            registration.addRecipeCategories(new ModRitualCategory(registration.getJeiHelpers().getGuiHelper(), entry));
-        }
+        //for (var entry : RitualDataManager.getRegistries().keySet()) {
+        //    registration.addRecipeCategories(new ModRitualCategory(registration.getJeiHelpers().getGuiHelper(), entry));
+        //}
     }
 
     @Inject(method = "registerRecipeCatalysts", at = @At("HEAD"))
     private void registerRecipeCatalysts(IRecipeCatalystRegistration registration, CallbackInfo ci) {
         if (GoetyJeiPlugin2.goetyJeiHelper == null)
             GoetyJeiPlugin2.setGoetyJeiHelper(jeiHelper);
-        for (var entry : RitualDataManager.getRegistries().entrySet()) {
-            registration.addRecipeCatalyst(entry.getValue().getIconItem(), JeiRecipeTypes.getRitual(entry.getKey()));
-        }
+        //for (var entry : RitualDataManager.getRegistries().entrySet()) {
+        //    registration.addRecipeCatalyst(entry.getValue().getIconItem(), JeiRecipeTypes.getRitual(entry.getKey()));
+        //}
     }
 
     @Inject(method = "registerRecipes",
@@ -56,8 +56,8 @@ public abstract class GoetyJeiPluginMixin {
         if (GoetyJeiPlugin2.goetyJeiHelper == null)
             GoetyJeiPlugin2.setGoetyJeiHelper(jeiHelper);
         //Internal.getJeiRuntime().getRecipeManager().addRecipes();
-        for (var entry : RitualDataManager.getRegistries().keySet()) {
-            this.registerRitualType(registration, recipeManager, entry);
-        }
+        //for (var entry : RitualDataManager.getRegistries().keySet()) {
+        //    this.registerRitualType(registration, recipeManager, entry);
+        //}
     }
 }

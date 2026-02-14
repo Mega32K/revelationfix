@@ -7,8 +7,8 @@ import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.IDamageLimitItem;
 import com.mega.endinglib.api.item.IInvulnerableItem;
 import com.mega.endinglib.api.item.armor.ModifiableArmorItem;
-import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorModifiersBuilder;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.item.armor.IGoetyDamageResistanceArmor;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
@@ -46,11 +46,10 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
     public static int getApocalyptiumTitleId(LivingEntity living) {
         return (living.tickCount / 100) % 3;
     }
-
-    public int getSoulDiscount(EquipmentSlot equipmentSlot) {
+    @Override
+    public int getSoulDiscount(EquipmentSlot equipmentSlot, ItemStack itemStack) {
         return 16;
     }
-
     @Override
     public void initializeClient(@NotNull Consumer<IClientItemExtensions> consumer) {
         super.initializeClient(consumer);
@@ -220,7 +219,6 @@ public class ApocalyptiumArmor extends ModifiableArmorItem implements IGoetyDama
         components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.apocalyptium_set.desc2"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
         super.addSetDescription(itemStack, level, components, tooltipFlag);
     }
-
     @Override
     public void injectExtraArmorAttributesBefore(ArmorModifiersBuilder builder) {
         UUID uuid = BaseArmorItem.EXTRA_MODIFIER_UUID_PER_TYPE.get(type);

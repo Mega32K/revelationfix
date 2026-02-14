@@ -35,6 +35,8 @@ public class IceHermitEntity extends SpellcasterIllager {
         this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0.0F);
         this.xpReward = 1000;
         this.setItemInHand(InteractionHand.MAIN_HAND, GRItems.STAFF_FROSTBLOOM.get().getDefaultInstance());
+        this.handDropChances[0] = 0F;
+        this.handDropChances[1] = 0F;
     }
 
     @Override
@@ -104,5 +106,10 @@ public class IceHermitEntity extends SpellcasterIllager {
             amount *= 0.5F;
         }
         return super.hurt(damageSource, amount);
+    }
+
+    @Override
+    protected void dropEquipment() {
+        super.dropEquipment();
     }
 }

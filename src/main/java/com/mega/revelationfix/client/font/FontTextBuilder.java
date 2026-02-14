@@ -43,7 +43,6 @@ public class FontTextBuilder {
         public static final char[] emptyChars = SafeClass.isModernUILoaded() ? new char[]{' ', ' ', ' ', ' '} : new char[]{' ', ' '};
         public Predicate<Style> stylePredicate;
         private StringBuilder text = new StringBuilder();
-
         public MyFormattedCharSink(Predicate<Style> stylePredicate) {
             this.stylePredicate = stylePredicate;
         }

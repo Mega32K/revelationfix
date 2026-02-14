@@ -15,6 +15,7 @@ import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.common.magic.SummonSpell;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.utils.SEHelper;
+import com.Polarice3.Goety.utils.WandUtil;
 import com.mega.revelationfix.api.event.block.RuneReactorChangeEvent;
 import com.mega.revelationfix.common.block.RuneReactorBlock;
 import com.mega.revelationfix.common.block.RunestoneEngravedTableBlock;
@@ -124,6 +125,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                 if (!world.getForcedChunks().contains(chunkPos.toLong())) {
                     world.setChunkForced(chunkPos.x, chunkPos.z, true);
                     if (!world.isLoaded(reactorBlockEntity.worldPosition)) {
+
                         world.getChunkAt(reactorBlockEntity.worldPosition).setLoaded(true);
                     }
                 }
@@ -546,10 +548,10 @@ public class RuneReactorBlockEntity extends BlockEntity {
                             for (int j = (int) aabb.minZ; j <= (int) aabb.maxZ; j++) {
                                 for (int k0 = (int) aabb.maxY - 6; k0 > (int) aabb.minY + 6; k0--) {
                                     BlockPos pos = new BlockPos(i, k0, j);
-                                    if (blockSpells.rightBlock(serverLevel, speller, pos, Direction.DOWN)) {
+                                    if (blockSpells.rightBlock(serverLevel, speller, pos, WandUtil.getStats(speller, blockSpells))) {
                                         if (canCastTouch(wandItem, spell, wand, level, speller, player)) {
 
-                                            blockSpells.blockResult(serverLevel, speller, pos, Direction.DOWN);
+                                            blockSpells.blockResult(serverLevel, speller, pos, WandUtil.getStats(speller, blockSpells));
                                         }
                                     }
                                 }
@@ -706,7 +708,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                         int CastTime = stack.getUseDuration() - spellUseTimeRemaining;
                         spellB = GoetyEventFactory.onStopSpell(playerOwner, stack, spellB, CastTime, spellUseTimeRemaining);
                         if (spellB != null) {
-                            spellB.stopSpell(serverLevel, livingEntityIn, stack, IWand.getFocus(stack), CastTime, spellB.defaultStats());
+                            spellB.stopSpell(serverLevel, livingEntityIn, stack, IWand.getFocus(stack), CastTime, WandUtil.getStats(livingEntityIn, spellB));
                             if (livingEntityIn instanceof FakeSpellerEntity fakeSpellerEntity) {
                                 if (spellB instanceof IChargingSpell spell) {
                                     if (spell.shotsNumber(playerOwner, stack) > 0) {
@@ -730,12 +732,12 @@ public class RuneReactorBlockEntity extends BlockEntity {
                         SoundEvent soundevent = wandB.CastingSound(stack, livingEntityIn);
 
                         if (CastTime == 1 && soundevent != null) {
-                            spellB.startSpell(serverLevel, livingEntityIn, stack, spellB.defaultStats());
+                            spellB.startSpell(serverLevel, livingEntityIn, stack, WandUtil.getStats(livingEntityIn, spellB));
                             worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), soundevent, SoundSource.PLAYERS, wandB.castingVolume(stack), wandB.castingPitch(stack));
                         }
                         spellB = GoetyEventFactory.onCastingSpell(livingEntityIn, stack, spellB, CastTime);
                         if (spellB != null)
-                            spellB.useSpell(serverLevel, livingEntityIn, stack, CastTime, spellB.defaultStats());
+                            spellB.useSpell(serverLevel, livingEntityIn, stack, CastTime, WandUtil.getStats(livingEntityIn, spellB));
                         else using = false;
                         label59:
                         {
@@ -785,7 +787,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                 IChargingSpell spell1;
                 if (playerOwner.isCreative()) {
                     if (stack.getTag() != null) {
-                        spellB.SpellResult(serverWorld, caster, stack, spellB.defaultStats());
+                        spellB.SpellResult(serverWorld, caster, stack, WandUtil.getStats(caster, spellB));
                         spent = false;
                         if (spellB instanceof IChargingSpell) {
                             spell1 = (IChargingSpell) spellB;
@@ -830,7 +832,7 @@ public class RuneReactorBlockEntity extends BlockEntity {
                     }
 
                     if (stack.getTag() != null) {
-                        spellB.SpellResult(serverWorld, caster, stack, spellB.defaultStats());
+                        spellB.SpellResult(serverWorld, caster, stack, WandUtil.getStats(caster, spellB));
                         boolean flag = false;
                         if (spellB instanceof IChargingSpell chargingSpell) {
                             if (chargingSpell.shotsNumber(playerOwner, stack) > 0 && wandB.ShotsFired(stack) >= chargingSpell.shotsNumber(playerOwner, stack)) {

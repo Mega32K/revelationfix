@@ -1,20 +1,25 @@
 package com.mega.revelationfix.common.event.handler;
 
+import com.Polarice3.Goety.common.entities.boss.EnderKeeper;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
+import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.utils.ColorUtil;
 import com.Polarice3.Goety.utils.ServerParticleUtil;
 import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
 import com.mega.revelationfix.api.item.combat.ICustomHurtWeapon;
 import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.data.TimeStopSavedData;
+import com.mega.revelationfix.common.data.ritual.RitualDataManager;
 import com.mega.revelationfix.common.entity.boss.ApostleServant;
 import com.mega.revelationfix.common.entity.projectile.GungnirSpearEntity;
 import com.mega.revelationfix.common.init.GRItems;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.item.curios.TheNeedleItem;
+import com.mega.revelationfix.common.item.tool.combat.sword.EnderKeeperSword;
 import com.mega.revelationfix.common.network.PacketHandler;
 import com.mega.revelationfix.common.network.c2s.TheEndDeathPacket;
 import com.mega.revelationfix.common.network.s2c.TheEndPuzzleUpdatePacket;
+import com.mega.revelationfix.common.network.s2c.data.RitualDataSyncPacket;
 import com.mega.revelationfix.common.odamane.common.TheEndPuzzleItems;
 import com.mega.revelationfix.safe.GRSavedDataEC;
 import com.mega.revelationfix.safe.GRSavedDataExpandedContext;
@@ -24,10 +29,12 @@ import com.mega.revelationfix.safe.entity.LivingEventEC;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
 import com.mega.revelationfix.util.entity.ATAHelper2;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -35,6 +42,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -44,11 +52,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -64,7 +75,25 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class CommonEventHandler {
-    private static final List<Item> vanillaItems = new ArrayList<>();
+    private static final List<Item> vanillaItems = new ObjectArrayList<>();
+    @SubscribeEvent
+    public static void onBrokenEnderKeeper(LivingDeathEvent event) {
+        if (event.getEntity() instanceof EnderKeeper) {
+            if (event.getSource().getEntity() instanceof LivingEntity source) {
+                ItemStack mainHandItem = source.getItemInHand(InteractionHand.MAIN_HAND);
+                if (mainHandItem.is(ModItems.BLADE_OF_ENDER.get()) && !source.level().isClientSide) {
+                    if (mainHandItem.getMaxDamage() - mainHandItem.getDamageValue() <= 30) {
+                        if (source.getRandom().nextFloat() <= ItemConfig.brokenEnderKeeperDropChance) {
+                            if (source instanceof Player player)
+                                player.getInventory().add(new ItemStack(GRItems.BROKEN_ENDER_KEEPER_SWORD.get()));
+                            else
+                                source.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(GRItems.BROKEN_ENDER_KEEPER_SWORD.get()));
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @SuppressWarnings("deprecation")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -288,17 +317,19 @@ public class CommonEventHandler {
         }
 
         @SubscribeEvent
-        public static void writeDataToNewPlayer(PlayerEvent.PlayerLoggedInEvent event) {
+        public static void writeDataToNewPlayer(OnDatapackSyncEvent event) {
             try {
-                if (event.getEntity().getServer() == null) return;
-                DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(event.getEntity().getServer());
+                MinecraftServer server = event.getPlayer() != null ? event.getPlayer().getServer() : null;
+                if (server == null) return;
+                DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state(server);
                 GRSavedDataEC savedDataEC = (GRSavedDataEC) state;
                 GRSavedDataExpandedContext context = savedDataEC.revelationfix$dataEC();
                 if (isValid(context.getPUZZLE1()) && isValid(context.getPUZZLE2()) && isValid(context.getPUZZLE3()) && isValid(context.getPUZZLE4()) && isValid(context.getTheEndCraftItem()))
                     PacketHandler.sendToAll(new TheEndPuzzleUpdatePacket(context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem()));
                 else
                     RevelationFixMixinPlugin.LOGGER.debug("Checked Invalid puzzle/end_craft : {}", context.getPUZZLE1(), context.getPUZZLE2(), context.getPUZZLE3(), context.getPUZZLE4(), context.getTheEndCraftItem());
-            } catch (Throwable throwable) {
+                PacketHandler.sendToAll(new RitualDataSyncPacket(RitualDataManager.getRegistries()));}
+            catch (Throwable throwable) {
                 throwable.printStackTrace();
                 System.exit(-1);
             }
@@ -352,6 +383,29 @@ public class CommonEventHandler {
 
     @Mod.EventBusSubscriber
     public static class ModItemEvents {
+        @SubscribeEvent
+        public static void enderKeeperAttackSpeed(TickEvent.PlayerTickEvent event) {
+            if (event.phase == TickEvent.Phase.START) {
+                if (event.player instanceof ServerPlayer serverPlayer) {
+                    if (serverPlayer.getItemInHand(InteractionHand.MAIN_HAND).is(GRItems.ENDER_KEEPER_SWORD.get())
+                            && serverPlayer.getItemInHand(InteractionHand.OFF_HAND).isEmpty()) {
+                        tryAddEnderKeeperModifier(serverPlayer);
+                    } else {
+                        tryRemoveEnderKeeperModifier(serverPlayer);
+                    }
+                }
+            }
+        }
+        private static void tryRemoveEnderKeeperModifier(Player player) {
+            AttributeInstance attribute = player.getAttribute(Attributes.ATTACK_SPEED);
+            if (attribute != null && attribute.getModifier(EnderKeeperSword.ATTACK_SPEED_EXTRA) != null)
+                attribute.removeModifier(EnderKeeperSword.ATTACK_SPEED_EXTRA);
+        }
+        private static void tryAddEnderKeeperModifier(Player player) {
+            AttributeInstance attribute = player.getAttribute(Attributes.ATTACK_SPEED);
+            if (attribute != null && attribute.getModifier(EnderKeeperSword.ATTACK_SPEED_EXTRA) == null)
+                attribute.addTransientModifier(new AttributeModifier(EnderKeeperSword.ATTACK_SPEED_EXTRA, "Weapon Attributes", 0.5, AttributeModifier.Operation.ADDITION));
+        }
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public static void modWeaponHurtEvent1(LivingHurtEvent event) {
             if (event.getSource().getEntity() instanceof LivingEntity living)

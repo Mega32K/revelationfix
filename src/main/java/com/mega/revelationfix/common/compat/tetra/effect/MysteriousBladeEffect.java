@@ -1,7 +1,7 @@
 package com.mega.revelationfix.common.compat.tetra.effect;
 
 import com.Polarice3.Goety.api.entities.IOwned;
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
 import com.mega.revelationfix.safe.DamageSourceInterface;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.damagesource.DamageSource;

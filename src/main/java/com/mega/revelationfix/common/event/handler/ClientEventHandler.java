@@ -21,6 +21,7 @@ import com.mega.revelationfix.util.entity.ATAHelper2;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Either;
+import com.mojang.math.Transformation;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -60,6 +61,7 @@ import org.joml.Math;
 import org.joml.Matrix4f;
 import org.joml.Options;
 import org.joml.Quaternionf;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,7 @@ public class ClientEventHandler {
     public static int tickCount;
     public static Item randomDisplayItem = Items.END_CRYSTAL;
     public static Item randomPuzzleDisplayItem = Items.END_CRYSTAL;
+    public static PoseStack afterParticlePoseStack = new PoseStack();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void tooltipNow(RenderTooltipEvent.GatherComponents event) {
@@ -338,31 +341,33 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void drawTrails(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
             if (ClientConfig.enableTrailRenderer) {
                 Minecraft mc = Minecraft.getInstance();
                 ProfilerFiller profilerFiller = mc.getProfiler();
                 MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
-                PoseStack matrix = event.getPoseStack();
+                PoseStack matrix = afterParticlePoseStack;
                 LightTexture lightTexture = mc.gameRenderer.lightTexture();
-                Camera camera = (Minecraft.getInstance()).gameRenderer.getMainCamera();
+                Camera camera = mc.gameRenderer.getMainCamera();
                 double d3 = camera.getPosition().x;
                 double d4 = camera.getPosition().y;
                 double d5 = camera.getPosition().z;
                 if (normalStarTrailsBuilder == null) {
                     normalStarTrailsBuilder = VFRBuilders.WorldVFRTrailBuilder.create();
                 }
-                lightTexture.turnOnLightLayer();
-                lightTexture.updateLightTexture(mc.getPartialTick());
                 profilerFiller.push("CIL_trail");
                 if (!normalStarTrailsBuilder.toRender.isEmpty()) {
                     matrix.translate(-d3, -d4, -d5);
-                    normalStarTrailsBuilder.renderTrails(matrix);
+                    normalStarTrailsBuilder.renderTrails(matrix, mc.levelRenderer);
                     matrix.translate(d3, d4, d5);
                 }
+                if (!matrix.clear())
+                    matrix.popPose();
                 profilerFiller.pop();
-                lightTexture.turnOffLightLayer();
             }
+        } else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            afterParticlePoseStack = new PoseStack();
+            afterParticlePoseStack.pushTransformation(new Transformation(event.getPoseStack().last().pose()));
         }
     }
 

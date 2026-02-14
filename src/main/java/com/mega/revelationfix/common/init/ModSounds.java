@@ -13,4 +13,5 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> QUIETUS_BEAM = SOUNDS.register("quietus_beam", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Revelationfix.MODID, "quietus_beam")));
     public static final RegistryObject<SoundEvent> STAR_CAST = SOUNDS.register("star_arrow_cast", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Revelationfix.MODID, "star_arrow_cast")));
     public static final RegistryObject<SoundEvent> STAR_EXPLODE = SOUNDS.register("star_arrow_explode", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Revelationfix.MODID, "star_arrow_explode")));
+    public static final RegistryObject<SoundEvent> ENDER_KEEPER_BACK = SOUNDS.register("ender_keeper.back", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Revelationfix.MODID, "ender_keeper.back")));
 }

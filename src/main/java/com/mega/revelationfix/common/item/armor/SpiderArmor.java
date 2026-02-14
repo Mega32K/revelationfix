@@ -9,8 +9,8 @@ import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.IModeToggleItem;
 import com.mega.endinglib.api.item.armor.OptionArmorMaterial;
-import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorModifiersBuilder;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.client.model.entity.SpiderArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
@@ -98,10 +98,9 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
     }
 
     @Override
-    public int getSoulDiscount(EquipmentSlot equipmentSlot) {
+    public int getSoulDiscount(EquipmentSlot equipmentSlot, ItemStack itemStack) {
         return 4;
     }
-
     @Override
     public void onArmorTick(Level level, LivingEntity living, ItemStack itemStack, Type type) {
         if (!level.isClientSide) {
@@ -181,7 +180,7 @@ public class SpiderArmor extends BaseArmorItem implements ISoulRepair, ISoulDisc
 
     @Override
     public void toggleMode(ServerPlayer serverPlayer, Item item) {
-        serverPlayer.getCapability(CommonProxy.getPlayerCap()).ifPresent(cap -> {
+        CommonProxy.getPlayerCapOptional(serverPlayer).ifPresent(cap -> {
             cap.setArmorClimbing(!cap.isArmorClimbingMode());
             serverPlayer.sendSystemMessage(Component.translatable("message.goety_revelation.armor.climbing_mode", cap.isArmorClimbingMode() ? LoreHelper.TRUE().getString() : LoreHelper.FALSE().getString()), true);
         });

@@ -1,22 +1,27 @@
 package com.mega.revelationfix.common.item.armor;
 
-import com.Polarice3.Goety.common.items.ModItems;
+import com.Polarice3.Goety.utils.MiscCapHelper;
+import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.IDamageLimitItem;
 import com.mega.endinglib.api.item.IDragonLightRendererItem;
-import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorModifiersBuilder;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
+import com.mega.revelationfix.client.font.effect.LoreHelper;
 import com.mega.revelationfix.client.model.entity.SpectreDarkmageHatModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
+import com.mega.revelationfix.common.config.ItemConfig;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.item.FontItemExtensions;
+import com.mega.revelationfix.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,6 +31,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -66,9 +72,11 @@ public class SpectreDarkmageArmor extends SpectreArmor implements IDragonLightRe
         });
     }
 
+
+
     @Override
-    public int getSoulDiscount(EquipmentSlot equipmentSlot) {
-        return super.getSoulDiscount(equipmentSlot) + 2;
+    public int getSoulDiscount(EquipmentSlot equipmentSlot, ItemStack itemStack) {
+        return super.getSoulDiscount(equipmentSlot, itemStack) + 2;
     }
 
     @Override
@@ -80,7 +88,6 @@ public class SpectreDarkmageArmor extends SpectreArmor implements IDragonLightRe
     public int getUseDamageLimit(ItemStack stack) {
         return 20;
     }
-
     @Override
     public void injectExtraArmorAttributes(ArmorModifiersBuilder builder) {
         UUID uuid = EXTRA_MODIFIER_UUID_PER_TYPE.get(type);
@@ -111,6 +118,9 @@ public class SpectreDarkmageArmor extends SpectreArmor implements IDragonLightRe
         components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name.generic.attack_damage", (s) -> BaseArmorItem.ATTACK_DAMAGE_MODIFIER.getAmount() * 100.0F)));
         components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name." + ModMain.MODID + ".spell_power", (s) -> BaseArmorItem.SPELL_POWER_MODIFIER.getAmount() * 100.0F)));
         components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION_ATTRIBUTE_PREFIX).appendAttributeFormat(1, new CuriosMutableComponent.AttributeDescFunction2("attribute.name." + ModMain.MODID + ".cast_duration", (s) -> SPELL_CASTING_DURATION_MODIFIER.getAmount() * 100.0F)));
+        components.add(CuriosMutableComponent.create(Component.translatable("item.goety_revelation.spectre_darkmage_set.desc0"), LoreStyle.INDENTATION_ATTRIBUTE_PREFIX));
+        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION2).appendFormat("%s", s -> new Object[]{LoreHelper.getSoulCostText(ItemConfig.spectreDAShieldCost)}));
+        components.add(CuriosMutableComponent.create(LoreStyle.INDENTATION2).appendFormat("%s", s -> new Object[]{I18n.get("tooltip.goety_revelation.cooldowns_seconds", ItemConfig.spectreDAShieldCooldown)}));
     }
 
     @Override
@@ -124,5 +134,23 @@ public class SpectreDarkmageArmor extends SpectreArmor implements IDragonLightRe
             return ModMain.MODID + ":textures/models/armor/spectre_darkmage_hat.png";
         }
         return super.getArmorTexture(stack, entity, slot, type);
+    }
+
+    @Override
+    public void when4SetTick(LivingEntity living, Level level) {
+        if (living instanceof Player player && !level.isClientSide) {
+            CommonProxy.getPlayerCapOptional(player).ifPresent(cap -> {
+                if (SEHelper.getSoulsAmount(player, ItemConfig.spectreDAShieldCost)) {
+                    if (cap.getSpectreDAShieldCooldown() <= 0 && MiscCapHelper.getShields(player) <= 0) {
+                        cap.setSpectreDAShieldCooldown(ItemConfig.spectreDAShieldCooldown * 20);
+                        cap.setExtraMagicShield(cap.getExtraMagicShield() + 1);
+                        MiscCapHelper.setShieldTime(player, 2000);
+                        MiscCapHelper.increaseShields(player);
+                        SEHelper.decreaseSouls(player, ItemConfig.spectreDAShieldCost);
+                    }
+                }
+            });
+
+        }
     }
 }

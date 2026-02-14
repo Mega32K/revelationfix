@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +36,12 @@ public class LoreHelper {
         int index = Mth.clamp(staff.getStaffLevel(), 0, staffLevelNameID.length - 1);
         return Component.translatable("tooltip.goety_revelation.wand_level." + staffLevelNameID[index]).withStyle(staffLevelColors.length == staffLevelNameID.length ? staffLevelColors[index] : ChatFormatting.GRAY);
     }
-
+    public static String getSoulCostText(int cost) {
+        if (cost < 700) {
+            return I18n.get("tooltip.goety_revelation.soul_cost", cost);
+        }
+        return I18n.get("tooltip.goety_revelation.soul_cost_kilo", cost * 0.001);
+    }
     public static boolean hasControlDown() {
         if (Minecraft.ON_OSX) {
             return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), 343) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), 347);

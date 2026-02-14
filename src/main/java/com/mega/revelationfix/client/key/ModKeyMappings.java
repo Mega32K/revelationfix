@@ -4,7 +4,6 @@ import com.mega.endinglib.api.client.ClientTaskInstance;
 import com.mega.endinglib.api.event.EventItf;
 import com.mega.endinglib.api.item.IModeToggleItem;
 import com.mega.endinglib.client.ClientWrapped;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
 import com.mega.revelationfix.client.screen.post.custom.BarrelDistortionCoordinatesPostEffect;
 import com.mega.revelationfix.client.task.TeleportCameraTask;
 import com.mega.revelationfix.common.block.blockentity.RuneReactorBlockEntity;
@@ -17,6 +16,7 @@ import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -83,7 +83,7 @@ public class ModKeyMappings {
                         BlockPos blockPos = player.blockPosition().above(-1);
                         if (level.getBlockState(blockPos).is(ModBlocks.RUNE_REACTOR.get())) {
                             if (level.getBlockEntity(blockPos) instanceof RuneReactorBlockEntity reactorBlockEntity) {
-                                List<TeleportEntity> preparation = new ArrayList<>(level.getEntitiesOfClass(TeleportEntity.class, new AABB(player.blockPosition()).inflate(128D)));
+                                List<TeleportEntity> preparation = new ArrayList<>(level.getEntitiesOfClass(TeleportEntity.class, new AABB(player.blockPosition()).inflate(4096D)));
                                 preparation.sort((e1, e2) -> (int) ((e1.distanceToSqr(player) - e2.distanceToSqr(player)) * 100));
                                 TeleportEntity target = null;
                                 for (TeleportEntity teleportEntity : preparation) {
@@ -92,7 +92,7 @@ public class ModKeyMappings {
                                         break;
                                     }
                                 }
-                                if (target != null && !target.isRemoved()) {
+                                if (target != null) {
                                     mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.ENDERMAN_TELEPORT, 1F));
                                     if (BarrelDistortionCoordinatesPostEffect.tickCount <= 0) {
                                         ClientTaskInstance instance = new TeleportCameraTask();

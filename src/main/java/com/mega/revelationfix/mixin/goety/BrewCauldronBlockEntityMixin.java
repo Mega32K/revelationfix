@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(BrewCauldronBlockEntity.class)
-public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
+public abstract class BrewCauldronBlockEntityMixin extends BlockEntity implements WorldlyContainer {
     @Shadow(remap = false)
     public BrewCauldronBlockEntity.Mode mode;
     @Shadow(remap = false)
@@ -67,9 +68,6 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity {
 
     @Shadow(remap = false)
     protected abstract int getFirstEmptySlot();
-
-    @Shadow
-    public abstract void setItem(int pIndex, @NotNull ItemStack pStack);
 
     @Shadow(remap = false)
     public abstract int getCapacity();

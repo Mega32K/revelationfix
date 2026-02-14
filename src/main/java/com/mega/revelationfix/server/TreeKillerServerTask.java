@@ -1,7 +1,7 @@
 package com.mega.revelationfix.server;
 
 import com.google.common.collect.Queues;
-import com.mega.endinglib.api.server.ServerTaskInstance;
+import com.mega.endinglib.api.server.ServerTask;
 import com.mega.endinglib.util.java.Args;
 import com.mega.revelationfix.mixin.ServerPlayerGameModeAccessor;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Queue;
 
-public class TreeKillerServerTask extends ServerTaskInstance {
+public class TreeKillerServerTask extends ServerTask {
     public static final Vec3i[] LOGS_FOUND_DELTA = new Vec3i[] {
             new Vec3i(1, 0, 1),
             new Vec3i(1, 0, 0),

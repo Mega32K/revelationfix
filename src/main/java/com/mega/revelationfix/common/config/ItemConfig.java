@@ -32,6 +32,9 @@ public class ItemConfig {
     private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_ATTRIBUTE_1;
     private static final ForgeConfigSpec.ConfigValue<Double> SOUL_OF_OBSIDIAN_PERCENT_INCREASE;
     private static final ForgeConfigSpec.ConfigValue<Integer> EERIE_AXE_MAX_DEPTH_OF_DIGGING;
+    private static final ForgeConfigSpec.ConfigValue<Integer> SPECTRE_DA_MAGIC_SHIELD_COOLDOWN;
+    private static final ForgeConfigSpec.ConfigValue<Integer> SPECTRE_DA_MAGIC_SHIELD_COST;
+    private static final ForgeConfigSpec.ConfigValue<Double> BROKEN_ENDER_KEEPER_CHANCE;
     public static double needleArmorPenetration;
     public static double needleEnchantmentPiercing;
     public static double needleAVMin;
@@ -53,8 +56,16 @@ public class ItemConfig {
     public static float soulOfObsidianSoulStealing;
     public static float soulOfObsidianSpecialLootIncrease;
     public static int eerieAxeMaxDepth;
+    public static int spectreDAShieldCooldown;
+    public static int spectreDAShieldCost;
+    public static float brokenEnderKeeperDropChance;
 
     static {
+        BUILDER.push("Ender Keeper");
+        BROKEN_ENDER_KEEPER_CHANCE = BUILDER.worldRestart().
+                comment("Drop chance of Broken Ender Keeper ppon conditions.").
+                defineInRange("BrokenDropChance", 0.35D, 0D, 1D);
+        BUILDER.pop();
         BUILDER.push("Blessing Scroll");
         BLESSING_SCROLL_DAMAGE_BOOST = BUILDER.worldRestart().
                 comment("Damage increase provided by Scroll of a Blessing for each lucky point, as percentage.").
@@ -111,6 +122,14 @@ public class ItemConfig {
                 .comment("display player's apostle title when equipped the apocalyptium chestplate")
                 .define("displayTitle", false);
         BUILDER.pop();
+        BUILDER.push("Spectre Darkmage Armor");
+        SPECTRE_DA_MAGIC_SHIELD_COOLDOWN = BUILDER.worldRestart()
+                .comment("The cooldown of Spectre Darkmage set after adding a layer of magic shield(in seconds.).")
+                .defineInRange("MagicShieldCooldown", 30, 1, 32768);
+        SPECTRE_DA_MAGIC_SHIELD_COST = BUILDER.worldRestart()
+                .comment("The soul energy cost of Spectre Darkmage set after adding a layer of magic shield.")
+                .defineInRange("MagicShieldCost", 30, 0, 32768);
+        BUILDER.pop();
         BUILDER.pop();
         BUILDER.push("Amulet of Slime");
         AMULET_OF_SLIME_COOLDOWN = BUILDER.worldRestart()
@@ -165,6 +184,9 @@ public class ItemConfig {
             soulOfObsidianSoulDecreaseEfficiency = SOUL_OF_OBSIDIAN_ATTRIBUTE_1.get().floatValue();
             soulOfObsidianSpecialLootIncrease = SOUL_OF_OBSIDIAN_PERCENT_INCREASE.get().floatValue();
             eerieAxeMaxDepth = EERIE_AXE_MAX_DEPTH_OF_DIGGING.get();
+            spectreDAShieldCooldown = SPECTRE_DA_MAGIC_SHIELD_COOLDOWN.get();
+            spectreDAShieldCost = SPECTRE_DA_MAGIC_SHIELD_COST.get();
+            brokenEnderKeeperDropChance = BROKEN_ENDER_KEEPER_CHANCE.get().floatValue();
         }
     }
 }

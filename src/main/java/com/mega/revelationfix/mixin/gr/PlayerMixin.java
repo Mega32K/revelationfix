@@ -3,6 +3,7 @@ package com.mega.revelationfix.mixin.gr;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.common.entities.projectiles.NetherMeteor;
 import com.Polarice3.Goety.init.ModSounds;
+import com.mega.revelationfix.common.capability.entity.GRPlayerCapability;
 import com.mega.revelationfix.proxy.CommonProxy;
 import com.mega.revelationfix.safe.OdamanePlayerExpandedContext;
 import com.mega.revelationfix.util.entity.ATAHelper2;
@@ -164,32 +165,32 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerAbilityH
 
     @Override
     public int getInvulTick() {
-        return CommonProxy.getPlayerCapInstance((Player) (Object) this).getInvulTick();
+        return CommonProxy.getPlayerCapOptional((Player) (Object) this).lazyMap(GRPlayerCapability::getInvulTick).orElse(0);
     }
 
     @Override
     public void setInvulTick(int tick) {
-        CommonProxy.getPlayerCapInstance((Player) (Object) this).setInvulTick(tick);
+        CommonProxy.getPlayerCapOptional((Player) (Object) this).ifPresent(cap -> cap.setInvulTick(tick));
     }
 
     @Override
     public int getMeteor() {
-        return CommonProxy.getPlayerCapInstance((Player) (Object) this).getHaloReviveCooldown();
+        return CommonProxy.getPlayerCapOptional((Player) (Object) this).lazyMap(GRPlayerCapability::getHaloReviveCooldown).orElse(0);
     }
 
     @Override
     public void setMeteor(int tick) {
-        CommonProxy.getPlayerCapInstance((Player) (Object) this).setHaloReviveCooldown(tick);
+        CommonProxy.getPlayerCapOptional((Player) (Object) this).ifPresent(cap -> cap.setHaloReviveCooldown(tick));
     }
 
     @Override
     public int getMeteoring() {
-        return CommonProxy.getPlayerCapInstance((Player) (Object) this).getMeteorTime();
+        return CommonProxy.getPlayerCapOptional((Player) (Object) this).lazyMap(GRPlayerCapability::getMeteorTime).orElse(0);
     }
 
     @Override
     public void setMeteoring(int tick) {
-        CommonProxy.getPlayerCapInstance((Player) (Object) this).setMeteorTime(tick);
+        CommonProxy.getPlayerCapOptional((Player) (Object) this).ifPresent(cap -> cap.setMeteorTime(tick));
     }
 
     @Override

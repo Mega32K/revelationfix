@@ -4,13 +4,14 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.cultists.Heretic;
 import com.Polarice3.Goety.common.entities.hostile.cultists.SpellCastingCultist;
 import com.Polarice3.Goety.common.entities.neutral.AbstractNecromancer;
-import com.mega.endinglib.client.RendererUtils;
+import com.mega.endinglib.client.ClientContext;
 import com.mega.endinglib.util.time.TimeStopEntityData;
 import com.mega.endinglib.util.time.TimeStopUtils;
 import com.mega.revelationfix.common.compat.ironspell.IronSpellbooksSafeClass;
 import com.mega.revelationfix.common.compat.tetra.TetraWrapped;
 import com.mega.revelationfix.common.config.ModpackCommonConfig;
 import com.mega.revelationfix.util.EarlyConfig;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.irisshaders.iris.api.v0.IrisApi;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -159,7 +160,7 @@ public class SafeClass {
     }
 
     public static void enableTimeStop(LivingEntity srcE, boolean z, int ticks) {
-        TimeStopUtils.use(z, srcE, true, ticks);
+        TimeStopUtils.use(z, srcE, true, ticks, true);
     }
 
     public static void enableTimeStop(LivingEntity srcE, boolean z) {
@@ -172,7 +173,7 @@ public class SafeClass {
     }
 
     public static boolean isClientTimeStop() {
-        return TimeStopUtils.isTimeStop && RendererUtils.isTimeStop_andSameDimension;
+        return TimeStopUtils.isTimeStop && ClientContext.isTimeStop_andSameDimension;
     }
 
     public static boolean isTimeStop(ServerLevel serverLevel) {
@@ -204,7 +205,7 @@ public class SafeClass {
         TetraWrapped.doomItemEffect(living, target);
     }
 
-    public static Map<Attribute, UUID> getAttributes() {
+    public static Object2ObjectOpenHashMap<Attribute, UUID> getAttributes() {
         return TetraWrapped.getAttributes();
     }
 

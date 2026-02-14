@@ -6,8 +6,8 @@ import com.mega.endinglib.api.client.cmc.CuriosMutableComponent;
 import com.mega.endinglib.api.client.cmc.LoreStyle;
 import com.mega.endinglib.api.item.IDamageLimitItem;
 import com.mega.endinglib.api.item.IDragonLightRendererItem;
-import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorModifiersBuilder;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.client.model.entity.SpiderDarkmageArmorModel;
 import com.mega.revelationfix.common.apollyon.common.RevelationRarity;
 import com.mega.revelationfix.common.init.ModAttributes;
@@ -84,11 +84,11 @@ public class SpiderDarkmageArmor extends SpiderArmor implements IDragonLightRend
         return ModMain.MODID + ":textures/models/armor/spider_darkmage_armor_layer.png";
     }
 
-    @Override
-    public int getSoulDiscount(EquipmentSlot equipmentSlot) {
-        return super.getSoulDiscount(equipmentSlot) + 2;
-    }
 
+    @Override
+    public int getSoulDiscount(EquipmentSlot equipmentSlot, ItemStack itemStack) {
+        return super.getSoulDiscount(equipmentSlot, itemStack) + 2;
+    }
     @Override
     public boolean enableDragonLightRenderer(ItemStack stack) {
         return true;

@@ -4,6 +4,7 @@ import com.Polarice3.Goety.common.entities.projectiles.CorruptedBeam;
 import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.common.magic.spells.CorruptedBeamSpell;
 import com.Polarice3.Goety.utils.WandUtil;
+import com.mega.endinglib.util.annotation.DeprecatedMixin;
 import com.mega.revelationfix.util.EventUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,20 +14,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(CorruptedBeam.class)
+@DeprecatedMixin
 public abstract class CorruptedBeamMixin {
-    @Redirect(
-            method = "damageEntities",
-            at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/utils/WandUtil;getLevels(Lnet/minecraft/world/item/enchantment/Enchantment;Lnet/minecraft/world/entity/LivingEntity;)I"),
-            remap = false
-    )
-    private int potencyDamage(Enchantment enchantment, LivingEntity livingEntity) {
-        if (livingEntity.level() instanceof ServerLevel serverLevel) {
-            CorruptedBeamSpell spell = new CorruptedBeamSpell();
-            SpellStat spellStat = spell.defaultStats();
-            spellStat.setPotency(spellStat.getPotency() + WandUtil.getLevels(enchantment, livingEntity));
-            EventUtil.modifySpellStatsWithoutEnchantment(spell, serverLevel, livingEntity, livingEntity.getUseItem(), spellStat);
-            return spellStat.getPotency();
-        }
-        return WandUtil.getLevels(enchantment, livingEntity);
-    }
+    /**
+     * @Redirect(
+     *             method = "damageEntities",
+     *             at = @At(value = "INVOKE", target = "Lcom/Polarice3/Goety/utils/WandUtil;getLevels(Lnet/minecraft/world/item/enchantment/Enchantment;Lnet/minecraft/world/entity/LivingEntity;)I"),
+     *             remap = false
+     *     )
+     *     private int potencyDamage(Enchantment enchantment, LivingEntity livingEntity) {CorruptedBeamSpell
+     *         if (livingEntity.level() instanceof ServerLevel serverLevel) {
+     *             CorruptedBeamSpell spell = new CorruptedBeamSpell();
+     *             SpellStat spellStat = spell.defaultStats();
+     *             spellStat.setPotency(spellStat.getPotency() + WandUtil.getLevels(enchantment, livingEntity));
+     *             EventUtil.modifySpellStatsWithoutEnchantment(spell, serverLevel, livingEntity, livingEntity.getUseItem(), spellStat);
+     *             return spellStat.getPotency();
+     *         }
+     *         return WandUtil.getLevels(enchantment, livingEntity);
+     *     }
+     */
 }

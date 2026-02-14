@@ -18,6 +18,7 @@ import com.mega.revelationfix.client.renderer.entity.*;
 import com.mega.revelationfix.client.renderer.entity.mob.HereticServantRenderer;
 import com.mega.revelationfix.client.renderer.entity.mob.IceHermitEntityRenderer;
 import com.mega.revelationfix.client.renderer.entity.mob.MaverickServantRenderer;
+import com.mega.revelationfix.client.model.item.KeeperSwordItemModel;
 import com.mega.revelationfix.client.screen.post.PostProcessingShaders;
 import com.mega.revelationfix.common.block.RuneReactorBlock;
 import com.mega.revelationfix.common.block.blockentity.renderer.RuneReactorBERenderer;
@@ -120,7 +121,7 @@ public class ClientProxy implements ModProxy {
                 }
 
                 out.close();
-            } catch (IOException var6) {
+            } catch (IOException ignore) {
             }
         }
 
@@ -145,7 +146,7 @@ public class ClientProxy implements ModProxy {
                 }
 
                 out.close();
-            } catch (IOException var6) {
+            } catch (IOException ignore) {
             }
         }
 
@@ -299,6 +300,7 @@ public class ClientProxy implements ModProxy {
         event.registerLayerDefinition(SpectreDarkmageHatModel.LAYER_LOCATION, SpectreDarkmageHatModel::createHatLayer);
         event.registerLayerDefinition(ApollyonRobeModel.LAYER_LOCATION, ApollyonRobeModel::createBodyLayer);
         event.registerLayerDefinition(IceHermitModel.LAYER_LOCATION, IceHermitModel::createBodyLayer);
+        event.registerLayerDefinition(KeeperSwordItemModel.LAYER_LOCATION, KeeperSwordItemModel::createBodyLayer);
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {
@@ -319,6 +321,7 @@ public class ClientProxy implements ModProxy {
             EntityRenderers.register(ModEntities.FAKE_SPELLER.get(), FakeSpellerRenderer::new);
             EntityRenderers.register(ModEntities.TELEPORT_ENTITY.get(), TeleportEntityRenderer::new);
             EntityRenderers.register(ModEntities.ICE_HERMIT.get(), IceHermitEntityRenderer::new);
+            EntityRenderers.register(ModEntities.SHADOW_PLAYER.get(), ShadowPlayerRenderer::new);
             //if (!SafeClass.isYSMLoaded())
             CuriosRendererRegistry.register(GRItems.HALO_OF_THE_END, OdamaneHaloLayer::new);
             BlockEntityRenderers.register(ModBlocks.RUNE_REACTOR_ENTITY.get(), RuneReactorBERenderer::new);
@@ -347,6 +350,7 @@ public class ClientProxy implements ModProxy {
 
     public void registerKeys(RegisterKeyMappingsEvent evt) {
         evt.register(ModKeyMappings.ACTIVE_CURIO_SKILL);
+        evt.register(ModKeyMappings.ACTIVE_ARMOR_SKILL);
     }
 
     public void onParticleFactoryRegistration(RegisterParticleProvidersEvent event) {

@@ -1,7 +1,7 @@
 package com.mega.revelationfix.mixin.ironspellbooks.goety_revelation;
 
 import com.mega.endinglib.util.annotation.ModDependsMixin;
-import com.mega.endinglib.util.entity.armor.ArmorModifiersBuilder;
+import com.mega.endinglib.util.mc.entity.armor.ArmorModifiersBuilder;
 import com.mega.revelationfix.common.item.armor.BaseArmorItem;
 import com.mega.revelationfix.common.item.armor.SpectreArmor;
 import com.mega.revelationfix.common.item.armor.SpectreDarkmageArmor;

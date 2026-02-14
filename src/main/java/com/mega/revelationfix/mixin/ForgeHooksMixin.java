@@ -1,7 +1,8 @@
 package com.mega.revelationfix.mixin;
 
-import com.mega.endinglib.util.entity.armor.ArmorUtils;
+import com.mega.endinglib.util.mc.entity.armor.ArmorUtils;
 import com.mega.revelationfix.api.event.entity.EarlyLivingDeathEvent;
+import com.mega.revelationfix.common.capability.entity.GRPlayerCapability;
 import com.mega.revelationfix.common.event.handler.ArmorEvents;
 import com.mega.revelationfix.proxy.CommonProxy;
 import net.minecraft.core.BlockPos;
@@ -22,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(value = ForgeHooks.class, priority = 888)
 public class ForgeHooksMixin {
@@ -38,7 +38,7 @@ public class ForgeHooksMixin {
         if (entity.horizontalCollision)
             if (ArmorEvents.isSpiderSet(ArmorUtils.getArmorSet(entity))) {
                 boolean isSpectator = (entity instanceof Player && entity.isSpectator());
-                if (entity instanceof Player player && !CommonProxy.getPlayerCapInstance(player).isArmorClimbingMode()) return;
+                if (entity instanceof Player player && !(CommonProxy.getPlayerCapOptional(player).map(GRPlayerCapability::isArmorClimbingMode).orElse(false))) return;
                 if (isSpectator) return;
                 if (!ForgeConfig.SERVER.fullBoundingBoxLadders.get()) {
                     cir.setReturnValue(Optional.of(pos));

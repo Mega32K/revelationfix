@@ -36,7 +36,7 @@ public class PostProcessingShaders implements ResourceManagerReloadListener {
     public void renderShaders(float partialTicks) {
         if (isReloading) return;
         if (minecraft.level != null && minecraft.player != null) {
-            this.minecraft.getProfiler().push("fantasy_ending_post_effects");
+            this.minecraft.getProfiler().push("revelation_post_effects");
             PostEffectHandler.getData().values().stream().filter(CustomScreenEffect::canUse).forEach(effect -> {
                 PostChain postChain = postChains.get(effect);
                 if (postChain != null) {

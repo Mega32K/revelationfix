@@ -1,6 +1,8 @@
 package com.mega.revelationfix.common.data.ritual;
 
 import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -18,7 +20,7 @@ public class RitualData {
     public static final String TIME = "time";
     private final String ritual;
     public Vec3i range = new Vec3i(8, 8, 8);
-    public Map<String, Set<Requirement>> requirements = new HashMap<>();
+    public Map<String, Set<Requirement>> requirements = new Object2ObjectOpenHashMap<>();
     private String iconItemKey;
     private ItemStack iconItem;
 
@@ -65,11 +67,11 @@ public class RitualData {
     }
 
     public void initRequirements() {
-        this.requirements.put(BLOCKS, new HashSet<>());
-        this.requirements.put(ENTITIES, new HashSet<>());
-        this.requirements.put(DIMENSION, new HashSet<>());
-        this.requirements.put(POSITION, new HashSet<>());
-        this.requirements.put(TIME, new HashSet<>());
+        this.requirements.put(BLOCKS, new ObjectOpenHashSet<>());
+        this.requirements.put(ENTITIES, new ObjectOpenHashSet<>());
+        this.requirements.put(DIMENSION, new ObjectOpenHashSet<>());
+        this.requirements.put(POSITION, new ObjectOpenHashSet<>());
+        this.requirements.put(TIME, new ObjectOpenHashSet<>());
     }
 
     public void setRequirements(String type, Collection<Requirement> collection) {

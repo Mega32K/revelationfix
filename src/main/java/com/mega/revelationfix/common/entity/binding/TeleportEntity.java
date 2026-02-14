@@ -60,7 +60,7 @@ public class TeleportEntity extends Entity implements BlockBindingEntity {
         } else {
             Vec3 vec3 = new Vec3(entity.getX(), entity.getEyeY(), entity.getZ());
             Vec3 vec31 = new Vec3(p_147185_.getX(), p_147185_.getEyeY(), p_147185_.getZ());
-            if (vec31.distanceTo(vec3) > 128.0D) {
+            if (vec31.distanceTo(vec3) > 4096.0D) {
                 return false;
             } else {
                 return clip(entity.level(), new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)).getType() == HitResult.Type.MISS;
@@ -299,12 +299,12 @@ public class TeleportEntity extends Entity implements BlockBindingEntity {
 
     @Override
     public boolean shouldRenderAtSqrDistance(double p_19883_) {
-        return p_19883_ < 64D * 64D * 8 * 8;
+        return p_19883_ < 64D * 64D * 32 * 32;
     }
 
     @Override
     public @NotNull AABB getBoundingBoxForCulling() {
-        return this.getBoundingBox().inflate(96);
+        return new AABB(this.getReactorPos()).inflate(1024);
     }
 
     @Override
@@ -325,6 +325,11 @@ public class TeleportEntity extends Entity implements BlockBindingEntity {
     @Override
     public void blockOwnerTickEvent(Level level, BlockPos pos, BlockState blockState, @Nullable BlockEntity blockEntity, int flag) {
 
+    }
+
+    @Override
+    public boolean isAlwaysTicking() {
+        return true;
     }
 
     public boolean isLookingAtMe(Player p_32535_) {

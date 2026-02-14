@@ -23,7 +23,8 @@ public class ModBlocks {
 
     public static RegistryObject<BlockItem> asBLockItem(DeferredRegister<Item> deferredRegister, RegistryObject<Block> ro) {
         return deferredRegister.register(ro.getId().getPath(), () -> new BlockItem(ro.get(), new Item.Properties()));
-    }    public static final RegistryObject<BlockEntityType<RuneReactorBlockEntity>> RUNE_REACTOR_ENTITY = BLOCK_ENTITIES.register("rune_reactor", () ->
+    }
+    public static final RegistryObject<BlockEntityType<RuneReactorBlockEntity>> RUNE_REACTOR_ENTITY = BLOCK_ENTITIES.register("rune_reactor", () ->
             BlockEntityType.Builder.of(
                     RuneReactorBlockEntity::new,
                     RUNE_REACTOR.get()

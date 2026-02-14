@@ -5,9 +5,10 @@ import com.Polarice3.Goety.common.entities.boss.Apostle;
 import com.Polarice3.Goety.common.entities.hostile.servants.ObsidianMonolith;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.CuriosFinder;
+import com.google.common.collect.ImmutableList;
 import com.mega.endinglib.mixin.accessor.AccessorLivingEntity;
-import com.mega.endinglib.util.entity.DamageSourceGenerator;
-import com.mega.endinglib.util.entity.MobEffectUtils;
+import com.mega.endinglib.util.mc.entity.DamageSourceGenerator;
+import com.mega.endinglib.util.mc.entity.MobEffectUtils;
 import com.mega.revelationfix.common.apollyon.common.CooldownsManager;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.common.config.CommonConfig;
@@ -17,14 +18,13 @@ import com.mega.revelationfix.mixin.gr.PlayerMixin;
 import com.mega.revelationfix.proxy.CommonProxy;
 import com.mega.revelationfix.safe.entity.PlayerInterface;
 import com.mega.revelationfix.util.entity.ATAHelper2;
-import com.mega.revelationfix.util.entity.CapabilityGetter;
 import com.mega.revelationfix.util.java.SynchedFixedLengthList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -132,7 +132,16 @@ public class OdamanePlayerExpandedContext {
         abilityHelper = (PlayerAbilityHelper) player;
         accessorLivingEntity = (AccessorLivingEntity) player;
     }
-
+    public static void setInvulnerableTo() {
+        List<TagKey<DamageType>> tagKeys = new ArrayList<>();
+        tagKeys.add(DamageTypeTags.IS_FIRE);//火焰
+        tagKeys.add(DamageTypeTags.IS_FALL); //摔落
+        tagKeys.add(DamageTypeTags.IS_DROWNING); //溺水
+        tagKeys.add(DamageTypeTags.IS_LIGHTNING); //闪电
+        tagKeys.add(DamageTypeTags.IS_EXPLOSION); //爆炸
+        tagKeys.add(DamageTypeTags.IS_FREEZING); //冰冻
+        OdamanePlayerExpandedContext.INVULNERABLE_TO_TAGS = ImmutableList.copyOf(tagKeys);
+    }
     public static float damageScale(float amount, Player odamanePlayer) {
         return Math.min(amount, damageLimit(odamanePlayer));
     }
@@ -162,18 +171,23 @@ public class OdamanePlayerExpandedContext {
     }
 
     private boolean getFlag(int mask) {
-        int i = CommonProxy.getPlayerCapInstance(player).readAllExpandedFlags();
-        return (i & mask) != 0;
+        boolean[] f = new boolean[] {false};
+        CommonProxy.getPlayerCapOptional(player).ifPresent(cap -> {
+            f[0] = (cap.readAllExpandedFlags() & mask) != 0;
+        });
+        return f[0];
     }
 
     private void setFlags(int mask, boolean value) {
-        int i = CommonProxy.getPlayerCapInstance(player).readAllExpandedFlags();
-        if (value) {
-            i |= mask;
-        } else {
-            i &= ~mask;
-        }
-        CommonProxy.getPlayerCapInstance(player).setAllExpandedFlags(i & 255);
+        CommonProxy.getPlayerCapOptional(player).ifPresent(cap -> {
+            int i = cap.readAllExpandedFlags();
+            if (value) {
+                i |= mask;
+            } else {
+                i &= ~mask;
+            }
+            cap.setAllExpandedFlags(i & 255);
+        });
     }
 
     /**

@@ -9,8 +9,11 @@ import com.mega.revelationfix.common.data.ritual.requirement.Requirement;
 import com.mega.revelationfix.common.data.ritual.requirement.TimeRequirement;
 import com.mega.revelationfix.common.data.ritual.requirement.block.BlockRequirement;
 import com.mega.revelationfix.common.data.ritual.requirement.entity.EntityRequirement;
+import com.mega.revelationfix.common.ritual.DynamicRitualType;
+import com.mega.revelationfix.common.ritual.ModRitualTypes;
 import com.mega.revelationfix.safe.mixinpart.goety.BrewEffectsInvoker;
 import com.mega.revelationfix.util.RevelationFixMixinPlugin;
+import it.unimi.dsi.fastutil.objects.Reference2IntArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.FriendlyByteBuf;
@@ -46,6 +49,7 @@ public class RitualDataManager {
 
     public static void register(String plugin, RitualData data) {
         REGISTRIES.put(plugin, data);
+        ModRitualTypes.register(new DynamicRitualType(data));
         {
             Logger logger = RevelationFixMixinPlugin.LOGGER;
             BrewEffectsInvoker invoker = (BrewEffectsInvoker) BrewEffects.INSTANCE;
@@ -64,6 +68,10 @@ public class RitualDataManager {
     }
 
     public static void clearData() {
+        REGISTRIES.forEach((key, value) -> {
+            ModRitualTypes.unregister(key);
+            ModRitualTypes.unregister(value.getPluginName());
+        });
         REGISTRIES.clear();
     }
 
@@ -71,8 +79,7 @@ public class RitualDataManager {
         return REGISTRIES.containsKey(craftType);
     }
 
-    public static boolean getProperStructure(String craftType, RitualBlockEntity pTileEntity, BlockPos pPos, Level pLevel) {
-        RitualData ritualData = REGISTRIES.get(craftType);
+    public static boolean getProperStructure(RitualData ritualData, RitualBlockEntity pTileEntity, BlockPos pPos, Level pLevel) {
         {
             Set<Requirement> requirements = ritualData.requirements.get(RitualData.DIMENSION);
             if (!requirements.isEmpty()) {
@@ -114,7 +121,7 @@ public class RitualDataManager {
         int blockLength = blockRequirements.size();
         int entityLength = entityRequirements.size();
         if (blockLength > 0) {
-            Map<BlockRequirement, Integer> map = new HashMap<>();
+            Map<BlockRequirement, Integer> map = new Reference2IntArrayMap<>();
             for (Requirement requirement : blockRequirements) {
                 if (requirement instanceof BlockRequirement br)
                     map.put(br, 0);
@@ -138,7 +145,7 @@ public class RitualDataManager {
             }
         }
         if (entityLength > 0) {
-            Map<EntityRequirement, Integer> map = new HashMap<>();
+            Map<EntityRequirement, Integer> map = new Reference2IntArrayMap<>();
             for (Requirement requirement : entityRequirements) {
                 if (requirement instanceof EntityRequirement er)
                     map.put(er, 0);

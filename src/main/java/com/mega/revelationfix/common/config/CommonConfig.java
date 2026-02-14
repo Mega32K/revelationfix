@@ -30,7 +30,7 @@ public class CommonConfig {
     private static final ForgeConfigSpec.ConfigValue<Boolean> HALO_UNDEAD_FRIENDLY;
     private static final ForgeConfigSpec.ConfigValue<Double> HALO_SOUL_REDUCTION;
     private static final ForgeConfigSpec.ConfigValue<Double> HALO_SPELL_CASTING_SPEED;
-    private static final ForgeConfigSpec.ConfigValue<Double> HALO_SPEL_COOLDOWN_REDUCTION;
+    private static final ForgeConfigSpec.ConfigValue<Double> HALO_SPELL_COOLDOWN_REDUCTION;
     private static final ForgeConfigSpec.ConfigValue<Double> HALO_DAMAGE_CAP;
     private static final ForgeConfigSpec.ConfigValue<Integer> APOLLYON_BARRIER_PREPARATION;
     private static final ForgeConfigSpec.ConfigValue<Integer> APOLLYON_SHOOTING_COOLDOWN;
@@ -109,7 +109,7 @@ public class CommonConfig {
         HALO_SPELL_CASTING_SPEED = BUILDER.worldRestart()
                 .comment("How many times faster can Halo players cast spells,Default: 4")
                 .defineInRange("haloSpellCastingSpeed", 4D, 1D, 64D);
-        HALO_SPEL_COOLDOWN_REDUCTION = BUILDER.worldRestart()
+        HALO_SPELL_COOLDOWN_REDUCTION = BUILDER.worldRestart()
                 .comment("How many times faster can Halo players accelerate the cooldowns of focus,Default: 2")
                 .defineInRange("haloSpellCooldownReduction", 2D, 1D, 64D);
         HALO_DAMAGE_CAP = BUILDER.worldRestart()
@@ -191,7 +191,7 @@ public class CommonConfig {
             haloSoulReduction = HALO_SOUL_REDUCTION.get();
             haloSpellCastingSpeed = HALO_SPELL_CASTING_SPEED.get();
             haloDamageCap = HALO_DAMAGE_CAP.get();
-            haloSpellCooldownReduction = HALO_SPEL_COOLDOWN_REDUCTION.get();
+            haloSpellCooldownReduction = HALO_SPELL_COOLDOWN_REDUCTION.get();
             apollyonBarrierPreparation = APOLLYON_BARRIER_PREPARATION.get();
             apollyonShootingCooldown = APOLLYON_SHOOTING_COOLDOWN.get();
             redirectTargetToServantOption = TARGET_REDIRECT_TO_SERVANTS.get();

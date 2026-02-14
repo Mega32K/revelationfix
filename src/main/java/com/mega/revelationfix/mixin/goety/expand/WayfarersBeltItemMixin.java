@@ -1,9 +1,8 @@
 package com.mega.revelationfix.mixin.goety.expand;
 
-import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.common.items.curios.WayfarersBeltItem;
 import com.google.common.collect.Multimap;
-import com.mega.revelationfix.common.item.curios.OdamaneHalo;
+import com.mega.revelationfix.common.config.GoetyModificationCommonConfig;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +20,8 @@ import java.util.UUID;
 public abstract class WayfarersBeltItemMixin {
     @Inject(remap = false, method = "getAttributeModifiers", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;put(Ljava/lang/Object;Ljava/lang/Object;)Z", shift = At.Shift.AFTER, ordinal = 2, remap = false), locals = LocalCapture.CAPTURE_FAILHARD)
     private void getAttributeModifiers(SlotContext slotContext, UUID uuid, ItemStack stack, CallbackInfoReturnable<Multimap<Attribute, AttributeModifier>> cir, Multimap<Attribute, AttributeModifier> map) {
-        CuriosApi.addSlotModifier(map, "charm",
-                UUID.fromString("bf084d19-7ea7-479a-8e19-6edf2d90cd6e"), 1.0D, AttributeModifier.Operation.ADDITION);
+        if (GoetyModificationCommonConfig.wayfarerBeltCharmExtra)
+            CuriosApi.addSlotModifier(map, "charm",
+                    UUID.fromString("bf084d19-7ea7-479a-8e19-6edf2d90cd6e"), 1.0D, AttributeModifier.Operation.ADDITION);
     }
 }
