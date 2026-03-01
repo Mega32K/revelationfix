@@ -23,8 +23,8 @@ public class SecondPhaseStaff extends DarkWand implements ILevelWand {
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
     private final Multimap<Attribute, AttributeModifier> offHandModifiers;
 
-    public SecondPhaseStaff(UUID customSpellAttributeUUID) {
-        super(new Properties().fireResistant().rarity(RevelationRarity.SPECTRE).setNoRepair().stacksTo(1), SpellType.FROST);
+    public SecondPhaseStaff(UUID customSpellAttributeUUID, SpellType spellType) {
+        super(new Properties().fireResistant().rarity(RevelationRarity.SPECTRE).setNoRepair().stacksTo(1), spellType);
         {
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
             builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 6.5F, AttributeModifier.Operation.ADDITION));

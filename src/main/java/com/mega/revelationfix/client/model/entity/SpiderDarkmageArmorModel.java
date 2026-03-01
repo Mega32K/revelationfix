@@ -216,7 +216,7 @@ public class SpiderDarkmageArmorModel extends HumanoidModel<LivingEntity> {
 
     @Override
     public void renderToBuffer(PoseStack p_102034_, VertexConsumer p_102035_, int p_102036_, int p_102037_, float p_102038_, float p_102039_, float p_102040_, float p_102041_) {
-        p_102036_ = 0xFF00F0;
+        p_102036_ = 0xF000F0;
 
         super.renderToBuffer(p_102034_, p_102035_, p_102036_, p_102037_, p_102038_, p_102039_, p_102040_, p_102041_);
     }

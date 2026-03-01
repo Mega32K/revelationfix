@@ -506,38 +506,43 @@ public abstract class ApollyonMixin extends SpellCastingCultist implements Apoll
     }
 
     @Override
-    public void remove(RemovalReason p_276115_) {
-        super.remove(p_276115_);
+    public void remove(@NotNull RemovalReason removalReason) {
+        super.remove(removalReason);
         Level level = this.level();
-        if (!level.isClientSide && isInNether() && revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
-            ChestBlock chest = (ChestBlock) Blocks.CHEST;
-            BlockState blockState = chest.defaultBlockState();
+        if (removalReason == RemovalReason.KILLED || removalReason == RemovalReason.DISCARDED) {
+            if (!level.isClientSide && isInNether() && revelationfix$asApollyonHelper().allTitlesApostle_1_20_1$isApollyon()) {
+                ChestBlock chest = (ChestBlock) Blocks.CHEST;
+                BlockState blockState = chest.defaultBlockState();
 
-            level.setBlock(this.blockPosition(), blockState, 3);
+                level.setBlock(this.blockPosition(), blockState, 3);
 
-            DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state((ServerLevel) level);
-            List<ItemStack> stacks = ((GRSavedDataEC) state).revelationfix$dataEC().getBannedCurios();
+                DefeatApollyonInNetherState state = GRSavedDataExpandedContext.state((ServerLevel) level);
+                List<ItemStack> stacks = ((GRSavedDataEC) state).revelationfix$dataEC().getBannedCurios();
 
-            AtomicBoolean changed = new AtomicBoolean(false);
-            Container container = ChestBlock.getContainer(chest, blockState, level, this.blockPosition(), true);
-            List<ItemStack> toAddToContainer = new ArrayList<>(stacks);
-            List<ItemStack> tempToRemove = new ArrayList<>();
-            for (int i = 0; i < container.getContainerSize(); i++) {
-                if (toAddToContainer.size() < i + 1) break;
-                ItemStack itemStack = toAddToContainer.get(i);
-                container.setItem(i, itemStack);
-                tempToRemove.add(itemStack);
-            }
-            toAddToContainer.removeAll(tempToRemove);
-            if (!toAddToContainer.isEmpty())
-                for (ItemStack stack : toAddToContainer) {
-                    ItemEntity itemEntity = new ItemEntity(level, getRandomX(1F), getY() + 2F, getRandomZ(1F), stack);
-                    level.addFreshEntity(itemEntity);
+                AtomicBoolean changed = new AtomicBoolean(false);
+                Container container = ChestBlock.getContainer(chest, blockState, level, this.blockPosition(), true);
+                List<ItemStack> toAddToContainer = new ArrayList<>(stacks);
+                List<ItemStack> tempToRemove = new ArrayList<>();
+                boolean shouldClearBannedItems = false;
+                if (container != null) {
+                    for (int i = 0; i < container.getContainerSize(); i++) {
+                        if (toAddToContainer.size() < i + 1) break;
+                        ItemStack itemStack = toAddToContainer.get(i);
+                        container.setItem(i, itemStack);
+                        tempToRemove.add(itemStack);
+                    }
+                    shouldClearBannedItems = true;
                 }
-            if (stacks.isEmpty())
-                level.setBlock(this.blockPosition(), Blocks.AIR.defaultBlockState(), 3);
-            stacks.clear();
-            state.setDirty();
+                toAddToContainer.removeAll(tempToRemove);
+                if (!toAddToContainer.isEmpty())
+                    for (ItemStack stack : toAddToContainer) {
+                        ItemEntity itemEntity = new ItemEntity(level, getRandomX(1F), getY() + 2F, getRandomZ(1F), stack);
+                        level.addFreshEntity(itemEntity);
+                    }
+                if (stacks.isEmpty()) level.setBlock(this.blockPosition(), Blocks.AIR.defaultBlockState(), 3);
+                if (shouldClearBannedItems) stacks.clear();
+                state.setDirty();
+            }
         }
     }
 

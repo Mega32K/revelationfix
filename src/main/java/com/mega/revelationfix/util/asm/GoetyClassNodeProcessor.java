@@ -261,6 +261,19 @@ public class GoetyClassNodeProcessor implements IClassProcessor, Opcodes {
                                 }
                             });
                             modified.set(true);
+                        } else if (methodNode.name.equals("typeStaff")) {
+                            LOGGER.debug("MethodName : " + methodNode.name);
+                            InsnList insnList = new InsnList();
+                            insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                            insnList.add(new VarInsnNode(Opcodes.ALOAD, 2));
+                            insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, RevelationFixMixinPlugin.EVENT_UTIL_CLASS, "typeSpell", "(Lnet/minecraft/world/item/ItemStack;Lcom/Polarice3/Goety/api/magic/SpellType;)Z", false));
+                            LabelNode elseNode = new LabelNode();
+                            insnList.add(new JumpInsnNode(Opcodes.IFEQ, elseNode));
+                            insnList.add(new InsnNode(Opcodes.ICONST_1));
+                            insnList.add(new InsnNode(Opcodes.IRETURN));
+                            insnList.add(elseNode);
+                            InjectionFinder.injectHead(methodNode, insnList);
+                            modified.set(true);
                         }
                     });
                 }

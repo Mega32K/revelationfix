@@ -49,7 +49,7 @@ public class GungnirSpearRenderer extends EntityRenderer<GungnirSpearEntity> {
                     itemStack = new ItemStack(GRItems.GUNGNIR.get());
                 spearEntity.updateWrappedTrail(spearEntity, nothing, partialTicks, poseStack, bufferSource, packedLight);
                 poseStack.pushPose();
-                packedLight = 0xFF00F0;
+                packedLight = 0xF000F0;
                 poseStack.scale(2F, 2F, 2.3F);
                 poseStack.translate(0F, 0F, -0.F);
                 poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, spearEntity.yRotO, spearEntity.getYRot()) - 90.0F));

@@ -1,5 +1,6 @@
 package com.mega.revelationfix.client.font;
 
+import com.Polarice3.Goety.mixin.BlockPlaceContextMixin;
 import com.mega.endinglib.api.client.text.TextColorInterface;
 import com.mega.revelationfix.common.compat.SafeClass;
 import net.minecraft.network.chat.Style;

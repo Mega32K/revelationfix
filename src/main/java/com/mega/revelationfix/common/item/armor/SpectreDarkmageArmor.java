@@ -143,7 +143,7 @@ public class SpectreDarkmageArmor extends SpectreArmor implements IDragonLightRe
                 if (SEHelper.getSoulsAmount(player, ItemConfig.spectreDAShieldCost)) {
                     if (cap.getSpectreDAShieldCooldown() <= 0 && MiscCapHelper.getShields(player) <= 0) {
                         cap.setSpectreDAShieldCooldown(ItemConfig.spectreDAShieldCooldown * 20);
-                        cap.setExtraMagicShield(cap.getExtraMagicShield() + 1);
+                        cap.setExtraMagicShield(1);
                         MiscCapHelper.setShieldTime(player, 2000);
                         MiscCapHelper.increaseShields(player);
                         SEHelper.decreaseSouls(player, ItemConfig.spectreDAShieldCost);

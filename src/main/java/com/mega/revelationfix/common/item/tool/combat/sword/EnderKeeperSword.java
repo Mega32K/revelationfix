@@ -121,7 +121,7 @@ public class EnderKeeperSword extends ModSwordItem implements ICustomHurtWeapon,
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (!serverPlayer.getCooldowns().isOnCooldown(stack.getItem())) {
                     if (RaycastHelper.findCrosshairTarget(serverPlayer, Math.max(serverPlayer.getBlockReach(), serverPlayer.getEntityReach()) * 2F) instanceof EntityHitResult entityHitResult) {
-                        if (entityHitResult.getEntity() instanceof LivingEntity target) {
+                        if (entityHitResult.getEntity() instanceof LivingEntity target && target.isAlive() && !target.isAlliedTo(entity)) {
                             Level level = serverPlayer.level();
                             ((AccessorLivingEntity) serverPlayer).setAttackStrengthTicker((int) (serverPlayer.getCurrentItemAttackStrengthDelay()) + 1);
                             double xSize = target.getBoundingBox().getXsize();

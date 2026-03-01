@@ -84,9 +84,11 @@ public class EerieAxeItem extends AxeItem {
     @Override
     public boolean mineBlock(@NotNull ItemStack itemStack, @NotNull Level level, @NotNull BlockState blockState, @NotNull BlockPos blockPos, @NotNull LivingEntity livingEntity) {
         if (!level.isClientSide && livingEntity instanceof Player player && blockState.is(BlockTags.LOGS)) {
-            Args args = new Args(player, blockPos);
-            TreeKillerServerTask task = new TreeKillerServerTask(args);
-            task.addToManager();
+            if (player.isShiftKeyDown()) {
+                Args args = new Args(player, blockPos);
+                TreeKillerServerTask task = new TreeKillerServerTask(args);
+                task.addToManager();
+            }
         }
         if (!level.isClientSide && !blockState.is(BlockTags.LEAVES) && blockState.getDestroySpeed(level, blockPos) != 0.0F) {
             itemStack.hurtAndBreak(1, livingEntity, (p_40992_) -> p_40992_.broadcastBreakEvent(EquipmentSlot.MAINHAND));

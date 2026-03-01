@@ -75,7 +75,7 @@ public class OdamaneHaloLayer implements ICurioRenderer {
         if (!SafeClass.usingShaderPack()) {
             if (ATAHelper2.hasOdamane(entity) && !entity.isInvisible()) {
                 float zRot = smoothstep(0.0F, 180.0F, (entity.tickCount + partialTicks));
-                light = 0xFF00F0;
+                light = 0xF000F0;
                 this.model.head.translateAndRotate(poseStack);
                 boolean isSecondPhase = entity.getHealth() / entity.getMaxHealth() < 0.5F;
                 RenderType renderType = isSecondPhase ? (GRRenderTypes.getOdamane(HALO_TEX)) : this.model.renderType(HALO_TEX);
@@ -98,7 +98,7 @@ public class OdamaneHaloLayer implements ICurioRenderer {
         } else
         if (ATAHelper2.hasOdamane(entity) && !entity.isInvisible()) {
             float zRot = smoothstep(0.0F, 180.0F, (entity.tickCount + partialTicks) );
-            light = 0xFF00F0;
+            light = 0xF000F0;
             this.model.head.translateAndRotate(poseStack);
             boolean isSecondPhase = entity.getHealth() / entity.getMaxHealth() < 0.5F;
             RenderType renderType = isSecondPhase ?  RenderType.energySwirl(HALO_TEX, 1f, 1f) : this.model.renderType(HALO_TEX);
@@ -124,7 +124,7 @@ public class OdamaneHaloLayer implements ICurioRenderer {
             if (ATAHelper2.hasOdamane(entity) && !entity.isInvisible()) {
                 //float zRot = smoothstep(0.0F, 180.0F, ());
                 float zRot = (Mth.cos(player.getName().getString().length()) * 3201123F + (float) Blaze3D.getTime() * 90F) * Mth.DEG_TO_RAD;
-                light = 0xFF00F0;
+                light = 0xF000F0;
                 poseStack.pushPose();
                 this.model.head.translateAndRotate(poseStack);
                 this.model.Halo.translateAndRotate(poseStack);
@@ -151,7 +151,7 @@ public class OdamaneHaloLayer implements ICurioRenderer {
             }
         } else if (ATAHelper2.hasOdamane(entity) && !entity.isInvisible()) {
             float zRot = (Mth.cos(player.getName().getString().length()) * 3201123F + (float) Blaze3D.getTime() * 90F) * Mth.DEG_TO_RAD;
-            light = 0xFF00F0;
+            light = 0xF000F0;
             poseStack.pushPose();
             this.model.head.translateAndRotate(poseStack);
             this.model.Halo.translateAndRotate(poseStack);

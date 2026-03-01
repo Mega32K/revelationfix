@@ -51,8 +51,8 @@ public class ShadowPlayerRenderer extends LivingEntityRenderer<ShadowPlayerEntit
     @Override
     public void render(@NotNull ShadowPlayerEntity shadowPlayerEntity, float p_115309_, float pTicks, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         if (SafeClass.usingShaderPack()) {
-            packedLight = (int) (0xFF00F0 * 1.3F);
-        } else packedLight = 0xFF00F0;
+            packedLight = (int) (0xF000F0 * 1.3F);
+        } else packedLight = 0xF000F0;
         if (shadowPlayerEntity.getBind() instanceof AbstractClientPlayer clientPlayer && shadowPlayerEntity.renderer instanceof WrappedPlayerRenderer wrappedPlayerRenderer) {
             Minecraft minecraft = Minecraft.getInstance();
             EntityRenderer<? super AbstractClientPlayer> renderer = minecraft.getEntityRenderDispatcher().getRenderer(clientPlayer);

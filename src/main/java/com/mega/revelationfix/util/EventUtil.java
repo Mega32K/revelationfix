@@ -2,8 +2,10 @@ package com.mega.revelationfix.util;
 
 import com.Polarice3.Goety.api.items.IPersist;
 import com.Polarice3.Goety.api.magic.ISpell;
+import com.Polarice3.Goety.api.magic.SpellType;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.boss.Apostle;
+import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -15,6 +17,7 @@ import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.init.ModAttributes;
 import com.mega.revelationfix.common.init.ModEffects;
 import com.mega.revelationfix.safe.entity.EntityExpandedContext;
+import com.mega.revelationfix.safe.mixinpart.goety.ILevelWand;
 import com.mega.revelationfix.safe.mixinpart.goety.SpellStatEC;
 import com.mega.revelationfix.util.asm.GoetyClassNodeProcessor;
 import com.mega.revelationfix.util.entity.ATAHelper2;
@@ -115,6 +118,13 @@ public class EventUtil {
                 duration = Math.round(duration * (float) Math.max(0F, (2F - player.getAttributeValue(ModAttributes.SPELL_COOLDOWN.get()))));
         }
         return duration;
+    }
+    public static boolean typeSpell(ItemStack staff, SpellType spellType) {
+        if (staff.getItem() instanceof DarkWand wand) {
+            ILevelWand wandItf = (ILevelWand) wand;
+            return wandItf.expandedTypeStaffLogic(spellType, staff);
+        }
+        return false;
     }
 
     public static void redirectSpellResult(ISpell iSpell, ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {

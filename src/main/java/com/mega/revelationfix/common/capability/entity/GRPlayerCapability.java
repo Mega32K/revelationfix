@@ -22,7 +22,6 @@ import java.util.function.Predicate;
 
 public class GRPlayerCapability extends EntitySyncCapabilityBase {
     public static final ResourceLocation NAME = new ResourceLocation(ModMain.MODID, "gr_player_cap");
-    public static final Supplier<GRPlayerCapability> INSTANCE_SUPPLIER = Suppliers.memoize(GRPlayerCapability::new);
     public CapabilityEntityData<Boolean> DEFAULT_ATTRIBUTE_MODE = this.dataManager.defineWithoutSerialization(0, false, CapabilityDataSerializers.BOOLEAN);
     public CapabilityEntityData<Integer> ODAMANE_EXPANDED_FLAGS = this.dataManager.define(1, "OdamaneExpandedFlags", 0, CapabilityDataSerializers.INT);
     public CapabilityEntityData<Integer> PURPLE_INVUL_TIME = this.dataManager.define(2, "PurpleInvulnerableTime", 0, CapabilityDataSerializers.INT);

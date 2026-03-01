@@ -28,7 +28,7 @@ public class MuchLightModelPart extends ModelPart {
 
     @Override
     public void render(@NotNull PoseStack p_104307_, @NotNull VertexConsumer p_104308_, int p_104309_, int p_104310_, float p_104311_, float p_104312_, float p_104313_, float p_104314_) {
-        p_104309_ = 0xFF00F0;
+        p_104309_ = 0xF000F0;
         if (SafeClass.usingShaderPack())
             p_104309_ = 20711920;
         super.render(p_104307_, p_104308_, p_104309_, p_104310_, p_104311_, p_104312_, p_104313_, p_104314_);

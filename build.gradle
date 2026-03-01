@@ -189,11 +189,14 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    implementation fg.deobf("maven.modrinth:endinglibrary:2.1.3")
+    implementation fg.deobf("curse.maven:goety-586095:7689315")
+
     implementation fg.deobf("curse.maven:MouseTweaks-60089:5338457")
     implementation fg.deobf("curse.maven:IMBlocker-483760:4656554")
     implementation fg.deobf("curse.maven:Oculus-581495:6020952")
     implementation fg.deobf("curse.maven:Xenon-564239:5752040")
-    implementation fg.deobf("curse.maven:goety-586095:7586938")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
     implementation fg.deobf("curse.maven:MobBattle-268746:5300817")
     implementation fg.deobf("curse.maven:IBE-256822:4994072")
@@ -222,7 +225,6 @@ dependencies {
     implementation fg.deobf("curse.maven:AttributeFix-280510:4911084")
     implementation fg.deobf("curse.maven:SMSN-1129397:7399448")
 
-    implementation fg.deobf("blank:EndingLibrary-1.20.1:2.1-all")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("maven.modrinth:tetraclip:1.0.5")
 }

@@ -13,6 +13,7 @@ import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.Goety.utils.BrewUtils;
 import com.mega.revelationfix.common.config.BrewConfig;
 import com.mega.revelationfix.common.data.brew.BrewData;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -122,21 +123,29 @@ public abstract class BrewCauldronBlockEntityMixin extends BlockEntity implement
 
     @Shadow(remap = false)
     public abstract EntityType<?> getSacrificed(int pIndex);
+    @Unique
+    private static Method clearContentMethod = Util.make(() -> {
+        try {
+            Method method = BrewCauldronBlockEntity.class.getDeclaredMethod("clearContent");
+            return method;
+        } catch (Throwable throwable) {
+            try {
+                Method method = BrewCauldronBlockEntity.class.getDeclaredMethod("m_6211_");
+                return method;
+            } catch (Throwable throwable2) {
+                System.exit(-1);
+            }
+        }
+        return null;
+    });
 
     @Unique
     private void fuckingClearContent() {
         try {
-            Method method = this.getClass().getDeclaredMethod("clearContent");
-            method.setAccessible(true);
-            method.invoke(this);
+            clearContentMethod.setAccessible(true);
+            clearContentMethod.invoke(this);
         } catch (Throwable throwable) {
-            try {
-                Method method = this.getClass().getDeclaredMethod("m_6211_");
-                method.setAccessible(true);
-                method.invoke(this);
-            } catch (Throwable throwable2) {
-                System.exit(-1);
-            }
+            throwable.printStackTrace();
         }
     }
 

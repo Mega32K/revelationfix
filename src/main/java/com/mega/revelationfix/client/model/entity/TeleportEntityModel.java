@@ -48,8 +48,8 @@ public class TeleportEntityModel extends EntityModel<TeleportEntity> {
     @Override
     public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         if (SafeClass.usingShaderPack()) {
-            packedLight = (int) (0xFF00F0 * (Math.min(0F, Mth.cos((float) (Blaze3D.getTime() * 90F * Mth.DEG_TO_RAD))) / 2F + 1f));
-            alpha *= 0.6F * ((float) packedLight / (float) (0xFF00F0));
+            packedLight = (int) (0xF000F0 * (Math.min(0F, Mth.cos((float) (Blaze3D.getTime() * 90F * Mth.DEG_TO_RAD))) / 2F + 1f));
+            alpha *= 0.6F * ((float) packedLight / (float) (0xF000F0));
         }
         main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }

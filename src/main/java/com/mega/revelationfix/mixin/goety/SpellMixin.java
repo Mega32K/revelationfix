@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.items.magic.DarkWand;
 import com.Polarice3.Goety.common.magic.Spell;
 import com.mega.revelationfix.common.entity.binding.FakeSpellerEntity;
 import com.mega.revelationfix.common.init.ModAttributes;
+import com.mega.revelationfix.common.spell.frost.IceSpell;
 import com.mega.revelationfix.safe.mixinpart.goety.ILevelWand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +29,8 @@ public class SpellMixin {
         }
     }
 
-    @Inject(method = "typeStaff", at = @At("HEAD"), cancellable = true, remap = false)
+    @SuppressWarnings({"UnresolvedMixinReference", "MixinAnnotationTarget"})
+    @Inject(method = "typeStaff", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
     private void typeStaff(ItemStack staff, SpellType spellType, CallbackInfoReturnable<Boolean> cir) {
         if (staff.getItem() instanceof DarkWand wand) {
             ILevelWand wandItf = (ILevelWand) wand;
