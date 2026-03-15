@@ -1,5 +1,7 @@
 package com.mega.revelationfix.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mega.revelationfix.common.compat.SafeClass;
 import com.mega.revelationfix.safe.entity.GoalSelectorEC;
 import com.mega.revelationfix.util.LivingEntityEC;
@@ -27,21 +29,25 @@ public class GoalSelectorMixin implements GoalSelectorEC {
         this.revelationfix$entity = entity;
     }
 
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/WrappedGoal;start()V"))
-    private void redirectStart(WrappedGoal instance) {
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/WrappedGoal;start()V"))
+    private void redirectStart(WrappedGoal instance, Operation<Void> original) {
         if (revelationfix$entity != null && ((LivingEntityEC) revelationfix$entity).revelationfix$livingECData().banAnySpelling > 0) {
             if (!SafeClass.isSpellGoal(instance.getGoal())) {
-                instance.start();
+                original.call(instance);
             }
-        } else instance.start();
+        } else {
+            original.call(instance);
+        }
     }
 
-    @Redirect(method = "tickRunningGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/WrappedGoal;tick()V"))
-    private void redirectTickRunningGoals(WrappedGoal instance) {
+    @WrapOperation(method = "tickRunningGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/WrappedGoal;tick()V"))
+    private void redirectTickRunningGoals(WrappedGoal instance, Operation<Void> original) {
         if (revelationfix$entity != null && ((LivingEntityEC) revelationfix$entity).revelationfix$livingECData().banAnySpelling > 0) {
             if (!SafeClass.isSpellGoal(instance.getGoal())) {
-                instance.tick();
+                original.call(instance);
             }
-        } else instance.tick();
+        } else {
+            original.call(instance);
+        }
     }
 }

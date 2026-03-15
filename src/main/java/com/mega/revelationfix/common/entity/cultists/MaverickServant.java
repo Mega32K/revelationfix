@@ -39,6 +39,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -49,6 +50,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.scores.Team;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import z1gned.goetyrevelation.util.ATAHelper;
 
@@ -83,7 +85,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     //Owned
-    private final NearestAttackableTargetGoal<Player> targetGoal = new NearestAttackableTargetGoal(this, Player.class, true);
+    private final NearestAttackableTargetGoal<Player> targetGoal = new NearestAttackableTargetGoal<>(this, Player.class, true);
     //Summoned
     public LivingEntity commandPosEntity;
     public BlockPos commandPos;
@@ -118,16 +120,30 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     protected void registerGoals() {
         super.registerGoals();
         //Owned
-        this.targetSelector.addGoal(1, new Owned.OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new Owned.OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(1, new Owned.OwnerHurtByTargetGoal<>(this));
+        this.targetSelector.addGoal(2, new Owned.OwnerHurtTargetGoal<>(this));
         //Summoned
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.followGoal();
         this.targetSelectGoal();
     }
+    @Override
+    public void checkHostility() {
+        if (!this.level().isClientSide) {
+            if (this.getTrueOwner() instanceof Enemy) {
+                this.setHostile(true);
+            }
 
+            LivingEntity var3 = this.getTrueOwner();
+            if (var3 instanceof IOwned owned) {
+                if (owned.isHostile()) {
+                    this.setHostile(true);
+                }
+            }
+        }
+    }
     public void followGoal() {
-        this.goalSelector.addGoal(5, new Summoned.FollowOwnerGoal(this, 1.0, 10.0F, 2.0F));
+        this.goalSelector.addGoal(5, new Summoned.FollowOwnerGoal<>(this, 1.0, 10.0F, 2.0F));
     }
 
     public void targetSelectGoal() {
@@ -245,8 +261,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
             EquipmentSlot[] var3 = EquipmentSlot.values();
             int var4 = var3.length;
 
-            for (int var5 = 0; var5 < var4; ++var5) {
-                EquipmentSlot equipmentslot = var3[var5];
+            for (EquipmentSlot equipmentslot : var3) {
                 if (equipmentslot.getType() == EquipmentSlot.Type.ARMOR) {
                     int i = randomSource.nextInt(2);
                     if (randomSource.nextFloat() < 0.095F) {
@@ -278,7 +293,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     public void populateDefaultWeapons(RandomSource randomSource, DifficultyInstance difficulty) {
     }
 
-    public void die(DamageSource pCause) {
+    public void die(@NotNull DamageSource pCause) {
         if (!this.level().isClientSide && this.hasCustomName() && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayer) {
             this.getTrueOwner().sendSystemMessage(this.getCombatTracker().getDeathMessage());
         }
@@ -486,7 +501,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     @Override
-    public void hurtArmor(DamageSource pDamageSource, float pDamage) {
+    public void hurtArmor(@NotNull DamageSource pDamageSource, float pDamage) {
         if (!(pDamage <= 0.0F)) {
             pDamage /= 4.0F;
             if (pDamage < 1.0F) {
@@ -496,14 +511,11 @@ public class MaverickServant extends Maverick implements IMonsterServant {
             EquipmentSlot[] var3 = EquipmentSlot.values();
             int var4 = var3.length;
 
-            for (int var5 = 0; var5 < var4; ++var5) {
-                EquipmentSlot equipmentSlotType = var3[var5];
+            for (EquipmentSlot equipmentSlotType : var3) {
                 if (equipmentSlotType.getType() == EquipmentSlot.Type.ARMOR) {
                     ItemStack itemstack = this.getItemBySlot(equipmentSlotType);
                     if ((!pDamageSource.is(DamageTypeTags.IS_FIRE) || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
-                        itemstack.hurtAndBreak((int) pDamage, this, (p_214023_1_) -> {
-                            p_214023_1_.broadcastBreakEvent(equipmentSlotType);
-                        });
+                        itemstack.hurtAndBreak((int) pDamage, this, (p_214023_1_) -> p_214023_1_.broadcastBreakEvent(equipmentSlotType));
                     }
                 }
             }
@@ -698,7 +710,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     //Owned
-    public boolean isInvisibleTo(Player p_20178_) {
+    public boolean isInvisibleTo(@NotNull Player p_20178_) {
         return p_20178_ != this.getMasterOwner() && super.isInvisibleTo(p_20178_);
     }
 
@@ -877,7 +889,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     //Owned
-    public void push(Entity p_21294_) {
+    public void push(@NotNull Entity p_21294_) {
         if (!this.level().isClientSide && p_21294_ != this.getTrueOwner()) {
             super.push(p_21294_);
         }
@@ -885,7 +897,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     //Owned
-    public void doPush(Entity p_20971_) {
+    public void doPush(@NotNull Entity p_20971_) {
         if (!this.level().isClientSide && p_20971_ != this.getTrueOwner()) {
             super.doPush(p_20971_);
         }
@@ -893,7 +905,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     //Owned
-    public boolean canCollideWith(Entity p_20303_) {
+    public boolean canCollideWith(@NotNull Entity p_20303_) {
         return p_20303_ != this.getTrueOwner() && super.canCollideWith(p_20303_);
     }
 
@@ -908,7 +920,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     //Owned
-    public void awardKillScore(Entity entity, int p_19954_, DamageSource damageSource) {
+    public void awardKillScore(@NotNull Entity entity, int p_19954_, @NotNull DamageSource damageSource) {
         super.awardKillScore(entity, p_19954_, damageSource);
         LivingEntity var5 = this.getMasterOwner();
         if (var5 instanceof ServerPlayer serverPlayer) {
@@ -934,7 +946,7 @@ public class MaverickServant extends Maverick implements IMonsterServant {
     }
 
     @Override
-    public boolean canAttack(LivingEntity p_21171_) {
+    public boolean canAttack(@NotNull LivingEntity p_21171_) {
         if (MobUtil.areAllies(p_21171_, this))
             return false;
         else if (GRServantUtil.isOwnerNotOnline(this))

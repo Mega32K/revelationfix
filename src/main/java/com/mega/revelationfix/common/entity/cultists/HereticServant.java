@@ -38,6 +38,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -130,7 +131,21 @@ public class HereticServant extends Heretic implements IMonsterServant {
         this.targetSelectGoal();
 
     }
+    @Override
+    public void checkHostility() {
+        if (!this.level().isClientSide) {
+            if (this.getTrueOwner() instanceof Enemy) {
+                this.setHostile(true);
+            }
 
+            LivingEntity var3 = this.getTrueOwner();
+            if (var3 instanceof IOwned owned) {
+                if (owned.isHostile()) {
+                    this.setHostile(true);
+                }
+            }
+        }
+    }
     public void followGoal() {
         this.goalSelector.addGoal(5, new Summoned.FollowOwnerGoal<>(this, 1.0, 10.0F, 2.0F));
     }
@@ -228,7 +243,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     }
 
     @Override
-    public boolean canAttack(LivingEntity p_21171_) {
+    public boolean canAttack(@NotNull LivingEntity p_21171_) {
         if (MobUtil.areAllies(p_21171_, this))
             return false;
         else if (GRServantUtil.isOwnerNotOnline(this))
@@ -462,9 +477,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
                 if (equipmentSlotType.getType() == EquipmentSlot.Type.ARMOR) {
                     ItemStack itemstack = this.getItemBySlot(equipmentSlotType);
                     if ((!pDamageSource.is(DamageTypeTags.IS_FIRE) || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
-                        itemstack.hurtAndBreak((int) pDamage, this, (p_214023_1_) -> {
-                            p_214023_1_.broadcastBreakEvent(equipmentSlotType);
-                        });
+                        itemstack.hurtAndBreak((int) pDamage, this, (p_214023_1_) -> p_214023_1_.broadcastBreakEvent(equipmentSlotType));
                     }
                 }
             }
@@ -666,7 +679,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     }
 
     //Owned
-    public boolean isInvisibleTo(Player p_20178_) {
+    public boolean isInvisibleTo(@NotNull Player p_20178_) {
         return p_20178_ != this.getMasterOwner() && super.isInvisibleTo(p_20178_);
     }
 
@@ -781,7 +794,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     //Owned
     @javax.annotation.Nullable
     public UUID getOwnerId() {
-        return (UUID) ((Optional) this.entityData.get(OWNER_UNIQUE_ID)).orElse(null);
+        return this.entityData.get(OWNER_UNIQUE_ID).orElse(null);
     }
 
     //Owned
@@ -876,7 +889,7 @@ public class HereticServant extends Heretic implements IMonsterServant {
     }
 
     //Owned
-    public void awardKillScore(Entity entity, int p_19954_, DamageSource damageSource) {
+    public void awardKillScore(@NotNull Entity entity, int p_19954_, @NotNull DamageSource damageSource) {
         super.awardKillScore(entity, p_19954_, damageSource);
         LivingEntity var5 = this.getMasterOwner();
         if (var5 instanceof ServerPlayer serverPlayer) {

@@ -61,7 +61,7 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
         this.setPos(p_149664_, p_149665_, p_149666_);
         this.setDeltaMovement(p_149668_, p_149669_, p_149670_);
         this.setItem(p_149667_);
-        this.lifespan = (p_149667_.getItem() == null ? FakeItemEntity.LIFETIME : p_149667_.getEntityLifespan(p_149663_));
+        this.lifespan = (p_149667_.isEmpty() ? FakeItemEntity.LIFETIME : p_149667_.getEntityLifespan(p_149663_));
     }
 
     private FakeItemEntity(FakeItemEntity p_31994_) {
@@ -276,12 +276,6 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
 
     public boolean isAttackable() {
         return false;
-    }
-
-    @Nullable
-    public Entity changeDimension(@NotNull ServerLevel p_32042_, net.minecraftforge.common.util.@NotNull ITeleporter teleporter) {
-        Entity entity = super.changeDimension(p_32042_, teleporter);
-        return entity;
     }
 
     public ItemStack getItem() {
